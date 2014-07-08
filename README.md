@@ -1,4 +1,4 @@
-play_pixi
+play_phaser
 =========
 A Dart port of Phaser.js
 
@@ -8,7 +8,9 @@ Not ready for using.
 You can check the [play_pixi][1] which is almost finished.
 
 Install:
+
 dependencies:
+
   play_pixi: any
 
 
