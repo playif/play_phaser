@@ -1,0 +1,17 @@
+name: play_phaser
+version: 0.0.1
+description:
+  A Dart port for Phaser.js library.
+author: playif <playif@gmail.com>
+homepage: https://github.com/playif/play_phaser
+dependencies:
+  browser: ">=0.10.0+2 <0.11.0"
+  play_pixi: any
+transformers:
+- $dart2js:
+    checked: true
+    minify: false
+    suppressWarnings: false
+    suppressHints: false
+    terse: false
+    verbose: true
