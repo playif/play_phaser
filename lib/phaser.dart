@@ -4,16 +4,21 @@ import "dart:async";
 import "dart:html";
 import "dart:convert";
 import "dart:web_gl";
+import "dart:math" as DMath;
 import "package:play_pixi/pixi.dart" as PIXI;
 
 
 part "core/game.dart";
-part "core/signal.dart";
+part "core/core_signal.dart";
 part "core/signal_binding.dart";
 part "core/state.dart";
 
 part "gameobjects/game_object_creator.dart";
 part "gameobjects/game_object_factory.dart";
+
+part "math/math.dart";
+part "math/quad_tree.dart";
+part "math/random_data_generator.dart";
 
 part "system/canvas.dart";
 part "system/device.dart";
