@@ -8,6 +8,8 @@ import "package:play_pixi/pixi.dart" as PIXI;
 
 
 part "core/game.dart";
+part "core/signal.dart";
+part "core/signal_binding.dart";
 part "core/state.dart";
 
 part "gameobjects/game_object_creator.dart";

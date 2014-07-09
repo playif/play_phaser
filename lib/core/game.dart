@@ -20,19 +20,16 @@ class Game {
   bool isBooted=false;
   bool isRunning = false;
 
-
   RequestAnimationFrame raf;
 
   GameObjectFactory add;
 
   GameObjectCreator make;
 
-    
-
   Game([this.width=800, this.height=600, this.renderer=AUTO, this.parent='', this.state,
        this.transparent, this.antialias, this.physicsConfig]) {
 
-
-
   }
+
+
 }
