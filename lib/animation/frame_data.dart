@@ -1,0 +1,4 @@
+class FrameData {
+  FrameData() {
+  }
+}
