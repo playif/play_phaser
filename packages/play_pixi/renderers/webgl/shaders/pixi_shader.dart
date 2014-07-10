@@ -93,9 +93,6 @@ class PixiShader extends Shader {
 
 
   init() {
-
-    var gl = this.gl;
-
     Program program = compileProgram(gl, (this.vertexSrc == null) ? PixiShader.defaultVertexSrc : this.vertexSrc, this.fragmentSrc);
 
     //window.console.log(1);
@@ -256,7 +253,6 @@ class PixiShader extends Shader {
       return;
     }
 
-    var gl = this.gl;
 
     print(this.textureCount);
     gl.activeTexture(TEXTURE0 + this.textureCount);
@@ -287,7 +283,7 @@ class PixiShader extends Shader {
         wrapT = REPEAT;
       }
 
-      gl.pixelStorei(UNPACK_FLIP_Y_WEBGL, !!data.flipY);
+      gl.pixelStorei(UNPACK_FLIP_Y_WEBGL, data.flipY ? 1 : 0);
 
       if (data.width) {
         var width = (data.width) ? data.width : 512;
@@ -338,12 +334,12 @@ class PixiShader extends Shader {
         else {
           UniformLocation location = uniform['uniformLocation'];
           //print(uniform['value']);
-          if(uniform['value'] is List){
+          if (uniform['value'] is List) {
             List list = uniform['value'];
             Float32List flist = new Float32List.fromList(list);
             uniform['glFunc'](location, flist);
           }
-          else{
+          else {
             uniform['glFunc'](location, uniform['value']);
           }
 

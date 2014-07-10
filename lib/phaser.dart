@@ -20,16 +20,32 @@ part "core/core_signal.dart";
 part "core/signal_binding.dart";
 part "core/state.dart";
 
+
 part "gameobjects/game_object_creator.dart";
 part "gameobjects/game_object_factory.dart";
+part "gameobjects/sprite.dart";
+
+part "geom/circle.dart";
+part "geom/ellipse.dart";
+part "geom/line.dart";
+part "geom/point.dart";
+part "geom/polygon.dart";
+part "geom/rectangle.dart";
+
 
 part "math/math.dart";
 part "math/quad_tree.dart";
 part "math/random_data_generator.dart";
 
+
 part "system/canvas.dart";
 part "system/device.dart";
 part "system/request_animation_frame.dart";
+
+
+part "utils/color.dart";
+part "utils/debug.dart";
+part "utils/utils.dart";
 
 
 const String VERSION = '2.0.5';

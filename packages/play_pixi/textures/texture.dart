@@ -130,6 +130,7 @@ class Texture extends BaseTexture {
   }
 
   static Texture fromFrame(String frameId) {
+    //window.console.log(TextureCache);
     var texture = TextureCache[frameId];
     if (texture ==null) throw new Exception('The frameId "$frameId" does not exist in the texture cache');
     return texture;

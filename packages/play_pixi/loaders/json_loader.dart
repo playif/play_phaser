@@ -1,7 +1,7 @@
 part of PIXI;
 
 class JsonLoader extends Loader {
-  dynamic json;
+  Map json;
 
   JsonLoader(String url, bool crossorigin)
   :super(url, crossorigin) {
@@ -91,7 +91,7 @@ class JsonLoader extends Loader {
             var actualSize = frameData[i]['sourceSize'];
             var realSize = frameData[i]['spriteSourceSize'];
 
-            texture.trim = new Rectangle(realSize.x, realSize.y, actualSize.w, actualSize.h);
+            texture.trim = new Rectangle(realSize['x'], realSize['y'], actualSize['w'], actualSize['h']);
           }
         }
       }
@@ -99,9 +99,9 @@ class JsonLoader extends Loader {
       image.load();
 
     }
-    else if (this.json.bones != null) {
+    else if (this.json['bones'] != null) {
       // spine animation
-      var spineJsonParser = new Spine.SkeletonJson();
+      var spineJsonParser = new SkeletonJson();
       var skeletonData = spineJsonParser.readSkeletonData(this.json);
       AnimCache[this.url] = skeletonData;
       this.onLoaded();

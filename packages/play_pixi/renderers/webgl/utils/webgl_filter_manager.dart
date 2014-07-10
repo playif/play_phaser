@@ -4,7 +4,7 @@ class WebGLFilterManager {
   RenderingContext gl;
   bool transparent;
 
-  List filterStack = [];
+  List<FilterBlock> filterStack = [];
   num offsetX = 0;
   num offsetY = 0;
 
@@ -27,7 +27,8 @@ class WebGLFilterManager {
   Buffer indexBuffer;
   Buffer vertexBuffer;
   Buffer uvBuffer;
-  Buffer buffer;
+
+  Framebuffer buffer;
 
   Float32List colorArray;
 
@@ -42,7 +43,7 @@ class WebGLFilterManager {
     this.initShaderBuffers();
   }
 
-  begin(RenderSession renderSession, Buffer buffer) {
+  begin(RenderSession renderSession, Framebuffer buffer) {
     this.renderSession = renderSession;
     this.defaultShader = renderSession.shaderManager.defaultShader;
 
@@ -139,7 +140,7 @@ class WebGLFilterManager {
 
 
   popFilter() {
-    var gl = this.gl;
+    //var gl = this.gl;
     FilterBlock filterBlock = this.filterStack.removeLast();
     Rectangle filterArea = filterBlock._filterArea;
     FilterTexture texture = filterBlock._glFilterTexture;
@@ -174,8 +175,8 @@ class WebGLFilterManager {
 
       gl.bufferSubData(ARRAY_BUFFER, 0, this.uvArray);
 
-      var inputTexture = texture;
-      var outputTexture;
+      FilterTexture inputTexture = texture;
+      FilterTexture outputTexture;
       if (this.texturePool.length > 0) {
         outputTexture = this.texturePool.removeLast();
       }
@@ -189,7 +190,7 @@ class WebGLFilterManager {
 
       gl.disable(BLEND);
 
-      for (var i = 0; i < filterBlock.filterPasses.length - 1; i++) {
+      for (int i = 0; i < filterBlock.filterPasses.length - 1; i++) {
         var filterPass = filterBlock.filterPasses[i];
 
         gl.bindFramebuffer(FRAMEBUFFER, outputTexture.frameBuffer);
@@ -214,19 +215,19 @@ class WebGLFilterManager {
       this.texturePool.add(outputTexture);
     }
 
-    var filter = filterBlock.filterPasses[filterBlock.filterPasses.length - 1];
+    AbstractFilter filter = filterBlock.filterPasses[filterBlock.filterPasses.length - 1];
 
     this.offsetX -= filterArea.x;
     this.offsetY -= filterArea.y;
 
 
-    var sizeX = this.width;
-    var sizeY = this.height;
+    num sizeX = this.width;
+    num sizeY = this.height;
 
-    var offsetX = 0;
-    var offsetY = 0;
+    num offsetX = 0;
+    num offsetY = 0;
 
-    var buffer = this.buffer;
+    Framebuffer buffer = this.buffer;
 
     // time to render the filters texture to the previous scene
     if (this.filterStack.length == 0) {
@@ -234,7 +235,7 @@ class WebGLFilterManager {
       //this.transparent);
     }
     else {
-      var currentFilter = this.filterStack[this.filterStack.length - 1];
+      FilterBlock currentFilter = this.filterStack[this.filterStack.length - 1];
       filterArea = currentFilter._filterArea;
 
       sizeX = filterArea.width;
@@ -317,7 +318,6 @@ class WebGLFilterManager {
 
   applyFilterPass(AbstractFilter filter, Rectangle filterArea, num width, num height) {
     // use program
-    var gl = this.gl;
     var shader = filter.shaders[gl];
 
     if (shader == null) {

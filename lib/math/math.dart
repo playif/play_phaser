@@ -4,10 +4,23 @@ class Math {
   Math._(){
   }
 
+  static const int PI = DMath.PI;
   static const int PI2 = DMath.PI * 2;
   static final DMath.Random random = new DMath.Random();
   static final num _degreeToRadiansFactor = DMath.PI / 180;
   static final num _radianToDegreesFactor = 180 / DMath.PI;
+
+  static num cos(num th) => DMath.cos(th);
+
+  static num sin(num th) => DMath.sin(th);
+
+  static num abs(num val) => val.abs();
+
+  static num sqrt(num val) => DMath.sqrt(val);
+
+  static num atan2(num a, num b) => DMath.atan2(a, b);
+
+  static num round(num val) => val.round();
 
   static bool fuzzyEqual(num a, num b, [num epsilon=0.0001]) {
     return (a - b).abs() < epsilon;
@@ -243,11 +256,19 @@ class Math {
     return (n % 2) == 0;
   }
 
-  num min(Iterable<num> args) {
+  num min(num a, num b) {
+    return DMath.min(a, b);
+  }
+
+  num max(num a, num b) {
+    return DMath.max(a, b);
+  }
+
+  num minList(Iterable<num> args) {
     return args.fold(double.MAX_FINITE, (i, n) => i < n ? i : n);
   }
 
-  num max(Iterable<num> args) {
+  num maxList(Iterable<num> args) {
     return args.fold(-double.MAX_FINITE, (i, n) => i > n ? i : n);
   }
 
@@ -458,31 +479,28 @@ class Math {
     return x * x * x * (x * (x * 6 - 15) + 10);
   }
 
-  num sign (num x ) {
+  num sign(num x) {
     return x.sign;
   }
 
-  num percent (num a, num  b,[num base=0]) {
+  num percent(num a, num b, [num base=0]) {
 
-    if (a > b || base > b)
-    {
+    if (a > b || base > b) {
       return 1;
     }
-    else if (a < base || base > a)
-    {
+    else if (a < base || base > a) {
       return 0;
     }
-    else
-    {
+    else {
       return (a - base) / b;
     }
   }
 
-  num degToRad(num degrees ) {
+  num degToRad(num degrees) {
     return degrees * _degreeToRadiansFactor;
   }
 
-  num radToDeg(num  radians ) {
+  num radToDeg(num radians) {
     return radians * _radianToDegreesFactor;
   }
 

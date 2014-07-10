@@ -409,10 +409,10 @@ createWebGLTexture(BaseTexture texture, RenderingContext gl) {
   return texture._glTextures[gl];
 }
 
-updateWebGLTexture(Texture texture, RenderingContext gl) {
+updateWebGLTexture(BaseTexture texture, RenderingContext gl) {
   if (texture._glTextures[gl] != null) {
     gl.bindTexture(TEXTURE_2D, texture._glTextures[gl]);
-    gl.pixelStorei(UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+    gl.pixelStorei(UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
 
     gl.texImage2D(TEXTURE_2D, 0, RGBA, RGBA, UNSIGNED_BYTE, texture.source);
     gl.texParameteri(TEXTURE_2D, TEXTURE_MAG_FILTER, texture.scaleMode == scaleModes.LINEAR ? LINEAR : NEAREST);

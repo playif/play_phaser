@@ -53,7 +53,7 @@ class FilterTexture {
 
     ImageElement image=new ImageElement();
     //int border=0;
-    gl.texImage2D(TEXTURE_2D, 0, RGBA, width, height, 0, RGBA, UNSIGNED_BYTE, null);
+    gl.texImage2DTyped(TEXTURE_2D, 0, RGBA, width, height, 0, RGBA, UNSIGNED_BYTE, null);
 
     // update the stencil buffer width and height
     gl.bindRenderbuffer(RENDERBUFFER, this.renderBuffer);
