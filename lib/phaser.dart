@@ -8,6 +8,13 @@ import "dart:math" as DMath;
 import "package:play_pixi/pixi.dart" as PIXI;
 
 
+part "animation/animation.dart";
+part "animation/animation_manager.dart";
+part "animation/animation_parser.dart";
+part "animation/frame.dart";
+part "animation/frame_data.dart";
+
+
 part "core/game.dart";
 part "core/core_signal.dart";
 part "core/signal_binding.dart";

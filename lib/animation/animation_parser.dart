@@ -1,4 +1,6 @@
-class animationParser {
-  animationParser() {
+part of Phaser;
+
+class AnimationParser {
+  AnimationParser() {
   }
 }
