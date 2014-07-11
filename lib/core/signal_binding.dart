@@ -16,7 +16,9 @@ class SignalBinding {
 
 
   SignalBinding(this._signal, this._listener, [this._isOnce=false, this.context, this._priority=0]) {
-
+    if (this._priority == null) {
+      this._priority = 0;
+    }
   }
 
   execute(List paramsArr) {

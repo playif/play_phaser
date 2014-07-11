@@ -25,7 +25,7 @@ class Signal {
     }
   }
 
-  _registerListener(listener, isOnce, listenerContext, priority) {
+  _registerListener(Function listener, bool isOnce, Object listenerContext, [int priority]) {
 
     var prevIndex = this._indexOfListener(listener, listenerContext),
     binding;
@@ -75,13 +75,13 @@ class Signal {
   }
 
 
-  add(Function listener, listenerContext, int priority) {
+  add(Function listener, listenerContext, [int priority]) {
     this.validateListener(listener, 'add');
     return this._registerListener(listener, false, listenerContext, priority);
   }
 
 
-  addOnce(Function listener, listenerContext, int priority) {
+  addOnce(Function listener, listenerContext, [int priority]) {
     this.validateListener(listener, 'addOnce');
     return this._registerListener(listener, true, listenerContext, priority);
   }

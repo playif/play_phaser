@@ -1,6 +1,6 @@
 library Phaser;
 
-import "dart:async";
+import "dart:async" as async;
 import "dart:html";
 import "dart:convert";
 import "dart:web_gl";
@@ -89,6 +89,7 @@ part "utils/utils.dart";
 
 
 const String VERSION = '2.0.5';
+final List<Game> GAMES = [];
 
 const int AUTO = 0;
 const int CANVAS = 1;

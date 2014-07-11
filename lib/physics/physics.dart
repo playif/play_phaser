@@ -3,7 +3,7 @@ library Physics;
 import "../phaser.dart";
 
 part "arcade/body.dart";
-part "arcade/world.dart";
+part "arcade/arcade.dart";
 
 
 class Physics {

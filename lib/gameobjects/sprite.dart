@@ -17,7 +17,7 @@ class Sprite extends PIXI.Sprite {
   Point world;
   bool autoCull;
   InputHandler input;
-  Body body=null;
+  Physics.Body body=null;
   bool alive;
   num health;
   bool checkWorldBounds=false;
@@ -408,7 +408,7 @@ class Sprite extends PIXI.Sprite {
 
   postUpdate() {
 
-    if (this.key is Phaser.BitmapData) {
+    if (this.key is BitmapData) {
       this.key.render();
     }
 
@@ -520,7 +520,7 @@ class Sprite extends PIXI.Sprite {
         var local = {
         };
 
-        Phaser.Utils.extend(true, local, this.texture);
+        Utils.extend(true, local, this.texture);
 
         local.sourceWidth = local.width;
         local.sourceHeight = local.height;

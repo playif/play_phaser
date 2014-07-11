@@ -3,7 +3,7 @@ part of Phaser;
 class Game {
   num width;
   num height;
-  num renderer;
+  PIXI.Renderer renderer;
   String parent;
   State state;
   bool transparent;
@@ -51,6 +51,9 @@ class Game {
   Signal onFocus;
   bool _paused;
   bool _codePaused;
+  bool preserveDrawingBuffer;
+
+  Function _onBoot;
 
   bool get paused {
     return this._paused;
@@ -78,14 +81,14 @@ class Game {
     }
   }
 
-  Game([this.width=800, this.height=600, this.renderer=AUTO, this.parent='', this.state,
+  Game([this.width=800, this.height=600, this.renderer=AUTO, this.parent='', Map state,
        this.transparent, this.antialias, this.physicsConfig]) {
 
-
+    GAMES.add(this);
     /**
      * @property {number} id - Phaser Game ID (for when Pixi supports multiple instances).
      */
-    this.id = GAMES.push(this) - 1;
+    this.id = GAMES.length - 1;
 
     /**
      * @property {object} config - The Phaser.Game configuration object.
@@ -141,7 +144,7 @@ class Game {
     /**
      * @property {number} renderType - The Renderer this game will use. Either Phaser.AUTO, Phaser.CANVAS or Phaser.WEBGL.
      */
-    this.renderType = Phaser.AUTO;
+    this.renderType = AUTO;
 
     /**
      * @property {Phaser.StateManager} state - The StateManager.
@@ -324,12 +327,13 @@ class Game {
     this._codePaused = false;
 
     //  Parse the configuration object (if any)
-    if (arguments.length == 1 && arguments[0] is Map) {
-      this.parseConfig(arguments[0]);
-    }
-    else {
+//    if (arguments.length == 1 && arguments[0] is Map) {
+//      this.parseConfig(arguments[0]);
+//    }
+//    else
+    {
       this.config = {
-          enableDebug: true
+          'enableDebug': true
       };
 
       if (width != null) {
@@ -364,7 +368,7 @@ class Game {
 
     var _this = this;
 
-    this._onBoot = () {
+    this._onBoot = (e) {
       return _this.boot();
     };
 
@@ -376,7 +380,7 @@ class Game {
       window.addEventListener('load', this._onBoot, false);
     }
 
-    return this;
+    //return this;
 
 
   }
@@ -387,11 +391,11 @@ class Game {
     this.config = config;
 
     if (config['width'] != null) {
-      this.width = Phaser.Utils.parseDimension(config['width'], 0);
+      this.width = Utils.parseDimension(config['width'], 0);
     }
 
     if (config['height'] != null) {
-      this.height = Phaser.Utils.parseDimension(config['height'], 1);
+      this.height = Utils.parseDimension(config['height'], 1);
     }
 
     if (config['renderer'] != null) {
@@ -419,13 +423,13 @@ class Game {
       this.physicsConfig = config['physicsConfig'];
     }
 
-    var seed = [(Date.now() * Math.random()).toString()];
+    var seed = [(new DateTime.now().millisecondsSinceEpoch * Math.random()).toString()];
 
     if (config['seed'] != null) {
       seed = config['seed'];
     }
 
-    this.rnd = new Phaser.RandomDataGenerator(seed);
+    this.rnd = new RandomDataGenerator(seed);
 
     var state = null;
 
@@ -433,7 +437,7 @@ class Game {
       state = config['state'];
     }
 
-    this.state = new Phaser.StateManager(this, state);
+    this.state = new StateManager(this, state);
 
   }
 
@@ -458,37 +462,38 @@ class Game {
       document.removeEventListener('DOMContentLoaded', this._onBoot);
       window.removeEventListener('load', this._onBoot);
 
-      this.onPause = new Phaser.Signal();
-      this.onResume = new Phaser.Signal();
-      this.onBlur = new Phaser.Signal();
-      this.onFocus = new Phaser.Signal();
+      this.onPause = new Signal();
+      this.onResume = new Signal();
+      this.onBlur = new Signal();
+      this.onFocus = new Signal();
 
       this.isBooted = true;
 
-      this.device = new Phaser.Device(this);
-      this.math = Phaser.Math;
+      this.device = new Device(this);
+      this.math = Math;
 
-      this.stage = new Phaser.Stage(this, this.width, this.height);
+
+      this.stage = new Stage(this, this.width, this.height);
 
       this.setUpRenderer();
 
-      this.scale = new Phaser.ScaleManager(this, this.width, this.height);
+      this.scale = new ScaleManager(this, this.width, this.height);
 
       this.device.checkFullScreenSupport();
 
-      this.world = new Phaser.World(this);
-      this.add = new Phaser.GameObjectFactory(this);
-      this.make = new Phaser.GameObjectCreator(this);
-      this.cache = new Phaser.Cache(this);
-      this.load = new Phaser.Loader(this);
-      this.time = new Phaser.Time(this);
-      this.tweens = new Phaser.TweenManager(this);
-      this.input = new Phaser.Input(this);
-      this.sound = new Phaser.SoundManager(this);
-      this.physics = new Phaser.Physics(this, this.physicsConfig);
-      this.particles = new Phaser.Particles(this);
-      this.plugins = new Phaser.PluginManager(this);
-      this.net = new Phaser.Net(this);
+      this.world = new World(this);
+      this.add = new GameObjectFactory(this);
+      this.make = new GameObjectCreator(this);
+      this.cache = new Cache(this);
+      this.load = new Loader(this);
+      this.time = new Time(this);
+      this.tweens = new TweenManager(this);
+      this.input = new Input(this);
+      this.sound = new SoundManager(this);
+      this.physics = new Physics(this, this.physicsConfig);
+      this.particles = new Particles(this);
+      this.plugins = new PluginManager(this);
+      this.net = new Net(this);
 
       this.time.boot();
       this.stage.boot();
@@ -498,7 +503,7 @@ class Game {
       this.state.boot();
 
       if (this.config['enableDebug']) {
-        this.debug = new Phaser.Utils.Debug(this);
+        this.debug = new Utils.Debug(this);
         this.debug.boot();
       }
 
@@ -507,10 +512,10 @@ class Game {
       this.isRunning = true;
 
       if (this.config && this.config['forceSetTimeOut']) {
-        this.raf = new Phaser.RequestAnimationFrame(this, this.config['forceSetTimeOut']);
+        this.raf = new RequestAnimationFrame(this, this.config['forceSetTimeOut']);
       }
       else {
-        this.raf = new Phaser.RequestAnimationFrame(this, false);
+        this.raf = new RequestAnimationFrame(this, false);
       }
 
       this.raf.start();
@@ -527,16 +532,16 @@ class Game {
 
   showDebugHeader() {
 
-    var v = Phaser.VERSION;
+    var v = VERSION;
     var r = 'Canvas';
     var a = 'HTML Audio';
     var c = 1;
 
-    if (this.renderType == Phaser.WEBGL) {
+    if (this.renderType == WEBGL) {
       r = 'WebGL';
       c++;
     }
-    else if (this.renderType == Phaser.HEADLESS) {
+    else if (this.renderType == HEADLESS) {
       r = 'Headless';
     }
 
@@ -565,10 +570,10 @@ class Game {
         }
       }
 
-      console.log.apply(console, args);
+      window. console.log.apply(window.console, args);
     }
     else if (window['console']) {
-      console.log('Phaser v' + v + ' | Pixi.js ' + PIXI.VERSION + ' | ' + r + ' | ' + a + ' | http://phaser.io');
+      window.console.log('Phaser v' + v + ' | Pixi.js ' + PIXI.VERSION + ' | ' + r + ' | ' + a + ' | http://phaser.io');
     }
 
   }
@@ -585,14 +590,14 @@ class Game {
     if (this.device.trident) {
       //  Pixi WebGL renderer on IE11 doesn't work correctly at the moment, the pre-multiplied alpha gets all washed out.
       //  So we're forcing canvas for now until this is fixed, sorry. It's got to be better than no game appearing at all, right?
-      this.renderType = Phaser.CANVAS;
+      this.renderType = CANVAS;
     }
 
     if (this.config['canvasID']) {
-      this.canvas = Phaser.Canvas.create(this.width, this.height, this.config['canvasID']);
+      this.canvas = Canvas.create(this.width, this.height, this.config['canvasID']);
     }
     else {
-      this.canvas = Phaser.Canvas.create(this.width, this.height);
+      this.canvas = Canvas.create(this.width, this.height);
     }
 
     if (this.config['canvasStyle']) {
@@ -607,31 +612,31 @@ class Game {
       this.canvas.screencanvas = true;
     }
 
-    if (this.renderType == Phaser.HEADLESS || this.renderType == Phaser.CANVAS || (this.renderType == Phaser.AUTO && this.device.webGL == false)) {
+    if (this.renderType == HEADLESS || this.renderType == CANVAS || (this.renderType == AUTO && this.device.webGL == false)) {
       if (this.device.canvas) {
-        if (this.renderType == Phaser.AUTO) {
-          this.renderType = Phaser.CANVAS;
+        if (this.renderType == AUTO) {
+          this.renderType = CANVAS;
         }
 
         this.renderer = new PIXI.CanvasRenderer(this.width, this.height, this.canvas, this.transparent);
         this.context = this.renderer.context;
       }
       else {
-        throw new Error('Phaser.Game - cannot create Canvas or WebGL context, aborting.');
+        throw new Exception('Phaser.Game - cannot create Canvas or WebGL context, aborting.');
       }
     }
     else {
       //  They requested WebGL and their browser supports it
-      this.renderType = Phaser.WEBGL;
+      this.renderType = WEBGL;
       this.renderer = new PIXI.WebGLRenderer(this.width, this.height, this.canvas, this.transparent, this.antialias, this.preserveDrawingBuffer);
       this.context = null;
     }
 
-    if (this.renderType != Phaser.HEADLESS) {
+    if (this.renderType != HEADLESS) {
       this.stage.smoothed = this.antialias;
 
-      Phaser.Canvas.addToDOM(this.canvas, this.parent, false);
-      Phaser.Canvas.setTouchAction(this.canvas);
+      Canvas.addToDOM(this.canvas, this.parent, false);
+      Canvas.setTouchAction(this.canvas);
     }
 
   }
@@ -677,7 +682,7 @@ class Game {
       this.debug.preUpdate();
     }
 
-    if (this.renderType != Phaser.HEADLESS) {
+    if (this.renderType != HEADLESS) {
       this.state.preRender();
       this.renderer.render(this.stage);
 
@@ -685,7 +690,7 @@ class Game {
       this.state.render();
       this.plugins.postRender();
 
-      if (this.device.cocoonJS && this.renderType == Phaser.CANVAS && this.stage.currentRenderOrderID == 1) {
+      if (this.device.cocoonJS && this.renderType == CANVAS && this.stage.currentRenderOrderID == 1) {
         //  Horrible hack! But without it Cocoon fails to render a scene with just a single drawImage call on it.
         this.context.fillRect(0, 0, 0, 0);
       }
