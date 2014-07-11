@@ -1,11 +1,11 @@
 part of Phaser;
 
-class Sprite extends Sprite {
+class Sprite extends PIXI.Sprite {
   Game game;
   num x;
   num y;
   String key;
-  num _frame;
+//  num _frame;
 
   String name;
   num type;
@@ -14,11 +14,184 @@ class Sprite extends Sprite {
   AnimationManager animations;
 
   String _frameName;
+  Point world;
+  bool autoCull;
+  InputHandler input;
+  Body body=null;
+  bool alive;
+  num health;
+  bool checkWorldBounds=false;
+  bool outOfBoundsKill=false;
+  bool debug =false;
+  Point cameraOffset;
+  Rectangle cropRect;
 
-  
+  List<num> _cache;
+  Rectangle _crop;
+
+  Rectangle _frame;
+  Rectangle _bounds;
+
+  num lifespan;
 
 
-  Sprite(this.game, [this.x=0, this.y=0, this.key, this._frame=0])
+  num get angle {
+    return Math.wrapAngle(Math.radToDeg(this.rotation));
+  }
+
+  set angle(num value) {
+    this.rotation = Math.degToRad(Math.wrapAngle(value));
+  }
+
+  num get deltaX {
+    return this.world.x - this._cache[0];
+  }
+
+  num get deltaY {
+    return this.world.y - this._cache[1];
+  }
+
+  num get deltaZ {
+    return this.rotation - this._cache[2];
+  }
+
+  bool get inWorld {
+    return this.game.world.bounds.intersects(this.getBounds());
+  }
+
+  bool get inCamera {
+    return this.game.world.camera.screenView.intersects(this.getBounds());
+  }
+
+  bool get frame {
+    return this.animations.frame;
+  }
+
+  set frame(bool value) {
+    this.animations.frame = value;
+  }
+
+  String get frameName {
+    return this.animations.frameName;
+  }
+
+  set frameName(String value) {
+    this.animations.frameName = value;
+  }
+
+  num get renderOrderID {
+    return this._cache[3];
+  }
+
+  bool get inputEnabled {
+    return (this.input != null && this.input.enabled);
+  }
+
+  set inputEnabled(bool value) {
+    if (value) {
+      if (this.input == null) {
+        this.input = new InputHandler(this);
+        this.input.start();
+      }
+      else if (this.input != null && !this.input.enabled) {
+        this.input.start();
+      }
+    }
+    else {
+      if (this.input != null && this.input.enabled) {
+        this.input.stop();
+      }
+    }
+  }
+
+  bool get exists {
+    return this._cache[6] == null ? false : this._cache[6] ;
+  }
+
+  set exists(bool value) {
+    if (value) {
+      //  exists = true
+      this._cache[6] = 1;
+
+      if (this.body != null && this.body.type == Physics.P2JS) {
+        this.body.addToWorld();
+      }
+
+      this.visible = true;
+    }
+    else {
+      //  exists = false
+      this._cache[6] = 0;
+
+      if (this.body != null && this.body.type == Physics.P2JS) {
+        this.body.removeFromWorld();
+      }
+
+      this.visible = false;
+
+    }
+  }
+
+  bool get fixedToCamera {
+    return this._cache[7] == null ? false : this._cache[7];
+  }
+
+  set fixedToCamera(bool value) {
+    if (value) {
+      this._cache[7] = 1;
+      this.cameraOffset.set(this.x, this.y);
+    }
+    else {
+      this._cache[7] = 0;
+    }
+  }
+
+  bool get smoothed {
+    return this.texture.baseTexture.scaleMode == PIXI.scaleModes.DEFAULT;
+  }
+
+  set smoothed(bool value) {
+    if (value) {
+      if (this.texture != null) {
+        this.texture.baseTexture.scaleMode = PIXI.scaleModes.DEFAULT;
+      }
+    }
+    else {
+      if (this.texture != null) {
+        this.texture.baseTexture.scaleMode = PIXI.scaleModes.LINEAR;
+      }
+    }
+  }
+
+  num get x {
+    return this.position.x;
+  }
+
+  set x(num value) {
+    this.position.x = value;
+
+    if (this.body != null && this.body.type == ARCADE && this.body.phase == 2) {
+      this.body._reset = 1;
+    }
+  }
+
+  num get y {
+    return this.position.y;
+  }
+
+  set y(num value) {
+    this.position.y = value;
+
+    if (this.body != null && this.body.type == ARCADE && this.body.phase == 2) {
+      this.body._reset = 1;
+    }
+  }
+
+  bool get destroyPhase {
+    return this._cache[8] == null ? false : this._cache[8];
+  }
+
+  Sprite(this.game, [this.x=0, this.y=0, this.key, num frame=0])
   :super(PIXI.TextureCache['__default']) {
 
     name = '';
@@ -30,14 +203,14 @@ class Sprite extends Sprite {
 
     _frameName = '';
 
-    this.loadTexture(key, _frame);
+    this.loadTexture(key, frame);
 
     this.position.set(x, y);
 
     /**
      * @property {Phaser.Point} world - The world coordinates of this Sprite. This differs from the x/y coordinates which are relative to the Sprites container.
      */
-    this.world = new Phaser.Point(x, y);
+    this.world = new Point(x, y);
 
     /**
      * Should this Sprite be automatically culled if out of range of the camera?
@@ -104,7 +277,7 @@ class Sprite extends Sprite {
     /**
      * @property {Phaser.Point} cameraOffset - If this object is fixedToCamera then this stores the x/y offset that its drawn at, from the top-left of the camera view.
      */
-    this.cameraOffset = new Phaser.Point();
+    this.cameraOffset = new Point();
 
     /**
      * A small internal cache:
@@ -126,7 +299,7 @@ class Sprite extends Sprite {
      * @property {Phaser.Rectangle} _bounds - Internal cache var.
      * @private
      */
-    this._bounds = new Phaser.Rectangle();
+    this._bounds = new Rectangle();
 
   }
 

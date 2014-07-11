@@ -14,16 +14,23 @@ part "animation/animation_parser.dart";
 part "animation/frame.dart";
 part "animation/frame_data.dart";
 
-
+part "core/camera.dart";
 part "core/game.dart";
 part "core/core_signal.dart";
+part "core/group.dart";
+part "core/scale_manager.dart";
 part "core/signal_binding.dart";
+
+part "core/stage.dart";
 part "core/state.dart";
+part "core/state_manager.dart";
+part "core/world.dart";
 
 
 part "gameobjects/game_object_creator.dart";
 part "gameobjects/game_object_factory.dart";
 part "gameobjects/sprite.dart";
+
 
 part "geom/circle.dart";
 part "geom/ellipse.dart";
@@ -37,11 +44,21 @@ part "math/math.dart";
 part "math/quad_tree.dart";
 part "math/random_data_generator.dart";
 
+part "net/net.dart";
+
+part "sound/sound_manager.dart";
 
 part "system/canvas.dart";
 part "system/device.dart";
 part "system/request_animation_frame.dart";
 
+part "time/time.dart";
+part "time/timer.dart";
+part "time/timer_event.dart";
+
+part "tween/easing.dart";
+part "tween/tween.dart";
+part "tween/tween_manager.dart";
 
 part "utils/color.dart";
 part "utils/debug.dart";

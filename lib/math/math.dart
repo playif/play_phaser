@@ -1,14 +1,18 @@
 part of Phaser;
 
+typedef double doubleFunc();
+
 class Math {
   Math._(){
   }
 
   static const int PI = DMath.PI;
   static const int PI2 = DMath.PI * 2;
-  static final DMath.Random random = new DMath.Random();
+  static final doubleFunc random = new DMath.Random().nextDouble;
   static final num _degreeToRadiansFactor = DMath.PI / 180;
   static final num _radianToDegreesFactor = 180 / DMath.PI;
+
+
 
   static num cos(num th) => DMath.cos(th);
 
