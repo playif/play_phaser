@@ -34,7 +34,7 @@ class Game {
   Stage stage;
   Time time;
   Physics.Physics physics;
-  TweenManager tween;
+  TweenManager tweens;
   RandomDataGenerator rnd;
   Device device;
   Camera camera;
@@ -52,7 +52,31 @@ class Game {
   bool _paused;
   bool _codePaused;
 
+  bool get paused {
+    return this._paused;
+  }
 
+  set paused(bool value) {
+    if (value == true) {
+      if (this._paused == false) {
+        this._paused = true;
+        this._codePaused = true;
+        this.sound.setMute();
+        this.time.gamePaused();
+        this.onPause.dispatch(this);
+      }
+    }
+    else {
+      if (this._paused) {
+        this._paused = false;
+        this._codePaused = false;
+        this.input.reset();
+        this.sound.unsetMute();
+        this.time.gameResumed();
+        this.onResume.dispatch(this);
+      }
+    }
+  }
 
   Game([this.width=800, this.height=600, this.renderer=AUTO, this.parent='', this.state,
        this.transparent, this.antialias, this.physicsConfig]) {
@@ -357,5 +381,461 @@ class Game {
 
   }
 
+
+  parseConfig(config) {
+
+    this.config = config;
+
+    if (config['width'] != null) {
+      this.width = Phaser.Utils.parseDimension(config['width'], 0);
+    }
+
+    if (config['height'] != null) {
+      this.height = Phaser.Utils.parseDimension(config['height'], 1);
+    }
+
+    if (config['renderer'] != null) {
+      this.renderer = config['renderer'];
+      this.renderType = config['renderer'];
+    }
+
+    if (config['parent'] != null) {
+      this.parent = config['parent'];
+    }
+
+    if (config['transparent'] != null) {
+      this.transparent = config['transparent'];
+    }
+
+    if (config['antialias'] != null) {
+      this.antialias = config['antialias'];
+    }
+
+    if (config['preserveDrawingBuffer'] != null) {
+      this.preserveDrawingBuffer = config['preserveDrawingBuffer'];
+    }
+
+    if (config['physicsConfig'] != null) {
+      this.physicsConfig = config['physicsConfig'];
+    }
+
+    var seed = [(Date.now() * Math.random()).toString()];
+
+    if (config['seed'] != null) {
+      seed = config['seed'];
+    }
+
+    this.rnd = new Phaser.RandomDataGenerator(seed);
+
+    var state = null;
+
+    if (config['state'] != null) {
+      state = config['state'];
+    }
+
+    this.state = new Phaser.StateManager(this, state);
+
+  }
+
+
+  /**
+   * Initialize engine sub modules and start the game.
+   *
+   * @method Phaser.Game#boot
+   * @protected
+   */
+
+  boot() {
+
+    if (this.isBooted) {
+      return;
+    }
+
+    if (!document.body) {
+      window.setTimeout(this._onBoot, 20);
+    }
+    else {
+      document.removeEventListener('DOMContentLoaded', this._onBoot);
+      window.removeEventListener('load', this._onBoot);
+
+      this.onPause = new Phaser.Signal();
+      this.onResume = new Phaser.Signal();
+      this.onBlur = new Phaser.Signal();
+      this.onFocus = new Phaser.Signal();
+
+      this.isBooted = true;
+
+      this.device = new Phaser.Device(this);
+      this.math = Phaser.Math;
+
+      this.stage = new Phaser.Stage(this, this.width, this.height);
+
+      this.setUpRenderer();
+
+      this.scale = new Phaser.ScaleManager(this, this.width, this.height);
+
+      this.device.checkFullScreenSupport();
+
+      this.world = new Phaser.World(this);
+      this.add = new Phaser.GameObjectFactory(this);
+      this.make = new Phaser.GameObjectCreator(this);
+      this.cache = new Phaser.Cache(this);
+      this.load = new Phaser.Loader(this);
+      this.time = new Phaser.Time(this);
+      this.tweens = new Phaser.TweenManager(this);
+      this.input = new Phaser.Input(this);
+      this.sound = new Phaser.SoundManager(this);
+      this.physics = new Phaser.Physics(this, this.physicsConfig);
+      this.particles = new Phaser.Particles(this);
+      this.plugins = new Phaser.PluginManager(this);
+      this.net = new Phaser.Net(this);
+
+      this.time.boot();
+      this.stage.boot();
+      this.world.boot();
+      this.input.boot();
+      this.sound.boot();
+      this.state.boot();
+
+      if (this.config['enableDebug']) {
+        this.debug = new Phaser.Utils.Debug(this);
+        this.debug.boot();
+      }
+
+      this.showDebugHeader();
+
+      this.isRunning = true;
+
+      if (this.config && this.config['forceSetTimeOut']) {
+        this.raf = new Phaser.RequestAnimationFrame(this, this.config['forceSetTimeOut']);
+      }
+      else {
+        this.raf = new Phaser.RequestAnimationFrame(this, false);
+      }
+
+      this.raf.start();
+    }
+
+  }
+
+  /**
+   * Displays a Phaser version debug header in the console.
+   *
+   * @method Phaser.Game#showDebugHeader
+   * @protected
+   */
+
+  showDebugHeader() {
+
+    var v = Phaser.VERSION;
+    var r = 'Canvas';
+    var a = 'HTML Audio';
+    var c = 1;
+
+    if (this.renderType == Phaser.WEBGL) {
+      r = 'WebGL';
+      c++;
+    }
+    else if (this.renderType == Phaser.HEADLESS) {
+      r = 'Headless';
+    }
+
+    if (this.device.webAudio) {
+      a = 'WebAudio';
+      c++;
+    }
+
+    if (this.device.chrome) {
+      var args = [
+          '%c %c %c Phaser v' + v + ' | Pixi.js ' + PIXI.VERSION + ' | ' + r + ' | ' + a + '  %c %c ' + ' http://phaser.io  %c %c \u2665%c\u2665%c\u2665 ',
+          'background: #0cf300',
+          'background: #00bc17',
+          'color: #ffffff; background: #00711f;',
+          'background: #00bc17',
+          'background: #0cf300',
+          'background: #00bc17'
+      ];
+
+      for (var i = 0; i < 3; i++) {
+        if (i < c) {
+          args.push('color: #ff2424; background: #fff');
+        }
+        else {
+          args.push('color: #959595; background: #fff');
+        }
+      }
+
+      console.log.apply(console, args);
+    }
+    else if (window['console']) {
+      console.log('Phaser v' + v + ' | Pixi.js ' + PIXI.VERSION + ' | ' + r + ' | ' + a + ' | http://phaser.io');
+    }
+
+  }
+
+  /**
+   * Checks if the device is capable of using the requested renderer and sets it up or an alternative if not.
+   *
+   * @method Phaser.Game#setUpRenderer
+   * @protected
+   */
+
+  setUpRenderer() {
+
+    if (this.device.trident) {
+      //  Pixi WebGL renderer on IE11 doesn't work correctly at the moment, the pre-multiplied alpha gets all washed out.
+      //  So we're forcing canvas for now until this is fixed, sorry. It's got to be better than no game appearing at all, right?
+      this.renderType = Phaser.CANVAS;
+    }
+
+    if (this.config['canvasID']) {
+      this.canvas = Phaser.Canvas.create(this.width, this.height, this.config['canvasID']);
+    }
+    else {
+      this.canvas = Phaser.Canvas.create(this.width, this.height);
+    }
+
+    if (this.config['canvasStyle']) {
+      this.canvas.style = this.config['canvasStyle'];
+    }
+    else {
+      this.canvas.style['-webkit-full-screen'] = 'width: 100%; height: 100%';
+    }
+
+    if (this.device.cocoonJS) {
+      //  Enable screencanvas for Cocoon on this Canvas object only
+      this.canvas.screencanvas = true;
+    }
+
+    if (this.renderType == Phaser.HEADLESS || this.renderType == Phaser.CANVAS || (this.renderType == Phaser.AUTO && this.device.webGL == false)) {
+      if (this.device.canvas) {
+        if (this.renderType == Phaser.AUTO) {
+          this.renderType = Phaser.CANVAS;
+        }
+
+        this.renderer = new PIXI.CanvasRenderer(this.width, this.height, this.canvas, this.transparent);
+        this.context = this.renderer.context;
+      }
+      else {
+        throw new Error('Phaser.Game - cannot create Canvas or WebGL context, aborting.');
+      }
+    }
+    else {
+      //  They requested WebGL and their browser supports it
+      this.renderType = Phaser.WEBGL;
+      this.renderer = new PIXI.WebGLRenderer(this.width, this.height, this.canvas, this.transparent, this.antialias, this.preserveDrawingBuffer);
+      this.context = null;
+    }
+
+    if (this.renderType != Phaser.HEADLESS) {
+      this.stage.smoothed = this.antialias;
+
+      Phaser.Canvas.addToDOM(this.canvas, this.parent, false);
+      Phaser.Canvas.setTouchAction(this.canvas);
+    }
+
+  }
+
+  /**
+   * The core game loop.
+   *
+   * @method Phaser.Game#update
+   * @protected
+   * @param {number} time - The current time as provided by RequestAnimationFrame.
+   */
+
+  update(num time) {
+
+    this.time.update(time);
+
+    if (!this._paused && !this.pendingStep) {
+      if (this.stepping) {
+        this.pendingStep = true;
+      }
+
+      this.debug.preUpdate();
+      this.physics.preUpdate();
+      this.state.preUpdate();
+      this.plugins.preUpdate();
+      this.stage.preUpdate();
+
+      this.state.update();
+      this.stage.update();
+      this.tweens.update();
+      this.sound.update();
+      this.input.update();
+      this.physics.update();
+      this.particles.update();
+      this.plugins.update();
+
+      this.stage.postUpdate();
+      this.plugins.postUpdate();
+    }
+    else {
+      this.state.pauseUpdate();
+      // this.input.update();
+      this.debug.preUpdate();
+    }
+
+    if (this.renderType != Phaser.HEADLESS) {
+      this.state.preRender();
+      this.renderer.render(this.stage);
+
+      this.plugins.render();
+      this.state.render();
+      this.plugins.postRender();
+
+      if (this.device.cocoonJS && this.renderType == Phaser.CANVAS && this.stage.currentRenderOrderID == 1) {
+        //  Horrible hack! But without it Cocoon fails to render a scene with just a single drawImage call on it.
+        this.context.fillRect(0, 0, 0, 0);
+      }
+    }
+
+  }
+
+  /**
+   * Enable core game loop stepping. When enabled you must call game.step() directly (perhaps via a DOM button?)
+   * Calling step will advance the game loop by one frame. This is extremely useful for hard to track down errors!
+   *
+   * @method Phaser.Game#enableStep
+   */
+
+  enableStep() {
+
+    this.stepping = true;
+    this.pendingStep = false;
+    this.stepCount = 0;
+
+  }
+
+  /**
+   * Disables core game loop stepping.
+   *
+   * @method Phaser.Game#disableStep
+   */
+
+  disableStep() {
+
+    this.stepping = false;
+    this.pendingStep = false;
+
+  }
+
+  /**
+   * When stepping is enabled you must call this function directly (perhaps via a DOM button?) to advance the game loop by one frame.
+   * This is extremely useful to hard to track down errors! Use the internal stepCount property to monitor progress.
+   *
+   * @method Phaser.Game#step
+   */
+
+  step() {
+
+    this.pendingStep = false;
+    this.stepCount++;
+
+  }
+
+  /**
+   * Nuke the entire game from orbit
+   *
+   * @method Phaser.Game#destroy
+   */
+
+  destroy() {
+
+    this.raf.stop();
+
+    this.input.destroy();
+    this.state.destroy();
+    this.physics.destroy();
+
+    this.state = null;
+    this.cache = null;
+    this.input = null;
+    this.load = null;
+    this.sound = null;
+    this.stage = null;
+    this.time = null;
+    this.world = null;
+    this.isBooted = false;
+
+  }
+
+  /**
+   * Called by the Stage visibility handler.
+   *
+   * @method Phaser.Game#gamePaused
+   * @param {object} event - The DOM event that caused the game to pause, if any.
+   * @protected
+   */
+
+  gamePaused(event) {
+
+    //   If the game is already paused it was done via game code, so don't re-pause it
+    if (!this._paused) {
+      this._paused = true;
+      this.time.gamePaused();
+      this.sound.setMute();
+      this.onPause.dispatch(event);
+    }
+
+  }
+
+  /**
+   * Called by the Stage visibility handler.
+   *
+   * @method Phaser.Game#gameResumed
+   * @param {object} event - The DOM event that caused the game to pause, if any.
+   * @protected
+   */
+
+  gameResumed(event) {
+
+    //  Game is paused, but wasn't paused via code, so resume it
+    if (this._paused && !this._codePaused) {
+      this._paused = false;
+      this.time.gameResumed();
+      this.input.reset();
+      this.sound.unsetMute();
+      this.onResume.dispatch(event);
+    }
+
+  }
+
+  /**
+   * Called by the Stage visibility handler.
+   *
+   * @method Phaser.Game#focusLoss
+   * @param {object} event - The DOM event that caused the game to pause, if any.
+   * @protected
+   */
+
+  focusLoss(event) {
+
+    this.onBlur.dispatch(event);
+
+    if (!this.stage.disableVisibilityChange) {
+      this.gamePaused(event);
+    }
+
+  }
+
+  /**
+   * Called by the Stage visibility handler.
+   *
+   * @method Phaser.Game#focusGain
+   * @param {object} event - The DOM event that caused the game to pause, if any.
+   * @protected
+   */
+
+  focusGain(event) {
+
+    this.onFocus.dispatch(event);
+
+    if (!this.stage.disableVisibilityChange) {
+      this.gameResumed(event);
+    }
+
+  }
 
 }
