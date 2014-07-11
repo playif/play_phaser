@@ -6,7 +6,7 @@ import "dart:convert";
 import "dart:web_gl";
 import "dart:math" as DMath;
 import "package:play_pixi/pixi.dart" as PIXI;
-
+import "physics/physics.dart" as Physics;
 
 part "animation/animation.dart";
 part "animation/animation_manager.dart";
@@ -14,12 +14,14 @@ part "animation/animation_parser.dart";
 part "animation/frame.dart";
 part "animation/frame_data.dart";
 
+
 part "core/camera.dart";
 part "core/game.dart";
 part "core/core_signal.dart";
 part "core/group.dart";
 part "core/scale_manager.dart";
 part "core/signal_binding.dart";
+
 
 part "core/stage.dart";
 part "core/state.dart";
@@ -53,7 +55,14 @@ part "math/math.dart";
 part "math/quad_tree.dart";
 part "math/random_data_generator.dart";
 
+
 part "net/net.dart";
+
+
+part "particles/arcade/arcade_particles.dart";
+part "particles/arcade/emitter.dart";
+part "particles/particles.dart";
+
 
 part "sound/sound.dart";
 part "sound/sound_manager.dart";
@@ -63,13 +72,16 @@ part "system/canvas.dart";
 part "system/device.dart";
 part "system/request_animation_frame.dart";
 
+
 part "time/time.dart";
 part "time/timer.dart";
 part "time/timer_event.dart";
 
+
 part "tween/easing.dart";
 part "tween/tween.dart";
 part "tween/tween_manager.dart";
+
 
 part "utils/color.dart";
 part "utils/debug.dart";

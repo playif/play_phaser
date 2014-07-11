@@ -33,7 +33,7 @@ class Game {
   SoundManager sound;
   Stage stage;
   Time time;
-  Physics physics;
+  Physics.Physics physics;
   TweenManager tween;
   RandomDataGenerator rnd;
   Device device;
