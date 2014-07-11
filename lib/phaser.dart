@@ -40,13 +40,24 @@ part "geom/polygon.dart";
 part "geom/rectangle.dart";
 
 
+part "input/input.dart";
+part "input/input_handler.dart";
+
+
+part "loader/cache.dart";
+part "loader/loader.dart";
+part "loader/loader_parser.dart";
+
+
 part "math/math.dart";
 part "math/quad_tree.dart";
 part "math/random_data_generator.dart";
 
 part "net/net.dart";
 
+part "sound/sound.dart";
 part "sound/sound_manager.dart";
+
 
 part "system/canvas.dart";
 part "system/device.dart";
