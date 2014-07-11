@@ -1,5 +1,7 @@
 library Phaser;
 
+import "dart:typed_data";
+import "dart:web_audio";
 import "dart:async" as async;
 import "dart:html";
 import "dart:convert";
