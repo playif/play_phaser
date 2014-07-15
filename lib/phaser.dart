@@ -7,8 +7,11 @@ import "dart:html";
 import "dart:convert";
 import "dart:web_gl";
 import "dart:math" as DMath;
+import "dart:mirrors";
 import "package:play_pixi/pixi.dart" as PIXI;
 import "physics/physics.dart" as Physics;
+
+import "tween/easing.dart" as Easing;
 
 part "animation/animation.dart";
 part "animation/animation_manager.dart";
@@ -80,7 +83,7 @@ part "time/timer.dart";
 part "time/timer_event.dart";
 
 
-part "tween/easing.dart";
+//part "tween/easing.dart";
 part "tween/tween.dart";
 part "tween/tween_manager.dart";
 

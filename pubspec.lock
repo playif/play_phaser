@@ -8,4 +8,4 @@ packages:
   play_pixi:
     description: play_pixi
     source: hosted
-    version: "0.9.3"
+    version: "0.9.4"
