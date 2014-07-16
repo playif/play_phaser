@@ -34,9 +34,21 @@ part "core/state_manager.dart";
 part "core/world.dart";
 
 
+part "gameobjects/bitmap_data.dart";
+part "gameobjects/bitmap_text.dart";
+part "gameobjects/button.dart";
+part "gameobjects/events.dart";
 part "gameobjects/game_object_creator.dart";
 part "gameobjects/game_object_factory.dart";
+part "gameobjects/graphics.dart";
+part "gameobjects/image.dart";
+part "gameobjects/particle.dart";
+part "gameobjects/render_texture.dart";
+part "gameobjects/retro_font.dart";
 part "gameobjects/sprite.dart";
+part "gameobjects/sprite_batch.dart";
+part "gameobjects/text.dart";
+part "gameobjects/tile_sprite.dart";
 
 
 part "geom/circle.dart";
