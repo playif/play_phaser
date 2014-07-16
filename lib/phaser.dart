@@ -47,8 +47,17 @@ part "geom/polygon.dart";
 part "geom/rectangle.dart";
 
 
+part "input/gamepad.dart";
+part "input/gamepad_button.dart";
 part "input/input.dart";
 part "input/input_handler.dart";
+part "input/key.dart";
+part "input/keyboard.dart";
+part "input/mouse.dart";
+part "input/ms_pointer.dart";
+part "input/pointer.dart";
+part "input/single_pad.dart";
+part "input/touch.dart";
 
 
 part "loader/cache.dart";
