@@ -603,14 +603,12 @@ class Input {
    * @method Phaser.Input#reset
    * @param {boolean} [hard=false] - A soft reset won't reset any events or callbacks that are bound. A hard reset will.
    */
-  reset (hard) {
+  reset ([bool hard=false]) {
 
     if (!this.game.isBooted || this.resetLocked)
     {
       return;
     }
-
-    if (hard == null) { hard = false; }
 
     this.keyboard.reset(hard);
     this.mousePointer.reset();

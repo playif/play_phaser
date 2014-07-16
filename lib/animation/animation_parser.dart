@@ -20,11 +20,11 @@ class AnimationParser {
     num height = img.height;
 
     if (frameWidth <= 0) {
-      frameWidth = Math.floor(-width / Math.min([-1, frameWidth]));
+      frameWidth = Math.floor(-width / Math.min(-1, frameWidth));
     }
 
     if (frameHeight <= 0) {
-      frameHeight = Math.floor(-height / Math.min([-1, frameHeight]));
+      frameHeight = Math.floor(-height / Math.min(-1, frameHeight));
     }
 
     int row = Math.floor((width - margin) / (frameWidth + spacing));

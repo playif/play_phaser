@@ -19,7 +19,7 @@ class Signal {
 //    Signal.prototype.dispatch.apply(self, arguments);
 //  }
 
-  validateListener(listener, fnName) {
+  validateListener(Function listener, String fnName) {
     if (!(listener is Function)) {
       throw new Exception('listener is a required param of {fn}() and should be a Function.'.replaceFirst('{fn}', fnName));
     }

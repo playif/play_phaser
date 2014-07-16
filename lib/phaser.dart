@@ -21,13 +21,13 @@ part "animation/frame_data.dart";
 
 
 part "core/camera.dart";
-part "core/game.dart";
 part "core/core_signal.dart";
+part "core/game.dart";
 part "core/group.dart";
+part "core/plugin.dart";
+part "core/plugin_manager.dart";
 part "core/scale_manager.dart";
 part "core/signal_binding.dart";
-
-
 part "core/stage.dart";
 part "core/state.dart";
 part "core/state_manager.dart";

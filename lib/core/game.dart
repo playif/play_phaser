@@ -31,6 +31,7 @@ class Game {
   Net net;
   ScaleManager scale;
   SoundManager sound;
+  PluginManager plugins;
   Stage stage;
   Time time;
   Physics.Physics physics;
@@ -372,14 +373,15 @@ class Game {
       return _this.boot();
     };
 
-    if (document.readyState == 'complete' || document.readyState == 'interactive') {
-      window.setTimeout(this._onBoot, 0);
-    }
-    else {
-      document.addEventListener('DOMContentLoaded', this._onBoot, false);
-      window.addEventListener('load', this._onBoot, false);
-    }
-
+//    if (document.readyState == 'complete' || document.readyState == 'interactive') {
+//      window.setTimeout(this._onBoot, 0);
+//    }
+//    else {
+//      document.addEventListener('DOMContentLoaded', this._onBoot, false);
+//      window.addEventListener('load', this._onBoot, false);
+//    }
+    document.addEventListener('DOMContentLoaded', this._onBoot, false);
+    window.addEventListener('load', this._onBoot, false);
     //return this;
 
 
@@ -455,71 +457,71 @@ class Game {
       return;
     }
 
-    if (!document.body) {
-      window.setTimeout(this._onBoot, 20);
+//    if (!document.body) {
+//      window.setTimeout(this._onBoot, 20);
+//    }
+//    else {
+    document.removeEventListener('DOMContentLoaded', this._onBoot);
+    window.removeEventListener('load', this._onBoot);
+
+    this.onPause = new Signal();
+    this.onResume = new Signal();
+    this.onBlur = new Signal();
+    this.onFocus = new Signal();
+
+    this.isBooted = true;
+
+    this.device = new Device(this);
+    this.math = Math;
+
+
+    this.stage = new Stage(this, this.width, this.height);
+
+    this.setUpRenderer();
+
+    this.scale = new ScaleManager(this, this.width, this.height);
+
+    this.device.checkFullScreenSupport();
+
+    this.world = new World(this);
+    this.add = new GameObjectFactory(this);
+    this.make = new GameObjectCreator(this);
+    this.cache = new Cache(this);
+    this.load = new Loader(this);
+    this.time = new Time(this);
+    this.tweens = new TweenManager(this);
+    this.input = new Input(this);
+    this.sound = new SoundManager(this);
+    this.physics = new Physics(this, this.physicsConfig);
+    this.particles = new Particles(this);
+    this.plugins = new PluginManager(this);
+    this.net = new Net(this);
+
+    this.time.boot();
+    this.stage.boot();
+    this.world.boot();
+    this.input.boot();
+    this.sound.boot();
+    this.state.boot();
+
+    if (this.config['enableDebug']) {
+      this.debug = new Utils.Debug(this);
+      this.debug.boot();
+    }
+
+    this.showDebugHeader();
+
+    this.isRunning = true;
+
+    if (this.config && this.config['forceSetTimeOut']) {
+      this.raf = new RequestAnimationFrame(this, this.config['forceSetTimeOut']);
     }
     else {
-      document.removeEventListener('DOMContentLoaded', this._onBoot);
-      window.removeEventListener('load', this._onBoot);
-
-      this.onPause = new Signal();
-      this.onResume = new Signal();
-      this.onBlur = new Signal();
-      this.onFocus = new Signal();
-
-      this.isBooted = true;
-
-      this.device = new Device(this);
-      this.math = Math;
-
-
-      this.stage = new Stage(this, this.width, this.height);
-
-      this.setUpRenderer();
-
-      this.scale = new ScaleManager(this, this.width, this.height);
-
-      this.device.checkFullScreenSupport();
-
-      this.world = new World(this);
-      this.add = new GameObjectFactory(this);
-      this.make = new GameObjectCreator(this);
-      this.cache = new Cache(this);
-      this.load = new Loader(this);
-      this.time = new Time(this);
-      this.tweens = new TweenManager(this);
-      this.input = new Input(this);
-      this.sound = new SoundManager(this);
-      this.physics = new Physics(this, this.physicsConfig);
-      this.particles = new Particles(this);
-      this.plugins = new PluginManager(this);
-      this.net = new Net(this);
-
-      this.time.boot();
-      this.stage.boot();
-      this.world.boot();
-      this.input.boot();
-      this.sound.boot();
-      this.state.boot();
-
-      if (this.config['enableDebug']) {
-        this.debug = new Utils.Debug(this);
-        this.debug.boot();
-      }
-
-      this.showDebugHeader();
-
-      this.isRunning = true;
-
-      if (this.config && this.config['forceSetTimeOut']) {
-        this.raf = new RequestAnimationFrame(this, this.config['forceSetTimeOut']);
-      }
-      else {
-        this.raf = new RequestAnimationFrame(this, false);
-      }
-
-      this.raf.start();
+      this.raf = new RequestAnimationFrame(this, false);
     }
+
+    this.raf.start();
+//    }
 
   }
 
