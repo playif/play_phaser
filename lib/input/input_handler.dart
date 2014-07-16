@@ -31,7 +31,15 @@ class InputHandler {
   bool _wasEnabled;
   Point _tempPoint;
 
-  List _pointerData;
+  List<Pointer> _pointerData;
+
+  int _draggedPointerID;
+
+  Point _dragPoint;
+  Point dragOffset;
+
+  bool dragFromCenter;
+  bool pixelPerfect;
 
   InputHandler(this.sprite) {
 
@@ -200,7 +208,7 @@ class InputHandler {
      * @property {Phaser.Point} _tempPoint - Internal cache var.
      * @private
      */
-    this._tempPoint = new Phaser.Point();
+    this._tempPoint = new Point();
 
     /**
      * @property {array} _pointerData - Internal cache var.
@@ -208,21 +216,20 @@ class InputHandler {
      */
     this._pointerData = [];
 
-    this._pointerData.add({
-        id: 0,
-        x: 0,
-        y: 0,
-        isDown: false,
-        isUp: false,
-        isOver: false,
-        isOut: false,
-        timeOver: 0,
-        timeOut: 0,
-        timeDown: 0,
-        timeUp: 0,
-        downDuration: 0,
-        isDragged: false
-    });
+    this._pointerData.add(new Pointer(sprite.game, 0)
+      ..x = 0
+      ..y = 0
+      ..isDown = false
+      ..isUp = false
+      ..isOver = false
+      ..isOut = false
+      ..timeOver = 0
+      ..timeOut = 0
+      ..timeDown = 0
+      ..timeUp = 0
+      ..downDuration = 0
+      ..isDragged = false
+    );
 
   }
 
@@ -235,12 +242,7 @@ class InputHandler {
    * @return {Phaser.Sprite} The Sprite object to which the Input Handler is bound.
    */
 
-  start(priority, useHandCursor) {
-
-    priority = priority || 0;
-    if (useHandCursor == null) {
-      useHandCursor = false;
-    }
+  Sprite start([int priority = 0, bool useHandCursor =false]) {
 
     //  Turning on
     if (this.enabled == false) {
@@ -250,35 +252,33 @@ class InputHandler {
       this.priorityID = priority;
 
       for (var i = 0; i < 10; i++) {
-        this._pointerData[i] = {
-            id: i,
-            x: 0,
-            y: 0,
-            isDown: false,
-            isUp: false,
-            isOver: false,
-            isOut: false,
-            timeOver: 0,
-            timeOut: 0,
-            timeDown: 0,
-            timeUp: 0,
-            downDuration: 0,
-            isDragged: false
-        };
+        this._pointerData[i] = new Pointer(sprite.game, i)
+          ..x = 0
+          ..y = 0
+          ..isDown = false
+          ..isUp = false
+          ..isOver = false
+          ..isOut = false
+          ..timeOver = 0
+          ..timeOut = 0
+          ..timeDown = 0
+          ..timeUp = 0
+          ..downDuration = 0
+          ..isDragged = false;
       }
 
-      this.snapOffset = new Phaser.Point();
+      this.snapOffset = new Point();
       this.enabled = true;
       this._wasEnabled = true;
 
       //  Create the signals the Input component will emit
       if (this.sprite.events && this.sprite.events.onInputOver == null) {
-        this.sprite.events.onInputOver = new Phaser.Signal();
-        this.sprite.events.onInputOut = new Phaser.Signal();
-        this.sprite.events.onInputDown = new Phaser.Signal();
-        this.sprite.events.onInputUp = new Phaser.Signal();
-        this.sprite.events.onDragStart = new Phaser.Signal();
-        this.sprite.events.onDragStop = new Phaser.Signal();
+        this.sprite.events.onInputOver = new Signal();
+        this.sprite.events.onInputOut = new Signal();
+        this.sprite.events.onInputDown = new Signal();
+        this.sprite.events.onInputUp = new Signal();
+        this.sprite.events.onDragStart = new Signal();
+        this.sprite.events.onDragStop = new Signal();
       }
     }
 
@@ -341,21 +341,19 @@ class InputHandler {
     this.enabled = false;
 
     for (var i = 0; i < 10; i++) {
-      this._pointerData[i] = {
-          id: i,
-          x: 0,
-          y: 0,
-          isDown: false,
-          isUp: false,
-          isOver: false,
-          isOut: false,
-          timeOver: 0,
-          timeOut: 0,
-          timeDown: 0,
-          timeUp: 0,
-          downDuration: 0,
-          isDragged: false
-      };
+      this._pointerData[i] = new Pointer(sprite.game, i)
+        ..x = 0
+        ..y = 0
+        ..isDown = false
+        ..isUp = false
+        ..isOver = false
+        ..isOut = false
+        ..timeOver = 0
+        ..timeOut = 0
+        ..timeDown = 0
+        ..timeUp = 0
+        ..downDuration = 0
+        ..isDragged = false;
     }
   }
 
@@ -685,7 +683,7 @@ class InputHandler {
    * @return {boolean} true if there is the alpha of the pixel is >= InputHandler.pixelPerfectAlpha
    */
 
-  checkPixel(x, y, pointer) {
+  checkPixel(int x, int y, [Pointer pointer]) {
 
     //  Grab a pixel from our image into the hitCanvas and then test it
     if (this.sprite.texture.baseTexture.source) {
@@ -710,7 +708,8 @@ class InputHandler {
       x += this.sprite.texture.frame.x;
       y += this.sprite.texture.frame.y;
 
-      this.game.input.hitContext.drawImage(this.sprite.texture.baseTexture.source, x, y, 1, 1, 0, 0, 1, 1);
+      this.game.input.hitContext.drawImageScaledFromSource(
+          this.sprite.texture.baseTexture.source, x, y, 1, 1, 0, 0, 1, 1);
 
       var rgb = this.game.input.hitContext.getImageData(0, 0, 1, 1);
 
@@ -732,7 +731,7 @@ class InputHandler {
 
   update(Pointer pointer) {
 
-    if (this.sprite == null || this.sprite.parent == undefined) {
+    if (this.sprite == null || this.sprite.parent == null) {
       //  Abort. We've been destroyed.
       return;
     }
@@ -785,7 +784,7 @@ class InputHandler {
       }
 
       if (this.sprite && this.sprite.events) {
-        this.sprite.events.onInputOver.dispatch(this.sprite, pointer);
+        this.sprite.events.onInputOver.dispatch([this.sprite, pointer]);
       }
     }
 
@@ -815,7 +814,7 @@ class InputHandler {
     }
 
     if (this.sprite && this.sprite.events) {
-      this.sprite.events.onInputOut.dispatch(this.sprite, pointer);
+      this.sprite.events.onInputOut.dispatch([this.sprite, pointer]);
     }
 
   }
@@ -844,7 +843,7 @@ class InputHandler {
       this._pointerData[pointer.id].timeDown = this.game.time.now;
 
       if (this.sprite && this.sprite.events) {
-        this.sprite.events.onInputDown.dispatch(this.sprite, pointer);
+        this.sprite.events.onInputDown.dispatch([this.sprite, pointer]);
       }
 
       //  Start drag
@@ -887,13 +886,13 @@ class InputHandler {
       if (this.checkPointerOver(pointer)) {
         //  Release the inputUp signal and provide optional parameter if pointer is still over the sprite or not
         if (this.sprite && this.sprite.events) {
-          this.sprite.events.onInputUp.dispatch(this.sprite, pointer, true);
+          this.sprite.events.onInputUp.dispatch([this.sprite, pointer, true]);
         }
       }
       else {
         //  Release the inputUp signal and provide optional parameter if pointer is still over the sprite or not
         if (this.sprite && this.sprite.events) {
-          this.sprite.events.onInputUp.dispatch(this.sprite, pointer, false);
+          this.sprite.events.onInputUp.dispatch([this.sprite, pointer, false]);
         }
 
         //  Pointer outside the sprite? Reset the cursor
@@ -1190,7 +1189,7 @@ class InputHandler {
       this.sprite.bringToTop();
     }
 
-    this.sprite.events.onDragStart.dispatch(this.sprite, pointer);
+    this.sprite.events.onDragStart.dispatch([this.sprite, pointer]);
 
   }
 
@@ -1218,7 +1217,7 @@ class InputHandler {
       }
     }
 
-    this.sprite.events.onDragStop.dispatch(this.sprite, pointer);
+    this.sprite.events.onDragStop.dispatch([this.sprite, pointer]);
 
     if (this.checkPointerOver(pointer) == false) {
       this._pointerOutHandler(pointer);

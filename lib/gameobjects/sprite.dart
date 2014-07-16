@@ -2,8 +2,8 @@ part of Phaser;
 
 class Sprite extends PIXI.Sprite {
   Game game;
-  num x;
-  num y;
+//  num x;
+//  num y;
   String key;
 //  num _frame;
 
@@ -34,6 +34,11 @@ class Sprite extends PIXI.Sprite {
 
   num lifespan;
 
+
+  bool __tilePattern;
+  bool tilingTexture;
+
+  Point camerOffset;
 
   num get angle {
     return Math.wrapAngle(Math.radToDeg(this.rotation));
