@@ -17,9 +17,7 @@ class Ellipse {
   }
 
   set left(value) {
-
     this.x = value;
-
   }
 
   //});
@@ -36,7 +34,6 @@ class Ellipse {
   }
 
   set right(value) {
-
     if (value < this.x) {
       this.width = 0;
     }
@@ -76,7 +73,6 @@ class Ellipse {
   }
 
   set bottom(value) {
-
     if (value < this.y) {
       this.height = 0;
     }
@@ -112,11 +108,6 @@ class Ellipse {
   Ellipse(num x, num y, num width, num height) {
     this.type = ELLIPSE;
 
-    //x = x || 0;
-    //y = y || 0;
-    //width = width || 0;
-    //height = height || 0;
-
     /**
      * @property {number} x - The X coordinate of the upper-left corner of the framing rectangle of this ellipse.
      */
@@ -149,7 +140,6 @@ class Ellipse {
    * @param {number} height - The overall height of this ellipse.
    * @return {Phaser.Ellipse} This Ellipse object.
    */
-
   setTo(num x, num y, num width, num height) {
     this.x = x;
     this.y = y;
@@ -164,11 +154,8 @@ class Ellipse {
    * @param {any} source - The object to copy from.
    * @return {Phaser.Ellipse} This Ellipse object.
    */
-
   copyFrom(source) {
-
     return this.setTo(source.x, source.y, source.width, source.height);
-
   }
 
   /**
@@ -177,16 +164,12 @@ class Ellipse {
    * @param {any} dest - The object to copy to.
    * @return {Object} This dest object.
    */
-
   copyTo(dest) {
-
     dest.x = this.x;
     dest.y = this.y;
     dest.width = this.width;
     dest.height = this.height;
-
     return dest;
-
   }
 
   /**
@@ -195,7 +178,6 @@ class Ellipse {
    * @param {Phaser.Ellipse} out - Optional Ellipse object. If given the values will be set into the object, otherwise a brand new Ellipse object will be created and returned.
    * @return {Phaser.Ellipse} The cloned Ellipse object.
    */
-
   Ellipse clone([Ellipse out]) {
 
     if (out == null) {
@@ -216,15 +198,14 @@ class Ellipse {
    * @param {number} y - The Y value of the coordinate to test.
    * @return {boolean} True if the coordinates are within this ellipse, otherwise false.
    */
-
-  contains(x, y) {
+  contains(num x, num y) {
     if (this.width <= 0 || this.height <= 0) {
       return false;
     }
 
     //  Normalize the coords to an ellipse with center 0,0 and a radius of 0.5
-    var normx = ((x - this.x) / this.width) - 0.5;
-    var normy = ((y - this.y) / this.height) - 0.5;
+    double normx = ((x - this.x) / this.width) - 0.5;
+    double normy = ((y - this.y) / this.height) - 0.5;
 
     normx *= normx;
     normy *= normy;
@@ -239,7 +220,6 @@ class Ellipse {
    * @method Phaser.Ellipse#toString
    * @return {string} A string representation of the instance.
    */
-
   toString() {
     return "[{Phaser.Ellipse (x=" + this.x + " y=" + this.y + " width=" + this.width + " height=" + this.height + ")}]";
   }
@@ -264,7 +244,6 @@ class Ellipse {
    * @method Phaser.Ellipse.getBounds
    * @return {Phaser.Rectangle} The framing rectangle
    */
-
   Rectangle getBounds() {
     return new Rectangle(this.x, this.y, this.width, this.height);
   }
