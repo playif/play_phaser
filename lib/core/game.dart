@@ -611,7 +611,7 @@ class Game {
 
     if (this.device.cocoonJS) {
       //  Enable screencanvas for Cocoon on this Canvas object only
-      this.canvas.screencanvas = true;
+      this.canvas.dataset['screencanvas'] = true;
     }
 
     if (this.renderType == HEADLESS || this.renderType == CANVAS || (this.renderType == AUTO && this.device.webGL == false)) {
