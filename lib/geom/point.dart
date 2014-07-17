@@ -167,7 +167,7 @@ class Point {
    * @return {Phaser.Point} The new Point object.
    */
 
-  Point clone(Point output) {
+  Point clone([Point output]) {
 
     if (output == null) {
       output = new Point(this.x, this.y);
@@ -266,16 +266,14 @@ class Point {
    * @return {Phaser.Point} The modified point object.
    */
 
-  Point rotate(num x,num y,num angle, [bool asDegrees =false, num distance]) {
+  Point rotate(num x, num y, num angle, [bool asDegrees =false, num distance]) {
 
-    if (asDegrees)
-    {
+    if (asDegrees) {
       angle = Math.degToRad(angle);
     }
 
     //  Get distance from origin (cx/cy) to this point
-    if (distance == null)
-    {
+    if (distance == null) {
       distance = Math.sqrt(((x - this.x) * (x - this.x)) + ((y - this.y) * (y - this.y)));
     }
 
