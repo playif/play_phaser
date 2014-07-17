@@ -12,11 +12,11 @@ class Ellipse {
    */
   //Object.defineProperty(Phaser.Ellipse.prototype, "left", {
 
-  get left {
+  num get left {
     return this.x;
   }
 
-  set left(value) {
+  set left(num value) {
     this.x = value;
   }
 
@@ -29,11 +29,11 @@ class Ellipse {
    */
   //Object.defineProperty(Phaser.Ellipse.prototype, "right", {
 
-  get right {
+  num get right {
     return this.x + this.width;
   }
 
-  set right(value) {
+  set right(num value) {
     if (value < this.x) {
       this.width = 0;
     }
@@ -51,11 +51,11 @@ class Ellipse {
    */
   //Object.defineProperty(Phaser.Ellipse.prototype, "top", {
 
-  get top {
+  num get top {
     return this.y;
   }
 
-  set top(value) {
+  set top(num value) {
     this.y = value;
   }
 
@@ -68,11 +68,11 @@ class Ellipse {
    */
   //Object.defineProperty(Phaser.Ellipse.prototype, "bottom", {
 
-  get bottom {
+  num get bottom {
     return this.y + this.height;
   }
 
-  set bottom(value) {
+  set bottom(num value) {
     if (value < this.y) {
       this.height = 0;
     }
@@ -91,16 +91,14 @@ class Ellipse {
    */
   //Object.defineProperty(Phaser.Ellipse.prototype, "empty", {
 
-  get empty {
+  bool get empty {
     return (this.width == 0 || this.height == 0);
   }
 
-  set(value) {
-
+  set(bool value) {
     if (value == true) {
       this.setTo(0, 0, 0, 0);
     }
-
   }
 
   //});
@@ -140,7 +138,8 @@ class Ellipse {
    * @param {number} height - The overall height of this ellipse.
    * @return {Phaser.Ellipse} This Ellipse object.
    */
-  setTo(num x, num y, num width, num height) {
+
+  Ellipse setTo(num x, num y, num width, num height) {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -154,7 +153,8 @@ class Ellipse {
    * @param {any} source - The object to copy from.
    * @return {Phaser.Ellipse} This Ellipse object.
    */
-  copyFrom(source) {
+
+  Ellipse copyFrom(Ellipse source) {
     return this.setTo(source.x, source.y, source.width, source.height);
   }
 
@@ -164,6 +164,7 @@ class Ellipse {
    * @param {any} dest - The object to copy to.
    * @return {Object} This dest object.
    */
+
   copyTo(dest) {
     dest.x = this.x;
     dest.y = this.y;
@@ -178,6 +179,7 @@ class Ellipse {
    * @param {Phaser.Ellipse} out - Optional Ellipse object. If given the values will be set into the object, otherwise a brand new Ellipse object will be created and returned.
    * @return {Phaser.Ellipse} The cloned Ellipse object.
    */
+
   Ellipse clone([Ellipse out]) {
 
     if (out == null) {
@@ -198,7 +200,8 @@ class Ellipse {
    * @param {number} y - The Y value of the coordinate to test.
    * @return {boolean} True if the coordinates are within this ellipse, otherwise false.
    */
-  contains(num x, num y) {
+
+  bool contains(num x, num y) {
     if (this.width <= 0 || this.height <= 0) {
       return false;
     }
@@ -212,7 +215,6 @@ class Ellipse {
 
     return (normx + normy < 0.25);
     //return Ellipse.contains(this, x, y);
-
   }
 
   /**
@@ -220,8 +222,9 @@ class Ellipse {
    * @method Phaser.Ellipse#toString
    * @return {string} A string representation of the instance.
    */
-  toString() {
-    return "[{Phaser.Ellipse (x=" + this.x + " y=" + this.y + " width=" + this.width + " height=" + this.height + ")}]";
+
+  String toString() {
+    return "[{Phaser.Ellipse (x=${this.x} y=${this.y} width=${this.width} height=${this.height})}]";
   }
 
   /**
@@ -244,6 +247,7 @@ class Ellipse {
    * @method Phaser.Ellipse.getBounds
    * @return {Phaser.Rectangle} The framing rectangle
    */
+
   Rectangle getBounds() {
     return new Rectangle(this.x, this.y, this.width, this.height);
   }
