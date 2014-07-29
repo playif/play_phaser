@@ -574,9 +574,9 @@ class Game {
 
       window. console.log.apply(window.console, args);
     }
-    else if (window['console']) {
-      window.console.log('Phaser v' + v + ' | Pixi.js ' + PIXI.VERSION + ' | ' + r + ' | ' + a + ' | http://phaser.io');
-    }
+//    else if (window['console']) {
+//      window.console.log('Phaser v' + v + ' | Pixi.js ' + PIXI.VERSION + ' | ' + r + ' | ' + a + ' | http://phaser.io');
+//    }
 
   }
 
