@@ -14,22 +14,67 @@ class Stage extends PIXI.Stage {
   num _nextOffsetCheck;
   int _backgroundColor;
 
-  int get backgroundColor{
+  int get backgroundColor {
     return this._backgroundColor;
   }
 
-  set backgroundColor(int value){
-    if (!this.game.transparent)
-    {
+  set backgroundColor(int value) {
+    if (!this.game.transparent) {
       this.setBackgroundColor(color);
     }
   }
+
+
+  /**
+   * @name Phaser.Stage#backgroundColor
+   * @property {number|string} backgroundColor - Gets and sets the background color of the stage. The color can be given as a number: 0xff0000 or a hex string: '#ff0000'
+   */
+  //Object.defineProperty(Phaser.Stage.prototype, "backgroundColor", {
+
+//  get backgroundColor{
+//    return this._backgroundColor;
+//  }
+//
+//  set backgroundColor(color) {
+//    if (!this.game.transparent) {
+//      this.setBackgroundColor(color);
+//    }
+//
+//  }
+
+  //});
+
+  /**
+   * Enable or disable texture smoothing for all objects on this Stage. Only works for bitmap/image textures. Smoothing is enabled by default.
+   *
+   * @name Phaser.Stage#smoothed
+   * @property {boolean} smoothed - Set to true to smooth all sprites rendered on this Stage, or false to disable smoothing (great for pixel art)
+   */
+  //Object.defineProperty(Phaser.Stage.prototype, "smoothed", {
+
+  bool get smoothed {
+
+    return PIXI.scaleModes.LINEAR ;
+
+  }
+
+  set smoothed(bool value) {
+
+    if (value) {
+      PIXI.scaleModes.LINEAR = 0;
+    }
+    else {
+      PIXI.scaleModes.LINEAR = 1;
+    }
+  }
+
+  //});
 
 //  bool get smoothed{
 //    return
 //  }
 
-  Stage(this.game,num width, num height) {
+  Stage(this.game, num width, num height) {
     /**
      * @property {Phaser.Point} offset - Holds the offset coordinates of the Game.canvas from the top-left of the browser window (used by Input and other classes)
      */
@@ -96,69 +141,59 @@ class Stage extends PIXI.Stage {
      */
     this._backgroundColor = 0x000000;
 
-    if (game.config != null)
-    {
+    if (game.config != null) {
       this.parseConfig(game.config);
     }
   }
 
 
-  preUpdate () {
+  preUpdate() {
 
     this.currentRenderOrderID = 0;
 
     //  This can't loop in reverse, we need the orderID to be in sequence
     var len = this.children.length;
 
-    for (var i = 0; i < len; i++)
-    {
+    for (var i = 0; i < len; i++) {
       this.children[i].preUpdate();
     }
 
   }
 
-  update () {
+  update() {
     var i = this.children.length;
-    while (i--)
-    {
+    while (i--) {
       this.children[i].update();
     }
   }
 
-  postUpdate  () {
+  postUpdate() {
 
-    if (this.game.world.camera.target)
-    {
+    if (this.game.world.camera.target) {
       this.game.world.camera.target.postUpdate();
 
       this.game.world.camera.update();
 
       var i = this.children.length;
 
-      while (i--)
-      {
-        if (this.children[i] != this.game.world.camera.target)
-        {
+      while (i--) {
+        if (this.children[i] != this.game.world.camera.target) {
           this.children[i].postUpdate();
         }
       }
     }
-    else
-    {
+    else {
       this.game.world.camera.update();
 
       var i = this.children.length;
 
-      while (i--)
-      {
+      while (i--) {
         this.children[i].postUpdate();
       }
     }
 
-    if (this.checkOffsetInterval != false)
-    {
-      if (this.game.time.now > this._nextOffsetCheck)
-      {
+    if (this.checkOffsetInterval != false) {
+      if (this.game.time.now > this._nextOffsetCheck) {
         Phaser.Canvas.getOffset(this.game.canvas, this.offset);
         this.bounds.x = this.offset.x;
         this.bounds.y = this.offset.y;
@@ -168,37 +203,32 @@ class Stage extends PIXI.Stage {
 
   }
 
-  parseConfig  (config) {
+  parseConfig(config) {
 
-    if (config['checkOffsetInterval'])
-    {
+    if (config['checkOffsetInterval']) {
       this.checkOffsetInterval = config['checkOffsetInterval'];
     }
 
-    if (config['disableVisibilityChange'])
-    {
+    if (config['disableVisibilityChange']) {
       this.disableVisibilityChange = config['disableVisibilityChange'];
     }
 
-    if (config['fullScreenScaleMode'])
-    {
+    if (config['fullScreenScaleMode']) {
       this.fullScreenScaleMode = config['fullScreenScaleMode'];
     }
 
-    if (config['scaleMode'])
-    {
+    if (config['scaleMode']) {
       this.scaleMode = config['scaleMode'];
     }
 
-    if (config['backgroundColor'])
-    {
+    if (config['backgroundColor']) {
       this.backgroundColor = config['backgroundColor'];
     }
 
   }
 
 
-  boot  () {
+  boot() {
 
     Canvas.getOffset(this.game.canvas, this.offset);
 
@@ -217,32 +247,26 @@ class Stage extends PIXI.Stage {
 
   }
 
-  checkVisibility  () {
+  checkVisibility() {
 
-    if (document.webkitHidden != null)
-    {
+    if (document.webkitHidden != null) {
       this._hiddenVar = 'webkitvisibilitychange';
     }
-    else if (document.mozHidden != null)
-    {
+    else if (document.mozHidden != null) {
       this._hiddenVar = 'mozvisibilitychange';
     }
-    else if (document.msHidden != null)
-      {
+    else if (document.msHidden != null) {
         this._hiddenVar = 'msvisibilitychange';
       }
-      else if (document.hidden != null)
-        {
+      else if (document.hidden != null) {
           this._hiddenVar = 'visibilitychange';
         }
-        else
-        {
+        else {
           this._hiddenVar = null;
         }
 
     //  Does browser support it? If not (like in IE9 or old Android) we need to fall back to blur/focus
-    if (this._hiddenVar)
-    {
+    if (this._hiddenVar) {
       document.addEventListener(this._hiddenVar, this._onChange, false);
     }
 
@@ -254,47 +278,38 @@ class Stage extends PIXI.Stage {
 
   }
 
-  visibilityChange (event) {
+  visibilityChange(event) {
 
-    if (event.type == 'pagehide' || event.type == 'blur' || event.type == 'pageshow' || event.type == 'focus')
-    {
-      if (event.type == 'pagehide' || event.type == 'blur')
-      {
+    if (event.type == 'pagehide' || event.type == 'blur' || event.type == 'pageshow' || event.type == 'focus') {
+      if (event.type == 'pagehide' || event.type == 'blur') {
         this.game.focusLoss(event);
       }
-      else if (event.type == 'pageshow' || event.type == 'focus')
-      {
+      else if (event.type == 'pageshow' || event.type == 'focus') {
         this.game.focusGain(event);
       }
 
       return;
     }
 
-    if (this.disableVisibilityChange)
-    {
+    if (this.disableVisibilityChange) {
       return;
     }
 
-    if (document.hidden || document.mozHidden || document.msHidden || document.webkitHidden)
-    {
+    if (document.hidden || document.mozHidden || document.msHidden || document.webkitHidden) {
       this.game.gamePaused(event);
     }
-    else
-    {
+    else {
       this.game.gameResumed(event);
     }
 
   }
 
-  setBackgroundColor (backgroundColor)
-  {
-    if (backgroundColor is String)
-    {
+  setBackgroundColor(backgroundColor) {
+    if (backgroundColor is String) {
       var rgb = Color.hexToColor(backgroundColor);
       this._backgroundColor = Color.getColor(rgb.r, rgb.g, rgb.b);
     }
-    else
-    {
+    else {
       var rgb = Color.getRGB(backgroundColor);
       this._backgroundColor = backgroundColor;
     }
@@ -303,9 +318,6 @@ class Stage extends PIXI.Stage {
     this.backgroundColorString = Color.RGBtoString(rgb.r, rgb.g, rgb.b, 255, '#');
 
   }
-
-
-
 
 
 }

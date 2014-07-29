@@ -1,4 +1,4 @@
-part of Physics;
+part of Phaser;
 
 class Arcade {
   Arcade() {

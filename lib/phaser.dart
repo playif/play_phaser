@@ -10,7 +10,7 @@ import "dart:web_gl";
 import "dart:math" as DMath;
 import "dart:mirrors";
 import "package:play_pixi/pixi.dart" as PIXI;
-import "physics/physics.dart" as Physics;
+//import "physics/physics.dart" as Physics;
 
 import "tween/easing.dart" as Easing;
 
@@ -23,6 +23,7 @@ part "animation/frame_data.dart";
 
 part "core/camera.dart";
 part "core/core_signal.dart";
+part "core/filter.dart";
 part "core/game.dart";
 part "core/group.dart";
 part "core/plugin.dart";
@@ -90,6 +91,9 @@ part "particles/arcade/arcade_particles.dart";
 part "particles/arcade/emitter.dart";
 part "particles/particles.dart";
 
+part "physics/physics.dart";
+part "physics/arcade/arcade.dart";
+part "physics/arcade/body.dart";
 
 part "sound/sound.dart";
 part "sound/sound_manager.dart";

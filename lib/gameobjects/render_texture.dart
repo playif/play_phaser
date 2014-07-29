@@ -7,7 +7,7 @@ class RenderTexture extends PIXI.RenderTexture {
 
   Game game;
 
-  RenderTexture(this.game, num width, num height, String key, PIXI.scaleModes scaleMode)
+  RenderTexture(this.game, num width, num height, String key, [PIXI.scaleModes scaleMode])
   :super(width, height, this.game.renderer, scaleMode) {
 
     if (key == null) {

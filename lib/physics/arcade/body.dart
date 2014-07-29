@@ -1,5 +1,4 @@
-part of Physics;
-
+part of Phaser;
 
 class Body {
   Body() {

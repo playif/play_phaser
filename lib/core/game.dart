@@ -5,7 +5,7 @@ class Game {
   num height;
   PIXI.Renderer renderer;
   String parent;
-  State state;
+  StateManager state;
   bool transparent;
   bool antialias;
   Map physicsConfig;
@@ -34,7 +34,7 @@ class Game {
   PluginManager plugins;
   Stage stage;
   Time time;
-  Physics.Physics physics;
+  Physics physics;
   TweenManager tweens;
   RandomDataGenerator rnd;
   Device device;
@@ -605,9 +605,9 @@ class Game {
     if (this.config['canvasStyle']) {
       this.canvas.style = this.config['canvasStyle'];
     }
-    else {
-      this.canvas.style['-webkit-full-screen'] = 'width: 100%; height: 100%';
-    }
+//    else {
+//      this.canvas.style['-webkit-full-screen'] = 'width: 100%; height: 100%';
+//    }
 
     if (this.device.cocoonJS) {
       //  Enable screencanvas for Cocoon on this Canvas object only
@@ -621,7 +621,7 @@ class Game {
         }
 
         this.renderer = new PIXI.CanvasRenderer(this.width, this.height, this.canvas, this.transparent);
-        this.context = this.renderer.context;
+        this.context = (this.renderer as PIXI.CanvasRenderer).context;
       }
       else {
         throw new Exception('Phaser.Game - cannot create Canvas or WebGL context, aborting.');
@@ -638,7 +638,7 @@ class Game {
       this.stage.smoothed = this.antialias;
 
       Canvas.addToDOM(this.canvas, this.parent, false);
-      Canvas.setTouchAction(this.canvas);
+      //Canvas.setTouchAction(this.canvas);
     }
 
   }
