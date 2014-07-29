@@ -91,9 +91,11 @@ part "particles/arcade/arcade_particles.dart";
 part "particles/arcade/emitter.dart";
 part "particles/particles.dart";
 
+
 part "physics/physics.dart";
 part "physics/arcade/arcade.dart";
 part "physics/arcade/body.dart";
+
 
 part "sound/sound.dart";
 part "sound/sound_manager.dart";
@@ -102,6 +104,13 @@ part "sound/sound_manager.dart";
 part "system/canvas.dart";
 part "system/device.dart";
 part "system/request_animation_frame.dart";
+
+
+part "tilemap/tile.dart";
+part "tilemap/tilemap.dart";
+part "tilemap/tilemap_layer.dart";
+part "tilemap/tilemap_parser.dart";
+part "tilemap/tileset.dart";
 
 
 part "time/time.dart";
