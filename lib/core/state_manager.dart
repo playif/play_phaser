@@ -2,13 +2,15 @@ part of Phaser;
 
 class StateManager {
   Game game;
-  Map states;
-  String _pendingState;
+  Map<String,State> states;
+
   bool _clearWorld;
   bool _clearCache;
   bool _created;
   List _args;
-  String current;
+
+  String _pendingState;
+  State current;
 
   Function onInitCallback;
   Function onPreloadCallback;
@@ -26,7 +28,7 @@ class StateManager {
   Object callbackContext;
 
 
-  StateManager(this.game, [String pendingState]) {
+  StateManager(this.game, [String pendingState=null]) {
     /**
      * @property {Object} states - The object containing Phaser.States.
      */
@@ -166,22 +168,22 @@ class StateManager {
    * @param {boolean} [autoStart=false]  - If true the State will be started immediately after adding it.
    */
 
-  add(String key, state, [bool autoStart=false]) {
+  add(String key, State state, [bool autoStart=false]) {
 
-    var newState;
+//    var newState;
+//
+//    if (state is State) {
+//      newState = state;
+//    }
+//    else if (state is Map) {
+//      newState = state;
+//      newState['game'] = this.game;
+//    }
+//    else if (state is Function) {
+//        newState = state(this.game);
+//      }
 
-    if (state is State) {
-      newState = state;
-    }
-    else if (state is Map) {
-      newState = state;
-      newState['game'] = this.game;
-    }
-    else if (state is Function) {
-        newState = state(this.game);
-      }
-
-    this.states[key] = newState;
+    this.states[key] = state;
 
     if (autoStart) {
       if (this.game.isBooted) {
@@ -192,7 +194,7 @@ class StateManager {
       }
     }
 
-    return newState;
+    return state;
 
   }
 
@@ -296,7 +298,7 @@ class StateManager {
 
     if (this._pendingState != null && this.game.isBooted) {
       //  Already got a state running?
-      if (this.current != null) {
+      if (this.current != null && this.current != "") {
         this.onShutDownCallback(this.callbackContext, this.game);
 
         this.game.tweens.removeAll();
@@ -322,7 +324,7 @@ class StateManager {
 
       if (this.onPreloadCallback != null) {
         this.game.load.reset();
-        this.onPreloadCallback(this.callbackContext, this.game);
+        this.onPreloadCallback(this.game);
 
         //  Is the loader empty?
         if (this.game.load.totalQueuedFiles() == 0 && this.game.load.totalQueuedPacks() == 0) {
@@ -356,25 +358,25 @@ class StateManager {
   checkState(String key) {
 
     if (this.states[key] != null) {
-      var valid = false;
+//      var valid = false;
 
-      if (this.states[key]['preload']) {
-        valid = true;
-      }
-      if (this.states[key]['create']) {
-        valid = true;
-      }
-      if (this.states[key]['update']) {
-        valid = true;
-      }
-      if (this.states[key]['render']) {
-        valid = true;
-      }
+//      if (this.states[key].preload) {
+//        valid = true;
+//      }
+//      if (this.states[key].create) {
+//        valid = true;
+//      }
+//      if (this.states[key].update) {
+//        valid = true;
+//      }
+//      if (this.states[key].render) {
+//        valid = true;
+//      }
 
-      if (valid == false) {
-        window.console.warn("Invalid Phaser State object given. Must contain at least a one of the required functions: preload, create, update or render");
-        return false;
-      }
+//      if (valid == false) {
+//        window.console.warn("Invalid Phaser State object given. Must contain at least a one of the required functions: preload, create, update or render");
+//        return false;
+//      }
 
       return true;
     }
@@ -402,7 +404,7 @@ class StateManager {
     this.states[key].cache = this.game.cache;
     this.states[key].input = this.game.input;
     this.states[key].load = this.game.load;
-    this.states[key].math = this.game.math;
+    //this.states[key]['math'] = this.game.math;
     this.states[key].sound = this.game.sound;
     this.states[key].scale = this.game.scale;
     this.states[key].state = this;
@@ -431,26 +433,26 @@ class StateManager {
     this.link(key);
 
     //  Used when the state is set as being the current active state
-    this.onInitCallback = this.states[key]['init'] || this.dummy;
+    this.onInitCallback = this.states[key].init;
 
-    this.onPreloadCallback = this.states[key]['preload'] || null;
-    this.onLoadRenderCallback = this.states[key]['loadRender'] || null;
-    this.onLoadUpdateCallback = this.states[key]['loadUpdate'] || null;
-    this.onCreateCallback = this.states[key]['create'] || null;
-    this.onUpdateCallback = this.states[key]['update'] || null;
-    this.onPreRenderCallback = this.states[key]['preRender'] || null;
-    this.onRenderCallback = this.states[key]['render'] || null;
-    this.onPausedCallback = this.states[key]['paused'] || null;
-    this.onResumedCallback = this.states[key]['resumed'] || null;
-    this.onPauseUpdateCallback = this.states[key]['pauseUpdate'] || null;
+    this.onPreloadCallback = this.states[key].preload;
+    this.onLoadRenderCallback = this.states[key].loadRender;
+    this.onLoadUpdateCallback = this.states[key].loadUpdate;
+    this.onCreateCallback = this.states[key].create;
+    this.onUpdateCallback = this.states[key].update;
+    this.onPreRenderCallback = this.states[key].preRender;
+    this.onRenderCallback = this.states[key].render;
+    this.onPausedCallback = this.states[key].paused;
+    this.onResumedCallback = this.states[key].resumed;
+    this.onPauseUpdateCallback = this.states[key].pauseUpdate;
 
     //  Used when the state is no longer the current active state
-    this.onShutDownCallback = this.states[key]['shutdown'] || this.dummy;
+    this.onShutDownCallback = this.states[key].shutdown;
 
     this.current = key;
     this._created = false;
 
-    this.onInitCallback.apply(this.callbackContext, this._args);
+    this.onInitCallback(this._args);
 
     this._args = [];
 
@@ -523,7 +525,7 @@ class StateManager {
     }
     else {
       if (this.onLoadUpdateCallback != null) {
-        this.onLoadUpdateCallback(this.callbackContext, this.game);
+        this.onLoadUpdateCallback(this.game);
       }
     }
 
@@ -536,12 +538,12 @@ class StateManager {
 
   pauseUpdate() {
 
-    if (this._created && this.onPauseUpdateCallback!= null) {
-      this.onPauseUpdateCallback(this.callbackContext, this.game);
+    if (this._created && this.onPauseUpdateCallback != null) {
+      this.onPauseUpdateCallback(this.game);
     }
     else {
-      if (this.onLoadUpdateCallback!= null) {
-        this.onLoadUpdateCallback(this.callbackContext, this.game);
+      if (this.onLoadUpdateCallback != null) {
+        this.onLoadUpdateCallback(this.game);
       }
     }
 
@@ -554,8 +556,8 @@ class StateManager {
 
   preRender() {
 
-    if (this.onPreRenderCallback!= null) {
-      this.onPreRenderCallback(this.callbackContext, this.game);
+    if (this.onPreRenderCallback != null) {
+      this.onPreRenderCallback(this.game);
     }
 
   }
@@ -567,7 +569,7 @@ class StateManager {
 
   render() {
 
-    if (this._created && this.onRenderCallback!= null) {
+    if (this._created && this.onRenderCallback != null) {
       if (this.game.renderType == CANVAS) {
         this.game.context.save();
         this.game.context.setTransform(1, 0, 0, 1, 0, 0);
@@ -580,8 +582,8 @@ class StateManager {
       }
     }
     else {
-      if (this.onLoadRenderCallback!= null) {
-        this.onLoadRenderCallback(this.callbackContext, this.game);
+      if (this.onLoadRenderCallback != null) {
+        this.onLoadRenderCallback(this.game);
       }
     }
 

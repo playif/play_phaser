@@ -154,7 +154,7 @@ class Signal {
     //reverse loop since listeners with higher priority will be added at the end of the list
     do {
       n--;
-    } while (bindings[n] != null && this._shouldPropagate && bindings[n].execute(paramsArr) != false);
+    } while (n>=0 && bindings[n] != null && this._shouldPropagate && bindings[n].execute(paramsArr) != false);
 
   }
 

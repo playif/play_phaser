@@ -53,7 +53,7 @@ class Particles {
    */
 
   update() {
-    for (var key in this.emitters) {
+    for (var key in this.emitters.keys) {
       if (this.emitters[key].exists) {
         this.emitters[key].update();
       }

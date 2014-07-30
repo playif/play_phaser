@@ -1,14 +1,15 @@
 part of example;
 
-class basic_01_load_an_image {
+
+
+class basic_01_load_an_image extends Phaser.State {
   Phaser.Game game;
 
   basic_01_load_an_image() {
-    game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { 'preload': preload, 'create': create });
-
+    game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', this);
   }
 
-  preload() {
+  preload([args]) {
 
     //Phaser.Easing.Linear.None;
     //  You can fill the preloader with as many assets as your game requires

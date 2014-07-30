@@ -341,15 +341,15 @@ class Loader {
    * @param {object} properties - Any additional properties needed to load the file.
    */
 
-  addToFileList(type, key, url, properties) {
+  addToFileList(type, key, url, [properties]) {
 
     var entry = {
-        type: type,
-        key: key,
-        url: url,
-        data: null,
-        error: false,
-        loaded: false
+        'type': type,
+        'key': key,
+        'url': url,
+        'data': null,
+        'error': false,
+        'loaded': false
     };
 
     if (properties != null) {
@@ -359,7 +359,7 @@ class Loader {
     }
 
     if (this.checkKeyExists(type, key) == false) {
-      this._fileList.push(entry);
+      this._fileList.add(entry);
     }
 
   }
@@ -375,15 +375,15 @@ class Loader {
    * @protected
    */
 
-  replaceInFileList(type, key, url, properties) {
+  replaceInFileList(type, key, url, [properties]) {
 
     var entry = {
-        type: type,
-        key: key,
-        url: url,
-        data: null,
-        error: false,
-        loaded: false
+        'type': type,
+        'key': key,
+        'url': url,
+        'data': null,
+        'error': false,
+        'loaded': false
     };
 
     if (properties != null) {
@@ -1213,14 +1213,14 @@ class Loader {
   loadFile() {
 
     if (!this._fileList[this._fileIndex]) {
-      console.warn('Phaser.Loader loadFile invalid index ' + this._fileIndex);
+      window.console.warn('Phaser.Loader loadFile invalid index $this._fileIndex');
       return;
     }
 
     var file = this._fileList[this._fileIndex];
     var _this = this;
 
-    this.onFileStart.dispatch(this.progress, file.key);
+    this.onFileStart.dispatch([this.progress, file.key]);
 
     //  Image or Data?
     switch (file.type) {
@@ -1228,7 +1228,7 @@ class Loader {
       case 'spritesheet':
       case 'textureatlas':
       case 'bitmapfont':
-        file.data = new Image();
+        file.data = new ImageElement();
         file.data.name = file.key;
         file.data.onload = () {
           return _this.fileComplete(_this._fileIndex);
@@ -1253,21 +1253,21 @@ class Loader {
           else if (this.game.sound.usingAudioTag) {
             if (this.game.sound.touchLocked) {
               //  If audio is locked we can't do this yet, so need to queue this load request. Bum.
-              file.data = new Audio();
+              file.data = new AudioElement();
               file.data.name = file.key;
               file.data.preload = 'auto';
               file.data.src = this.baseURL + file.url;
               this.fileComplete(this._fileIndex);
             }
             else {
-              file.data = new Audio();
+              file.data = new AudioElement();
               file.data.name = file.key;
               file.data.onerror = () {
                 return _this.fileError(_this._fileIndex);
               };
               file.data.preload = 'auto';
               file.data.src = this.baseURL + file.url;
-              file.data.addEventListener('canplaythrough', Phaser.GAMES[this.game.id].load.fileComplete(this._fileIndex), false);
+              file.data.addEventListener('canplaythrough', GAMES[this.game.id].load.fileComplete(this._fileIndex), false);
               file.data.load();
             }
           }
@@ -1281,7 +1281,7 @@ class Loader {
       case 'json':
 
         if (window.XDomainRequest) {
-          this._ajax = new window.XDomainRequest();
+          this._ajax = new XDomainRequest();
 
           // XDomainRequest has a few querks. Occasionally it will abort requests
           // A way to avoid this is to make sure ALL callbacks are set even if not used
@@ -1748,12 +1748,12 @@ class Loader {
    * @return {number} The number of files that still remain in the load queue.
    */
 
-  totalQueuedFiles() {
+  int totalQueuedFiles() {
 
     var total = 0;
 
     for (var i = 0; i < this._fileList.length; i++) {
-      if (this._fileList[i].loaded == false) {
+      if (this._fileList[i]['loaded'] == false) {
         total++;
       }
     }
@@ -1774,7 +1774,7 @@ class Loader {
     var total = 0;
 
     for (var i = 0; i < this._packList.length; i++) {
-      if (this._packList[i].loaded) {
+      if (this._packList[i]['loaded']) {
         total++;
       }
     }
@@ -1795,7 +1795,7 @@ class Loader {
     var total = 0;
 
     for (var i = 0; i < this._packList.length; i++) {
-      if (this._packList[i].loaded == false) {
+      if (this._packList[i]['loaded'] == false) {
         total++;
       }
     }

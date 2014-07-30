@@ -16,8 +16,9 @@ class State {
   TweenManager tweens;
   World world;
   Particles particles;
-  Physics.Physics physics;
+  Physics physics;
   RandomDataGenerator rnd;
+  StateManager state;
 
   State() {
     /**
@@ -116,7 +117,7 @@ class State {
    * @method Phaser.State#preload
    */
 
-  preload() {
+  preload([args]) {
   }
 
   /**
@@ -125,7 +126,7 @@ class State {
    * @method Phaser.State#loadUpdate
    */
 
-  loadUpdate() {
+  loadUpdate([args]) {
   }
 
   /**
@@ -135,7 +136,7 @@ class State {
    * @method Phaser.State#loadRender
    */
 
-  loadRender() {
+  loadRender([args]) {
   }
 
   /**
@@ -145,7 +146,7 @@ class State {
    * @method Phaser.State#create
    */
 
-  create() {
+  create([args]) {
   }
 
   /**
@@ -156,7 +157,7 @@ class State {
    * @method Phaser.State#update
    */
 
-  update() {
+  update([args]) {
   }
 
   /**
@@ -167,7 +168,7 @@ class State {
    * @method Phaser.State#render
    */
 
-  render() {
+  render([args]) {
   }
 
   /**
@@ -176,7 +177,7 @@ class State {
    * @method Phaser.State#paused
    */
 
-  paused() {
+  paused([args]) {
   }
 
   /**
@@ -185,7 +186,7 @@ class State {
    * @method Phaser.State#pauseUpdate
    */
 
-  pauseUpdate() {
+  pauseUpdate([args]) {
   }
 
   /**
@@ -194,6 +195,18 @@ class State {
    * @method Phaser.State#shutdown
    */
 
-  shutdown() {
+  shutdown([args]) {
+  }
+
+  preRender([args]){
+
+  }
+
+  resumed([args]){
+
+  }
+
+  init([args]){
+
   }
 }
