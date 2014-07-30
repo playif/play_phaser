@@ -14,35 +14,22 @@ class Stage extends PIXI.Stage {
   num _nextOffsetCheck;
   int _backgroundColor;
 
+  Function _onChange;
+
+  /**
+   * @name Phaser.Stage#backgroundColor
+   * @property {number|string} backgroundColor - Gets and sets the background color of the stage. The color can be given as a number: 0xff0000 or a hex string: '#ff0000'
+   */
+
   int get backgroundColor {
     return this._backgroundColor;
   }
 
   set backgroundColor(int value) {
     if (!this.game.transparent) {
-      this.setBackgroundColor(color);
+      this.setBackgroundColor(value);
     }
   }
-
-
-  /**
-   * @name Phaser.Stage#backgroundColor
-   * @property {number|string} backgroundColor - Gets and sets the background color of the stage. The color can be given as a number: 0xff0000 or a hex string: '#ff0000'
-   */
-  //Object.defineProperty(Phaser.Stage.prototype, "backgroundColor", {
-
-//  get backgroundColor{
-//    return this._backgroundColor;
-//  }
-//
-//  set backgroundColor(color) {
-//    if (!this.game.transparent) {
-//      this.setBackgroundColor(color);
-//    }
-//
-//  }
-
-  //});
 
   /**
    * Enable or disable texture smoothing for all objects on this Stage. Only works for bitmap/image textures. Smoothing is enabled by default.
@@ -50,29 +37,19 @@ class Stage extends PIXI.Stage {
    * @name Phaser.Stage#smoothed
    * @property {boolean} smoothed - Set to true to smooth all sprites rendered on this Stage, or false to disable smoothing (great for pixel art)
    */
-  //Object.defineProperty(Phaser.Stage.prototype, "smoothed", {
 
   bool get smoothed {
-
-    return PIXI.scaleModes.LINEAR ;
-
+    //return PIXI.scaleModes.LINEAR ;
   }
 
   set smoothed(bool value) {
-
-    if (value) {
-      PIXI.scaleModes.LINEAR = 0;
-    }
-    else {
-      PIXI.scaleModes.LINEAR = 1;
-    }
+//    if (value) {
+//      PIXI.scaleModes.LINEAR = 0;
+//    }
+//    else {
+//      PIXI.scaleModes.LINEAR = 1;
+//    }
   }
-
-  //});
-
-//  bool get smoothed{
-//    return
-//  }
 
   Stage(this.game, num width, num height) {
     /**
@@ -194,7 +171,7 @@ class Stage extends PIXI.Stage {
 
     if (this.checkOffsetInterval != false) {
       if (this.game.time.now > this._nextOffsetCheck) {
-        Phaser.Canvas.getOffset(this.game.canvas, this.offset);
+        Canvas.getOffset(this.game.canvas, this.offset);
         this.bounds.x = this.offset.x;
         this.bounds.y = this.offset.y;
         this._nextOffsetCheck = this.game.time.now + this.checkOffsetInterval;
@@ -241,7 +218,7 @@ class Stage extends PIXI.Stage {
     };
 
     Canvas.setUserSelect(this.game.canvas, 'none');
-    Canvas.setTouchAction(this.game.canvas, 'none');
+    //Canvas.setTouchAction(this.game.canvas, 'none');
 
     this.checkVisibility();
 
@@ -249,32 +226,34 @@ class Stage extends PIXI.Stage {
 
   checkVisibility() {
 
-    if (document.webkitHidden != null) {
-      this._hiddenVar = 'webkitvisibilitychange';
-    }
-    else if (document.mozHidden != null) {
-      this._hiddenVar = 'mozvisibilitychange';
-    }
-    else if (document.msHidden != null) {
-        this._hiddenVar = 'msvisibilitychange';
-      }
-      else if (document.hidden != null) {
-          this._hiddenVar = 'visibilitychange';
-        }
-        else {
-          this._hiddenVar = null;
-        }
+//    if (document.webkitHidden != null) {
+//      this._hiddenVar = 'webkitvisibilitychange';
+//    }
+//    else if (document.mozHidden != null) {
+//      this._hiddenVar = 'mozvisibilitychange';
+//    }
+//    else if (document.msHidden != null) {
+//        this._hiddenVar = 'msvisibilitychange';
+//      }
+//      else if (document.hidden != null) {
+//          this._hiddenVar = 'visibilitychange';
+//        }
+//        else {
+//          this._hiddenVar = null;
+//        }
 
+
+    this._hiddenVar = 'visibilitychange';
     //  Does browser support it? If not (like in IE9 or old Android) we need to fall back to blur/focus
-    if (this._hiddenVar) {
-      document.addEventListener(this._hiddenVar, this._onChange, false);
-    }
+    //if (this._hiddenVar) {
+    document.addEventListener(this._hiddenVar, this._onChange, false);
+    //}
 
-    window.onpagehide = this._onChange;
-    window.onpageshow = this._onChange;
+    window.onPageHide.listen(this._onChange);
+    window.onPageShow.listen(this._onChange);
 
-    window.onblur = this._onChange;
-    window.onfocus = this._onChange;
+    window.onBlur.listen(this._onChange);
+    window.onFocus.listen(this._onChange);
 
   }
 
@@ -304,13 +283,14 @@ class Stage extends PIXI.Stage {
 
   }
 
-  setBackgroundColor(backgroundColor) {
+  setBackgroundColor(int backgroundColor) {
+    Color rgb;
     if (backgroundColor is String) {
-      var rgb = Color.hexToColor(backgroundColor);
+      rgb = Color.hexToColor(backgroundColor);
       this._backgroundColor = Color.getColor(rgb.r, rgb.g, rgb.b);
     }
     else {
-      var rgb = Color.getRGB(backgroundColor);
+      rgb = Color.getRGB(backgroundColor);
       this._backgroundColor = backgroundColor;
     }
 

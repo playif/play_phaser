@@ -183,19 +183,19 @@ class ScaleManager {
    * @constant
    * @type {number}
    */
-  const int EXACT_FIT = 0;
+  static const int EXACT_FIT = 0;
 
   /**
    * @constant
    * @type {number}
    */
-  const int NO_SCALE = 1;
+  static const int NO_SCALE = 1;
 
   /**
    * @constant
    * @type {number}
    */
-  const int SHOW_ALL = 2;
+  static const int SHOW_ALL = 2;
 
   ScaleManager(Game game, num width, num height) {
 
@@ -327,14 +327,15 @@ class ScaleManager {
      */
     this.orientation = 0;
 
-    if (window['orientation']) {
-      this.orientation = window['orientation'];
-    }
-    else {
-      if (window.outerWidth > window.outerHeight) {
-        this.orientation = 90;
-      }
-    }
+    this.orientation = window.orientation;
+//    if (['orientation']) {
+//      this.orientation = window['orientation'];
+//    }
+//    else {
+//      if (window.outerWidth > window.outerHeight) {
+//        this.orientation = 90;
+//      }
+//    }
 
     /**
      * @property {Phaser.Point} scaleFactor - The scale factor based on the game dimensions vs. the scaled dimensions.

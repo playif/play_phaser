@@ -6,6 +6,8 @@ packages:
     source: hosted
     version: "0.10.0+2"
   play_pixi:
-    description: play_pixi
-    source: hosted
-    version: "0.9.4"
+    description:
+      path: "..\\play_pixi"
+      relative: true
+    source: path
+    version: "0.9.4+1"

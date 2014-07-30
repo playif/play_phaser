@@ -52,7 +52,7 @@ class Signal {
     var n = this._bindings.length;
     do {
       --n;
-    } while (this._bindings[n] && binding._priority <= this._bindings[n]._priority);
+    } while (n>=0 && this._bindings[n] != null && binding._priority <= this._bindings[n]._priority);
     this._bindings.insert(n + 1, binding);
   }
 
@@ -120,13 +120,21 @@ class Signal {
   }
 
 
-  dispatch(List arguments) {
+  dispatch(arguments) {
 
     if (!this.active) {
       return;
     }
+    List paramsArr;
 
-    List paramsArr = new List.from(arguments);
+    if(arguments is List){
+      paramsArr=arguments;
+    }
+    else{
+      paramsArr=[arguments];
+    }
+
+    // = new List.from(arguments);
     int n = this._bindings.length;
     List<SignalBinding> bindings;
 

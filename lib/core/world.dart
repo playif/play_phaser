@@ -47,7 +47,10 @@ class World extends Group {
     }
   }
 
-  World(Game game):super(game, null, '__world', false) {
+    World(Game game):super(game, null, '__world', false) {
+
+    this.game=game;
+
     /**
      * The World has no fixed size, but it does have a bounds outside of which objects are no longer considered as being "in world" and you should use this to clean-up the display list and purge dead objects.
      * By default we set the Bounds to be from 0,0 to Game.width,Game.height. I.e. it will match the size given to the game constructor with 0,0 representing the top-left of the display.

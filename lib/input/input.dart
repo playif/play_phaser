@@ -26,16 +26,19 @@ class Input {
   bool recordPointerHistory;
   int recordRate;
   int recordLimit;
-  Pointer pointer1;
-  Pointer pointer2;
-  Pointer pointer3;
-  Pointer pointer4;
-  Pointer pointer5;
-  Pointer pointer6;
-  Pointer pointer7;
-  Pointer pointer8;
-  Pointer pointer9;
-  Pointer pointer10;
+
+//  Pointer pointer1;
+//  Pointer pointer2;
+//  Pointer pointer3;
+//  Pointer pointer4;
+//  Pointer pointer5;
+//  Pointer pointer6;
+//  Pointer pointer7;
+//  Pointer pointer8;
+//  Pointer pointer9;
+//  Pointer pointer10;
+
+  List<Pointer> pointers = new List<Pointer>(11);
 
   Pointer activePointer;
 
@@ -47,9 +50,9 @@ class Input {
 
   Touch touch;
 
-  MSPointer mspointer;
+  //MSPointer mspointer;
 
-  Gamepad gamepad;
+  //Gamepad gamepad;
 
   bool resetLocked;
   Signal onDown;
@@ -58,9 +61,9 @@ class Input {
   Signal onHold;
   int minPriorityID;
 
-  List interactiveItems = [];
+  List<InputHandler> interactiveItems;
 
-  Point _localPoint = new Point();
+  Point _localPoint;
 
   int _pollCounter;
   Point _oldPosition;
@@ -69,23 +72,23 @@ class Input {
 
   num _y = 0;
 
-  const int MOUSE_OVERRIDES_TOUCH = 0;
-  const int TOUCH_OVERRIDES_MOUSE = 1;
-  const int MOUSE_TOUCH_COMBINE = 2;
+  static const int MOUSE_OVERRIDES_TOUCH = 0;
+  static const int TOUCH_OVERRIDES_MOUSE = 1;
+  static const int MOUSE_TOUCH_COMBINE = 2;
 
-  num get x{
+  num get x {
     return this._x;
   }
 
-  set x(num value){
+  set x(num value) {
     this._x = Math.floor(value);
   }
 
-  num get y{
+  num get y {
     return this._y;
   }
 
-  set y(num value){
+  set y(num value) {
     this._y = Math.floor(value);
   }
 
@@ -93,27 +96,25 @@ class Input {
     return (this.pollRate > 0 && this._pollCounter < this.pollRate);
   }
 
-  int get totalInactivePointers{
+  int get totalInactivePointers {
     return 10 - this.currentPointers;
   }
 
-  int get totalActivePointers{
+  int get totalActivePointers {
     this.currentPointers = 0;
-    for (var i = 1; i <= 10; i++)
-    {
-      if (this['pointer' + i] && this['pointer' + i].active)
-      {
+    for (var i = 1; i <= 10; i++) {
+      if (this.pointers[i] != null && this.pointers[i].active) {
         this.currentPointers++;
       }
     }
     return this.currentPointers;
   }
 
-  num get worldX{
+  num get worldX {
     return this.game.camera.view.x + this.x;
   }
 
-  num get worldY{
+  num get worldY {
     return this.game.camera.view.y + this.y;
   }
 
@@ -241,55 +242,55 @@ class Input {
      */
     this.recordLimit = 100;
 
-    /**
-     * @property {Phaser.Pointer} pointer1 - A Pointer object.
-     */
-    this.pointer1 = null;
-
-    /**
-     * @property {Phaser.Pointer} pointer2 - A Pointer object.
-     */
-    this.pointer2 = null;
-
-    /**
-     * @property {Phaser.Pointer} pointer3 - A Pointer object.
-     */
-    this.pointer3 = null;
-
-    /**
-     * @property {Phaser.Pointer} pointer4 - A Pointer object.
-     */
-    this.pointer4 = null;
-
-    /**
-     * @property {Phaser.Pointer} pointer5 - A Pointer object.
-     */
-    this.pointer5 = null;
-
-    /**
-     * @property {Phaser.Pointer} pointer6 - A Pointer object.
-     */
-    this.pointer6 = null;
-
-    /**
-     * @property {Phaser.Pointer} pointer7 - A Pointer object.
-     */
-    this.pointer7 = null;
-
-    /**
-     * @property {Phaser.Pointer} pointer8 - A Pointer object.
-     */
-    this.pointer8 = null;
-
-    /**
-     * @property {Phaser.Pointer} pointer9 - A Pointer object.
-     */
-    this.pointer9 = null;
-
-    /**
-     * @property {Phaser.Pointer} pointer10 - A Pointer object.
-     */
-    this.pointer10 = null;
+//    /**
+//     * @property {Phaser.Pointer} pointer1 - A Pointer object.
+//     */
+//    this.pointer1 = null;
+//
+//    /**
+//     * @property {Phaser.Pointer} pointer2 - A Pointer object.
+//     */
+//    this.pointer2 = null;
+//
+//    /**
+//     * @property {Phaser.Pointer} pointer3 - A Pointer object.
+//     */
+//    this.pointer3 = null;
+//
+//    /**
+//     * @property {Phaser.Pointer} pointer4 - A Pointer object.
+//     */
+//    this.pointer4 = null;
+//
+//    /**
+//     * @property {Phaser.Pointer} pointer5 - A Pointer object.
+//     */
+//    this.pointer5 = null;
+//
+//    /**
+//     * @property {Phaser.Pointer} pointer6 - A Pointer object.
+//     */
+//    this.pointer6 = null;
+//
+//    /**
+//     * @property {Phaser.Pointer} pointer7 - A Pointer object.
+//     */
+//    this.pointer7 = null;
+//
+//    /**
+//     * @property {Phaser.Pointer} pointer8 - A Pointer object.
+//     */
+//    this.pointer8 = null;
+//
+//    /**
+//     * @property {Phaser.Pointer} pointer9 - A Pointer object.
+//     */
+//    this.pointer9 = null;
+//
+//    /**
+//     * @property {Phaser.Pointer} pointer10 - A Pointer object.
+//     */
+//    this.pointer10 = null;
 
     /**
      * The most recently active Pointer object.
@@ -321,12 +322,12 @@ class Input {
     /**
      * @property {Phaser.MSPointer} mspointer - The MSPointer Input manager.
      */
-    this.mspointer = null;
+    //this.mspointer = null;
 
     /**
      * @property {Phaser.Gamepad} gamepad - The Gamepad Input manager.
      */
-    this.gamepad = null;
+    //this.gamepad = null;
 
     /**
      * @property {Phaser.Gestures} gestures - The Gestures manager.
@@ -369,13 +370,13 @@ class Input {
      * A list of interactive objects. Te InputHandler components add and remove themselves from this.
      * @property {Phaser.ArrayList} interactiveItems
      */
-    this.interactiveItems = new Phaser.ArrayList();
+    this.interactiveItems = new List();
 
     /**
      * @property {Phaser.Point} _localPoint - Internal cache var.
      * @private
      */
-    this._localPoint = new Phaser.Point();
+    this._localPoint = new Point();
 
     /**
      * @property {number} _pollCounter - Internal var holding the current poll counter.
@@ -409,17 +410,18 @@ class Input {
    * @method Phaser.Input#boot
    * @protected
    */
-  boot () {
+
+  boot() {
 
     this.mousePointer = new Pointer(this.game, 0);
-    this.pointer1 = new Pointer(this.game, 1);
-    this.pointer2 = new Pointer(this.game, 2);
+    this.pointers[1] = new Pointer(this.game, 1);
+    this.pointers[2] = new Pointer(this.game, 2);
 
     this.mouse = new Mouse(this.game);
     this.keyboard = new Keyboard(this.game);
     this.touch = new Touch(this.game);
-    this.mspointer = new MSPointer(this.game);
-    this.gamepad = new Gamepad(this.game);
+    //this.mspointer = new MSPointer(this.game);
+    //this.gamepad = new Gamepad(this.game);
     // this.gestures = new Phaser.Gestures(this.game);
 
     this.onDown = new Signal();
@@ -445,26 +447,25 @@ class Input {
     this.mouse.start();
     this.keyboard.start();
     this.touch.start();
-    this.mspointer.start();
+    //this.mspointer.start();
     this.mousePointer.active = true;
 
 
-
   }
-
 
 
   /**
    * Stops all of the Input Managers from running.
    * @method Phaser.Input#destroy
    */
-  destroy () {
+
+  destroy() {
 
     this.mouse.stop();
     this.keyboard.stop();
     this.touch.stop();
-    this.mspointer.stop();
-    this.gamepad.stop();
+    //this.mspointer.stop();
+    //this.gamepad.stop();
     // this.gestures.stop();
 
     this.moveCallbacks = [];
@@ -484,7 +485,8 @@ class Input {
    * @param {function} callback - The callback that will be called each time the activePointer receives a DOM move event.
    * @param {object} callbackContext - The context in which the callback will be called.
    */
-  setMoveCallback (callback, callbackContext) {
+
+  setMoveCallback(callback, callbackContext) {
 
     this.moveCallback = callback;
     this.moveCallbackContext = callbackContext;
@@ -502,10 +504,12 @@ class Input {
    * @param {object} callbackContext - The context in which the callback will be called.
    * @return {number} The index of the callback entry. Use this index when calling Input.deleteMoveCallback.
    */
-  addMoveCallback (callback, callbackContext) {
 
-    return this.moveCallbacks.add( { callback: callback, context: callbackContext }) - 1;
-
+  int addMoveCallback(Function callback, callbackContext) {
+    this.moveCallbacks.add({
+        'callback': callback, 'context': callbackContext
+    });
+    return this.moveCallbacks.length - 1;
   }
 
   /**
@@ -514,13 +518,11 @@ class Input {
    * @method Phaser.Input#deleteMoveCallback
    * @param {number} index - The index of the callback to remove.
    */
-  deleteMoveCallback (index) {
 
-    if (this.moveCallbacks[index])
-    {
-      this.moveCallbacks.splice(index, 1);
+  deleteMoveCallback(int index) {
+    if (this.moveCallbacks[index]) {
+      this.moveCallbacks.removeAt(index);
     }
-
   }
 
   /**
@@ -529,27 +531,26 @@ class Input {
    * @method Phaser.Input#addPointer
    * @return {Phaser.Pointer} A reference to the new Pointer object that was created.
    */
-  addPointer () {
+
+  Pointer addPointer() {
 
     var next = 0;
 
-    for (var i = 10; i > 0; i--)
-    {
-      if (this['pointer' + i] == null)
-      {
+    for (var i = 10; i > 0; i--) {
+      //Pointer pointer= reflect(this).getField(new Symbol('pointer$i')).reflectee;
+      if (pointers[i] == null) {
         next = i;
       }
     }
 
-    if (next == 0)
-    {
+    if (next == 0) {
       window.console.warn("You can only have 10 Pointer objects");
       return null;
     }
-    else
-    {
-      this['pointer' + next] = new Phaser.Pointer(this.game, next);
-      return this['pointer' + next];
+    else {
+      //reflect(this).getField(new Symbol('pointer$next'))
+      this.pointers[next] = new Pointer(this.game, next);
+      return this.pointers[next];
     }
 
   }
@@ -559,12 +560,12 @@ class Input {
    * @method Phaser.Input#update
    * @protected
    */
-  update () {
+
+  update() {
 
     this.keyboard.update();
 
-    if (this.pollRate > 0 && this._pollCounter < this.pollRate)
-    {
+    if (this.pollRate > 0 && this._pollCounter < this.pollRate) {
       this._pollCounter++;
       return;
     }
@@ -575,19 +576,36 @@ class Input {
     this._oldPosition.copyFrom(this.position);
     this.mousePointer.update();
 
-    if (this.gamepad.active) { this.gamepad.update(); }
+    //TODO gamepad
+    //if (this.gamepad.active) { this.gamepad.update(); }
 
-    this.pointer1.update();
-    this.pointer2.update();
+    this.pointers[1].update();
+    this.pointers[2].update();
 
-    if (this.pointer3) { this.pointer3.update(); }
-    if (this.pointer4) { this.pointer4.update(); }
-    if (this.pointer5) { this.pointer5.update(); }
-    if (this.pointer6) { this.pointer6.update(); }
-    if (this.pointer7) { this.pointer7.update(); }
-    if (this.pointer8) { this.pointer8.update(); }
-    if (this.pointer9) { this.pointer9.update(); }
-    if (this.pointer10) { this.pointer10.update(); }
+    if (this.pointers[3]) {
+      this.pointers[3].update();
+    }
+    if (this.pointers[4]) {
+      this.pointers[4].update();
+    }
+    if (this.pointers[5]) {
+      this.pointers[5].update();
+    }
+    if (this.pointers[6]) {
+      this.pointers[6].update();
+    }
+    if (this.pointers[7]) {
+      this.pointers[7].update();
+    }
+    if (this.pointers[8]) {
+      this.pointers[8].update();
+    }
+    if (this.pointers[9]) {
+      this.pointers[9].update();
+    }
+    if (this.pointers[10]) {
+      this.pointers[10].update();
+    }
 
     this._pollCounter = 0;
 
@@ -603,34 +621,30 @@ class Input {
    * @method Phaser.Input#reset
    * @param {boolean} [hard=false] - A soft reset won't reset any events or callbacks that are bound. A hard reset will.
    */
-  reset ([bool hard=false]) {
 
-    if (!this.game.isBooted || this.resetLocked)
-    {
+  reset([bool hard=false]) {
+
+    if (!this.game.isBooted || this.resetLocked) {
       return;
     }
 
     this.keyboard.reset(hard);
     this.mousePointer.reset();
-    this.gamepad.reset();
+    //this.gamepad.reset();
 
-    for (var i = 1; i <= 10; i++)
-    {
-      if (this['pointer' + i])
-      {
-        this['pointer' + i].reset();
+    for (var i = 1; i <= 10; i++) {
+      if (this.pointers[i]) {
+        this.pointers[i].reset();
       }
     }
 
     this.currentPointers = 0;
 
-    if (this.game.canvas.style.cursor != 'none')
-    {
+    if (this.game.canvas.style.cursor != 'none') {
       this.game.canvas.style.cursor = 'inherit';
     }
 
-    if (hard)
-    {
+    if (hard) {
       this.onDown.dispose();
       this.onUp.dispose();
       this.onTap.dispose();
@@ -652,7 +666,8 @@ class Input {
    * @param {number} x - Sets the oldPosition.x value.
    * @param {number} y - Sets the oldPosition.y value.
    */
-  resetSpeed (x, y) {
+
+  resetSpeed(int x, int y) {
 
     this._oldPosition.setTo(x, y);
     this.speed.setTo(0, 0);
@@ -665,28 +680,23 @@ class Input {
    * @param {Any} event - The event data from the Touch event.
    * @return {Phaser.Pointer} The Pointer object that was started or null if no Pointer object is available.
    */
-  startPointer (event) {
 
-    if (this.maxPointers < 10 && this.totalActivePointers == this.maxPointers)
-    {
+  Pointer startPointer(event) {
+
+    if (this.maxPointers < 10 && this.totalActivePointers == this.maxPointers) {
       return null;
     }
 
-    if (this.pointer1.active == false)
-    {
-      return this.pointer1.start(event);
+    if (this.pointers[1].active == false) {
+      return this.pointers[1].start(event);
     }
-    else if (this.pointer2.active == false)
-    {
-      return this.pointer2.start(event);
+    else if (this.pointers[2].active == false) {
+      return this.pointers[2].start(event);
     }
-    else
-    {
-      for (var i = 3; i <= 10; i++)
-      {
-        if (this['pointer' + i] && this['pointer' + i].active == false)
-        {
-          return this['pointer' + i].start(event);
+    else {
+      for (var i = 3; i <= 10; i++) {
+        if (this.pointers[i] != null && this.pointers[i].active == false) {
+          return this.pointers[i].start(event);
         }
       }
     }
@@ -701,23 +711,19 @@ class Input {
    * @param {Any} event - The event data from the Touch event.
    * @return {Phaser.Pointer} The Pointer object that was updated or null if no Pointer object is available.
    */
-  updatePointer (event) {
 
-    if (this.pointer1.active && this.pointer1.identifier == event.identifier)
-    {
-      return this.pointer1.move(event);
+  Pointer updatePointer(event) {
+
+    if (this.pointers[1].active && this.pointers[1].identifier == event.identifier) {
+      return this.pointers[1].move(event);
     }
-    else if (this.pointer2.active && this.pointer2.identifier == event.identifier)
-    {
-      return this.pointer2.move(event);
+    else if (this.pointers[2].active && this.pointers[2].identifier == event.identifier) {
+      return this.pointers[2].move(event);
     }
-    else
-    {
-      for (var i = 3; i <= 10; i++)
-      {
-        if (this['pointer' + i] && this['pointer' + i].active && this['pointer' + i].identifier == event.identifier)
-        {
-          return this['pointer' + i].move(event);
+    else {
+      for (var i = 3; i <= 10; i++) {
+        if (this.pointers[i] != null && this.pointers[i].active && this.pointers[i].identifier == event.identifier) {
+          return this.pointers[i].move(event);
         }
       }
     }
@@ -732,23 +738,19 @@ class Input {
    * @param {Any} event - The event data from the Touch event.
    * @return {Phaser.Pointer} The Pointer object that was stopped or null if no Pointer object is available.
    */
-  stopPointer (event) {
 
-    if (this.pointer1.active && this.pointer1.identifier == event.identifier)
-    {
-      return this.pointer1.stop(event);
+  Pointer stopPointer(event) {
+
+    if (this.pointers[1].active && this.pointers[1].identifier == event.identifier) {
+      return this.pointers[1].stop(event);
     }
-    else if (this.pointer2.active && this.pointer2.identifier == event.identifier)
-    {
-      return this.pointer2.stop(event);
+    else if (this.pointers[2].active && this.pointers[2].identifier == event.identifier) {
+      return this.pointers[2].stop(event);
     }
-    else
-    {
-      for (var i = 3; i <= 10; i++)
-      {
-        if (this['pointer' + i] && this['pointer' + i].active && this['pointer' + i].identifier == event.identifier)
-        {
-          return this['pointer' + i].stop(event);
+    else {
+      for (var i = 3; i <= 10; i++) {
+        if (this.pointers[i] != null && this.pointers[i].active && this.pointers[i].identifier == event.identifier) {
+          return this.pointers[i].stop(event);
         }
       }
     }
@@ -763,25 +765,21 @@ class Input {
    * @param {boolean} state - The state the Pointer should be in (false for inactive, true for active).
    * @return {Phaser.Pointer} A Pointer object or null if no Pointer object matches the requested state.
    */
-  getPointer (state) {
 
-    state = state || false;
+  Pointer getPointer([bool state=false]) {
 
-    if (this.pointer1.active == state)
-    {
-      return this.pointer1;
+    //state = state || false;
+
+    if (this.pointers[1].active == state) {
+      return this.pointers[1];
     }
-    else if (this.pointer2.active == state)
-    {
-      return this.pointer2;
+    else if (this.pointers[2].active == state) {
+      return this.pointers[2];
     }
-    else
-    {
-      for (var i = 3; i <= 10; i++)
-      {
-        if (this['pointer' + i] && this['pointer' + i].active == state)
-        {
-          return this['pointer' + i];
+    else {
+      for (var i = 3; i <= 10; i++) {
+        if (this.pointers[i] != null && this.pointers[i].active == state) {
+          return this.pointers[i];
         }
       }
     }
@@ -800,23 +798,19 @@ class Input {
    * @param {number} identifier - The Pointer.identifier value to search for.
    * @return {Phaser.Pointer} A Pointer object or null if no Pointer object matches the requested identifier.
    */
-  getPointerFromIdentifier (identifier) {
 
-    if (this.pointer1.identifier == identifier)
-    {
-      return this.pointer1;
+  Pointer getPointerFromIdentifier(int identifier) {
+
+    if (this.pointers[1].identifier == identifier) {
+      return this.pointers[1];
     }
-    else if (this.pointer2.identifier == identifier)
-    {
-      return this.pointer2;
+    else if (this.pointers[2].identifier == identifier) {
+      return this.pointers[2];
     }
-    else
-    {
-      for (var i = 3; i <= 10; i++)
-      {
-        if (this['pointer' + i] && this['pointer' + i].identifier == identifier)
-        {
-          return this['pointer' + i];
+    else {
+      for (var i = 3; i <= 10; i++) {
+        if (this.pointers[i] != null && this.pointers[i].identifier == identifier) {
+          return this.pointers[i];
         }
       }
     }
@@ -834,23 +828,19 @@ class Input {
    * @param {number} pointerId - The Pointer.pointerId value to search for.
    * @return {Phaser.Pointer} A Pointer object or null if no Pointer object matches the requested identifier.
    */
-  getPointerFromId (pointerId) {
 
-    if (this.pointer1.pointerId == pointerId)
-    {
-      return this.pointer1;
+  Pointer getPointerFromId(int pointerId) {
+
+    if (this.pointers[1].pointerId == pointerId) {
+      return this.pointers[1];
     }
-    else if (this.pointer2.pointerId == pointerId)
-    {
-      return this.pointer2;
+    else if (this.pointers[2].pointerId == pointerId) {
+      return this.pointers[2];
     }
-    else
-    {
-      for (var i = 3; i <= 10; i++)
-      {
-        if (this['pointer' + i] && this['pointer' + i].pointerId == pointerId)
-        {
-          return this['pointer' + i];
+    else {
+      for (var i = 3; i <= 10; i++) {
+        if (this.pointers[i] != null && this.pointers[i].pointerId == pointerId) {
+          return this.pointers[i];
         }
       }
     }
@@ -866,9 +856,12 @@ class Input {
    * @param {Phaser.Pointer} pointer - The Pointer to use in the check against the displayObject.
    * @return {Phaser.Point} A point containing the coordinates of the Pointer position relative to the DisplayObject.
    */
-  getLocalPosition (displayObject, pointer, output) {
 
-    if (output == null) { output = new Point(); }
+  Point getLocalPosition(displayObject, Pointer pointer, Point output) {
+
+    if (output == null) {
+      output = new Point();
+    }
 
     var wt = displayObject.worldTransform;
     var id = 1 / (wt.a * wt.d + wt.b * -wt.c);
@@ -888,10 +881,10 @@ class Input {
    * @param {Phaser.Pointer} pointer - The pointer to use for the test.
    * @param {Phaser.Point} localPoint - The local translated point.
    */
-  hitTest (displayObject, pointer, localPoint) {
 
-    if (!displayObject.worldVisible)
-    {
+  bool hitTest(displayObject, Pointer pointer, Point localPoint) {
+
+    if (!displayObject.worldVisible) {
       return false;
     }
 
@@ -899,52 +892,42 @@ class Input {
 
     localPoint.copyFrom(this._localPoint);
 
-    if (displayObject.hitArea && displayObject.hitArea.contains)
-    {
-      if (displayObject.hitArea.contains(this._localPoint.x, this._localPoint.y))
-      {
+    if (displayObject.hitArea && displayObject.hitArea.contains) {
+      if (displayObject.hitArea.contains(this._localPoint.x, this._localPoint.y)) {
         return true;
       }
 
       return false;
     }
-    else if (displayObject is TileSprite)
-    {
+    else if (displayObject is TileSprite) {
       var width = displayObject.width;
       var height = displayObject.height;
       var x1 = -width * displayObject.anchor.x;
 
-      if (this._localPoint.x > x1 && this._localPoint.x < x1 + width)
-      {
+      if (this._localPoint.x > x1 && this._localPoint.x < x1 + width) {
         var y1 = -height * displayObject.anchor.y;
 
-        if (this._localPoint.y > y1 && this._localPoint.y < y1 + height)
-        {
+        if (this._localPoint.y > y1 && this._localPoint.y < y1 + height) {
           return true;
         }
       }
     }
-    else if (displayObject is PIXI.Sprite)
-      {
+    else if (displayObject is PIXI.Sprite) {
         var width = displayObject.texture.frame.width;
         var height = displayObject.texture.frame.height;
         var x1 = -width * displayObject.anchor.x;
 
-        if (this._localPoint.x > x1 && this._localPoint.x < x1 + width)
-        {
+        if (this._localPoint.x > x1 && this._localPoint.x < x1 + width) {
           var y1 = -height * displayObject.anchor.y;
 
-          if (this._localPoint.y > y1 && this._localPoint.y < y1 + height)
-          {
+          if (this._localPoint.y > y1 && this._localPoint.y < y1 + height) {
             return true;
           }
         }
       }
 
-    for (var i = 0, len = displayObject.children.length; i < len; i++)
-    {
-      if (this.hitTest(displayObject.children[i], pointer, localPoint))
-      {
+    for (var i = 0, len = displayObject.children.length; i < len; i++) {
+      if (this.hitTest(displayObject.children[i], pointer, localPoint)) {
         return true;
       }
     }

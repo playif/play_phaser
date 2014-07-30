@@ -4,8 +4,9 @@ part of Phaser;
 class GameObjectFactory {
   Game game;
   World world;
+
   GameObjectFactory(this.game) {
-    world=game.world;
+    world = game.world;
   }
 
   /**
@@ -14,7 +15,8 @@ class GameObjectFactory {
    * @param {*} object - An instance of Phaser.Sprite, Phaser.Button or any other display object..
    * @return {*} The child that was added to the Group.
    */
-  existing (object) {
+
+  existing(object) {
 
     return this.world.add(object);
 
@@ -32,9 +34,12 @@ class GameObjectFactory {
    * @param {Phaser.Group} [group] - Optional Group to add the object to. If not specified it will be added to the World group.
    * @returns {Phaser.Sprite} the newly created sprite object.
    */
-  image (x, y, key, frame, group) {
 
-    if ( group == null) { group = this.world; }
+  image(x, y, key, frame, group) {
+
+    if (group == null) {
+      group = this.world;
+    }
 
     return group.add(new Image(this.game, x, y, key, frame));
 
@@ -51,9 +56,12 @@ class GameObjectFactory {
    * @param {Phaser.Group} [group] - Optional Group to add the object to. If not specified it will be added to the World group.
    * @returns {Phaser.Sprite} the newly created sprite object.
    */
-  sprite (x, y, key, frame, group) {
 
-    if ( group == null) { group = this.world; }
+  sprite(num x, num y, key, [frame, Group group]) {
+
+    if (group == null) {
+      group = this.world;
+    }
 
     return group.create(x, y, key, frame);
 
@@ -66,7 +74,8 @@ class GameObjectFactory {
    * @param {object} obj - Object the tween will be run on.
    * @return {Phaser.Tween} The newly created Phaser.Tween object.
    */
-  tween (obj) {
+
+  tween(obj) {
 
     return this.game.tweens.create(obj);
 
@@ -83,7 +92,8 @@ class GameObjectFactory {
    * @param {number} [physicsBodyType=0] - If enableBody is true this is the type of physics body that is created on new Sprites. Phaser.Physics.ARCADE, Phaser.Physics.P2, Phaser.Physics.NINJA, etc.
    * @return {Phaser.Group} The newly created group.
    */
-  group (parent, name, addToStage, enableBody, physicsBodyType) {
+
+  group(parent, name, addToStage, enableBody, physicsBodyType) {
 
     return new Group(this.game, parent, name, addToStage, enableBody, physicsBodyType);
 
@@ -101,7 +111,8 @@ class GameObjectFactory {
    * @param {boolean} [addToStage=false] - If set to true this Group will be added directly to the Game.Stage instead of Game.World.
    * @return {Phaser.Group} The newly created group.
    */
-  physicsGroup (physicsBodyType, parent, name, addToStage) {
+
+  physicsGroup(physicsBodyType, parent, name, addToStage) {
 
     return new Group(this.game, parent, name, addToStage, true, physicsBodyType);
 
@@ -118,11 +129,18 @@ class GameObjectFactory {
    * @param {boolean} [addToStage=false] - If set to true this Sprite Batch will be added directly to the Game.Stage instead of the parent.
    * @return {Phaser.Group} The newly created group.
    */
-  spriteBatch (parent, name, addToStage) {
 
-    if ( parent == null) { parent = null; }
-    if ( name == null) { name = 'group'; }
-    if ( addToStage == null) { addToStage = false; }
+  spriteBatch(parent, name, addToStage) {
+
+    if (parent == null) {
+      parent = null;
+    }
+    if (name == null) {
+      name = 'group';
+    }
+    if (addToStage == null) {
+      addToStage = false;
+    }
 
     return new SpriteBatch(this.game, parent, name, addToStage);
 
@@ -138,7 +156,8 @@ class GameObjectFactory {
    * @param {boolean} [connect=true] - Controls if the created Sound object will connect to the master gainNode of the SoundManager when running under WebAudio.
    * @return {Phaser.Sound} The newly created text object.
    */
-  audio (key, volume, loop, connect) {
+
+  audio(key, volume, loop, connect) {
 
     return this.game.sound.add(key, volume, loop, connect);
 
@@ -154,7 +173,8 @@ class GameObjectFactory {
    * @param {boolean} [connect=true] - Controls if the created Sound object will connect to the master gainNode of the SoundManager when running under WebAudio.
    * @return {Phaser.Sound} The newly created text object.
    */
-  sound (key, volume, loop, connect) {
+
+  sound(key, volume, loop, connect) {
 
     return this.game.sound.add(key, volume, loop, connect);
 
@@ -173,9 +193,12 @@ class GameObjectFactory {
    * @param {Phaser.Group} [group] - Optional Group to add the object to. If not specified it will be added to the World group.
    * @return {Phaser.TileSprite} The newly created tileSprite object.
    */
-  tileSprite (x, y, width, height, key, frame, group) {
 
-    if ( group == null) { group = this.world; }
+  tileSprite(x, y, width, height, key, frame, group) {
+
+    if (group == null) {
+      group = this.world;
+    }
 
     return group.add(new TileSprite(this.game, x, y, width, height, key, frame));
 
@@ -192,9 +215,12 @@ class GameObjectFactory {
    * @param {Phaser.Group} [group] - Optional Group to add the object to. If not specified it will be added to the World group.
    * @return {Phaser.Text} The newly created text object.
    */
-  text (x, y, text, style, group) {
 
-    if ( group == null) { group = this.world; }
+  text(x, y, text, style, group) {
+
+    if (group == null) {
+      group = this.world;
+    }
 
     return group.add(new Phaser.Text(this.game, x, y, text, style));
 
@@ -216,9 +242,12 @@ class GameObjectFactory {
    * @param {Phaser.Group} [group] - Optional Group to add the object to. If not specified it will be added to the World group.
    * @return {Phaser.Button} The newly created button object.
    */
-  button (x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame, group) {
 
-    if ( group == null) { group = this.world; }
+  button(x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame, group) {
+
+    if (group == null) {
+      group = this.world;
+    }
 
     return group.add(new Button(this.game, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame));
 
@@ -233,8 +262,11 @@ class GameObjectFactory {
    * @param {Phaser.Group} [group] - Optional Group to add the object to. If not specified it will be added to the World group.
    * @return {Phaser.Graphics} The newly created graphics object.
    */
-  graphics (int x, int y, [Group group]) {
-    if ( group == null) { group = this.world; }
+
+  graphics(int x, int y, [Group group]) {
+    if (group == null) {
+      group = this.world;
+    }
 
     return group.add(new Graphics(this.game, x, y));
   }
@@ -250,7 +282,8 @@ class GameObjectFactory {
    * @param {number} [maxParticles=50] - The total number of particles in this emitter.
    * @return {Phaser.Emitter} The newly created emitter object.
    */
-  emitter ([int x, int y, int maxParticles=50]) {
+
+  emitter([int x, int y, int maxParticles=50]) {
     return this.game.particles.add(new Particles.Arcade.Emitter(this.game, x, y, maxParticles));
   }
 
@@ -274,8 +307,9 @@ class GameObjectFactory {
    * @param {number} [yOffset=0] - If the font set doesn't start at the top left of the given image, specify the Y coordinate offset here.
    * @return {Phaser.RetroFont} The newly created RetroFont texture which can be applied to an Image or Sprite.
    */
-  retroFont (String font, int characterWidth, int characterHeight, String chars, int charsPerRow,
-             [int xSpacing=0, int ySpacing=0, int xOffset=0, int yOffset=0]) {
+
+  retroFont(String font, int characterWidth, int characterHeight, String chars, int charsPerRow,
+            [int xSpacing=0, int ySpacing=0, int xOffset=0, int yOffset=0]) {
     return new RetroFont(this.game, font, characterWidth, characterHeight, chars, charsPerRow, xSpacing, ySpacing, xOffset, yOffset);
   }
 
@@ -291,9 +325,12 @@ class GameObjectFactory {
    * @param {Phaser.Group} [group] - Optional Group to add the object to. If not specified it will be added to the World group.
    * @return {Phaser.BitmapText} The newly created bitmapText object.
    */
-  bitmapText (int x, int y, String font, [String text, int size, Group group]) {
 
-    if ( group == null) { group = this.world; }
+  bitmapText(int x, int y, String font, [String text, int size, Group group]) {
+
+    if (group == null) {
+      group = this.world;
+    }
 
     return group.add(new BitmapText(this.game, x, y, font, text, size));
 
@@ -314,7 +351,8 @@ class GameObjectFactory {
    * @param {number} [height=10] - The height of the map in tiles. If this map is created from Tiled or CSV data you don't need to specify this.
    * @return {Phaser.Tilemap} The newly created tilemap object.
    */
-  tilemap ([String key, int tileWidth=32, int tileHeight=32, int width=10, int height=10]) {
+
+  tilemap([String key, int tileWidth=32, int tileHeight=32, int width=10, int height=10]) {
 
     return new Tilemap(this.game, key, tileWidth, tileHeight, width, height);
 
@@ -330,15 +368,17 @@ class GameObjectFactory {
    * @param {boolean} [addToCache=false] - Should this RenderTexture be added to the Game.Cache? If so you can retrieve it with Cache.getTexture(key)
    * @return {Phaser.RenderTexture} The newly created RenderTexture object.
    */
-  renderTexture ([int width, int height, String key, bool addToCache=false]) {
 
-    if (key == null) { key = this.game.rnd.uuid(); }
+  renderTexture([int width, int height, String key, bool addToCache=false]) {
+
+    if (key == null) {
+      key = this.game.rnd.uuid();
+    }
     //if (typeof addToCache === 'undefined') { addToCache = false; }
 
     var texture = new RenderTexture(this.game, width, height, key);
 
-    if (addToCache)
-    {
+    if (addToCache) {
       this.game.cache.addRenderTexture(key, texture);
     }
 
@@ -356,15 +396,17 @@ class GameObjectFactory {
    * @param {boolean} [addToCache=false] - Should this BitmapData be added to the Game.Cache? If so you can retrieve it with Cache.getBitmapData(key)
    * @return {Phaser.BitmapData} The newly created BitmapData object.
    */
-  bitmapData ([int width, int height, String key, bool addToCache=false]) {
+
+  bitmapData([int width, int height, String key, bool addToCache=false]) {
 
     //if ( addToCache == 'undefined') { addToCache = false; }
-    if ( key == null) { key = this.game.rnd.uuid(); }
+    if (key == null) {
+      key = this.game.rnd.uuid();
+    }
 
     var texture = new BitmapData(this.game, key, width, height);
 
-    if (addToCache)
-    {
+    if (addToCache) {
       this.game.cache.addBitmapData(key, texture);
     }
 
@@ -380,7 +422,8 @@ class GameObjectFactory {
    * @param {any} - Whatever parameters are needed to be passed to the filter init function.
    * @return {Phaser.Filter} The newly created Phaser.Filter object.
    */
-  filter (String filter) {
+
+  filter(String filter) {
     //TODO
     //var args = Array.prototype.splice.call(arguments, 1);
 
@@ -401,7 +444,8 @@ class GameObjectFactory {
    * @param {...*} parameter - Additional parameters that will be passed to the Plugin.init method.
    * @return {Phaser.Plugin} The Plugin that was added to the manager.
    */
-  plugin (plugin) {
+
+  plugin(plugin) {
 
     return this.game.plugins.add(plugin);
 

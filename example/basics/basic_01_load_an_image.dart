@@ -10,7 +10,7 @@ class basic_01_load_an_image {
 
   preload() {
 
-    Phaser.Easing.Linear.None;
+    //Phaser.Easing.Linear.None;
     //  You can fill the preloader with as many assets as your game requires
 
     //  Here we are loading an image. The first parameter is the unique

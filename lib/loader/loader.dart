@@ -55,31 +55,31 @@ class Loader {
    * @constant
    * @type {number}
    */
-  const int TEXTURE_ATLAS_JSON_ARRAY = 0;
+  static const int TEXTURE_ATLAS_JSON_ARRAY = 0;
 
   /**
    * @constant
    * @type {number}
    */
-  const int TEXTURE_ATLAS_JSON_HASH = 1;
+  static const int TEXTURE_ATLAS_JSON_HASH = 1;
 
   /**
    * @constant
    * @type {number}
    */
-  const int TEXTURE_ATLAS_XML_STARLING = 2;
+  static const int TEXTURE_ATLAS_XML_STARLING = 2;
 
   /**
    * @constant
    * @type {number}
    */
-  const int PHYSICS_LIME_CORONA_JSON = 3;
+  static const int PHYSICS_LIME_CORONA_JSON = 3;
 
   /**
    * @constant
    * @type {number}
    */
-  const int PHYSICS_PHASER_JSON = 4;
+  static const int PHYSICS_PHASER_JSON = 4;
 
 
   Loader(this.game) {
@@ -456,7 +456,7 @@ class Loader {
    * @return {Phaser.Loader} This Loader instance.
    */
 
-  image(key, url, overwrite) {
+  Loader image(String key, String url, [bool overwrite=false]) {
 
     if (overwrite == null) {
       overwrite = false;

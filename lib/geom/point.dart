@@ -431,29 +431,36 @@ class Point {
 
   }
 
-  Point operator - (Point a, Point b) {
+  Point operator - (Point b) {
     Point out = new Point();
-    out.x = a.x - b.x;
-    out.y = a.y - b.y;
+    out.x = x - b.x;
+    out.y = y - b.y;
     return out;
   }
 
-  Point operator * (Point a, Point b) {
+  Point operator * (Point b) {
     Point out = new Point();
-    out.x = a.x * b.x;
-    out.y = a.y * b.y;
+    out.x = x * b.x;
+    out.y = y * b.y;
     return out;
   }
 
-  Point operator / (Point a, Point b) {
+  Point operator / (Point b) {
     Point out = new Point();
-    out.x = a.x / b.x;
-    out.y = a.y / b.y;
+    out.x = x / b.x;
+    out.y = y / b.y;
     return out;
   }
 
-  bool operator == (Point a, Point b) {
-    return (a.x == b.x && a.y == b.y);
+  bool operator == (Point b) {
+    return (x == b.x && y == b.y);
+  }
+
+  int get hashCode {
+    int result = 17;
+    result = 37 * result + x.hashCode;
+    result = 37 * result + y.hashCode;
+    return result;
   }
 
   Point multiplyAdd(Point a, Point b, Point s, [Point out]) {

@@ -22,9 +22,15 @@ class Group extends PIXI.DisplayObjectContainer {
 
   List _cache;
 
+  Type classType;
 
-  Group(this.game, [this.parent, this.name='group',
+  int renderOrderID;
+
+
+  Group(Game game, [this.parent, this.name='group',
   this.addToStage=false, this.enableBody=false, this.physicsBodyType=0]) {
+    this.game=game;
+
     if (parent == null) {
       parent = game.world;
     }
@@ -67,7 +73,7 @@ class Group extends PIXI.DisplayObjectContainer {
      * @property {object} classType
      * @default
      */
-    this.classType = Phaser.Sprite;
+    this.classType = Sprite;
 
     /**
      * @property {Phaser.Group|Phaser.Sprite} parent - The parent of this Group.
@@ -233,7 +239,10 @@ class Group extends PIXI.DisplayObjectContainer {
 
   create(x, y, String key, int frame, [bool exists]) {
 
-    var child = new this.classType(this.game, x, y, key, frame);
+
+    //var child = new this.classType(this.game, x, y, key, frame);
+
+    var child =reflectClass(classType).newInstance('',[this.game,x,y,key,frame]);
 
     if (this.enableBody) {
       this.game.physics.enable(child, this.physicsBodyType);
@@ -430,14 +439,15 @@ class Group extends PIXI.DisplayObjectContainer {
 
   }
 
-  hasProperty(child, String key) {
+  //needing mirrior
+  hasProperty(dynamic child, List<String> key) {
 
     var len = key.length;
 
-    if (len == 1 && key[0] in child) {
+    if (len == 1 && child.containsKey(key[0])) {
       return true;
     }
-    else if (len == 2 && key[0] in child && key[1] in child[key[0]]) {
+    else if (len == 2 && child.containsKey(key[0]) && child.containsKey(key[0]).containsKey(key[1])) {
       return true;
     }
     else if (len == 3 && key[0] in child && key[1] in child[key[0]] && key[2] in child[key[0]][key[1]]) {
@@ -452,7 +462,7 @@ class Group extends PIXI.DisplayObjectContainer {
   }
 
 
-  setProperty(child, key, value, [int operation=0, bool force=false]) {
+  setProperty(Map child, List<String> key, value, [int operation=0, bool force=false]) {
 
 //    operation = operation || 0;
 

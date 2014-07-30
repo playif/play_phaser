@@ -27,7 +27,7 @@ class Game {
   Cache cache;
   Input input;
   Loader load;
-  Math math;
+  //Math math;
   Net net;
   ScaleManager scale;
   SoundManager sound;
@@ -197,7 +197,7 @@ class Game {
     /**
      * @property {Phaser.Math} math - Reference to the math helper.
      */
-    this.math = null;
+    //this.math = null;
 
     /**
      * @property {Phaser.Net} net - Reference to the network class.
@@ -472,7 +472,7 @@ class Game {
     this.isBooted = true;
 
     this.device = new Device(this);
-    this.math = Math;
+    //this.math = Math;
 
 
     this.stage = new Stage(this, this.width, this.height);
@@ -505,7 +505,7 @@ class Game {
     this.state.boot();
 
     if (this.config['enableDebug']) {
-      this.debug = new Utils.Debug(this);
+      this.debug = new Debug(this);
       this.debug.boot();
     }
 
@@ -534,10 +534,10 @@ class Game {
 
   showDebugHeader() {
 
-    var v = VERSION;
-    var r = 'Canvas';
-    var a = 'HTML Audio';
-    var c = 1;
+    String v = VERSION;
+    String r = 'Canvas';
+    String a = 'HTML Audio';
+    int c = 1;
 
     if (this.renderType == WEBGL) {
       r = 'WebGL';
@@ -553,7 +553,7 @@ class Game {
     }
 
     if (this.device.chrome) {
-      var args = [
+      List<String> args = [
           '%c %c %c Phaser v' + v + ' | Pixi.js ' + PIXI.VERSION + ' | ' + r + ' | ' + a + '  %c %c ' + ' http://phaser.io  %c %c \u2665%c\u2665%c\u2665 ',
           'background: #0cf300',
           'background: #00bc17',
@@ -565,14 +565,14 @@ class Game {
 
       for (var i = 0; i < 3; i++) {
         if (i < c) {
-          args.push('color: #ff2424; background: #fff');
+          args.add('color: #ff2424; background: #fff');
         }
         else {
-          args.push('color: #959595; background: #fff');
+          args.add('color: #959595; background: #fff');
         }
       }
 
-      window. console.log.apply(window.console, args);
+      window.console.log(args);
     }
 //    else if (window['console']) {
 //      window.console.log('Phaser v' + v + ' | Pixi.js ' + PIXI.VERSION + ' | ' + r + ' | ' + a + ' | http://phaser.io');
@@ -651,7 +651,7 @@ class Game {
    * @param {number} time - The current time as provided by RequestAnimationFrame.
    */
 
-  update(num time) {
+  update(int time) {
 
     this.time.update(time);
 

@@ -175,10 +175,10 @@ class StateManager {
     }
     else if (state is Map) {
       newState = state;
-      newState.game = this.game;
+      newState['game'] = this.game;
     }
     else if (state is Function) {
-        newState = new state(this.game);
+        newState = state(this.game);
       }
 
     this.states[key] = newState;
@@ -297,7 +297,7 @@ class StateManager {
     if (this._pendingState != null && this.game.isBooted) {
       //  Already got a state running?
       if (this.current != null) {
-        this.onShutDownCallback.call(this.callbackContext, this.game);
+        this.onShutDownCallback(this.callbackContext, this.game);
 
         this.game.tweens.removeAll();
 

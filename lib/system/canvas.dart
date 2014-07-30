@@ -24,17 +24,17 @@ class Canvas {
 
     //  Without this check Chrome is now throwing console warnings about strict vs. quirks :(
 
-    var scrollTop = 0;
-    var scrollLeft = 0;
+    int scrollTop = 0;
+    int scrollLeft = 0;
 
-    if (document.compatMode == 'CSS1Compat') {
-      scrollTop = window.pageYOffset || document.documentElement.scrollTop || element.scrollTop || 0;
-      scrollLeft = window.pageXOffset || document.documentElement.scrollLeft || element.scrollLeft || 0;
-    }
-    else {
-      scrollTop = window.pageYOffset || document.body.scrollTop || element.scrollTop || 0;
-      scrollLeft = window.pageXOffset || document.body.scrollLeft || element.scrollLeft || 0;
-    }
+    //if (document.compatMode == 'CSS1Compat') {
+    //  scrollTop = window.pageYOffset || document.documentElement.scrollTop || element.scrollTop || 0;
+    //  scrollLeft = window.pageXOffset || document.documentElement.scrollLeft || element.scrollLeft || 0;
+    //}
+    //else {
+    scrollTop = window.pageYOffset;// || document.body.scrollTop || element.scrollTop || 0;
+    scrollLeft = window.pageXOffset;// || document.body.scrollLeft || element.scrollLeft || 0;
+    //}
 
     point.x = box.left + scrollLeft - clientLeft;
     point.y = box.top + scrollTop - clientTop;
@@ -43,24 +43,24 @@ class Canvas {
 
   }
 
-  static num getAspectRatio (CanvasElement canvas) {
+  static num getAspectRatio(CanvasElement canvas) {
     return canvas.width / canvas.height;
   }
 
-  static CanvasElement setBackgroundColor (CanvasElement canvas, [String color='rgb(0,0,0)']) {
+  static CanvasElement setBackgroundColor(CanvasElement canvas, [String color='rgb(0,0,0)']) {
     canvas.style.backgroundColor = color;
     return canvas;
   }
 
 //  CanvasElement setTouchAction (CanvasElement canvas, [String value='none']) {
 //    //value = value || 'none';
-//    canvas.style.msTouchAction = value;
-//    canvas.style['ms-touch-action'] = value;
+//    //canvas.style.msTouchAction = value;
+//    //canvas.style['ms-touch-action'] = value;
 //    canvas.style['touch-action'] = value;
 //    return canvas;
 //  }
 
-  static CanvasElement setUserSelect (CanvasElement canvas, [String value='none']) {
+  static CanvasElement setUserSelect(CanvasElement canvas, [String value='none']) {
     canvas.style.userSelect = value;
 //    canvas.style['-webkit-user-select'] = value;
 //    canvas.style['-khtml-user-select'] = value;
@@ -71,32 +71,27 @@ class Canvas {
     return canvas;
   }
 
-  static CanvasElement addToDOM (CanvasElement canvas, [parent, bool overflowHidden=true]) {
+  static CanvasElement addToDOM(CanvasElement canvas, [parent, bool overflowHidden=true]) {
 
     HtmlElement target;
 
-    if (parent != null)
-    {
-      if (parent is String)
-      {
+    if (parent != null) {
+      if (parent is String) {
         // hopefully an element ID
         target = document.getElementById(parent);
       }
-      else if (parent is HtmlElement)
-      {
+      else if (parent is HtmlElement) {
         // quick test for a HTMLelement
         target = parent;
       }
     }
 
     // Fallback, covers an invalid ID and a non HTMLelement object
-    if (target == null)
-    {
+    if (target == null) {
       target = document.body;
     }
 
-    if (overflowHidden)
-    {
+    if (overflowHidden) {
       target.style.overflow = 'hidden';
     }
 
@@ -106,13 +101,13 @@ class Canvas {
 
   }
 
-  static CanvasRenderingContext2D setTransform (CanvasRenderingContext2D context, num translateX,num translateY,num scaleX,num scaleY,num skewX,num skewY) {
+  static CanvasRenderingContext2D setTransform(CanvasRenderingContext2D context, num translateX, num translateY, num scaleX, num scaleY, num skewX, num skewY) {
     context.setTransform(scaleX, skewX, skewY, scaleY, translateX, translateY);
     return context;
   }
 
-  static CanvasRenderingContext2D setSmoothingEnabled (CanvasRenderingContext2D context, [bool value=false]) {
-    context.imageSmoothingEnabled=value;
+  static CanvasRenderingContext2D setSmoothingEnabled(CanvasRenderingContext2D context, [bool value=false]) {
+    context.imageSmoothingEnabled = value;
 //    context['imageSmoothingEnabled'] = value;
 //    context['mozImageSmoothingEnabled'] = value;
 //    context['oImageSmoothingEnabled'] = value;
@@ -121,8 +116,8 @@ class Canvas {
     return context;
   }
 
-  static CanvasElement setImageRenderingCrisp (CanvasElement canvas) {
-    canvas.style.imageRendering='optimize-contrast';
+  static CanvasElement setImageRenderingCrisp(CanvasElement canvas) {
+    canvas.style.imageRendering = 'optimize-contrast';
 //    canvas.style['image-rendering'] = 'optimizeSpeed';
 //    canvas.style['image-rendering'] = 'crisp-edges';
 //    canvas.style['image-rendering'] = '-moz-crisp-edges';
@@ -132,7 +127,7 @@ class Canvas {
     return canvas;
   }
 
-  static CanvasElement setImageRenderingBicubic (CanvasElement canvas) {
+  static CanvasElement setImageRenderingBicubic(CanvasElement canvas) {
     canvas.style.imageRendering = 'auto';
     //canvas.style.msInterpolationMode = 'bicubic';
     return canvas;

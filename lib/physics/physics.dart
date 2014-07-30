@@ -21,34 +21,35 @@ class Physics {
    * @const
    * @type {number}
    */
-  const int ARCADE = 0;
+  static const int ARCADE = 0;
 
   /**
    * @const
    * @type {number}
    */
-  const int P2JS = 1;
+  static const int P2JS = 1;
 
   /**
    * @const
    * @type {number}
    */
-  const int NINJA = 2;
+  static const int NINJA = 2;
 
   /**
    * @const
    * @type {number}
    */
-  const int BOX2D = 3;
+  static const int BOX2D = 3;
 
   /**
    * @const
    * @type {number}
    */
-  const int CHIPMUNK = 5;
+  static const int CHIPMUNK = 5;
 
 
-  Physics(game, [Map config = const {}]) {
+  Physics(game, [Map config = const {
+  }]) {
 
     /**
      * @property {Phaser.Game} game - Local reference to game.
@@ -84,8 +85,10 @@ class Physics {
      * @property {Phaser.Physics.Chipmunk} chipmunk - The Chipmunk Physics system (to be done).
      */
     //this.chipmunk = null;
+    if(config != null){
+      this.parseConfig();
+    }
 
-    this.parseConfig();
   }
 
   /**
@@ -93,192 +96,186 @@ class Physics {
    *
    * @method Phaser.Physics#parseConfig
    */
-  parseConfig () {
 
-    if ((!this.config.containsKey('arcade') || this.config['arcade'] == true) && Physics.hasOwnProperty('Arcade'))
-    {
+  parseConfig() {
+
+    if ((!this.config.containsKey('arcade') || this.config['arcade'] == true) && Physics.hasOwnProperty('Arcade')) {
       //  If Arcade isn't specified, we create it automatically if we can
       this.arcade = new Physics.Arcade(this.game);
       this.game.time.deltaCap = 0.2;
     }
 
-    if (this.config.containsKey('ninja') && this.config['ninja'] == true && Physics.hasOwnProperty('Ninja'))
-  {
-  this.ninja = new Physics.Ninja(this.game);
-  }
-
-  if (this.config.containsKey('p2') && this.config['p2'] == true && Physics.hasOwnProperty('P2'))
-  {
-  this.p2 = new Physics.P2(this.game, this.config);
-  }
-
-}
-
-/**
- * This will create an instance of the requested physics simulation.
- * Phaser.Physics.Arcade is running by default, but all others need activating directly.
- * You can start the following physics systems:
- * Phaser.Physics.P2JS - A full-body advanced physics system by Stefan Hedman.
- * Phaser.Physics.NINJA - A port of Metanet Softwares N+ physics system.
- * Phaser.Physics.BOX2D and Phaser.Physics.CHIPMUNK are still in development.
- *
- * @method Phaser.Physics#startSystem
- * @param {number} The physics system to start.
- */
-startSystem (system) {
-
-  if (system == Physics.ARCADE)
-  {
-    this.arcade = new Physics.Arcade(this.game);
-  }
-  else if (system == Physics.P2JS)
-  {
-    this.p2 = new Physics.P2(this.game, this.config);
-  }
-  if (system == Physics.NINJA)
-  {
-    this.ninja = new Physics.Ninja(this.game);
-  }
-  else if (system == Physics.BOX2D && this.box2d == null)
-  {
-    throw new Exception('The Box2D physics system has not been implemented yet.');
-  }
-  else if (system == Physics.CHIPMUNK && this.chipmunk == null)
-    {
-      throw new Exception('The Chipmunk physics system has not been implemented yet.');
+    if (this.config.containsKey('ninja') && this.config['ninja'] == true && Physics.hasOwnProperty('Ninja')) {
+      this.ninja = new Physics.Ninja(this.game);
     }
 
-  this.setBoundsToWorld();
-
-}
-
-/**
- * This will create a default physics body on the given game object or array of objects.
- * A game object can only have 1 physics body active at any one time, and it can't be changed until the object is destroyed.
- * It can be for any of the physics systems that have been started:
- *
- * Phaser.Physics.Arcade - A light weight AABB based collision system with basic separation.
- * Phaser.Physics.P2JS - A full-body advanced physics system supporting multiple object shapes, polygon loading, contact materials, springs and constraints.
- * Phaser.Physics.NINJA - A port of Metanet Softwares N+ physics system. Advanced AABB and Circle vs. Tile collision.
- * Phaser.Physics.BOX2D and Phaser.Physics.CHIPMUNK are still in development.
- *
- * If you require more control over what type of body is created, for example to create a Ninja Physics Circle instead of the default AABB, then see the
- * individual physics systems `enable` methods instead of using this generic one.
- *
- * @method Phaser.Physics#enable
- * @param {object|array} object - The game object to create the physics body on. Can also be an array of objects, a body will be created on every object in the array.
- * @param {number} [system=Phaser.Physics.ARCADE] - The physics system that will be used to create the body. Defaults to Arcade Physics.
- * @param {boolean} [debug=false] - Enable the debug drawing for this body. Defaults to false.
- */
-enable (object, system, debug) {
-
-  if ( system == null) { system = Physics.ARCADE; }
-  if ( debug == null) { debug = false; }
-
-  if (system == Physics.ARCADE)
-  {
-    this.arcade.enable(object);
-  }
-  else if (system == Physics.P2JS && this.p2)
-  {
-    this.p2.enable(object, debug);
-  }
-  else if (system == Physics.NINJA && this.ninja)
-    {
-      this.ninja.enableAABB(object);
+    if (this.config.containsKey('p2') && this.config['p2'] == true && Physics.hasOwnProperty('P2')) {
+      this.p2 = new Physics.P2(this.game, this.config);
     }
 
-}
-
-/**
- * preUpdate checks.
- *
- * @method Phaser.Physics#preUpdate
- * @protected
- */
-preUpdate () {
-
-  //  ArcadePhysics / Ninja don't have a core to preUpdate
-
-  if (this.p2)
-  {
-    this.p2.preUpdate();
   }
 
-}
+  /**
+   * This will create an instance of the requested physics simulation.
+   * Phaser.Physics.Arcade is running by default, but all others need activating directly.
+   * You can start the following physics systems:
+   * Phaser.Physics.P2JS - A full-body advanced physics system by Stefan Hedman.
+   * Phaser.Physics.NINJA - A port of Metanet Softwares N+ physics system.
+   * Phaser.Physics.BOX2D and Phaser.Physics.CHIPMUNK are still in development.
+   *
+   * @method Phaser.Physics#startSystem
+   * @param {number} The physics system to start.
+   */
 
-/**
- * Updates all running physics systems.
- *
- * @method Phaser.Physics#update
- * @protected
- */
-update () {
+  startSystem(system) {
 
-  //  ArcadePhysics / Ninja don't have a core to update
+    if (system == Physics.ARCADE) {
+      this.arcade = new Physics.Arcade(this.game);
+    }
+    else if (system == Physics.P2JS) {
+      this.p2 = new Physics.P2(this.game, this.config);
+    }
+    if (system == Physics.NINJA) {
+      this.ninja = new Physics.Ninja(this.game);
+    }
+    else if (system == Physics.BOX2D && this.box2d == null) {
+      throw new Exception('The Box2D physics system has not been implemented yet.');
+    }
+    else if (system == Physics.CHIPMUNK && this.chipmunk == null) {
+        throw new Exception('The Chipmunk physics system has not been implemented yet.');
+      }
 
-  if (this.p2)
-  {
-    this.p2.update();
+    this.setBoundsToWorld();
+
   }
 
-}
+  /**
+   * This will create a default physics body on the given game object or array of objects.
+   * A game object can only have 1 physics body active at any one time, and it can't be changed until the object is destroyed.
+   * It can be for any of the physics systems that have been started:
+   *
+   * Phaser.Physics.Arcade - A light weight AABB based collision system with basic separation.
+   * Phaser.Physics.P2JS - A full-body advanced physics system supporting multiple object shapes, polygon loading, contact materials, springs and constraints.
+   * Phaser.Physics.NINJA - A port of Metanet Softwares N+ physics system. Advanced AABB and Circle vs. Tile collision.
+   * Phaser.Physics.BOX2D and Phaser.Physics.CHIPMUNK are still in development.
+   *
+   * If you require more control over what type of body is created, for example to create a Ninja Physics Circle instead of the default AABB, then see the
+   * individual physics systems `enable` methods instead of using this generic one.
+   *
+   * @method Phaser.Physics#enable
+   * @param {object|array} object - The game object to create the physics body on. Can also be an array of objects, a body will be created on every object in the array.
+   * @param {number} [system=Phaser.Physics.ARCADE] - The physics system that will be used to create the body. Defaults to Arcade Physics.
+   * @param {boolean} [debug=false] - Enable the debug drawing for this body. Defaults to false.
+   */
 
-/**
- * Updates the physics bounds to match the world dimensions.
- *
- * @method Phaser.Physics#setBoundsToWorld
- * @protected
- */
-setBoundsToWorld () {
+  enable(object, [int system, bool debug]) {
 
-  if (this.arcade)
-  {
-    this.arcade.setBoundsToWorld();
+    if (system == null) {
+      system = Physics.ARCADE;
+    }
+    if (debug == null) {
+      debug = false;
+    }
+
+    if (system == Physics.ARCADE) {
+      this.arcade.enable(object);
+    }
+    else if (system == Physics.P2JS && this.p2) {
+      this.p2.enable(object, debug);
+    }
+    else if (system == Physics.NINJA && this.ninja) {
+        this.ninja.enableAABB(object);
+      }
+
   }
 
-  if (this.ninja)
-  {
-    this.ninja.setBoundsToWorld();
+  /**
+   * preUpdate checks.
+   *
+   * @method Phaser.Physics#preUpdate
+   * @protected
+   */
+
+  preUpdate() {
+
+    //  ArcadePhysics / Ninja don't have a core to preUpdate
+
+    if (this.p2) {
+      this.p2.preUpdate();
+    }
+
   }
 
-  if (this.p2)
-  {
-    this.p2.setBoundsToWorld();
+  /**
+   * Updates all running physics systems.
+   *
+   * @method Phaser.Physics#update
+   * @protected
+   */
+
+  update() {
+
+    //  ArcadePhysics / Ninja don't have a core to update
+
+    if (this.p2) {
+      this.p2.update();
+    }
+
   }
 
-}
+  /**
+   * Updates the physics bounds to match the world dimensions.
+   *
+   * @method Phaser.Physics#setBoundsToWorld
+   * @protected
+   */
 
-/**
- * Clears down all active physics systems. This doesn't destroy them, it just clears them of objects and is called when the State changes.
- *
- * @method Phaser.Physics#clear
- * @protected
- */
-clear () {
+  setBoundsToWorld() {
 
-  if (this.p2)
-  {
-    this.p2.clear();
+    if (this.arcade) {
+      this.arcade.setBoundsToWorld();
+    }
+
+    if (this.ninja) {
+      this.ninja.setBoundsToWorld();
+    }
+
+    if (this.p2) {
+      this.p2.setBoundsToWorld();
+    }
+
   }
 
-}
+  /**
+   * Clears down all active physics systems. This doesn't destroy them, it just clears them of objects and is called when the State changes.
+   *
+   * @method Phaser.Physics#clear
+   * @protected
+   */
 
-/**
- * Destroys all active physics systems. Usually only called on a Game Shutdown, not on a State swap.
- *
- * @method Phaser.Physics#destroy
- */
-destroy () {
+  clear() {
 
-  if (this.p2)
-  {
-    this.p2.destroy();
+    if (this.p2) {
+      this.p2.clear();
+    }
+
   }
 
-  this.arcade = null;
-  this.ninja = null;
-  this.p2 = null;
+  /**
+   * Destroys all active physics systems. Usually only called on a Game Shutdown, not on a State swap.
+   *
+   * @method Phaser.Physics#destroy
+   */
 
-}
+  destroy() {
+
+    if (this.p2) {
+      this.p2.destroy();
+    }
+
+    this.arcade = null;
+    this.ninja = null;
+    this.p2 = null;
+
+  }
 }

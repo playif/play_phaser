@@ -16,19 +16,19 @@ class Cache {
   Map _bitmapFont;
 
   Signal onSoundUnlock = new Signal();
-  List _cacheMap = new List(11);
+  List _cacheMap;
 
-  const int CANVAS = 1;
-  const int IMAGE = 2;
-  const int TEXTURE = 3;
-  const int SOUND = 4;
-  const int TEXT = 5;
-  const int PHYSICS = 6;
-  const int TILEMAP = 7;
-  const int BINARY = 8;
-  const int BITMAPDATA = 9;
-  const int BITMAPFONT = 10;
-  const int JSON = 11;
+  static const int CANVAS = 1;
+  static const int IMAGE = 2;
+  static const int TEXTURE = 3;
+  static const int SOUND = 4;
+  static const int TEXT = 5;
+  static const int PHYSICS = 6;
+  static const int TILEMAP = 7;
+  static const int BINARY = 8;
+  static const int BITMAPDATA = 9;
+  static const int BITMAPFONT = 10;
+  static const int JSON = 11;
 
 
   Cache(this.game) {
@@ -121,7 +121,7 @@ class Cache {
     /**
      * @property {array} _cacheMap - Const to cache object look-up array.
      */
-    this._cacheMap = [];
+    this._cacheMap = new List(12);
 
     this._cacheMap[Cache.CANVAS] = this._canvases;
     this._cacheMap[Cache.IMAGE] = this._images;
@@ -331,13 +331,13 @@ class Cache {
 
   addDefaultImage() {
 
-    var img = new Image();
+    var img = new ImageElement();
     img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAQMAAABJtOi3AAAAA1BMVEX///+nxBvIAAAAAXRSTlMAQObYZgAAABVJREFUeF7NwIEAAAAAgKD9qdeocAMAoAABm3DkcAAAAABJRU5ErkJggg==";
 
     this._images['__default'] = {
-        url: null, data: img, spriteSheet: false
+        'url': null, 'data': img, 'spriteSheet': false
     };
-    this._images['__default'].frame = new Phaser.Frame(0, 0, 0, 32, 32, '', '');
+    this._images['__default']['frame'] = new Frame(0, 0, 0, 32, 32, '', '');
 
     PIXI.BaseTextureCache['__default'] = new PIXI.BaseTexture(img);
     PIXI.TextureCache['__default'] = new PIXI.Texture(PIXI.BaseTextureCache['__default']);
@@ -353,13 +353,13 @@ class Cache {
 
   addMissingImage() {
 
-    var img = new Image();
+    var img = new ImageElement();
     img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJ9JREFUeNq01ssOwyAMRFG46v//Mt1ESmgh+DFmE2GPOBARKb2NVjo+17PXLD8a1+pl5+A+wSgFygymWYHBb0FtsKhJDdZlncG2IzJ4ayoMDv20wTmSMzClEgbWYNTAkQ0Z+OJ+A/eWnAaR9+oxCF4Os0H8htsMUp+pwcgBBiMNnAwF8GqIgL2hAzaGFFgZauDPKABmowZ4GL369/0rwACp2yA/ttmvsQAAAABJRU5ErkJggg==";
 
     this._images['__missing'] = {
-        url: null, data: img, spriteSheet: false
+        'url': null, 'data': img, 'spriteSheet': false
     };
-    this._images['__missing'].frame = new Phaser.Frame(0, 0, 0, 32, 32, '', '');
+    this._images['__missing']['frame'] = new Frame(0, 0, 0, 32, 32, '', '');
 
     PIXI.BaseTextureCache['__missing'] = new PIXI.BaseTexture(img);
     PIXI.TextureCache['__missing'] = new PIXI.Texture(PIXI.BaseTextureCache['__missing']);

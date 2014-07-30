@@ -3,11 +3,12 @@ part of Phaser;
 class Color {
 
   int r, g, b, a;
+  int red, green, blue, alpha;
   int color;
   String rgba;
 
-  Color._() {
-  }
+//  Color._() {
+//  }
 
   /**
    * Packs the r, g, b, a components into a single integer, for use with Int32Array.
@@ -480,13 +481,13 @@ class Color {
    * @return {string} A string containing the color values. If prefix was '#' it will be in the format `#RRGGBB` otherwise `0xAARRGGBB`.
    */
 
-  RGBtoString(r, g, b, [int a=255, String prefix='#']) {
+  static String RGBtoString(r, g, b, [int a=255, String prefix='#']) {
 
 //    if (typeof a == 'undefined') { a = 255; }
 //    if (typeof prefix == 'undefined') { prefix = '#'; }
 
     if (prefix == '#') {
-      return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+      return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toInt().toRadixString(16).substring(1);
     }
     else {
       return '0x' + Color.componentToHex(a) + Color.componentToHex(r) + Color.componentToHex(g) + Color.componentToHex(b);
@@ -682,7 +683,7 @@ class Color {
    * @returns {number} The interpolated color value.
    */
 
-  interpolateRGB(r1, g1, b1, r2, g2, b2, steps, currentStep) {
+  static num interpolateRGB(r1, g1, b1, r2, g2, b2, steps, currentStep) {
 
     var r = (((r2 - r1) * currentStep) / steps) + r1;
     var g = (((g2 - g1) * currentStep) / steps) + g1;
@@ -705,7 +706,7 @@ class Color {
    * @returns {number} 32-bit color value with alpha.
    */
 
-  int getRandomColor([int min=0, int max=255, int alpha=255]) {
+  static int getRandomColor([int min=0, int max=255, int alpha=255]) {
 
 //  if (typeof min === "undefined") { min = 0; }
 //  if (typeof max === "undefined") { max = 255; }
@@ -735,34 +736,53 @@ class Color {
    * @returns {object} An Object with properties: alpha, red, green, blue (also r, g, b and a). Alpha will only be present if a color value > 16777215 was given.
    */
 
-  getRGB(color) {
+  static Color getRGB(int color) {
+    Color c = new Color();
 
     if (color > 16777215) {
       //  The color value has an alpha component
-      return {
-          alpha: color >> 24,
-          red: color >> 16 & 0xFF,
-          green: color >> 8 & 0xFF,
-          blue: color & 0xFF,
-          a: color >> 24,
-          r: color >> 16 & 0xFF,
-          g: color >> 8 & 0xFF,
-          b: color & 0xFF
-      };
+      c.a = color >> 24;
+      c.r = color >> 16 & 0xFF;
+      c.g = color >> 8 & 0xFF;
+      c.b = color & 0xFF;
+      c.alpha = c.a;
+      c.red = c.r;
+      c.green = c.g;
+      c.blue = c.b;
+
+//      return {
+//          alpha: color >> 24,
+//          red: color >> 16 & 0xFF,
+//          green: color >> 8 & 0xFF,
+//          blue: color & 0xFF,
+//          a: color >> 24,
+//          r: color >> 16 & 0xFF,
+//          g: color >> 8 & 0xFF,
+//          b: color & 0xFF
+//      };
     }
     else {
-      return {
-          alpha: 255,
-          red: color >> 16 & 0xFF,
-          green: color >> 8 & 0xFF,
-          blue: color & 0xFF,
-          a: 255,
-          r: color >> 16 & 0xFF,
-          g: color >> 8 & 0xFF,
-          b: color & 0xFF
-      };
-    }
+      c.a = 255;
+      c.r = color >> 16 & 0xFF;
+      c.g = color >> 8 & 0xFF;
+      c.b = color & 0xFF;
+      c.alpha = c.a;
+      c.red = c.r;
+      c.green = c.g;
+      c.blue = c.b;
 
+//      return {
+//          alpha: 255,
+//          red: color >> 16 & 0xFF,
+//          green: color >> 8 & 0xFF,
+//          blue: color & 0xFF,
+//          a: 255,
+//          r: color >> 16 & 0xFF,
+//          g: color >> 8 & 0xFF,
+//          b: color & 0xFF
+//      };
+    }
+    return c;
   }
 
   /**

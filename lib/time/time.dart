@@ -53,7 +53,7 @@ class Time {
   /**
    * @property {Phaser.Timer} events - This is a Phaser.Timer object bound to the master clock to which you can add timed events.
    */
-  Timer events = new Timer(this.game, false);
+  Timer events;
 
   /**
    * @property {number} _started - The time at which the Game instance started.
@@ -98,6 +98,7 @@ class Time {
   int _i = 0;
 
   Time(this.game) {
+    events = new Timer(this.game, false);
   }
 
 
@@ -108,7 +109,7 @@ class Time {
    * @protected
    */
   boot () {
-    this._started = Date.now();
+    this._started = new DateTime.now();
     this.events.start();
 
   }
@@ -171,7 +172,7 @@ class Time {
 
     this.now = time;
 
-    this.timeToCall = this.game.math.max(0, 16 - (time - this.lastTime));
+    this.timeToCall = Math.max(0, 16 - (time - this.lastTime));
 
     this.elapsed = this.now - this.time;
 

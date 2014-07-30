@@ -90,7 +90,7 @@ class RequestAnimationFrame {
 
   updateRAF(num time) {
 
-    this.game.update(new DateTime.now());
+    this.game.update(new DateTime.now().millisecond);
 
     this._timeOutID = window.requestAnimationFrame(this._onLoop);
 

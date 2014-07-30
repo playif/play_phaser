@@ -15,6 +15,11 @@ class SoundManager {
   bool touchLocked;
   int channels;
 
+  GainNode masterGain;
+
+  AudioBufferSourceNode _unlockSource;
+
+  num _muteVolume;
 
   SoundManager(this.game) {
     this.onSoundDecode = new Signal();
@@ -81,7 +86,7 @@ class SoundManager {
       this.channels = 1;
     }
 
-    if (!this.game.device.cocoonJS && this.game.device.iOS || (window['PhaserGlobal'] && window['PhaserGlobal'].fakeiOSTouchLock)) {
+    if (!this.game.device.cocoonJS && this.game.device.iOS) {
       this.game.input.touch.callbackContext = this;
       this.game.input.touch.touchStartCallback = this.unlock;
       this.game.input.mouse.callbackContext = this;
@@ -93,22 +98,22 @@ class SoundManager {
     }
 
 
-    if (window['PhaserGlobal']) {
-      //  Check to see if all audio playback is disabled (i.e. handled by a 3rd party class)
-      if (window['PhaserGlobal'].disableAudio == true) {
-        this.usingWebAudio = false;
-        this.noAudio = true;
-        return;
-      }
-
-      //  Check if the Web Audio API is disabled (for testing Audio Tag playback during development)
-      if (window['PhaserGlobal'].disableWebAudio == true) {
-        this.usingWebAudio = false;
-        this.usingAudioTag = true;
-        this.noAudio = false;
-        return;
-      }
-    }
+//    if (window['PhaserGlobal']) {
+//      //  Check to see if all audio playback is disabled (i.e. handled by a 3rd party class)
+//      if (window['PhaserGlobal'].disableAudio == true) {
+//        this.usingWebAudio = false;
+//        this.noAudio = true;
+//        return;
+//      }
+//
+//      //  Check if the Web Audio API is disabled (for testing Audio Tag playback during development)
+//      if (window['PhaserGlobal'].disableWebAudio == true) {
+//        this.usingWebAudio = false;
+//        this.usingAudioTag = true;
+//        this.noAudio = false;
+//        return;
+//      }
+//    }
 
 
     this.context = new AudioContext();
@@ -141,17 +146,17 @@ class SoundManager {
 //      this.noAudio = false;
 //    }
 //
-    if (this.context != null) {
-      if (this.context.createGain == null) {
-        this.masterGain = this.context.createGainNode();
-      }
-      else {
-        this.masterGain = this.context.createGain();
-      }
+    //if (this.context != null) {
+//      if (this.context.createGain == null) {
+//        this.masterGain = this.context.createGainNode();
+//      }
+//      else {
+      this.masterGain = this.context.createGain();
+//      }
 
       this.masterGain.gain.value = 1;
-      this.masterGain.connect(this.context.destination);
-    }
+      this.masterGain.connectNode(this.context.destination);
+    //}
 
   }
 
@@ -182,7 +187,7 @@ class SoundManager {
       var buffer = this.context.createBuffer(1, 1, 22050);
       this._unlockSource = this.context.createBufferSource();
       this._unlockSource.buffer = buffer;
-      this._unlockSource.connect(this.context.destination);
+      this._unlockSource.connectNode(this.context.destination);
       this._unlockSource.noteOn(0);
     }
 
@@ -259,7 +264,7 @@ class SoundManager {
         this.context.decodeAudioData(soundData).then((buffer) {
           that.game.cache.decodedSound(key, buffer);
           if (sound) {
-            that.onSoundDecode.dispatch(key, sound);
+            that.onSoundDecode.dispatch([key, sound]);
           }
         });
       }
@@ -332,7 +337,7 @@ class SoundManager {
     while (i--) {
       if (this._sounds[i] == sound) {
         this._sounds[i].destroy(false);
-        this._sounds.splice(i, 1);
+        this._sounds.removeAt(i);
         return true;
       }
     }
@@ -358,7 +363,7 @@ class SoundManager {
     while (i--) {
       if (this._sounds[i].key == key) {
         this._sounds[i].destroy(false);
-        this._sounds.splice(i, 1);
+        this._sounds.removeAt(i);
         removed++;
       }
     }

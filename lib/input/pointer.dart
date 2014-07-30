@@ -57,6 +57,10 @@ class Pointer {
 
   var targetObject;
 
+  int _highestRenderOrderID;
+  var _highestRenderObject;
+  int _highestInputPriorityID;
+
   bool active;
   Point position;
   Point positionDown;
@@ -270,7 +274,7 @@ class Pointer {
      * @property {number} msSinceLastClick - The number of milliseconds since the last click or touch event.
      * @default
      */
-    this.msSinceLastClick = Number.MAX_VALUE;
+    this.msSinceLastClick = 999999999;
 
     /**
      * @property {any} targetObject - The Game Object this Pointer is currently over / touching / dragging.
@@ -396,13 +400,13 @@ class Pointer {
       if (this.game.input.recordPointerHistory && this.game.time.now >= this._nextDrop) {
         this._nextDrop = this.game.time.now + this.game.input.recordRate;
 
-        this._history.push({
+        this._history.add({
             x: this.position.x,
             y: this.position.y
         });
 
         if (this._history.length > this.game.input.recordLimit) {
-          this._history.shift();
+          this._history.removeAt(0);
         }
       }
     }
@@ -416,32 +420,32 @@ class Pointer {
    * @param {boolean} [fromClick=false] - Was this called from the click event?
    */
 
-  move(event, fromClick) {
+  move(MouseEvent event, [bool fromClick=false]) {
 
     if (this.game.input.pollLocked) {
       return;
     }
 
-    if (fromClick == null) {
-      fromClick = false;
-    }
+//    if (fromClick == null) {
+//      fromClick = false;
+//    }
 
     if (event.button != null) {
       this.button = event.button;
     }
 
-    this.clientX = event.clientX;
-    this.clientY = event.clientY;
+    this.clientX = event.client.x;
+    this.clientY = event.client.y;
 
-    this.pageX = event.pageX;
-    this.pageY = event.pageY;
+    this.pageX = event.page.x;
+    this.pageY = event.page.y;
 
-    this.screenX = event.screenX;
-    this.screenY = event.screenY;
+    this.screenX = event.screen.x;
+    this.screenY = event.screen.y;
 
     if (this.isMouse && this.game.input.mouse.locked && !fromClick) {
-      this.rawMovementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
-      this.rawMovementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+      this.rawMovementX = event.movement.x;
+      this.rawMovementY = event.movement.y;
 
       this.movementX += this.rawMovementX;
       this.movementY += this.rawMovementY;
@@ -494,26 +498,27 @@ class Pointer {
     }
 
 //  Work out which object is on the top
-    this._highestRenderOrderID = Number.MAX_SAFE_INTEGER;
+    this._highestRenderOrderID = 9999999999;
     this._highestRenderObject = null;
     this._highestInputPriorityID = -1;
 
 //  Run through the list
-    if (this.game.input.interactiveItems.total > 0) {
-      var currentNode = this.game.input.interactiveItems.first;
+    if (this.game.input.interactiveItems.length > 0) {
+      for (InputHandler currentNode in this.game.input.interactiveItems) {
+        //var currentNode = this.game.input.interactiveItems.first;
 
-      do {
+        //do {
 //  If the object is using pixelPerfect checks, or has a higher InputManager.PriorityID OR if the priority ID is the same as the current highest AND it has a higher renderOrderID, then set it to the top
-        if (currentNode && currentNode.validForInput(this._highestInputPriorityID, this._highestRenderOrderID)) {
+        if (currentNode != null && currentNode.validForInput(this._highestInputPriorityID, this._highestRenderOrderID)) {
           if ((!fromClick && currentNode.checkPointerOver(this)) || (fromClick && currentNode.checkPointerDown(this))) {
             this._highestRenderOrderID = currentNode.sprite._cache[3]; // renderOrderID
             this._highestInputPriorityID = currentNode.priorityID;
             this._highestRenderObject = currentNode;
           }
         }
-        currentNode = this.game.input.interactiveItems.next;
+        //currentNode = this.game.input.interactiveItems.next;
       }
-      while (currentNode != null);
+      //while (currentNode != null);
     }
 
     if (this._highestRenderObject == null) {

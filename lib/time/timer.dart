@@ -23,16 +23,16 @@ class Timer {
 
   int _len = 0;
 
-  bool _marked = 0;
+  int _marked = 0;
 
   int _i = 0;
   int _diff = 0;
   int _newTick = 0;
 
-  const int MINUTE = 60000;
-  const int SECOND = 1000;
-  const int HALF = 500;
-  const int QUARTER = 250;
+  static const int MINUTE = 60000;
+  static const int SECOND = 1000;
+  static const int HALF = 500;
+  static const int QUARTER = 250;
 
   Timer(this.game, [bool autoDestroy=true]) {
   }
@@ -92,9 +92,9 @@ class Timer {
       tick += this._now;
     }
 
-    var event = new Phaser.TimerEvent(this, delay, tick, repeatCount, loop, callback, callbackContext, args);
+    var event = new TimerEvent(this, delay, tick, repeatCount, loop, callback, callbackContext, args);
 
-    this.events.push(event);
+    this.events.add(event);
 
     this.order();
 
@@ -170,13 +170,13 @@ class Timer {
    * @param {number} [delay=0] - The number of milliseconds that should elapse before the Timer will start.
    */
 
-  start(delay) {
+  start([int delay=0]) {
 
     if (this.running) {
       return;
     }
 
-    this._started = this.game.time.now + (delay || 0);
+    this._started = this.game.time.now + delay;
 
     this.running = true;
 
@@ -269,7 +269,7 @@ class Timer {
 
     while (this._i--) {
       if (this.events[this._i].pendingDelete) {
-        this.events.splice(this._i, 1);
+        this.events.removeAt(this._i);
       }
     }
 

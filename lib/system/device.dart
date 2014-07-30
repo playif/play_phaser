@@ -426,7 +426,7 @@ bool fullscreenKeyboard;
     this._checkFeatures();
   }
 
-  static const bool LITTLE_ENDIAN = false;
+  static bool LITTLE_ENDIAN = false;
 
   /**
    * Check which OS is game running on.
@@ -807,8 +807,8 @@ this.vibration = true;
 _checkIsLittleEndian () {
 
   var a = new Uint8List(4);// ArrayBuffer(4);
-  var b = new Uint8List(a);
-  var c = new Uint32List(a);
+  var b = new Uint8List.fromList(a);
+  var c = new Uint32List.fromList(a);
 
   b[0] = 0xa1;
   b[1] = 0xb2;

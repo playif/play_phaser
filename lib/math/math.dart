@@ -198,7 +198,7 @@ class Math {
 
   }
 
-  num maxAdd(num value, num amount, num max) {
+  static num maxAdd(num value, num amount, num max) {
     value += amount;
     if (value > max) {
       value = max;
@@ -206,7 +206,7 @@ class Math {
     return value;
   }
 
-  num minSub(num value, num amount, num max) {
+  static num minSub(num value, num amount, num max) {
     value -= amount;
     if (value < min) {
       value = min;
@@ -214,7 +214,7 @@ class Math {
     return value;
   }
 
-  num wrap(num value, num min, num max) {
+  static num wrap(num value, num min, num max) {
 
     num range = max - min;
 
@@ -232,7 +232,7 @@ class Math {
 
   }
 
-  num wrapValue(num value, num amount, num max) {
+  static num wrapValue(num value, num amount, num max) {
 
     num diff;
     value = value.abs();
@@ -244,53 +244,53 @@ class Math {
 
   }
 
-  num limitValue(num value, num min, num max) {
+  static num limitValue(num value, num min, num max) {
     return value < min ? min : value > max ? max : value;
   }
 
-  int randomSign() {
+  static int randomSign() {
     return (Math.random.nextDouble() > 0.5) ? 1 : -1;
   }
 
-  bool isOdd(int n) {
+  static bool isOdd(int n) {
     return (n % 2) == 1;
   }
 
-  bool isEven(int n) {
+  static bool isEven(int n) {
     return (n % 2) == 0;
   }
 
-  num min(num a, num b) {
+  static num min(num a, num b) {
     return DMath.min(a, b);
   }
 
-  num max(num a, num b) {
+  static num max(num a, num b) {
     return DMath.max(a, b);
   }
 
-  num minList(Iterable<num> args) {
+  static num minList(Iterable<num> args) {
     return args.fold(double.MAX_FINITE, (i, n) => i < n ? i : n);
   }
 
-  num maxList(Iterable<num> args) {
+  static num maxList(Iterable<num> args) {
     return args.fold(-double.MAX_FINITE, (i, n) => i > n ? i : n);
   }
 
-  num minProperty(Iterable args, prop(e)) {
+  static num minProperty(Iterable args, prop(e)) {
     return args.map(prop).fold(double.MAX_FINITE, (i, n) => i < n ? i : n);
   }
 
-  num maxProperty(Iterable args, prop(e)) {
+  static num maxProperty(Iterable args, prop(e)) {
     return args.map(prop).fold(-double.MAX_FINITE, (i, n) => i > n ? i : n);
   }
 
 
-  num wrapAngle(num angle, [bool radians=false]) {
+  static num wrapAngle(num angle, [bool radians=false]) {
     num radianFactor = (radians) ? DMath.PI / 180 : 1;
     return this.wrap(angle, -180 * radianFactor, 180 * radianFactor);
   }
 
-  num angleLimit(num angle, num min, num max) {
+  static num angleLimit(num angle, num min, num max) {
     num result = angle;
     if (angle > max) {
       result = max;
@@ -301,7 +301,7 @@ class Math {
     return result;
   }
 
-  num linearInterpolation(List<num> v, num k) {
+  static num linearInterpolation(List<num> v, num k) {
     num m = v.length - 1;
     num f = m * k;
     num i = f.floor();
@@ -314,7 +314,7 @@ class Math {
     return linear(v[i], v[i + 1 > m ? m : i + 1], f - i);
   }
 
-  num bezierInterpolation(List<num> v, num k) {
+  static num bezierInterpolation(List<num> v, num k) {
     num b = 0;
     num n = v.length - 1;
 
@@ -324,7 +324,7 @@ class Math {
     return b;
   }
 
-  num catmullRomInterpolation(List<num> v, num k) {
+  static num catmullRomInterpolation(List<num> v, num k) {
 
     var m = v.length - 1;
     var f = m * k;
@@ -352,16 +352,16 @@ class Math {
 
   }
 
-  num linear(num p0, num p1, num t) {
+  static num linear(num p0, num p1, num t) {
     return (p1 - p0) * t + p0;
   }
 
 
-  num bernstein(num n, num i) {
+  static num bernstein(num n, num i) {
     return this.factorial(n) / this.factorial(i) / this.factorial(n - i);
   }
 
-  num catmullRom(num p0, num p1, num p2, num p3, num t) {
+  static num catmullRom(num p0, num p1, num p2, num p3, num t) {
 
     num v0 = (p2 - p0) * 0.5, v1 = (p3 - p1) * 0.5, t2 = t * t, t3 = t * t2;
 
@@ -369,11 +369,11 @@ class Math {
 
   }
 
-  num difference(num a, num b) {
+  static num difference(num a, num b) {
     return (a - b).abs();
   }
 
-  Object getRandom(List objects, [int startIndex=0, int length=0]) {
+  static Object getRandom(List objects, [int startIndex=0, int length=0]) {
     if (objects != null) {
       int l = length;
       if ((l == 0) || (l > objects.length - startIndex)) {
@@ -386,7 +386,7 @@ class Math {
     return null;
   }
 
-  Object removeRandom(List objects, [int startIndex=0, int length=0]) {
+  static Object removeRandom(List objects, [int startIndex=0, int length=0]) {
     if (objects != null) {
       var l = length;
       if ((l == 0) || (l > objects.length - startIndex)) {
@@ -401,17 +401,17 @@ class Math {
     return null;
   }
 
-  int floor(num value) {
+  static int floor(num value) {
     //int n = value.floor();
     //return (value > 0) ? (n) : ((n != value) ? (n - 1) : (n));
     return value.floor();
   }
 
-  int ceil(num value) {
+  static int ceil(num value) {
     return value.ceil();
   }
 
-  sinCosGenerator(int length, [num sinAmplitude=1.0, num cosAmplitude=1.0, num frequency=1.0]) {
+  static sinCosGenerator(int length, [num sinAmplitude=1.0, num cosAmplitude=1.0, num frequency=1.0]) {
 
     num sin = sinAmplitude;
     num cos = cosAmplitude;
@@ -433,61 +433,61 @@ class Math {
 
   }
 
-  Object shift(List stack) {
+  static Object shift(List stack) {
     Object s = stack.removeAt(0);
     stack.add(s);
     return s;
   }
 
-  List shuffleArray(List array) {
+  static List shuffleArray(List array) {
     return array.shuffle(random);
   }
 
-  num distance(num x1, num y1, num x2, num y2) {
+  static num distance(num x1, num y1, num x2, num y2) {
     num dx = x1 - x2;
     num dy = y1 - y2;
     return DMath.sqrt(dx * dx + dy * dy);
   }
 
-  num distancePow(num x1, num y1, num x2, num y2, [num power=2]) {
+  static num distancePow(num x1, num y1, num x2, num y2, [num power=2]) {
     return DMath.sqrt(DMath.pow(x2 - x1, power) + DMath.pow(y2 - y1, power));
   }
 
-  num distanceRounded(num x1, num y1, num x2, num y2) {
+  static num distanceRounded(num x1, num y1, num x2, num y2) {
     return (distance(x1, y1, x2, y2)).round();
   }
 
-  num clamp(num x, num a, num b) {
+  static num clamp(num x, num a, num b) {
     return ( x < a ) ? a : ( ( x > b ) ? b : x );
   }
 
-  num clampBottom(num x, num a) {
+  static num clampBottom(num x, num a) {
     return x < a ? a : x;
   }
 
-  bool within(num a, num b, num tolerance) {
+  static bool within(num a, num b, num tolerance) {
     return ((a - b).abs() <= tolerance);
   }
 
-  num mapLinear(num x, num a1, num a2, num b1, num b2) {
+  static num mapLinear(num x, num a1, num a2, num b1, num b2) {
     return b1 + ( x - a1 ) * ( b2 - b1 ) / ( a2 - a1 );
   }
 
-  num smoothstep(num x, num min, num max) {
+  static num smoothstep(num x, num min, num max) {
     x = DMath.max(0, DMath.min(1, (x - min) / (max - min)));
     return x * x * (3 - 2 * x);
   }
 
-  num smootherstep(num x, num min, num max) {
+  static num smootherstep(num x, num min, num max) {
     x = DMath.max(0, DMath.min(1, (x - min) / (max - min)));
     return x * x * x * (x * (x * 6 - 15) + 10);
   }
 
-  num sign(num x) {
+  static num sign(num x) {
     return x.sign;
   }
 
-  num percent(num a, num b, [num base=0]) {
+  static num percent(num a, num b, [num base=0]) {
 
     if (a > b || base > b) {
       return 1;
@@ -500,11 +500,11 @@ class Math {
     }
   }
 
-  num degToRad(num degrees) {
+  static num degToRad(num degrees) {
     return degrees * _degreeToRadiansFactor;
   }
 
-  num radToDeg(num radians) {
+  static num radToDeg(num radians) {
     return radians * _radianToDegreesFactor;
   }
 
