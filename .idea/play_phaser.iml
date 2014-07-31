@@ -8,7 +8,6 @@
       <excludeFolder url="file://$MODULE_DIR$/example/packages" />
       <excludeFolder url="file://$MODULE_DIR$/packages/play_phaser" />
       <excludeFolder url="file://$MODULE_DIR$/packages/play_pixi" />
-      <excludeFolder url="file://$MODULE_DIR$/web/packages" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

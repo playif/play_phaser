@@ -135,7 +135,7 @@ class GameObjectCreator {
    */
   tileSprite (x, y, width, height, key, frame) {
 
-    return new Phaser.TileSprite(this.game, x, y, width, height, key, frame);
+    return new TileSprite(this.game, x, y, width, height, key, frame);
 
   }
 
@@ -151,7 +151,7 @@ class GameObjectCreator {
    */
   text (x, y, text, style) {
 
-    return new Phaser.Text(this.game, x, y, text, style);
+    return new Text(this.game, x, y, text, style);
 
   }
 
@@ -172,7 +172,7 @@ class GameObjectCreator {
    */
   button (x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame) {
 
-    return new Phaser.Button(this.game, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame);
+    return new Button(this.game, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame);
 
   }
 
@@ -186,7 +186,7 @@ class GameObjectCreator {
    */
   graphics (x, y) {
 
-    return new Phaser.Graphics(this.game, x, y);
+    return new Graphics(this.game, x, y);
 
   }
 
@@ -203,7 +203,7 @@ class GameObjectCreator {
    */
   emitter (x, y, maxParticles) {
 
-    return new Particles.Arcade.Emitter(this.game, x, y, maxParticles);
+    return new Emitter(this.game, x, y, maxParticles);
 
   }
 
@@ -229,7 +229,7 @@ class GameObjectCreator {
    */
   retroFont (font, characterWidth, characterHeight, chars, charsPerRow, xSpacing, ySpacing, xOffset, yOffset) {
 
-    return new Phaser.RetroFont(this.game, font, characterWidth, characterHeight, chars, charsPerRow, xSpacing, ySpacing, xOffset, yOffset);
+    return new RetroFont(this.game, font, characterWidth, characterHeight, chars, charsPerRow, xSpacing, ySpacing, xOffset, yOffset);
 
   }
 

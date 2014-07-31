@@ -36,11 +36,11 @@ class RandomDataGenerator {
 
     for (var i = 0; seed = seeds[i++];) {
       this.s0 -= this.hash(seed);
-      this.s0 += ~~(this.s0 < 0);
+      //this.s0 += ~(this.s0 < 0);
       this.s1 -= this.hash(seed);
-      this.s1 += ~~(this.s1 < 0);
+      //this.s1 += ~(this.s1 < 0);
       this.s2 -= this.hash(seed);
-      this.s2 += ~~(this.s2 < 0);
+      //this.s2 += ~(this.s2 < 0);
     }
 
   }
@@ -75,11 +75,9 @@ class RandomDataGenerator {
    * @return {number} A random integer between 0 and 2^32.
    */
 
-  integer() {
-
-    return this.rnd.apply(this) * 0x100000000;
+  int integer() {
+    return this.rnd() * 0x100000000;
     // 2^32
-
   }
 
   /**
@@ -89,11 +87,9 @@ class RandomDataGenerator {
    * @return {number} A random real number between 0 and 1.
    */
 
-  frac() {
-
-    return this.rnd.apply(this) + (this.rnd.apply(this) * 0x200000 | 0) * 1.1102230246251565e-16;
+  double frac() {
+    return this.rnd() + (this.rnd() * 0x200000 | 0) * 1.1102230246251565e-16;
     // 2^-53
-
   }
 
   /**
@@ -103,10 +99,8 @@ class RandomDataGenerator {
    * @return {number} A random real number between 0 and 2^32.
    */
 
-  real() {
-
+  double real() {
     return this.integer() + this.frac();
-
   }
 
   /**
@@ -118,7 +112,7 @@ class RandomDataGenerator {
    * @return {number} A random number between min and max.
    */
 
-  integerInRange(min, max) {
+  int integerInRange(num min, num max) {
 
     return Math.floor(this.realInRange(0, max - min + 1) + min);
 
@@ -133,10 +127,8 @@ class RandomDataGenerator {
    * @return {number} A random number between min and max.
    */
 
-  realInRange(min, max) {
-
+  num realInRange(num min, num max) {
     return this.frac() * (max - min) + min;
-
   }
 
   /**
@@ -146,10 +138,8 @@ class RandomDataGenerator {
    * @return {number} A random real number between -1 and 1.
    */
 
-  normal() {
-
+  num normal() {
     return 1 - 2 * this.frac();
-
   }
 
   /**
@@ -181,10 +171,8 @@ class RandomDataGenerator {
    * @return {any} A random member of the array.
    */
 
-  pick(ary) {
-
+  pick(List ary) {
     return ary[this.integerInRange(0, ary.length - 1)];
-
   }
 
   /**
@@ -195,10 +183,8 @@ class RandomDataGenerator {
    * @return {any} A random member of the array.
    */
 
-  weightedPick(ary) {
-
-    return ary[~~(Math.pow(this.frac(), 2) * (ary.length - 1))];
-
+  weightedPick(List ary) {
+    return ary[(Math.pow(this.frac(), 2) * (ary.length - 1))];
   }
 
   /**
@@ -210,10 +196,8 @@ class RandomDataGenerator {
    * @return {number} A random timestamp between min and max.
    */
 
-  timestamp(min, max) {
-
-    return this.realInRange(min || 946684800000, max || 1577862000000);
-
+  num timestamp([num min=946684800000, num max=1577862000000]) {
+    return this.realInRange(min , max );
   }
 
   /**
@@ -223,10 +207,8 @@ class RandomDataGenerator {
    * @return {number} A random number between -180 and 180.
    */
 
-  angle() {
-
+  num angle() {
     return this.integerInRange(-180, 180);
-
   }
 
 

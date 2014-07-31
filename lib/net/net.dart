@@ -14,13 +14,13 @@ class Net {
    */
 
   String getHostName() {
-
-    if (window.location && window.location.hostname) {
-      return window.location.hostname;
-    }
-
-    return null;
-
+//
+//    if (window.location && window.location.hostname) {
+//
+//    }
+//
+//    return null;
+    return window.location.hostname;
   }
 
   /**
@@ -124,7 +124,7 @@ class Net {
       var key = keyValues[i].split('=');
 
       if (key.length > 1) {
-        if (parameter && parameter == this.decodeURI(key[0])) {
+        if (parameter!=null && parameter == this.decodeURI(key[0])) {
           return this.decodeURI(key[1]);
         }
         else {

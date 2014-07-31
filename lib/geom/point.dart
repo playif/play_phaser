@@ -463,7 +463,7 @@ class Point extends PIXI.Point {
     return result;
   }
 
-  Point multiplyAdd(Point a, Point b, Point s, [Point out]) {
+  Point multiplyAdd(Point a, Point b, num s, [Point out]) {
     if (out == null) {
       out = new Point();
     }

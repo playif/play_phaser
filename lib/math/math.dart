@@ -12,6 +12,7 @@ class Math {
   static final double _degreeToRadiansFactor = DMath.PI / 180;
   static final double _radianToDegreesFactor = 180 / DMath.PI;
 
+  static num pow(num th, num exp) => DMath.pow(th, exp);
 
   static num cos(num th) => DMath.cos(th);
 
@@ -58,7 +59,7 @@ class Math {
     return n % 1;
   }
 
-  static num snapTo(num input, num gap, [num start=0]) {
+  static int snapTo(num input, num gap, [num start=0]) {
 
     if (gap == 0) {
       return input;
@@ -71,7 +72,7 @@ class Math {
 
   }
 
-  static num snapToFloor(num input, num gap, [num start=0]) {
+  static int snapToFloor(num input, num gap, [num start=0]) {
 
     if (gap == 0) {
       return input;
@@ -84,7 +85,7 @@ class Math {
 
   }
 
-  static num snapToCeil(num input, num gap, [num start=0]) {
+  static int snapToCeil(num input, num gap, [num start=0]) {
 
     if (gap == 0) {
       return input;
@@ -450,7 +451,8 @@ class Math {
   }
 
   static List shuffleArray(List array) {
-    return new List.from(array)..shuffle();
+    return new List.from(array)
+      ..shuffle();
   }
 
   static num distance(num x1, num y1, num x2, num y2) {

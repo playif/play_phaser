@@ -103,7 +103,7 @@ class World extends Group {
 
     this.bounds.setTo(x, y, width, height);
 
-    if (this.camera.bounds) {
+    if (this.camera.bounds != null) {
       //  The Camera can never be smaller than the game size
       this.camera.bounds.setTo(x, y, width, height);
     }
@@ -137,7 +137,7 @@ class World extends Group {
    * @param {boolean} [vertical=true] - If vertical is false, wrap will not wrap the object.y coordinates vertically.
    */
 
-  wrap(Sprite sprite, [num padding =0, bool useBounds =false, bool horizontal=true, bool vertical=true]) {
+  wrap(GameObject sprite, [num padding =0, bool useBounds =false, bool horizontal=true, bool vertical=true]) {
 
     if (!useBounds) {
       if (horizontal && sprite.x + padding < this.bounds.x) {

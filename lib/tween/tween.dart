@@ -374,11 +374,11 @@ class Tween {
     if (this._yoyo) {
 //      List reversed = output.reversed;
 //      reversed.reverse();
-      output = output.addAll(output.reversed);
+      output.addAll(output.reversed);
     }
 
     if (data != null) {
-      data = data.addAll(output);
+      data.addAll(output);
 
       return data;
     }

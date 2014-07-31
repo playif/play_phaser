@@ -140,7 +140,7 @@ class Image extends PIXI.Sprite implements GameObject {
     return !!this._cache[8];
   }
 
-  Image(this.game, int x, int y, String key, Rectangle frame)
+  Image(this.game, [int x, int y, String key, Rectangle frame])
   :super(PIXI.TextureCache['__default']) {
     x = x || 0;
     y = y || 0;
@@ -458,7 +458,7 @@ class Image extends PIXI.Sprite implements GameObject {
     this.exists = true;
     this.visible = true;
 
-    if (this.events) {
+    if (this.events != null) {
       this.events.onRevived.dispatch(this);
     }
 

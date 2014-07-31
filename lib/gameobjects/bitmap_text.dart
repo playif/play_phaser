@@ -29,6 +29,10 @@ class BitmapText extends PIXI.BitmapText {
   int renderOrderID;
   bool autoCull;
 
+
+  List<GameObject> children;
+  Group parent;
+
   //bool destroyPhase;
 
 
@@ -107,7 +111,7 @@ class BitmapText extends PIXI.BitmapText {
 
     if (value != this._font) {
       this._font = value.trim();
-      this.style.font = this._fontSize + "px '" + this._font + "'";
+      this.style.font = this._fontSize.toString() + "px '" + this._font + "'";
       this.dirty = true;
     }
 
@@ -127,11 +131,11 @@ class BitmapText extends PIXI.BitmapText {
 
   set fontSize(int value) {
 
-    value = parseInt(value, 10);
+    //value = int.parse(value);
 
     if (value != this._fontSize) {
       this._fontSize = value;
-      this.style.font = this._fontSize + "px '" + this._font + "'";
+      this.style.font = this._fontSize.toString() + "px '" + this._font + "'";
       this.dirty = true;
     }
 
@@ -153,7 +157,7 @@ class BitmapText extends PIXI.BitmapText {
   set text(String value) {
 
     if (value != this._text) {
-      this._text = value.toString() || ' ';
+      this._text = value;
       this.dirty = true;
     }
 

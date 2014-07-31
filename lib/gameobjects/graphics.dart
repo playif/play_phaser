@@ -1,18 +1,31 @@
 part of Phaser;
 
-class Graphics extends PIXI.Graphics {
+class Graphics extends PIXI.Graphics implements GameObject {
   Game game;
-  num x, y;
+  //num x, y;
 
-  bool exists;
-  String name;
-  int type;
-  int z;
+  //bool exists;
+  //String name;
+  //int type;
+  //int z;
   Point world;
   Point cameraOffset;
   List _cache;
+  GameObject parent;
+  List<GameObject> children;
 
+  bool exists;
+  Events events;
+  int type;
+  String name;
 
+  Rectangle _currentBounds;
+
+  int renderOrderID;
+
+  num x;
+  num y;
+  num z;
   /**
    * Indicates the rotation of the Graphics, in degrees, from its original orientation. Values from 0 to 180 represent clockwise rotation; values from 0 to -180 represent counterclockwise rotation.
    * Values outside this range are added to or subtracted from 360 to obtain a value within the range. For example, the statement player.angle = 450 is the same as player.angle = 90.
@@ -44,9 +57,7 @@ class Graphics extends PIXI.Graphics {
   //Object.defineProperty(Phaser.Graphics.prototype, "fixedToCamera", {
 
   bool get fixedToCamera {
-
-    return !!this._cache[7];
-
+    return this._cache[7] == 1;
   }
 
   set fixedToCamera(bool value) {
@@ -70,7 +81,7 @@ class Graphics extends PIXI.Graphics {
 
   bool get destroyPhase {
 
-    return !!this._cache[8];
+    return this._cache[8] == 1;
 
   }
 
@@ -198,7 +209,7 @@ class Graphics extends PIXI.Graphics {
    * @param {boolean} [destroyChildren=true] - Should every child of this object have its destroy method called?
    */
 
-  destroy(destroyChildren) {
+  destroy(bool destroyChildren) {
 
     if (this.game == null || this.destroyPhase) {
       return;
@@ -212,9 +223,9 @@ class Graphics extends PIXI.Graphics {
 
     this.clear();
 
-    if (this.parent) {
+    if (this.parent != null) {
       if (this.parent is Group) {
-        this.parent.remove(this);
+        (this.parent as Group).remove(this);
       }
       else {
         this.parent.removeChild(this);
@@ -249,7 +260,7 @@ class Graphics extends PIXI.Graphics {
 * @method Phaser.Graphics.prototype.drawPolygon
 */
 
-  drawPolygon(poly) {
+  drawPolygon(Polygon poly) {
 
     this.moveTo(poly.points[0].x, poly.points[0].y);
 
@@ -269,7 +280,7 @@ class Graphics extends PIXI.Graphics {
 * @param {boolean} [cull=false] - Should we check if the triangle is back-facing
 */
 
-  drawTriangle(points, cull) {
+  drawTriangle(List<Point> points, [bool cull=false]) {
 
     if (cull == null) {
       cull = false;
@@ -302,7 +313,7 @@ class Graphics extends PIXI.Graphics {
 * @param {boolean} [cull=false] - Should we check if the triangle is back-facing
 */
 
-  drawTriangles(vertices, indices, cull) {
+  drawTriangles(vertices, [List<int> indices, bool cull=false]) {
 
     if (cull == null) {
       cull = false;
@@ -311,10 +322,10 @@ class Graphics extends PIXI.Graphics {
     var point1 = new Point();
     var point2 = new Point();
     var point3 = new Point();
-    var points = [];
+    List<Point> points = [];
     var i;
 
-    if (!indices) {
+    if (indices ==null) {
       if (vertices[0] is Point) {
         for (i = 0; i < vertices.length / 3; i++) {
           this.drawTriangle([vertices[i * 3], vertices[i * 3 + 1], vertices[i * 3 + 2]], cull);
@@ -335,9 +346,9 @@ class Graphics extends PIXI.Graphics {
     else {
       if (vertices[0] is Point) {
         for (i = 0; i < indices.length / 3; i++) {
-          points.push(vertices[indices[i * 3 ]]);
-          points.push(vertices[indices[i * 3 + 1]]);
-          points.push(vertices[indices[i * 3 + 2]]);
+          points.add(vertices[indices[i * 3 ]]);
+          points.add(vertices[indices[i * 3 + 1]]);
+          points.add(vertices[indices[i * 3 + 2]]);
 
           if (points.length == 3) {
             this.drawTriangle(points, cull);
@@ -349,7 +360,7 @@ class Graphics extends PIXI.Graphics {
         for (i = 0; i < indices.length; i++) {
           point1.x = vertices[indices[i] * 2];
           point1.y = vertices[indices[i] * 2 + 1];
-          points.push(point1.copyTo({
+          points.add(point1.copyTo({
           }));
 
           if (points.length == 3) {

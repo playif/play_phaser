@@ -99,19 +99,19 @@ class Physics {
 
   parseConfig() {
 
-    if ((!this.config.containsKey('arcade') || this.config['arcade'] == true) && Physics.hasOwnProperty('Arcade')) {
+    if ((!this.config.containsKey('arcade') || this.config['arcade'] == true)) {
       //  If Arcade isn't specified, we create it automatically if we can
-      this.arcade = new Physics.Arcade(this.game);
+      this.arcade = new Arcade(this.game);
       this.game.time.deltaCap = 0.2;
     }
 
-    if (this.config.containsKey('ninja') && this.config['ninja'] == true && Physics.hasOwnProperty('Ninja')) {
-      this.ninja = new Physics.Ninja(this.game);
-    }
+    //if (this.config.containsKey('ninja') && this.config['ninja'] == true ) {
+      //this.ninja = new Physics.Ninja(this.game);
+    //}
 
-    if (this.config.containsKey('p2') && this.config['p2'] == true && Physics.hasOwnProperty('P2')) {
-      this.p2 = new Physics.P2(this.game, this.config);
-    }
+    //if (this.config.containsKey('p2') && this.config['p2'] == true) {
+      //this.p2 = new Physics.P2(this.game, this.config);
+    //}
 
   }
 
@@ -127,23 +127,23 @@ class Physics {
    * @param {number} The physics system to start.
    */
 
-  startSystem(system) {
+  startSystem(int system) {
 
     if (system == Physics.ARCADE) {
-      this.arcade = new Physics.Arcade(this.game);
+      this.arcade = new Arcade(this.game);
     }
-    else if (system == Physics.P2JS) {
-      this.p2 = new Physics.P2(this.game, this.config);
-    }
-    if (system == Physics.NINJA) {
-      this.ninja = new Physics.Ninja(this.game);
-    }
-    else if (system == Physics.BOX2D && this.box2d == null) {
-      throw new Exception('The Box2D physics system has not been implemented yet.');
-    }
-    else if (system == Physics.CHIPMUNK && this.chipmunk == null) {
-        throw new Exception('The Chipmunk physics system has not been implemented yet.');
-      }
+//    else if (system == Physics.P2JS) {
+//      this.p2 = new Physics.P2(this.game, this.config);
+//    }
+//    if (system == Physics.NINJA) {
+//      this.ninja = new Physics.Ninja(this.game);
+//    }
+//    else if (system == Physics.BOX2D && this.box2d == null) {
+//      throw new Exception('The Box2D physics system has not been implemented yet.');
+//    }
+//    else if (system == Physics.CHIPMUNK && this.chipmunk == null) {
+//        throw new Exception('The Chipmunk physics system has not been implemented yet.');
+//      }
 
     this.setBoundsToWorld();
 
@@ -180,10 +180,10 @@ class Physics {
     if (system == Physics.ARCADE) {
       this.arcade.enable(object);
     }
-    else if (system == Physics.P2JS && this.p2) {
+    else if (system == Physics.P2JS && this.p2!= null) {
       this.p2.enable(object, debug);
     }
-    else if (system == Physics.NINJA && this.ninja) {
+    else if (system == Physics.NINJA && this.ninja!= null) {
         this.ninja.enableAABB(object);
       }
 
@@ -200,7 +200,7 @@ class Physics {
 
     //  ArcadePhysics / Ninja don't have a core to preUpdate
 
-    if (this.p2) {
+    if (this.p2!= null) {
       this.p2.preUpdate();
     }
 
@@ -217,7 +217,7 @@ class Physics {
 
     //  ArcadePhysics / Ninja don't have a core to update
 
-    if (this.p2) {
+    if (this.p2!= null) {
       this.p2.update();
     }
 
@@ -232,15 +232,15 @@ class Physics {
 
   setBoundsToWorld() {
 
-    if (this.arcade) {
+    if (this.arcade != null) {
       this.arcade.setBoundsToWorld();
     }
 
-    if (this.ninja) {
+    if (this.ninja!= null) {
       this.ninja.setBoundsToWorld();
     }
 
-    if (this.p2) {
+    if (this.p2!= null) {
       this.p2.setBoundsToWorld();
     }
 
@@ -255,7 +255,7 @@ class Physics {
 
   clear() {
 
-    if (this.p2) {
+    if (this.p2!= null) {
       this.p2.clear();
     }
 
@@ -269,7 +269,7 @@ class Physics {
 
   destroy() {
 
-    if (this.p2) {
+    if (this.p2!= null) {
       this.p2.destroy();
     }
 

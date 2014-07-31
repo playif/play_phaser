@@ -1079,7 +1079,7 @@ class Cache {
     }
 
     if (array == null) {
-      return;
+      return [];
     }
 
 //    var output = [];

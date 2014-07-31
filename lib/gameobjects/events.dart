@@ -19,9 +19,9 @@ class Events {
   Signal onAnimationComplete;
   Signal onAnimationLoop;
 
-  PIXI.Sprite sprite;
+  GameObject sprite;
 
-  PIXI.Sprite parent;
+  GameObject parent;
 
   Events(this.sprite) {
     this.onAddedToGroup = new Signal();

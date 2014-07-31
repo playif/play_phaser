@@ -206,7 +206,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
   }
 
 
-  PIXI.DisplayObject addAt(PIXI.DisplayObject child, int index, [bool silent=false]) {
+  GameObject addAt(GameObject child, int index, [bool silent=false]) {
 
     if (child.parent != this) {
       if (this.enableBody) {
@@ -218,7 +218,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
       this.updateZ();
 
       if (!silent && child.events) {
-        child.events.onAddedToGroup.dispatch(child, this);
+        child.events.onAddedToGroup.dispatch([child, this]);
       }
 
       if (this.cursor == null) {
@@ -330,7 +330,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
 
   }
 
-  swap(child1, child2) {
+  swap(GameObject child1, GameObject child2) {
     var result = this.swapChildren(child1, child2);
     if (result) {
       this.updateZ();
@@ -338,7 +338,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
     return result;
   }
 
-  bringToTop(child) {
+  bringToTop(GameObject child) {
 
     if (child.parent == this && this.getIndex(child) < this.children.length) {
       this.remove(child, false, true);
@@ -349,7 +349,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
 
   }
 
-  sendToBack(child) {
+  sendToBack(GameObject child) {
 
     if (child.parent == this && this.getIndex(child) > 0) {
       this.remove(child, false, true);
@@ -360,7 +360,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
 
   }
 
-  moveUp(child) {
+  moveUp(GameObject child) {
 
     if (child.parent == this && this.getIndex(child) < this.children.length - 1) {
       var a = this.getIndex(child);
@@ -375,7 +375,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
 
   }
 
-  moveDown(child) {
+  moveDown(GameObject child) {
 
     if (child.parent == this && this.getIndex(child) > 0) {
       var a = this.getIndex(child);
@@ -410,13 +410,13 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
 
   }
 
-  getIndex(child) {
+  getIndex(GameObject child) {
 
     return this.children.indexOf(child);
 
   }
 
-  replace(oldChild, newChild) {
+  replace(GameObject oldChild, GameObject newChild) {
 
     var index = this.getIndex(oldChild);
 
@@ -748,50 +748,50 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
 
   }
 
-  forEach(callback, callbackContext, [bool checkExists=false]) {
+  forEach(callback, [bool checkExists=false, List args]) {
 
-    var args = Array.prototype.splice.call(arguments, 3);
-    args.unshift(null);
+    //var args = Array.prototype.splice.call(arguments, 3);
+    //args.unshift(null);
 
     for (var i = 0, len = this.children.length; i < len; i++) {
       if (!checkExists || (checkExists && this.children[i].exists)) {
         args[0] = this.children[i];
-        callback.apply(callbackContext, args);
+        callback(args);
       }
     }
 
   }
 
 
-  forEachExists(callback, callbackContext) {
+  forEachExists(callback, [List args]) {
 
-    var args = Array.prototype.splice.call(arguments, 2);
-    args.unshift(null);
+    //var args = Array.prototype.splice.call(arguments, 2);
+    //args.unshift(null);
 
-    this.iterate('exists', true, Group.RETURN_TOTAL, callback, callbackContext, args);
-
-  }
-
-  forEachAlive(callback, callbackContext) {
-
-    var args = Array.prototype.splice.call(arguments, 2);
-    args.unshift(null);
-
-    this.iterate('alive', true, Group.RETURN_TOTAL, callback, callbackContext, args);
+    this.iterate('exists', true, Group.RETURN_TOTAL, callback, args);
 
   }
 
+  forEachAlive(callback, [List args]) {
 
-  forEachDead(callback, callbackContext) {
+    //var args = Array.prototype.splice.call(arguments, 2);
+    //args.unshift(null);
 
-    var args = Array.prototype.splice.call(arguments, 2);
-    args.unshift(null);
-
-    this.iterate('alive', false, Group.RETURN_TOTAL, callback, callbackContext, args);
+    this.iterate('alive', true, Group.RETURN_TOTAL, callback, args);
 
   }
 
-  sort(index, order) {
+
+  forEachDead(callback, [List args]) {
+
+    //var args = Array.prototype.splice.call(arguments, 2);
+    //args.unshift(null);
+
+    this.iterate('alive', false, Group.RETURN_TOTAL, callback, args);
+
+  }
+
+  sort([int index, int order]) {
 
     if (this.children.length < 2) {
       //  Nothing to swap
@@ -808,30 +808,30 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
     this._sortProperty = index;
 
     if (order == Group.SORT_ASCENDING) {
-      this.children.sort(this.ascendingSortHandler.bind(this));
+      this.children.sort(this.ascendingSortHandler);
     }
     else {
-      this.children.sort(this.descendingSortHandler.bind(this));
+      this.children.sort(this.descendingSortHandler);
     }
 
     this.updateZ();
 
   }
 
-  customSort(sortHandler, context) {
+  customSort(Function sortHandler) {
 
     if (this.children.length < 2) {
       //  Nothing to swap
       return;
     }
 
-    this.children.sort(sortHandler.bind(context));
+    this.children.sort(sortHandler);
 
     this.updateZ();
 
   }
 
-  ascendingSortHandler(a, b) {
+  int ascendingSortHandler(a, b) {
 
     if (a[this._sortProperty] < b[this._sortProperty]) {
       return -1;
@@ -851,7 +851,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
   }
 
 
-  descendingSortHandler(a, b) {
+  int descendingSortHandler(a, b) {
 
     if (a[this._sortProperty] < b[this._sortProperty]) {
       return 1;
@@ -866,7 +866,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
   }
 
 
-  iterate(key, value, returnType, [bool callback =false, callbackContext, args]) {
+  GameObject iterate(key, value, returnType, [bool callback =false, callbackContext, args]) {
 
     if (returnType == Group.RETURN_TOTAL && this.children.length == 0) {
       return 0;
@@ -881,7 +881,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
 
         if (callback) {
           args[0] = this.children[i];
-          callback.apply(callbackContext, args);
+          callback( args);
         }
 
         if (returnType == Group.RETURN_CHILD) {
@@ -899,39 +899,39 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
 
   }
 
-  getFirstExists([bool state=true]) {
+  GameObject getFirstExists([bool state=true]) {
     return this.iterate('exists', state, Group.RETURN_CHILD);
   }
 
-  getFirstAlive() {
+  GameObject getFirstAlive() {
     return this.iterate('alive', true, Group.RETURN_CHILD);
   }
 
-  getFirstDead() {
+  GameObject getFirstDead() {
     return this.iterate('alive', false, Group.RETURN_CHILD);
   }
 
-  getTop() {
+  GameObject getTop() {
     if (this.children.length > 0) {
       return this.children[this.children.length - 1];
     }
   }
 
-  getBottom() {
+  GameObject getBottom() {
     if (this.children.length > 0) {
       return this.children[0];
     }
   }
 
-  countLiving() {
+  int countLiving() {
     return this.iterate('alive', true, Group.RETURN_TOTAL);
   }
 
-  countDead() {
+  int countDead() {
     return this.iterate('alive', false, Group.RETURN_TOTAL);
   }
 
-  getRandom([int startIndex =0, int length]) {
+  GameObject getRandom([int startIndex =0, int length]) {
     if (this.children.length == 0) {
       return null;
     }
@@ -939,10 +939,11 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
     if (length == null) {
       length = this.children.length;
     }
-    return this.game.math.getRandom(this.children, startIndex, length);
+    return Math.getRandom(this.children, startIndex, length);
   }
 
-  remove(child, [ bool destroy=false, bool silent=false]) {
+
+  bool remove(GameObject child, [ bool destroy=false, bool silent=false]) {
 
 
     if (this.children.length == 0 || this.children.indexOf(child) == -1) {
@@ -950,10 +951,10 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
     }
 
     if (!silent && child.events != null && !child.destroyPhase) {
-      child.events.onRemovedFromGroup.dispatch(child, this);
+      child.events.onRemovedFromGroup.dispatch([child, this]);
     }
 
-    var removed = this.removeChild(child);
+    GameObject removed = this.removeChild(child);
 
     this.updateZ();
 
@@ -961,7 +962,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
       this.next();
     }
 
-    if (destroy && removed) {
+    if (destroy && removed != null) {
       removed.destroy(true);
     }
 
@@ -985,13 +986,13 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
     }
 
     do {
-      if (!silent && this.children[0].events) {
+      if (!silent && this.children[0].events !=null) {
         this.children[0].events.onRemovedFromGroup.dispatch(this.children[0], this);
       }
 
-      var removed = this.removeChild(this.children[0]);
+      GameObject removed = this.removeChild(this.children[0]);
 
-      if (destroy && removed) {
+      if (destroy && removed != null) {
         removed.destroy(true);
       }
     }
@@ -1029,13 +1030,13 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
     int i = endIndex;
 
     while (i >= startIndex) {
-      if (!silent && this.children[i].events) {
-        this.children[i].events.onRemovedFromGroup.dispatch(this.children[i], this);
+      if (!silent && this.children[i].events !=null) {
+        this.children[i].events.onRemovedFromGroup.dispatch([this.children[i], this]);
       }
 
-      var removed = this.removeChild(this.children[i]);
+      GameObject removed = this.removeChild(this.children[i]);
 
-      if (destroy && removed) {
+      if (destroy && removed !=null) {
         removed.destroy(true);
       }
 

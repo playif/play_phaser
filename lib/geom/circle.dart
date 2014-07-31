@@ -113,7 +113,7 @@ class Circle extends PIXI.Circle {
    * @return {Circle} This circle object.
    */
 
-  num setTo(num x, num y, num diameter) {
+  Circle setTo(num x, num y, num diameter) {
     this.x = x;
     this.y = y;
     this._diameter = diameter;
@@ -223,7 +223,7 @@ class Circle extends PIXI.Circle {
     return out;
   }
 
-  static num intersectsRectangle(Circle c, Rectangle r) {
+  static bool intersectsRectangle(Circle c, Rectangle r) {
 
     var cx = Math.abs(c.x - r.x - r.halfWidth);
     var xDist = r.halfWidth + c.radius;
@@ -257,7 +257,7 @@ class Circle extends PIXI.Circle {
     return (a.x == b.x && a.y == b.y && a.diameter == b.diameter);
   }
 
-  num intersects(Circle a, Circle b) {
+  bool intersects(Circle a, Circle b) {
     return (Math.distance(a.x, a.y, b.x, b.y) <= (a.radius + b.radius));
   }
 

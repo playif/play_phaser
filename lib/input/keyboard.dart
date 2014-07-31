@@ -27,11 +27,11 @@ class Keyboard {
       return '';
     }
     else {
-      return String.fromCharCode(this.pressEvent.charCode);
+      return new String.fromCharCode(this.pressEvent.charCode);
     }
   }
 
-  String get lastKey {
+  Key get lastKey {
     return this._keys[this._k];
   }
 
@@ -160,7 +160,7 @@ class Keyboard {
 
   addKey(keycode) {
 
-    if (!this._keys[keycode]) {
+    if (this._keys[keycode] ==null) {
       this._keys[keycode] = new Key(this.game, keycode);
 
       this.addKeyCapture(keycode);
@@ -179,7 +179,7 @@ class Keyboard {
 
   removeKey(keycode) {
 
-    if (this._keys[keycode]) {
+    if (this._keys[keycode] !=null) {
       this._keys[keycode] = null;
 
       this.removeKeyCapture(keycode);
@@ -337,8 +337,8 @@ class Keyboard {
 
     this._i = this._keys.length;
 
-    while (this._i--) {
-      if (this._keys[this._i]) {
+    while (this._i-- >=0) {
+      if (this._keys[this._i] != null) {
         this._keys[this._i].update();
       }
     }
@@ -362,11 +362,11 @@ class Keyboard {
     }
 
     //   The event is being captured but another hotkey may need it
-    if (this._capture[event.keyCode]) {
+    if (this._capture[event.keyCode] !=null) {
       event.preventDefault();
     }
 
-    if (!this._keys[event.keyCode]) {
+    if (this._keys[event.keyCode] == null) {
       this._keys[event.keyCode] = new Key(this.game, event.keyCode);
     }
 
@@ -374,7 +374,7 @@ class Keyboard {
 
     this._k = event.keyCode;
 
-    if (this.onDownCallback) {
+    if (this.onDownCallback != null) {
       this.onDownCallback.call(this.callbackContext, event);
     }
 
@@ -396,8 +396,8 @@ class Keyboard {
       return;
     }
 
-    if (this.onPressCallback) {
-      this.onPressCallback.call(this.callbackContext, String.fromCharCode(event.charCode), event);
+    if (this.onPressCallback != null) {
+      this.onPressCallback.call(this.callbackContext, new String.fromCharCode(event.charCode), event);
     }
 
   }
@@ -422,13 +422,13 @@ class Keyboard {
       event.preventDefault();
     }
 
-    if (!this._keys[event.keyCode]) {
+    if (this._keys[event.keyCode] == null) {
       this._keys[event.keyCode] = new Phaser.Key(this.game, event.keyCode);
     }
 
     this._keys[event.keyCode].processKeyUp(event);
 
-    if (this.onUpCallback) {
+    if (this.onUpCallback !=null) {
       this.onUpCallback.call(this.callbackContext, event);
     }
 
@@ -449,8 +449,8 @@ class Keyboard {
 
     var i = this._keys.length;
 
-    while (i--) {
-      if (this._keys[i]) {
+    while (i-- >=0) {
+      if (this._keys[i] != null) {
         this._keys[i].reset(hard);
       }
     }
@@ -466,11 +466,11 @@ class Keyboard {
    * @return {boolean} True if the key is just pressed otherwise false.
    */
 
-  justPressed(keycode, [int duration=50]) {
+  bool justPressed(keycode, [int duration=50]) {
 
     //if (typeof duration === 'undefined') { duration = 50; }
 
-    if (this._keys[keycode]) {
+    if (this._keys[keycode] != null) {
       return this._keys[keycode].justPressed(duration);
     }
     else {
@@ -492,7 +492,7 @@ class Keyboard {
 
 //    if (duration == null) { duration = 50; }
 
-    if (this._keys[keycode]) {
+    if (this._keys[keycode] != null) {
       return this._keys[keycode].justReleased(duration);
     }
     else {
@@ -511,7 +511,7 @@ class Keyboard {
 
   isDown(int keycode) {
 
-    if (this._keys[keycode]) {
+    if (this._keys[keycode] != null) {
       return this._keys[keycode].isDown;
     }
 

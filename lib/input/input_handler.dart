@@ -412,7 +412,7 @@ class InputHandler {
    * @return {boolean} True if the object this InputHandler is bound to should be considered as valid for input detection.
    */
 
-  validForInput(highestID, highestRenderID) {
+  bool validForInput(int highestID, int highestRenderID) {
 
     if (this.sprite.scale.x == 0 || this.sprite.scale.y == 0 || this.priorityID < this.game.input.minPriorityID) {
       return false;
@@ -438,9 +438,9 @@ class InputHandler {
    * @return {number} The x coordinate of the Input pointer.
    */
 
-  pointerX(pointer) {
+  int pointerX([int pointer=0]) {
 
-    pointer = pointer || 0;
+    //pointer = pointer || 0;
 
     return this._pointerData[pointer].x;
 
@@ -454,9 +454,9 @@ class InputHandler {
    * @return {number} The y coordinate of the Input pointer.
    */
 
-  pointerY(pointer) {
+  int pointerY([int pointer=0]) {
 
-    pointer = pointer || 0;
+    //pointer = pointer || 0;
 
     return this._pointerData[pointer].y;
 
@@ -469,9 +469,9 @@ class InputHandler {
    * @return {boolean}
    */
 
-  pointerDown(pointer) {
+  bool pointerDown([int pointer=0]) {
 
-    pointer = pointer || 0;
+    //pointer = pointer || 0;
 
     return this._pointerData[pointer].isDown;
 
@@ -484,9 +484,9 @@ class InputHandler {
    * @return {boolean}
    */
 
-  pointerUp(pointer) {
+  bool pointerUp([int pointer=0]) {
 
-    pointer = pointer || 0;
+    //pointer = pointer || 0;
 
     return this._pointerData[pointer].isUp;
 
@@ -499,9 +499,9 @@ class InputHandler {
    * @return {number}
    */
 
-  pointerTimeDown(pointer) {
+  int pointerTimeDown([int pointer=0]) {
 
-    pointer = pointer || 0;
+    //pointer = pointer || 0;
 
     return this._pointerData[pointer].timeDown;
 
@@ -514,9 +514,9 @@ class InputHandler {
    * @return {number}
    */
 
-  pointerTimeUp(pointer) {
+  int pointerTimeUp([int pointer=0]) {
 
-    pointer = pointer || 0;
+    //pointer = pointer || 0;
 
     return this._pointerData[pointer].timeUp;
 
@@ -529,7 +529,7 @@ class InputHandler {
    * @return {boolean} True if the given pointer (if a index was given, or any pointer if not) is over this object.
    */
 
-  pointerOver([int index]) {
+  bool pointerOver([int index]) {
 
     if (this.enabled) {
       if (index == null) {
@@ -555,7 +555,7 @@ class InputHandler {
    * @return {boolean} True if the given pointer (if a index was given, or any pointer if not) is out of this object.
    */
 
-  pointerOut([int index]) {
+  bool pointerOut([int index]) {
 
     if (this.enabled) {
       if (index == null) {
@@ -581,9 +581,9 @@ class InputHandler {
    * @return {number}
    */
 
-  pointerTimeOver(pointer) {
+  int pointerTimeOver([int pointer=0]) {
 
-    pointer = pointer || 0;
+    //pointer = pointer || 0;
 
     return this._pointerData[pointer].timeOver;
 
@@ -596,7 +596,7 @@ class InputHandler {
    * @return {number}
    */
 
-  pointerTimeOut(Pointer pointer) {
+  int pointerTimeOut([int pointer=0]) {
 
     //pointer = pointer || 0;
 
@@ -611,9 +611,9 @@ class InputHandler {
    * @return {boolean} True if the pointer is dragging an object, otherwise false.
    */
 
-  pointerDragged(pointer) {
+  bool pointerDragged([int pointer=0]) {
 
-    pointer = pointer || 0;
+    //pointer = pointer || 0;
 
     return this._pointerData[pointer].isDragged;
 
@@ -626,9 +626,9 @@ class InputHandler {
    * @return {boolean} True if the pointer is down, otherwise false.
    */
 
-  checkPointerDown(pointer) {
+  bool checkPointerDown(Pointer pointer) {
 
-    if (!pointer.isDown || !this.enabled || !this.sprite || !this.sprite.parent || !this.sprite.visible || !this.sprite.parent.visible) {
+    if (!pointer.isDown || !this.enabled || this.sprite == null || this.sprite.parent ==null || !this.sprite.visible || !this.sprite.parent.visible) {
       return false;
     }
 
@@ -653,9 +653,9 @@ class InputHandler {
    * @return {boolean}
    */
 
-  checkPointerOver(pointer) {
+  bool checkPointerOver(Pointer pointer) {
 
-    if (!this.enabled || !this.sprite || !this.sprite.parent || !this.sprite.visible || !this.sprite.parent.visible) {
+    if (!this.enabled || this.sprite==null || this.sprite.parent ==null || !this.sprite.visible || !this.sprite.parent.visible) {
       return false;
     }
 
@@ -683,7 +683,7 @@ class InputHandler {
    * @return {boolean} true if there is the alpha of the pixel is >= InputHandler.pixelPerfectAlpha
    */
 
-  checkPixel(int x, int y, [Pointer pointer]) {
+  bool checkPixel(int x, int y, [Pointer pointer]) {
 
     //  Grab a pixel from our image into the hitCanvas and then test it
     if (this.sprite.texture.baseTexture.source) {
@@ -764,7 +764,7 @@ class InputHandler {
    * @param {Phaser.Pointer} pointer
    */
 
-  _pointerOverHandler(pointer) {
+  _pointerOverHandler(Pointer pointer) {
 
     if (this.sprite == null) {
       //  Abort. We've been destroyed.
@@ -797,7 +797,7 @@ class InputHandler {
    * @param {Phaser.Pointer} pointer
    */
 
-  _pointerOutHandler(pointer) {
+  _pointerOutHandler(Pointer pointer) {
 
     if (this.sprite == null) {
       //  Abort. We've been destroyed.
@@ -826,7 +826,7 @@ class InputHandler {
    * @param {Phaser.Pointer} pointer
    */
 
-  _touchedHandler(pointer) {
+  _touchedHandler(Pointer pointer) {
 
     if (this.sprite == null) {
       //  Abort. We've been destroyed.
@@ -868,7 +868,7 @@ class InputHandler {
    * @param {Phaser.Pointer} pointer
    */
 
-  _releasedHandler(pointer) {
+  _releasedHandler(Pointer pointer) {
 
     if (this.sprite == null) {
       //  Abort. We've been destroyed.
@@ -917,7 +917,7 @@ class InputHandler {
    * @return {boolean}
    */
 
-  updateDrag(pointer) {
+  bool updateDrag(Pointer pointer) {
 
     if (pointer.isUp) {
       this.stopDrag(pointer);
@@ -980,10 +980,10 @@ class InputHandler {
    * @return {boolean}
    */
 
-  justOver(pointer, delay) {
+  bool justOver([int pointer = 0, int delay = 500]) {
 
-    pointer = pointer || 0;
-    delay = delay || 500;
+    //pointer = pointer || 0;
+    //delay = delay || 500;
 
     return (this._pointerData[pointer].isOver && this.overDuration(pointer) < delay);
 
@@ -997,10 +997,10 @@ class InputHandler {
    * @return {boolean}
    */
 
-  justOut(pointer, delay) {
+  bool justOut([int pointer = 0, int delay = 500]) {
 
-    pointer = pointer || 0;
-    delay = delay || 500;
+    //pointer = pointer || 0;
+    //delay = delay || 500;
 
     return (this._pointerData[pointer].isOut && (this.game.time.now - this._pointerData[pointer].timeOut < delay));
 
@@ -1014,10 +1014,10 @@ class InputHandler {
    * @return {boolean}
    */
 
-  justPressed(pointer, delay) {
+  bool justPressed([int pointer = 0, int delay = 500]) {
 
-    pointer = pointer || 0;
-    delay = delay || 500;
+    //pointer = pointer || 0;
+    //delay = delay || 500;
 
     return (this._pointerData[pointer].isDown && this.downDuration(pointer) < delay);
 
@@ -1031,10 +1031,10 @@ class InputHandler {
    * @return {boolean}
    */
 
-  justReleased(pointer, delay) {
+  bool justReleased([int pointer = 0, int delay = 500]) {
 
-    pointer = pointer || 0;
-    delay = delay || 500;
+    //pointer = pointer || 0;
+    //delay = delay || 500;
 
     return (this._pointerData[pointer].isUp && (this.game.time.now - this._pointerData[pointer].timeUp < delay));
 
@@ -1047,9 +1047,9 @@ class InputHandler {
    * @return {number} The number of milliseconds the pointer has been over the Sprite, or -1 if not over.
    */
 
-  overDuration(pointer) {
+  int overDuration([int pointer = 0]) {
 
-    pointer = pointer || 0;
+    //pointer = pointer || 0;
 
     if (this._pointerData[pointer].isOver) {
       return this.game.time.now - this._pointerData[pointer].timeOver;
@@ -1066,9 +1066,9 @@ class InputHandler {
    * @return {number} The number of milliseconds the pointer has been pressed down on the Sprite, or -1 if not over.
    */
 
-  downDuration(pointer) {
+  int downDuration([int pointer]) {
 
-    pointer = pointer || 0;
+    //pointer = pointer;
 
     if (this._pointerData[pointer].isDown) {
       return this.game.time.now - this._pointerData[pointer].timeDown;
@@ -1120,11 +1120,11 @@ class InputHandler {
     this.pixelPerfect = pixelPerfect;
     this.pixelPerfectAlpha = alphaThreshold;
 
-    if (boundsRect) {
+    if (boundsRect != null) {
       this.boundsRect = boundsRect;
     }
 
-    if (boundsSprite) {
+    if (boundsSprite != null) {
       this.boundsSprite = boundsSprite;
     }
 
@@ -1137,7 +1137,7 @@ class InputHandler {
 
   disableDrag() {
 
-    if (this._pointerData) {
+    if (this._pointerData != null) {
       for (var i = 0; i < 10; i++) {
         this._pointerData[i].isDragged = false;
       }

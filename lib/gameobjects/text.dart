@@ -241,7 +241,7 @@ class Text extends PIXI.Text implements GameObject {
 
     this._cache[8] = 1;
 
-    if (this.parent)
+    if (this.parent !=null)
     {
       if (this.parent is Group)
       {
@@ -255,7 +255,7 @@ class Text extends PIXI.Text implements GameObject {
 
     this.texture.destroy();
 
-    if (this.canvas.parentNode)
+    if (this.canvas.parentNode != null)
     {
       this.canvas.remove();
     }

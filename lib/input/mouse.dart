@@ -557,7 +557,7 @@ class Mouse {
 
   releasePointerLock() {
 
-    document.exitPointerLock = document.exitPointerLock;// || document.mozExitPointerLock || document.webkitExitPointerLock;
+    //document.exitPointerLock = document.exitPointerLock;// || document.mozExitPointerLock || document.webkitExitPointerLock;
 
     document.exitPointerLock();
 

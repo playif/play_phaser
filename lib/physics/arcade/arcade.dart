@@ -16,11 +16,11 @@ class Arcade {
   QuadTree quadTree;
   int _overlap;
   int _maxOverlap;
-  int _velocity1;
-  int _velocity2;
-  int _newVelocity1;
-  int _newVelocity2;
-  int _average;
+  num _velocity1;
+  num _velocity2;
+  num _newVelocity1;
+  num _newVelocity2;
+  num _average;
   List _mapData;
   bool _result;
   int _total;
@@ -217,7 +217,7 @@ class Arcade {
     if (object is List) {
       i = object.length;
 
-      while (i--) {
+      while (i-- >=0) {
         if (object[i] is Group) {
           //  If it's a Group then we do it on the children regardless
           this.enable(object[i].children, children);
@@ -270,7 +270,7 @@ class Arcade {
    * @param {Phaser.Physics.Arcade.Body} The Body object to be updated.
    */
 
-  updateMotion(body) {
+  updateMotion(Body body) {
 
     this._velocityDelta = this.computeVelocity(0, body, body.angularVelocity, body.angularAcceleration, body.angularDrag, body.maxAngular) - body.angularVelocity;
     body.angularVelocity += this._velocityDelta;
@@ -295,9 +295,9 @@ class Arcade {
    * @return {number} The altered Velocity value.
    */
 
-  num computeVelocity(axis, body, velocity, acceleration, drag, max) {
+  num computeVelocity(int axis, Body body, num velocity, num acceleration, num drag, [num max=10000]) {
 
-    max = max || 10000;
+    //max = max || 10000;
 
     if (axis == 1 && body.allowGravity) {
       velocity += (this.gravity.x + body.gravity.x) * this.game.time.physicsElapsed;
@@ -350,11 +350,11 @@ class Arcade {
    * @return {boolean} True if an overlap occured otherwise false.
    */
 
-  overlap(object1, object2, overlapCallback, processCallback, callbackContext) {
+  bool overlap(GameObject object1, object2, [Function overlapCallback, Function processCallback]) {
 
-    overlapCallback = overlapCallback || null;
-    processCallback = processCallback || null;
-    callbackContext = callbackContext || overlapCallback;
+    //overlapCallback = overlapCallback || null;
+    //processCallback = processCallback || null;
+    //callbackContext = callbackContext || overlapCallback;
 
     this._result = false;
     this._total = 0;
@@ -390,11 +390,11 @@ class Arcade {
    * @return {boolean} True if a collision occured otherwise false.
    */
 
-  collide(object1, object2, collideCallback, processCallback, callbackContext) {
+  bool collide(GameObject object1, object2, [Function collideCallback, Function processCallback]) {
 
-    collideCallback = collideCallback || null;
-    processCallback = processCallback || null;
-    callbackContext = callbackContext || collideCallback;
+    //collideCallback = collideCallback || null;
+    //processCallback = processCallback || null;
+    //callbackContext = callbackContext || collideCallback;
 
     this._result = false;
     this._total = 0;
@@ -425,15 +425,15 @@ class Arcade {
    * @param {boolean} overlapOnly - Just run an overlap or a full collision.
    */
 
-  collideHandler(object1, object2, Function collideCallback, Function processCallback, bool overlapOnly) {
+  bool collideHandler(GameObject object1, object2, Function collideCallback, Function processCallback, bool overlapOnly) {
 
     //  Only collide valid objects
     if (object2 == null && (object1.type == GROUP || object1.type == EMITTER)) {
-      this.collideGroupVsSelf(object1, collideCallback, processCallback, callbackContext, overlapOnly);
-      return;
+      this.collideGroupVsSelf(object1, collideCallback, processCallback, overlapOnly);
+      return false;
     }
 
-    if (object1 && object2 && object1.exists && object2.exists) {
+    if (object1 != null && object2 != null && object1.exists && object2.exists) {
       //  SPRITES
       if (object1.type == SPRITE || object1.type == TILESPRITE) {
         if (object2.type == SPRITE || object2.type == TILESPRITE) {
@@ -497,7 +497,7 @@ class Arcade {
    * @return {boolean} True if there was a collision, otherwise false.
    */
 
-  collideSpriteVsSprite(Sprite sprite1, Sprite sprite2, Function collideCallback, Function processCallback, bool overlapOnly) {
+  bool collideSpriteVsSprite(Sprite sprite1, Sprite sprite2, Function collideCallback, Function processCallback, bool overlapOnly) {
 
     if (sprite1.body == null || sprite2.body == null) {
       return false;
@@ -572,7 +572,7 @@ class Arcade {
   bool collideGroupVsSelf(Group group, Function collideCallback, Function processCallback, bool overlapOnly) {
 
     if (group.length == 0) {
-      return;
+      return false;
     }
 
     int len = group.children.length;
@@ -603,7 +603,7 @@ class Arcade {
   bool collideGroupVsGroup(Group group1, Group group2, Function collideCallback, Function processCallback, bool overlapOnly) {
 
     if (group1.length == 0 || group2.length == 0) {
-      return;
+      return false;
     }
 
     for (var i = 0, len = group1.children.length; i < len; i++) {
@@ -630,7 +630,7 @@ class Arcade {
   bool collideSpriteVsTilemapLayer(Sprite sprite, TilemapLayer tilemapLayer, collideCallback, processCallback) {
 
     if (sprite.body == null) {
-      return;
+      return false;
     }
 
     this._mapData = tilemapLayer.getTiles(
@@ -641,17 +641,17 @@ class Arcade {
         false, false);
 
     if (this._mapData.length == 0) {
-      return;
+      return false;
     }
 
     for (var i = 0; i < this._mapData.length; i++) {
       if (processCallback) {
-        if (processCallback( sprite, this._mapData[i])) {
+        if (processCallback(sprite, this._mapData[i])) {
           if (this.separateTile(i, sprite.body, this._mapData[i])) {
             this._total++;
 
             if (collideCallback) {
-              collideCallback( sprite, this._mapData[i]);
+              collideCallback(sprite, this._mapData[i]);
             }
           }
         }
@@ -661,7 +661,7 @@ class Arcade {
           this._total++;
 
           if (collideCallback) {
-            collideCallback.call(callbackContext, sprite, this._mapData[i]);
+            collideCallback.call(sprite, this._mapData[i]);
           }
         }
       }
@@ -685,7 +685,7 @@ class Arcade {
   bool collideGroupVsTilemapLayer(Group group, TilemapLayer tilemapLayer, [Function collideCallback, Function processCallback]) {
 
     if (group.length == 0) {
-      return;
+      return false;
     }
 
     for (var i = 0, len = group.children.length; i < len; i++) {
@@ -1005,11 +1005,11 @@ class Arcade {
     //  They overlap. Any custom callbacks?
 
     //  A local callback always takes priority over a layer level callback
-    if (tile.collisionCallback && !tile.collisionCallback(tile, body.sprite, tile)) {
+    if (tile.collisionCallback != null && !tile.collisionCallback(tile, body.sprite, tile)) {
       //  If it returns true then we can carry on, otherwise we should abort.
       return false;
     }
-    else if (tile.layer.callbacks[tile.index] && !tile.layer.callbacks[tile.index].callback.call(tile.layer.callbacks[tile.index].callbackContext, body.sprite, tile)) {
+    else if (tile.layer.callbacks[tile.index] != null && !tile.layer.callbacks[tile.index](body.sprite, tile)) {
       //  If it returns true then we can carry on, otherwise we should abort.
       return false;
     }
@@ -1234,7 +1234,7 @@ class Arcade {
   List<Sprite> getObjectsUnderPointer(Pointer pointer, Group group, Function callback) {
 
     if (group.length == 0 || !pointer.exists) {
-      return;
+      return [];
     }
 
     this.quadTree.clear();
@@ -1244,17 +1244,17 @@ class Arcade {
     this.quadTree.populate(group);
 
     var rect = new Rectangle(pointer.x, pointer.y, 1, 1);
-    var output = [];
+    List output = [];
 
     this._potentials = this.quadTree.retrieve(rect);
 
-    for (var i = 0, len = this._potentials.length; i < len; i++) {
+    for (int i = 0, len = this._potentials.length; i < len; i++) {
       if (this._potentials[i].hitTest(pointer.x, pointer.y)) {
-        if (callback) {
+        if (callback != null) {
           callback(pointer, this._potentials[i].sprite);
         }
 
-        output.push(this._potentials[i].sprite);
+        output.add(this._potentials[i].sprite);
       }
     }
 

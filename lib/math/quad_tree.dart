@@ -163,14 +163,14 @@ class QuadTree {
     if (this.nodes[0] != null) {
       //  If rect fits into a subnode ..
       if (index != -1) {
-        returnObjects = returnObjects.addAll(this.nodes[index].retrieve(source));
+        returnObjects.addAll(this.nodes[index].retrieve(source));
       }
       else {
         //  If rect does not fit into a subnode, check it against all subnodes (unrolled for speed)
-        returnObjects = returnObjects.addAll(this.nodes[0].retrieve(source));
-        returnObjects = returnObjects.addAll(this.nodes[1].retrieve(source));
-        returnObjects = returnObjects.addAll(this.nodes[2].retrieve(source));
-        returnObjects = returnObjects.addAll(this.nodes[3].retrieve(source));
+        returnObjects.addAll(this.nodes[0].retrieve(source));
+        returnObjects.addAll(this.nodes[1].retrieve(source));
+        returnObjects.addAll(this.nodes[2].retrieve(source));
+        returnObjects.addAll(this.nodes[3].retrieve(source));
       }
     }
 

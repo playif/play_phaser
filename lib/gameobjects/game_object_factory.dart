@@ -176,7 +176,7 @@ class GameObjectFactory {
    * @return {Phaser.TileSprite} The newly created tileSprite object.
    */
 
-  TileSprite tileSprite(int x, int y, int width, int height, String key, frame, [ Groupgroup]) {
+  TileSprite tileSprite(int x, int y, int width, int height, String key, frame, [Group group]) {
 
     if (group == null) {
       group = this.world;
@@ -266,7 +266,7 @@ class GameObjectFactory {
    */
 
   Emitter emitter([int x, int y, int maxParticles=50]) {
-    return this.game.particles.add(new Particles.Arcade.Emitter(this.game, x, y, maxParticles));
+    return this.game.particles.add(new Emitter(this.game, x, y, maxParticles));
   }
 
   /**

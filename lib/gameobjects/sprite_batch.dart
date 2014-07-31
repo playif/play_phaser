@@ -1,6 +1,6 @@
 part of Phaser;
 
-class SpriteBatch {
-  SpriteBatch() {
+class SpriteBatch extends Group {
+  SpriteBatch(game, parent, name, addToStage) {
   }
 }

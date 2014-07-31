@@ -222,7 +222,7 @@ class SoundManager {
     }
 
     //  Global override (mostly for Audio Tag testing)
-    if (this.game.device.webAudio == false || (window['PhaserGlobal'] && window['PhaserGlobal'].disableWebAudio == true)) {
+    if (this.game.device.webAudio == false) {
       //  Create an Audio tag?
       this.touchLocked = false;
       this._unlockSource = null;
@@ -251,7 +251,7 @@ class SoundManager {
   stopAll() {
 
     for (var i = 0; i < this._sounds.length; i++) {
-      if (this._sounds[i]) {
+      if (this._sounds[i] != null) {
         this._sounds[i].stop();
       }
     }

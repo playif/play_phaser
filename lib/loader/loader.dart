@@ -303,7 +303,7 @@ class Loader {
         }
       }
     }
-    return false;
+    return null;
   }
 
   /**

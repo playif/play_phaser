@@ -1,6 +1,6 @@
 part of Phaser;
 
-class Sprite extends PIXI.Sprite  implements GameObject {
+class Sprite extends PIXI.Sprite implements GameObject {
   Game game;
 //  num x;
 //  num y;
@@ -40,7 +40,7 @@ class Sprite extends PIXI.Sprite  implements GameObject {
 
   Point camerOffset;
 
-  GameObject parent;
+  Group parent;
 
   List<GameObject> children;
 
@@ -528,9 +528,11 @@ class Sprite extends PIXI.Sprite  implements GameObject {
 
     if (rect == null) {
       //  Clear any crop that may be set
-      if (this.texture.hasOwnProperty('sourceWidth')) {
-        this.texture.setFrame(new Rectangle(0, 0, this.texture.sourceWidth, this.texture.sourceHeight));
-      }
+//      if (this.texture.hasOwnProperty('sourceWidth')) {
+//        this.texture.setFrame(new Rectangle(0, 0, this.texture.sourceWidth, this.texture.sourceHeight));
+//      }
+      this.texture.setFrame(new Rectangle(0, 0, this.texture.sourceWidth, this.texture.sourceHeight));
+
     }
     else {
       //  Do we need to clone the PIXI.Texture object?
@@ -581,7 +583,7 @@ class Sprite extends PIXI.Sprite  implements GameObject {
     this.visible = true;
     this.health = health;
 
-    if (this.events) {
+    if (this.events != null) {
       this.events.onRevived.dispatch(this);
     }
 
@@ -796,7 +798,7 @@ class Sprite extends PIXI.Sprite  implements GameObject {
    * @return {boolean} True if the bounds of this Sprite intersects at any point with the bounds of the given display object.
    */
 
-  overlap(displayObject) {
+  overlap(GameObject displayObject) {
 
     return Rectangle.intersects(this.getBounds(), displayObject.getBounds());
 

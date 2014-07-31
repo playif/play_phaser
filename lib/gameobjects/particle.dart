@@ -146,7 +146,7 @@ class Particle extends Sprite {
 
     this.health = health;
 
-    if (this.body)
+    if (this.body != null)
     {
       this.body.reset(x, y, false, false);
     }
