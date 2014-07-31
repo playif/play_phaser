@@ -10,10 +10,10 @@ class Device {
   bool crosswalk;
   bool android;
   bool chromeOS;
-bool linux;
+  bool linux;
   bool macOS;
   bool windows;
-bool windowsPhone;
+  bool windowsPhone;
   bool canvas;
   bool file;
   bool fileSystem;
@@ -44,7 +44,7 @@ bool windowsPhone;
   bool silk;
   bool audioData;
   bool webAudio;
- bool ogg;
+  bool ogg;
   bool opus;
   bool mp3;
 
@@ -52,17 +52,16 @@ bool windowsPhone;
 
   bool m4a;
   bool webm;
-bool iPhone;
-bool iPhone4;
-bool iPad;
-double pixelRatio;
-bool littleEndian;
-bool support32bit;
-bool fullscreen;
-String requestFullscreen;
-String cancelFullscreen;
-bool fullscreenKeyboard;
-
+  bool iPhone;
+  bool iPhone4;
+  bool iPad;
+  double pixelRatio;
+  bool littleEndian;
+  bool support32bit;
+  bool fullscreen;
+  String requestFullscreen;
+  String cancelFullscreen;
+  bool fullscreenKeyboard;
 
 
   Device(this.game) {
@@ -379,7 +378,7 @@ bool fullscreenKeyboard;
      * @property {number} pixelRatio - PixelRatio of the host device?
      * @default
      */
-    this.pixelRatio = 0;
+    this.pixelRatio = 0.0;
 
     /**
      * @property {boolean} littleEndian - Is the device big or little endian? (only detected if the browser supports TypedArrays)
@@ -433,74 +432,67 @@ bool fullscreenKeyboard;
    * @method Phaser.Device#_checkOS
    * @private
    */
-  _checkOS () {
+
+  _checkOS() {
 
     String ua = window.navigator.userAgent;
 
-    if (ua.contains("Android"))
-  {
-  this.android = true;
-  }
-  else if (ua.contains("CrOS"))
-  {
-  this.chromeOS = true;
-  }
-  else if ( ua.contains("iPad") || ua.contains("iPod") || ua.contains("iPhone"))
-  {
-  this.iOS = true;
-  }
-  else if (ua.contains("Linux"))
-  {
-  this.linux = true;
-  }
-  else if (ua.contains("Map OS"))
-  {
-  this.macOS = true;
-  }
-  else if (ua.contains("Windows"))
-  {
-  this.windows = true;
+    if (ua.contains("Android")) {
+      this.android = true;
+    }
+    else if (ua.contains("CrOS")) {
+      this.chromeOS = true;
+    }
+    else if (ua.contains("iPad") || ua.contains("iPod") || ua.contains("iPhone")) {
+        this.iOS = true;
+      }
+      else if (ua.contains("Linux")) {
+          this.linux = true;
+        }
+        else if (ua.contains("Map OS")) {
+            this.macOS = true;
+          }
+          else if (ua.contains("Windows")) {
+              this.windows = true;
 
-  if (ua.contains("Windows Phone"))
-  {
-  this.windowsPhone = true;
-  }
-  }
+              if (ua.contains("Windows Phone")) {
+                this.windowsPhone = true;
+              }
+            }
 
-  if (this.windows || this.macOS || (this.linux && this.silk == false))
-  {
-  this.desktop = true;
-  }
+    if (this.windows || this.macOS || (this.linux && this.silk == false)) {
+      this.desktop = true;
+    }
 
-  //  Windows Phone / Table reset
-  if (this.windowsPhone || (ua.contains("Windows NT") && ua.contains("Touch")))
-  {
-  this.desktop = false;
+    //  Windows Phone / Table reset
+    if (this.windowsPhone || (ua.contains("Windows NT") && ua.contains("Touch"))) {
+      this.desktop = false;
+    }
+
   }
 
-}
+  /**
+   * Check HTML5 features of the host environment.
+   * @method Phaser.Device#_checkFeatures
+   * @private
+   */
 
-/**
- * Check HTML5 features of the host environment.
- * @method Phaser.Device#_checkFeatures
- * @private
- */
-_checkFeatures () {
-  CanvasElement canvas = new CanvasElement();
-  this.canvas = canvas.getContext("2d")!=null || this.cocoonJS;
+  _checkFeatures() {
+    CanvasElement canvas = new CanvasElement();
+    this.canvas = canvas.getContext("2d") != null || this.cocoonJS;
 
-  try {
-    this.localStorage = window.localStorage != null;
-  } catch (error) {
-    this.localStorage = false;
-  }
+    try {
+      this.localStorage = window.localStorage != null;
+    } catch (error) {
+      this.localStorage = false;
+    }
 
-  //TODO
-  //this.file = !!window['File'] && !!window['FileReader'] && !!window['FileList'] && !!window['Blob'];
-  //this.fileSystem = !!window['requestFileSystem'];
+    //TODO
+    //this.file = !!window['File'] && !!window['FileReader'] && !!window['FileList'] && !!window['Blob'];
+    //this.fileSystem = !!window['requestFileSystem'];
 
-  RenderingContext context3D = canvas.getContext3d();
-  this.webGL = context3D != null;
+    RenderingContext context3D = canvas.getContext3d();
+    this.webGL = context3D != null;
 //  ( function () { try { var canvas = document.createElement( 'canvas' ); return !! window.WebGLRenderingContext && ( canvas.getContext( 'webgl' ) || canvas.getContext( 'experimental-webgl' ) ); } catch( e ) { return false; } } )();
 //
 //  if (this.webGL === null || this.webGL === false)
@@ -513,13 +505,12 @@ _checkFeatures () {
 //  }
 
 
-  //TODO
-  //this.worker = !!window['Worker'];
+    //TODO
+    //this.worker = !!window['Worker'];
 //document.documentElement.onTouchStart.listen()
-  if ((window.navigator.maxTouchPoints != null && window.navigator.maxTouchPoints > 1))
-{
-this.touch = true;
-}
+    if ((window.navigator.maxTouchPoints != null && window.navigator.maxTouchPoints > 1)) {
+      this.touch = true;
+    }
 
 //TODO
 //
@@ -528,24 +519,25 @@ this.touch = true;
 //this.mspointer = true;
 //}
 
-this.pointerLock=true;
+    this.pointerLock = true;
 //this.pointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
 //TODO
 //this.quirksMode = (document.compatMode == 'CSS1Compat') ? false : true;
 
 
-this.getUserMedia = true;
+    this.getUserMedia = true;
 //!!(window.navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
 
-}
+  }
 
-/**
- * Checks for support of the Full Screen API.
- *
- * @method Phaser.Device#checkFullScreenSupport
- */
-checkFullScreenSupport () {
+  /**
+   * Checks for support of the Full Screen API.
+   *
+   * @method Phaser.Device#checkFullScreenSupport
+   */
+
+  checkFullScreenSupport() {
 //
 //  var fs = [
 //      'requestFullscreen',
@@ -569,7 +561,7 @@ checkFullScreenSupport () {
 //    }
 //  }
 
-this.fullscreen =true;
+    this.fullscreen = true;
 //this.requestFullscreen=
 
 //  var cfs = [
@@ -595,81 +587,71 @@ this.fullscreen =true;
 //    }
 //  }
 
-  this.cancelFullscreen=true;
+    this.cancelFullscreen = true;
 
-  //TODO
-  this.fullscreenKeyboard = true;
-  //  Keyboard Input?
+    //TODO
+    this.fullscreenKeyboard = true;
+    //  Keyboard Input?
 //  if (window['Element'] && Element['ALLOW_KEYBOARD_INPUT'])
 //  {
 //    this.fullscreenKeyboard = true;
 //  }
 
-}
+  }
 
-/**
- * Check what browser is game running in.
- * @method Phaser.Device#_checkBrowser
- * @private
- */
-_checkBrowser () {
+  /**
+   * Check what browser is game running in.
+   * @method Phaser.Device#_checkBrowser
+   * @private
+   */
 
-  String ua = window.navigator.userAgent;
+  _checkBrowser() {
 
-  if (ua.contains("Arora"))
-{
-this.arora = true;
-}
-else if (ua.contains("Chrome"))
-{
-this.chrome = true;
-}
-else if (ua.contains("Epiphany"))
-{
-this.epiphany = true;
-}
-else if (ua.contains("Firefox"))
-{
-this.firefox = true;
-}
-else if (ua.contains("AppleWebKit") && this.iOS)
-{
-this.mobileSafari = true;
-}
-else if (ua.contains("MSIE"))
-{
-this.ie = true;
-  this.ieVersion=10;
+    String ua = window.navigator.userAgent;
+
+    if (ua.contains("Arora")) {
+      this.arora = true;
+    }
+    else if (ua.contains("Chrome")) {
+      this.chrome = true;
+    }
+    else if (ua.contains("Epiphany")) {
+        this.epiphany = true;
+      }
+      else if (ua.contains("Firefox")) {
+          this.firefox = true;
+        }
+        else if (ua.contains("AppleWebKit") && this.iOS) {
+            this.mobileSafari = true;
+          }
+          else if (ua.contains("MSIE")) {
+              this.ie = true;
+              this.ieVersion = 10;
 //this.ieVersion = parseInt(RegExp.$1, 10);
-}
-else if (ua.contains("Midori"))
-{
-this.midori = true;
-}
-else if (ua.contains("Opera"))
-{
-this.opera = true;
-}
-else if (ua.contains("Safari"))
-{
-this.safari = true;
-}
-else if (ua.contains("Trident"))// /\/(\d+\.\d+)(.*)rv:(\d+\.\d+)/.test(ua))
-{
-this.ie = true;
-this.trident = true;
-this.tridentVersion = 10;
-this.ieVersion = 10;
-}
+            }
+            else if (ua.contains("Midori")) {
+                this.midori = true;
+              }
+              else if (ua.contains("Opera")) {
+                  this.opera = true;
+                }
+                else if (ua.contains("Safari")) {
+                    this.safari = true;
+                  }
+                  else if (ua.contains("Trident")) {
+                      this.ie = true;
+                      this.trident = true;
+                      this.tridentVersion = 10;
+                      this.ieVersion = 10;
+                    }
 
 //Silk gets its own if clause because its ua also contains 'Safari'
-if (ua.contains("Silk"))
-{
-this.silk = true;
-}
+    if (ua.contains("Silk")) {
+      this.silk = true;
+    }
 
 //TODO
-//// WebApp mode in iOS
+    //// WebApp mode in iOS
 //if (window.navigator['standalone'])
 //{
 //this.webApp = true;
@@ -685,44 +667,44 @@ this.silk = true;
 //this.ejecta = true;
 //}
 
-if (ua.contains("Crosswalk"))
-{
-this.crosswalk = true;
-}
+    if (ua.contains("Crosswalk")) {
+      this.crosswalk = true;
+    }
 
-}
+  }
 
-/**
- * Check audio support.
- * @method Phaser.Device#_checkAudio
- * @private
- */
-_checkAudio () {
-AudioElement audio=new AudioElement();
-  this.audioData = audio!= null;
-this.webAudio=true;
+  /**
+   * Check audio support.
+   * @method Phaser.Device#_checkAudio
+   * @private
+   */
+
+  _checkAudio() {
+    AudioElement audio = new AudioElement();
+    this.audioData = audio != null;
+    this.webAudio = true;
 //  this.webAudio = !!(window['webkitAudioContext'] || window['AudioContext']);
-  //var audioElement = document.createElement('audio');
-  //var result = false;
+    //var audioElement = document.createElement('audio');
+    //var result = false;
 
-  if(audio.canPlayType('ogg')){
-    this.ogg=true;
-  }
-  if(audio.canPlayType('opus')){
-    this.opus=true;
-  }
-  if(audio.canPlayType('mp3')){
-    this.mp3=true;
-  }
-  if(audio.canPlayType('wav')){
-    this.wav=true;
-  }
-  if(audio.canPlayType('m4a')){
-    this.m4a=true;
-  }
-  if(audio.canPlayType('webm')){
-    this.webm=true;
-  }
+    if (audio.canPlayType('ogg') != "") {
+      this.ogg = true;
+    }
+    if (audio.canPlayType('opus') != "") {
+      this.opus = true;
+    }
+    if (audio.canPlayType('mp3') != "") {
+      this.mp3 = true;
+    }
+    if (audio.canPlayType('wav') != "") {
+      this.wav = true;
+    }
+    if (audio.canPlayType('m4a') != "") {
+      this.m4a = true;
+    }
+    if (audio.canPlayType('webm') != "") {
+      this.webm = true;
+    }
 //  try {
 //    if (result = !!audioElement.canPlayType) {
 //
@@ -756,90 +738,90 @@ this.webAudio=true;
 //  } catch (e) {
 //  }
 
-}
+  }
 
-/**
- * Check PixelRatio, iOS device, Vibration API, ArrayBuffers and endianess.
- * @method Phaser.Device#_checkDevice
- * @private
- */
-_checkDevice () {
+  /**
+   * Check PixelRatio, iOS device, Vibration API, ArrayBuffers and endianess.
+   * @method Phaser.Device#_checkDevice
+   * @private
+   */
 
-  this.pixelRatio =window.devicePixelRatio;
-  this.iPhone =window. navigator.userAgent.toLowerCase().indexOf('iphone') != -1;
-  this.iPhone4 = (this.pixelRatio == 2.0 && this.iPhone);
-  this.iPad = window.navigator.userAgent.toLowerCase().indexOf('ipad') != -1;
+  _checkDevice() {
 
-  //Int8List
-  //if (typeof Int8Array != 'undefined')
-  //{
+    this.pixelRatio = window.devicePixelRatio;
+    this.iPhone = window. navigator.userAgent.toLowerCase().indexOf('iphone') != -1;
+    this.iPhone4 = (this.pixelRatio == 2.0 && this.iPhone);
+    this.iPad = window.navigator.userAgent.toLowerCase().indexOf('ipad') != -1;
+
+    //Int8List
+    //if (typeof Int8Array != 'undefined')
+    //{
     this.typedArray = true;
-  //}
-  //else
-  //{
-  //  this.typedArray = false;
-  //}
+    //}
+    //else
+    //{
+    //  this.typedArray = false;
+    //}
 
-  //if (typeof ArrayBuffer !== 'undefined' && typeof Uint8Array !== 'undefined' && typeof Uint32Array !== 'undefined')
-  //{
+    //if (typeof ArrayBuffer !== 'undefined' && typeof Uint8Array !== 'undefined' && typeof Uint32Array !== 'undefined')
+    //{
     this.littleEndian = this._checkIsLittleEndian();
     Device.LITTLE_ENDIAN = this.littleEndian;
-  //}
+    //}
 
-  this.support32bit=true;
-  //= (typeof ArrayBuffer !== "undefined" && typeof Uint8ClampedArray !== "undefined" && typeof Int32Array !== "undefined" && this.littleEndian !== null && this._checkIsUint8ClampedImageData());
+    this.support32bit = true;
+    //= (typeof ArrayBuffer !== "undefined" && typeof Uint8ClampedArray !== "undefined" && typeof Int32Array !== "undefined" && this.littleEndian !== null && this._checkIsUint8ClampedImageData());
 
 //window.navigator..vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
 
 //if (navigator.vibrate)
 //{
-this.vibration = true;
+    this.vibration = true;
 //}
 
-}
+  }
 
-/**
- * Check Little or Big Endian system.
- * @author Matt DesLauriers (@mattdesl)
- * @method Phaser.Device#_checkIsLittleEndian
- * @private
- */
-_checkIsLittleEndian () {
+  /**
+   * Check Little or Big Endian system.
+   * @author Matt DesLauriers (@mattdesl)
+   * @method Phaser.Device#_checkIsLittleEndian
+   * @private
+   */
 
-  var a = new Uint8List(4);// ArrayBuffer(4);
-  var b = new Uint8List.fromList(a);
-  var c = new Uint32List.fromList(a);
+  _checkIsLittleEndian() {
 
-  b[0] = 0xa1;
-  b[1] = 0xb2;
-  b[2] = 0xc3;
-  b[3] = 0xd4;
+    var a = new Uint8List(4);// ArrayBuffer(4);
+    var b = new Uint8List.fromList(a);
+    var c = new Uint32List.fromList(a);
 
-  if (c[0] == 0xd4c3b2a1)
-  {
+    b[0] = 0xa1;
+    b[1] = 0xb2;
+    b[2] = 0xc3;
+    b[3] = 0xd4;
+
+    if (c[0] == 0xd4c3b2a1) {
+      return true;
+    }
+
+    if (c[0] == 0xa1b2c3d4) {
+      return false;
+    }
+    else {
+      //  Could not determine endianness
+      return null;
+    }
+
+  }
+
+  /**
+   * Test to see if ImageData uses CanvasPixelArray or Uint8ClampedArray.
+   * @author Matt DesLauriers (@mattdesl)
+   * @method Phaser.Device#_checkIsUint8ClampedImageData
+   * @private
+   */
+
+  _checkIsUint8ClampedImageData() {
     return true;
-  }
-
-  if (c[0] == 0xa1b2c3d4)
-  {
-    return false;
-  }
-  else
-  {
-    //  Could not determine endianness
-    return null;
-  }
-
-}
-
-/**
- * Test to see if ImageData uses CanvasPixelArray or Uint8ClampedArray.
- * @author Matt DesLauriers (@mattdesl)
- * @method Phaser.Device#_checkIsUint8ClampedImageData
- * @private
- */
-_checkIsUint8ClampedImageData () {
-  return true;
 //  if (typeof Uint8ClampedArray === "undefined")
 //  {
 //    return false;
@@ -857,15 +839,16 @@ _checkIsUint8ClampedImageData () {
 //
 //  return image.data instanceof Uint8ClampedArray;
 
-}
+  }
 
-/**
- * Check whether the host environment support 3D CSS.
- * @method Phaser.Device#_checkCSS3D
- * @private
- */
-_checkCSS3D () {
-  return true;
+  /**
+   * Check whether the host environment support 3D CSS.
+   * @method Phaser.Device#_checkCSS3D
+   * @private
+   */
+
+  _checkCSS3D() {
+    return true;
 //
 //  var el = document.createElement('p');
 //  var has3d;
@@ -892,50 +875,47 @@ _checkCSS3D () {
 //  document.body.removeChild(el);
 //  this.css3D = (has3d !== undefined && has3d.length > 0 && has3d !== "none");
 
-}
-
-/**
- * Check whether the host environment can play audio.
- * @method Phaser.Device#canPlayAudio
- * @param {string} type - One of 'mp3, 'ogg', 'm4a', 'wav', 'webm'.
- * @return {boolean} True if the given file type is supported by the browser, otherwise false.
- */
-bool canPlayAudio (String type) {
-
-  if (type == 'mp3' && this.mp3)
-  {
-    return true;
   }
-  else if (type == 'ogg' && (this.ogg || this.opus))
-  {
-    return true;
-  }
-  else if (type == 'm4a' && this.m4a)
-    {
+
+  /**
+   * Check whether the host environment can play audio.
+   * @method Phaser.Device#canPlayAudio
+   * @param {string} type - One of 'mp3, 'ogg', 'm4a', 'wav', 'webm'.
+   * @return {boolean} True if the given file type is supported by the browser, otherwise false.
+   */
+
+  bool canPlayAudio(String type) {
+
+    if (type == 'mp3' && this.mp3) {
       return true;
     }
-    else if (type == 'wav' && this.wav)
-      {
+    else if (type == 'ogg' && (this.ogg || this.opus)) {
+      return true;
+    }
+    else if (type == 'm4a' && this.m4a) {
         return true;
       }
-      else if (type == 'webm' && this.webm)
-        {
+      else if (type == 'wav' && this.wav) {
           return true;
         }
+        else if (type == 'webm' && this.webm) {
+            return true;
+          }
 
-  return false;
+    return false;
 
-}
+  }
 
-/**
- * Check whether the console is open.
- * Note that this only works in Firefox with Firebug and earlier versions of Chrome.
- * It used to work in Chrome, but then they removed the ability: http://src.chromium.org/viewvc/blink?view=revision&revision=151136
- *
- * @method Phaser.Device#isConsoleOpen
- * @return {boolean} True if the browser dev console is open.
- */
-isConsoleOpen () {
+  /**
+   * Check whether the console is open.
+   * Note that this only works in Firefox with Firebug and earlier versions of Chrome.
+   * It used to work in Chrome, but then they removed the ability: http://src.chromium.org/viewvc/blink?view=revision&revision=151136
+   *
+   * @method Phaser.Device#isConsoleOpen
+   * @return {boolean} True if the browser dev console is open.
+   */
+
+  isConsoleOpen() {
 
 //  if (window.console && window.console['firebug'])
 //  {
@@ -958,9 +938,9 @@ isConsoleOpen () {
 //    }
 //  }
 
-  return false;
+    return false;
 
-}
+  }
 
 
 }

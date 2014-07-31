@@ -17,7 +17,7 @@ class Filter {
    */
   //Object.defineProperty(Phaser.Filter.prototype, 'width', {
 
-  num get width() {
+  num get width {
     return this.uniforms['resolution']['value']['x'];
   }
 
@@ -33,7 +33,7 @@ class Filter {
    */
   //Object.defineProperty(Phaser.Filter.prototype, 'height', {
 
-  num get height() {
+  num get height {
     return this.uniforms['resolution']['value']['y'];
   }
 
@@ -86,12 +86,12 @@ class Filter {
         },
         'resolution': {
             'type': '2f', 'value': {
-                x: 256, y: 256
+                'x': 256, 'y': 256
             }
         },
         'mouse': {
             'type': '2f', 'value': {
-                x: 0.0, y: 0.0
+                'x': 0.0, 'y': 0.0
             }
         }
     };
@@ -99,8 +99,10 @@ class Filter {
     /**
      * @property {array} fragmentSrc - The fragment shader code.
      */
-    this.fragmentSrc = fragmentSrc || [];
-
+    this.fragmentSrc = fragmentSrc;
+    if(this.fragmentSrc == null){
+      this.fragmentSrc=[];
+    }
 
   }
 
@@ -135,11 +137,11 @@ class Filter {
 
     if (pointer != null) {
       if (pointer.x > 0) {
-        this.uniforms['mouse']['x'] = pointer.x.toFixed(2);
+        this.uniforms['mouse']['x'] = pointer.x.toStringAsFixed(2);
       }
 
       if (pointer.y > 0) {
-        this.uniforms['mouse']['y'] = pointer.y.toFixed(2);
+        this.uniforms['mouse']['y'] = pointer.y.toStringAsFixed(2);
       }
     }
 

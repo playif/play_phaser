@@ -9,7 +9,7 @@ class StateManager {
   bool _created;
   List _args;
 
-  String _pendingState;
+  State _pendingState;
   State current;
 
   Function onInitCallback;
@@ -28,7 +28,7 @@ class StateManager {
   Object callbackContext;
 
 
-  StateManager(this.game, [String pendingState=null]) {
+  StateManager(this.game, [State pendingState=null]) {
     /**
      * @property {Object} states - The object containing Phaser.States.
      */
@@ -70,7 +70,7 @@ class StateManager {
     /**
      * @property {string} current - The current active State object (defaults to null).
      */
-    this.current = '';
+    this.current = null;
 
     /**
      * @property {function} onInitCallback - This will be called when the state is started (i.e. set as the current active state).
@@ -146,13 +146,13 @@ class StateManager {
     this.game.load.onLoadComplete.add(this.loadComplete, this);
 
     if (this._pendingState != null) {
-      if (this._pendingState is String) {
-        //  State was already added, so just start it
-        this.start(this._pendingState, false, false);
-      }
-      else {
+//      if (this._pendingState is String) {
+//        //  State was already added, so just start it
+//        this.start(this._pendingState, false, false);
+//      }
+//      else {
         this.add('default', this._pendingState, true);
-      }
+//      }
     }
 
   }
@@ -206,7 +206,7 @@ class StateManager {
 
   remove(String key) {
 
-    if (this.current == key) {
+    if (this.current == this.states[key]) {
       this.callbackContext = null;
 
       this.onInitCallback = null;
@@ -242,7 +242,7 @@ class StateManager {
 
     if (this.checkState(key)) {
       //  Place the state in the queue. It will be started the next time the game loop starts.
-      this._pendingState = key;
+      this._pendingState = this.states[key];
       this._clearWorld = clearWorld;
       this._clearCache = clearCache;
       this._args = args;
@@ -279,14 +279,14 @@ class StateManager {
 
   }
 
-  /**
-   * Used by onInit and onShutdown when those functions don't exist on the state
-   * @method Phaser.StateManager#dummy
-   * @private
-   */
-
-  dummy() {
-  }
+//  /**
+//   * Used by onInit and onShutdown when those functions don't exist on the state
+//   * @method Phaser.StateManager#dummy
+//   * @private
+//   */
+//
+//  dummy() {
+//  }
 
   /**
    * preUpdate is called right at the start of the game loop. It is responsible for changing to a new state that was requested previously.
@@ -298,7 +298,7 @@ class StateManager {
 
     if (this._pendingState != null && this.game.isBooted) {
       //  Already got a state running?
-      if (this.current != null && this.current != "") {
+      if (this.current != null) {
         this.onShutDownCallback();
 
         this.game.tweens.removeAll();
@@ -355,7 +355,7 @@ class StateManager {
    * @return {boolean} true if the State has the required functions, otherwise false.
    */
 
-  checkState(String key) {
+  checkState(State key) {
 
     if (this.states[key] != null) {
 //      var valid = false;
@@ -449,7 +449,7 @@ class StateManager {
     //  Used when the state is no longer the current active state
     this.onShutDownCallback = this.states[key].shutdown;
 
-    this.current = key;
+    this.current = this.states[key];
     this._created = false;
 
     this.onInitCallback(this._args);
@@ -467,7 +467,7 @@ class StateManager {
    */
 
   getCurrentState() {
-    return this.states[this.current];
+    return this.current;
   }
 
   /**

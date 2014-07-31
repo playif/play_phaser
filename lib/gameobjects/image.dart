@@ -43,11 +43,11 @@ class Image extends PIXI.Sprite {
   }
 
   bool get inWorld {
-    return this.game.world.bounds.intersects(this.getBounds());
+    return this.game.world.bounds.intersects(new Rectangle()..copyFrom(this.getBounds()));
   }
 
   bool get inCamera {
-    return this.game.world.camera.screenView.intersects(this.getBounds());
+    return this.game.world.camera.screenView.intersects(new Rectangle()..copyFrom(this.getBounds()));
   }
 
   num get frame {
@@ -85,7 +85,7 @@ class Image extends PIXI.Sprite {
   }
 
   bool get inputEnabled {
-    return (this.input && this.input.enabled);
+    return (this.input != null && this.input.enabled);
   }
 
   set inputEnabled(bool value) {
@@ -120,7 +120,7 @@ class Image extends PIXI.Sprite {
   }
 
   bool get smoothed {
-    return !this.texture.baseTexture.scaleMode;
+    return this.texture.baseTexture.scaleMode == 0;
   }
 
   set smoothed(bool value) {

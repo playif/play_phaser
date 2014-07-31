@@ -172,6 +172,6 @@ class Signal {
 
 
   toString() {
-    return '[Phaser.Signal active:' + this.active + ' numListeners:' + this.getNumListeners() + ']';
+    return '[Phaser.Signal active:$this.active numListeners:${this.getNumListeners()}]';
   }
 }

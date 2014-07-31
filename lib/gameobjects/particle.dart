@@ -3,7 +3,7 @@ part of Phaser;
 class Particle extends Sprite {
   bool autoScale;
   List scaleData;
-  double _s;
+  int _s;
   bool autoAlpha;
   List alphaData;
   int _a;
@@ -54,7 +54,7 @@ class Particle extends Sprite {
     {
       this._s--;
 
-      if (this._s)
+      if (this._s != 0)
       {
         this.scale.set(this.scaleData[this._s].x, this.scaleData[this._s].y);
       }
@@ -68,7 +68,7 @@ class Particle extends Sprite {
     {
       this._a--;
 
-      if (this._a)
+      if (this._a != 0)
       {
         this.alpha = this.alphaData[this._a].v;
       }

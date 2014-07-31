@@ -2,7 +2,7 @@ part of Phaser;
 
 class PluginManager {
   Game game;
-  List plugins;
+  List<Plugin> plugins;
   int _len;
   int _i;
 
@@ -38,45 +38,45 @@ class PluginManager {
    * @return {Phaser.Plugin} The Plugin that was added to the manager.
    */
 
-  add(plugin) {
+  Plugin add(Plugin plugin, List args) {
 
-    var args = Array.prototype.splice.call(arguments, 1);
-    var result = false;
+    //var args = Array.prototype.splice.call(arguments, 1);
+    bool result = false;
 
     //  Prototype?
-    if (plugin is Function) {
-      plugin = new plugin(this.game, this);
-    }
-    else {
-      plugin.game = this.game;
-      plugin.parent = this;
-    }
+    //if (plugin is Function) {
+    //  plugin = plugin(this.game, this);
+    //}
+    //else {
+    plugin.game = this.game;
+    plugin.parent = this;
+    //}
 
     //  Check for methods now to avoid having to do this every loop
-    if (plugin['preUpdate'] is Function) {
-      plugin.hasPreUpdate = true;
-      result = true;
-    }
-
-    if (plugin['update'] is Function) {
-      plugin.hasUpdate = true;
-      result = true;
-    }
-
-    if (plugin['postUpdate'] is Function) {
-      plugin.hasPostUpdate = true;
-      result = true;
-    }
-
-    if (plugin['render'] is Function) {
-      plugin.hasRender = true;
-      result = true;
-    }
-
-    if (plugin['postRender'] is Function) {
-      plugin.hasPostRender = true;
-      result = true;
-    }
+//    if (plugin['preUpdate'] is Function) {
+//      plugin.hasPreUpdate = true;
+//      result = true;
+//    }
+//
+//    if (plugin['update'] is Function) {
+//      plugin.hasUpdate = true;
+//      result = true;
+//    }
+//
+//    if (plugin['postUpdate'] is Function) {
+//      plugin.hasPostUpdate = true;
+//      result = true;
+//    }
+//
+//    if (plugin['render'] is Function) {
+//      plugin.hasRender = true;
+//      result = true;
+//    }
+//
+//    if (plugin['postRender'] is Function) {
+//      plugin.hasPostRender = true;
+//      result = true;
+//    }
 
     //  The plugin must have at least one of the above functions to be added to the PluginManager.
     if (result) {
@@ -91,9 +91,9 @@ class PluginManager {
       this._len = this.plugins.add(plugin);
 
       // Allows plugins to run potentially destructive code outside of the constructor, and only if being added to the PluginManager
-      if (plugin['init'] is Function) {
-        plugin.init.apply(plugin, args);
-      }
+//      if (plugin['init'] is Function) {
+//        plugin.init.apply(plugin, args);
+//      }
 
       return plugin;
     }
@@ -109,11 +109,9 @@ class PluginManager {
    * @param {Phaser.Plugin} plugin - The plugin to be removed.
    */
 
-  remove(plugin) {
-
+  remove(Plugin plugin) {
     this._i = this._len;
-
-    while (this._i--) {
+    while (this._i-- > 0) {
       if (this.plugins[this._i] == plugin) {
         plugin.destroy();
         this.plugins.removeAt(this._i);
@@ -121,7 +119,6 @@ class PluginManager {
         return;
       }
     }
-
   }
 
   /**
@@ -131,16 +128,12 @@ class PluginManager {
    */
 
   removeAll() {
-
     this._i = this._len;
-
-    while (this._i--) {
+    while (this._i-- > 0) {
       this.plugins[this._i].destroy();
     }
-
-    this.plugins.length = 0;
+    this.plugins.clear();
     this._len = 0;
-
   }
 
   /**
@@ -151,15 +144,12 @@ class PluginManager {
    */
 
   preUpdate() {
-
     this._i = this._len;
-
-    while (this._i--) {
+    while (this._i-- > 0) {
       if (this.plugins[this._i].active && this.plugins[this._i].hasPreUpdate) {
         this.plugins[this._i].preUpdate();
       }
     }
-
   }
 
   /**
@@ -170,15 +160,12 @@ class PluginManager {
    */
 
   update() {
-
     this._i = this._len;
-
-    while (this._i--) {
+    while (this._i-- > 0) {
       if (this.plugins[this._i].active && this.plugins[this._i].hasUpdate) {
         this.plugins[this._i].update();
       }
     }
-
   }
 
   /**
@@ -190,15 +177,12 @@ class PluginManager {
    */
 
   postUpdate() {
-
     this._i = this._len;
-
-    while (this._i--) {
+    while (this._i-- > 0) {
       if (this.plugins[this._i].active && this.plugins[this._i].hasPostUpdate) {
         this.plugins[this._i].postUpdate();
       }
     }
-
   }
 
   /**
@@ -209,15 +193,12 @@ class PluginManager {
    */
 
   render() {
-
     this._i = this._len;
-
-    while (this._i--) {
+    while (this._i-- > 0) {
       if (this.plugins[this._i].visible && this.plugins[this._i].hasRender) {
         this.plugins[this._i].render();
       }
     }
-
   }
 
   /**
@@ -228,15 +209,12 @@ class PluginManager {
    */
 
   postRender() {
-
     this._i = this._len;
-
-    while (this._i--) {
+    while (this._i-- > 0) {
       if (this.plugins[this._i].visible && this.plugins[this._i].hasPostRender) {
         this.plugins[this._i].postRender();
       }
     }
-
   }
 
   /**
@@ -246,11 +224,8 @@ class PluginManager {
    */
 
   destroy() {
-
     this.removeAll();
-
     this.game = null;
-
   }
 
 

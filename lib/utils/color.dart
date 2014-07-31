@@ -7,6 +7,8 @@ class Color {
   int color;
   String rgba;
 
+  double h,s,l;
+
 //  Color._() {
 //  }
 
@@ -131,7 +133,7 @@ class Color {
    * @return {number} A RGBA-packed 32 bit integer
    */
 
-  int toRGBA(int r, int g, int b, int a) {
+  static int toRGBA(int r, int g, int b, int a) {
     return (r << 24) | (g << 16) | (b << 8) | a;
   }
 
@@ -205,7 +207,7 @@ class Color {
    * @return {object} An object with the red, green and blue values set in the r, g and b properties.
    */
 
-  Color HSLtoRGB(double h, double s, double l, Color out) {
+  static Color HSLtoRGB(double h, double s, double l, Color out) {
 
     if (out == null) {
       out = Color.createColor(l, l, l);
@@ -374,7 +376,7 @@ class Color {
    * @return {number} The color component value.
    */
 
-  int hueToColor(double p, double q, double t) {
+  static int hueToColor(double p, double q, double t) {
 
     if (t < 0) {
       t += 1;
@@ -420,7 +422,7 @@ class Color {
    * @return {object} The resulting object with r, g, b, a properties and h, s, l and v.
    */
 
-  Color createColor([int r, int g, int b, double a, double h, double s, double l, double v]) {
+  static Color createColor([int r, int g, int b, double a, double h, double s, double l, double v]) {
 
     //var out = { r: r || 0, g: g || 0, b: b || 0, a: a || 1, h: h || 0, s: s || 0, l: l || 0, v: v || 0, color: 0 };
     Color out = new Color._();
@@ -445,8 +447,7 @@ class Color {
    * @returns {number} A native color value integer (format: 0xAARRGGBB).
    */
 
-  getColor32(a, r, g, b) {
-
+  static int getColor32(a, r, g, b) {
     return a << 24 | r << 16 | g << 8 | b;
   }
 
@@ -461,10 +462,8 @@ class Color {
    * @returns {number} A native color value integer (format: 0xRRGGBB).
    */
 
-  getColor(r, g, b) {
-
+  static int getColor(r, g, b) {
     return r << 16 | g << 8 | b;
-
   }
 
   /**
@@ -481,7 +480,7 @@ class Color {
    * @return {string} A string containing the color values. If prefix was '#' it will be in the format `#RRGGBB` otherwise `0xAARRGGBB`.
    */
 
-  static String RGBtoString(r, g, b, [int a=255, String prefix='#']) {
+  static String RGBtoString(int r, int g, int b, [int a=255, String prefix='#']) {
 
 //    if (typeof a == 'undefined') { a = 255; }
 //    if (typeof prefix == 'undefined') { prefix = '#'; }
@@ -524,7 +523,7 @@ class Color {
    * @return {object} An object with the red, green and blue values set in the r, g and b properties.
    */
 
-  Color hexToColor(String hex, [Color out]) {
+  static Color hexToColor(String hex, [Color out]) {
 
     if (out == null) {
       out = Color.createColor();
@@ -541,9 +540,9 @@ class Color {
 
     if (result) {
 
-      out.r = int.toRadixString(result[1], 16);
-      out.g = int.toRadixString(result[2], 16);
-      out.b = int.toRadixString(result[3], 16);
+      out.r = int.parse(result[1]).toRadixString(16);
+      out.g = int.parse(result[2]).toRadixString(16);
+      out.b = int.parse(result[3]).toRadixString(16);
     }
 
     return out;
@@ -559,11 +558,9 @@ class Color {
    * @returns {string} A string of length 2 characters, i.e. 255 = ff, 100 = 64.
    */
 
-  componentToHex(color) {
-
-    var hex = color.toString(16);
+  static String componentToHex(int color) {
+    String hex = color.toRadixString(16);
     return hex.length == 1 ? "0" + hex : hex;
-
   }
 
   /**
@@ -576,7 +573,7 @@ class Color {
    * @return {array} An array containing 360 elements corresponding to the HSV color wheel.
    */
 
-  List HSVColorWheel([double s=1.0, double v=1.0]) {
+  static List HSVColorWheel([double s=1.0, double v=1.0]) {
 
 //  if (typeof s === 'undefined') { s = 1.0; }
 //  if (typeof v === 'undefined') { v = 1.0; }
@@ -601,7 +598,7 @@ class Color {
    * @return {array} An array containing 360 elements corresponding to the HSL color wheel.
    */
 
-  List HSLColorWheel([double s=0.5, double l=0.5]) {
+  static List HSLColorWheel([double s=0.5, double l=0.5]) {
 
 //  if (typeof s === 'undefined') { s = 0.5; }
 //  if (typeof l === 'undefined') { l = 0.5; }
@@ -629,7 +626,7 @@ class Color {
    * @returns {number} The interpolated color value.
    */
 
-  int interpolateColor(color1, color2, steps, currentStep, [int alpha=255]) {
+  static int interpolateColor(color1, color2, steps, currentStep, [int alpha=255]) {
 
 //  if ( alpha == "undefined") { alpha = 255; }
 
@@ -657,7 +654,7 @@ class Color {
    * @returns {number} The interpolated color value.
    */
 
-  interpolateColorWithRGB(color, r, g, b, steps, currentStep) {
+  static num interpolateColorWithRGB(color, r, g, b, steps, currentStep) {
 
     var src = Color.getRGB(color);
     var or = (((r - src.red) * currentStep) / steps) + src.red;
@@ -794,7 +791,7 @@ class Color {
    * @returns {string} A string in the format: 'rgba(r,g,b,a)'
    */
 
-  String getWebRGB(color) {
+  static String getWebRGB(color) {
 
     if (color is Object) {
       return 'rgba(' + color.r.toString() + ',' + color.g.toString() + ',' + color.b.toString() + ',' + (color.a / 255).toString() + ')';
@@ -815,7 +812,7 @@ class Color {
    * @returns {number} The Alpha component of the color, will be between 0 and 1 (0 being no Alpha (opaque), 1 full Alpha (transparent)).
    */
 
-  getAlpha(color) {
+  static int getAlpha(int color) {
     return color >> 24;
   }
 
@@ -828,8 +825,8 @@ class Color {
    * @returns {number} The Alpha component of the color, will be between 0 and 1 (0 being no Alpha (opaque), 1 full Alpha (transparent)).
    */
 
-  getAlphaFloat(color) {
-    return (color >> 24) / 255;
+  static double getAlphaFloat(int color) {
+    return (color >> 24) / 255.0;
   }
 
   /**
@@ -841,7 +838,7 @@ class Color {
    * @returns {number} The Red component of the color, will be between 0 and 255 (0 being no color, 255 full Red).
    */
 
-  getRed(color) {
+  static int getRed(int color) {
     return color >> 16 & 0xFF;
   }
 
@@ -854,7 +851,7 @@ class Color {
    * @returns {number} The Green component of the color, will be between 0 and 255 (0 being no color, 255 full Green).
    */
 
-  getGreen(color) {
+  static int getGreen(int color) {
     return color >> 8 & 0xFF;
   }
 
@@ -867,7 +864,7 @@ class Color {
    * @returns {number} The Blue component of the color, will be between 0 and 255 (0 being no color, 255 full Blue).
    */
 
-  getBlue(color) {
+  static int getBlue(int color) {
     return color & 0xFF;
   }
 
@@ -884,18 +881,13 @@ class Color {
    * @returns {string} String containing the 3 lines of information.
    */
 
-  getColorInfo(color) {
-
-    var argb = Color.getRGB(color);
-
+  static String getColorInfo(int color) {
+    Color argb = Color.getRGB(color);
     //  Hex format
-    var result = Color.RGBtoHexstring(color) + "\n";
-
+    String result = Color.RGBtoHexstring(color) + "\n";
     //  RGB format
-    result = result.concat("Alpha: " + argb.alpha + " Red: " + argb.red + " Green: " + argb.green + " Blue: " + argb.blue) + "\n";
-
+    result = result + "Alpha: ${argb.alpha} Red: ${argb.red} Green: ${argb.green} Blue: ${argb.blue} \n";
     return result;
-
   }
 
   /**
@@ -908,11 +900,11 @@ class Color {
    * @returns {string} A string of length 10 characters in the format 0xAARRGGBB
    */
 
-  RGBtoHexstring(color) {
+  static  String RGBtoHexstring(int color) {
 
-    var argb = Phaser.Color.getRGB(color);
+    Color argb = Color.getRGB(color);
 
-    return "0x" + Phaser.Color.colorToHexstring(argb.alpha) + Phaser.Color.colorToHexstring(argb.red) + Phaser.Color.colorToHexstring(argb.green) + Phaser.Color.colorToHexstring(argb.blue);
+    return "0x" + Color.colorToHexstring(argb.alpha) + Color.colorToHexstring(argb.red) + Color.colorToHexstring(argb.green) + Color.colorToHexstring(argb.blue);
 
   }
 
@@ -926,12 +918,9 @@ class Color {
    * @returns {string} A string of length 10 characters in the format 0xAARRGGBB.
    */
 
-  RGBtoWebstring(color) {
-
-    var argb = Phaser.Color.getRGB(color);
-
-    return "#" + Phaser.Color.colorToHexstring(argb.red) + Phaser.Color.colorToHexstring(argb.green) + Phaser.Color.colorToHexstring(argb.blue);
-
+  static String RGBtoWebstring(int color) {
+    Color argb = Color.getRGB(color);
+    return "#" + Color.colorToHexstring(argb.red) + Color.colorToHexstring(argb.green) + Color.colorToHexstring(argb.blue);
   }
 
   /**
@@ -944,14 +933,12 @@ class Color {
    * @returns {string} A string of length 2 characters, i.e. 255 = FF, 0 = 00.
    */
 
-  colorToHexstring(color) {
-
-    var digits = "0123456789ABCDEF";
-    var lsd = color % 16;
-    var msd = (color - lsd) / 16;
-    var hexified = digits.charAt(msd) + digits.charAt(lsd);
+  static String colorToHexstring(int color) {
+    String digits = "0123456789ABCDEF";
+    int lsd = color % 16;
+    int msd = (color - lsd) ~/ 16;
+    String hexified = digits.indexOf(msd.toString()) + digits.indexOf(lsd.toString());
     return hexified;
-
   }
 
 }

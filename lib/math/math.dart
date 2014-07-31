@@ -6,12 +6,11 @@ class Math {
   Math._(){
   }
 
-  static const int PI = DMath.PI;
-  static const int PI2 = DMath.PI * 2;
+  static const double PI = DMath.PI;
+  static const double PI2 = DMath.PI * 2;
   static final doubleFunc random = new DMath.Random().nextDouble;
-  static final num _degreeToRadiansFactor = DMath.PI / 180;
-  static final num _radianToDegreesFactor = 180 / DMath.PI;
-
+  static final double _degreeToRadiansFactor = DMath.PI / 180;
+  static final double _radianToDegreesFactor = 180 / DMath.PI;
 
 
   static num cos(num th) => DMath.cos(th);
@@ -46,7 +45,7 @@ class Math {
     return (val + epsilon).floor();
   }
 
-  static int average(List<num> args) {
+  static double average(List<num> args) {
     num sum = args.fold(0, (a, b) => a + b);
     return sum / args.length;
   }
@@ -148,7 +147,7 @@ class Math {
   }
 
   static num reverseAngle(num angleRad) {
-    return this.normalizeAngle(angleRad + DMath.PI);
+    return normalizeAngle(angleRad + DMath.PI);
   }
 
   static num normalizeAngle(num angleRad) {
@@ -177,7 +176,7 @@ class Math {
       return true;
     }
     else {
-      if (Math.random.nextInt(100) >= chance) {
+      if (random() * 100 >= chance) {
         return false;
       }
       else {
@@ -206,7 +205,7 @@ class Math {
     return value;
   }
 
-  static num minSub(num value, num amount, num max) {
+  static num minSub(num value, num amount, num min) {
     value -= amount;
     if (value < min) {
       value = min;
@@ -249,7 +248,7 @@ class Math {
   }
 
   static int randomSign() {
-    return (Math.random.nextDouble() > 0.5) ? 1 : -1;
+    return (Math.random() > 0.5) ? 1 : -1;
   }
 
   static bool isOdd(int n) {
@@ -287,7 +286,7 @@ class Math {
 
   static num wrapAngle(num angle, [bool radians=false]) {
     num radianFactor = (radians) ? DMath.PI / 180 : 1;
-    return this.wrap(angle, -180 * radianFactor, 180 * radianFactor);
+    return wrap(angle, -180 * radianFactor, 180 * radianFactor);
   }
 
   static num angleLimit(num angle, num min, num max) {
@@ -358,7 +357,18 @@ class Math {
 
 
   static num bernstein(num n, num i) {
-    return this.factorial(n) / this.factorial(i) / this.factorial(n - i);
+    return factorial(n) / factorial(i) / factorial(n - i);
+  }
+
+  static num factorial(num value) {
+    if (value == 0) {
+      return 1;
+    }
+    num res = value;
+    while (--value >= 0) {
+      res *= value;
+    }
+    return res;
   }
 
   static num catmullRom(num p0, num p1, num p2, num p3, num t) {
@@ -380,7 +390,7 @@ class Math {
         l = objects.length - startIndex;
       }
       if (l > 0) {
-        return objects[startIndex + Math.random.nextInt(l)];
+        return objects[startIndex + (Math.random() * l).floor()];
       }
     }
     return null;
@@ -393,7 +403,7 @@ class Math {
         l = objects.length - startIndex;
       }
       if (l > 0) {
-        var idx = startIndex + Math.random.nextInt(l);
+        var idx = startIndex + Math.random() * l;
         var removed = objects.removeAt(idx);
         return removed[0];
       }
@@ -440,7 +450,7 @@ class Math {
   }
 
   static List shuffleArray(List array) {
-    return array.shuffle(random);
+    return new List.from(array)..shuffle();
   }
 
   static num distance(num x1, num y1, num x2, num y2) {

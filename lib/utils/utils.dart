@@ -87,7 +87,7 @@ class Utils {
 //      array[i] = array[j];
 //      array[j] = temp;
 //    }
-    return array.shuffle();
+    return new List.from(array)..shuffle();
   }
 
   /**

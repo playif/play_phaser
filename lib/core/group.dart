@@ -439,267 +439,268 @@ class Group extends PIXI.DisplayObjectContainer {
 
   }
 
-  //needing mirrior
-  hasProperty(dynamic child, List<String> key) {
-
-    var len = key.length;
-
-    if (len == 1 && child.containsKey(key[0])) {
-      return true;
-    }
-    else if (len == 2 && child.containsKey(key[0]) && child.containsKey(key[0]).containsKey(key[1])) {
-      return true;
-    }
-    else if (len == 3 && key[0] in child && key[1] in child[key[0]] && key[2] in child[key[0]][key[1]]) {
-        return true;
-      }
-      else if (len == 4 && key[0] in child && key[1] in child[key[0]] && key[2] in child[key[0]][key[1]] && key[3] in child[key[0]][key[1]][key[2]]) {
-          return true;
-        }
-
-    return false;
-
-  }
-
-
-  setProperty(Map child, List<String> key, value, [int operation=0, bool force=false]) {
-
-//    operation = operation || 0;
-
-    //  As ugly as this approach looks, and although it's limited to a depth of only 4, it's much faster than a for loop or object iteration.
-
-    //  0 = Equals
-    //  1 = Add
-    //  2 = Subtract
-    //  3 = Multiply
-    //  4 = Divide
-
-    //  We can't force a property in and the child doesn't have it, so abort.
-    //  Equally we can't add, subtract, multiply or divide a property value if it doesn't exist, so abort in those cases too.
-    if (!this.hasProperty(child, key) && (!force || operation > 0)) {
-      return false;
-    }
-
-    int len = key.length;
-
-    if (len == 1) {
-      if (operation == 0) {
-        child[key[0]] = value;
-      }
-      else if (operation == 1) {
-        child[key[0]] += value;
-      }
-      else if (operation == 2) {
-          child[key[0]] -= value;
-        }
-        else if (operation == 3) {
-            child[key[0]] *= value;
-          }
-          else if (operation == 4) {
-              child[key[0]] /= value;
-            }
-    }
-    else if (len == 2) {
-      if (operation == 0) {
-        child[key[0]][key[1]] = value;
-      }
-      else if (operation == 1) {
-        child[key[0]][key[1]] += value;
-      }
-      else if (operation == 2) {
-          child[key[0]][key[1]] -= value;
-        }
-        else if (operation == 3) {
-            child[key[0]][key[1]] *= value;
-          }
-          else if (operation == 4) {
-              child[key[0]][key[1]] /= value;
-            }
-    }
-    else if (len == 3) {
-        if (operation == 0) {
-          child[key[0]][key[1]][key[2]] = value;
-        }
-        else if (operation == 1) {
-          child[key[0]][key[1]][key[2]] += value;
-        }
-        else if (operation == 2) {
-            child[key[0]][key[1]][key[2]] -= value;
-          }
-          else if (operation == 3) {
-              child[key[0]][key[1]][key[2]] *= value;
-            }
-            else if (operation == 4) {
-                child[key[0]][key[1]][key[2]] /= value;
-              }
-      }
-      else if (len == 4) {
-          if (operation == 0) {
-            child[key[0]][key[1]][key[2]][key[3]] = value;
-          }
-          else if (operation == 1) {
-            child[key[0]][key[1]][key[2]][key[3]] += value;
-          }
-          else if (operation == 2) {
-              child[key[0]][key[1]][key[2]][key[3]] -= value;
-            }
-            else if (operation == 3) {
-                child[key[0]][key[1]][key[2]][key[3]] *= value;
-              }
-              else if (operation == 4) {
-                  child[key[0]][key[1]][key[2]][key[3]] /= value;
-                }
-        }
-
-    return true;
-
-  }
-
-
-  set(child, String key, num value, [bool checkAlive=false, bool checkVisible=false, int operation, bool force=false]) {
-
-    key = key.split('.');
-
-    if ((checkAlive == false || (checkAlive && child.alive)) && (checkVisible == false || (checkVisible && child.visible))) {
-      return this.setProperty(child, key, value, operation, force);
-    }
-
-  }
-
-  setAll(String key, num value, [bool checkAlive=false, bool checkVisible =false, int operation = 0, bool force=false]) {
-
-    key = key.split('.');
-
-    for (var i = 0, len = this.children.length; i < len; i++) {
-      if ((!checkAlive || (checkAlive && this.children[i].alive)) && (!checkVisible || (checkVisible && this.children[i].visible))) {
-        this.setProperty(this.children[i], key, value, operation, force);
-      }
-    }
-
-  }
-
-
-  setAllChildren(String key, num value, [bool checkAlive=false, bool checkVisible =false, int operation=0, bool force=false]) {
-
-
-    for (var i = 0, len = this.children.length; i < len; i++) {
-      if ((!checkAlive || (checkAlive && this.children[i].alive)) && (!checkVisible || (checkVisible && this.children[i].visible))) {
-        if (this.children[i] is Group) {
-          this.children[i].setAllChildren(key, value, checkAlive, checkVisible, operation, force);
-        }
-        else {
-          this.setProperty(this.children[i], key.split('.'), value, operation, force);
-        }
-      }
-    }
-
-  }
-
-  addAll(String property, num amount, bool checkAlive, bool checkVisible) {
-    this.setAll(property, amount, checkAlive, checkVisible, 1);
-  }
-
-  subAll(String property, num amount, bool checkAlive, bool checkVisible) {
-    this.setAll(property, amount, checkAlive, checkVisible, 2);
-  }
-
-  multiplyAll(String property, num amount, bool checkAlive, bool checkVisible) {
-    this.setAll(property, amount, checkAlive, checkVisible, 3);
-  }
-
-  divideAll(String property, num amount, bool checkAlive, bool checkVisible) {
-    this.setAll(property, amount, checkAlive, checkVisible, 4);
-  }
-
-  callAllExists(callback, existsValue) {
-
-    var args = Array.prototype.splice.call(arguments, 2);
-
-    for (var i = 0, len = this.children.length; i < len; i++) {
-      if (this.children[i].exists == existsValue && this.children[i][callback]) {
-        this.children[i][callback].apply(this.children[i], args);
-      }
-    }
-
-  }
-
-
-  callbackFromArray(child, callback, length) {
-
-    //  Kinda looks like a Christmas tree
-
-    if (length == 1) {
-      if (child[callback[0]]) {
-        return child[callback[0]];
-      }
-    }
-    else if (length == 2) {
-      if (child[callback[0]][callback[1]]) {
-        return child[callback[0]][callback[1]];
-      }
-    }
-    else if (length == 3) {
-        if (child[callback[0]][callback[1]][callback[2]]) {
-          return child[callback[0]][callback[1]][callback[2]];
-        }
-      }
-      else if (length == 4) {
-          if (child[callback[0]][callback[1]][callback[2]][callback[3]]) {
-            return child[callback[0]][callback[1]][callback[2]][callback[3]];
-          }
-        }
-        else {
-          if (child[callback]) {
-            return child[callback];
-          }
-        }
-
-    return false;
-
-  }
-
-  callAll(method, context) {
-
-    if (method == null) {
-      return;
-    }
-
-    //  Extract the method into an array
-    method = method.split('.');
-
-    var methodLength = method.length;
-
-    if (context == null || context == null || context == '') {
-      context = null;
-    }
-    else {
-      //  Extract the context into an array
-      if (context is String) {
-        context = context.split('.');
-        var contextLength = context.length;
-      }
-    }
-
-    var args = Array.prototype.splice.call(arguments, 2);
-    var callback = null;
-    var callbackContext = null;
-
-    for (var i = 0, len = this.children.length; i < len; i++) {
-      callback = this.callbackFromArray(this.children[i], method, methodLength);
-
-      if (context && callback) {
-        callbackContext = this.callbackFromArray(this.children[i], context, contextLength);
-
-        if (callback) {
-          callback.apply(callbackContext, args);
-        }
-      }
-      else if (callback) {
-        callback.apply(this.children[i], args);
-      }
-    }
-
-  }
+//
+//  //needing mirrior
+//  hasProperty(dynamic child, List<String> key) {
+//
+//    var len = key.length;
+//
+//    if (len == 1 && child.containsKey(key[0])) {
+//      return true;
+//    }
+//    else if (len == 2 && child.containsKey(key[0]) && child.containsKey(key[0]).containsKey(key[1])) {
+//      return true;
+//    }
+//    else if (len == 3 && key[0] in child && key[1] in child[key[0]] && key[2] in child[key[0]][key[1]]) {
+//        return true;
+//      }
+//      else if (len == 4 && key[0] in child && key[1] in child[key[0]] && key[2] in child[key[0]][key[1]] && key[3] in child[key[0]][key[1]][key[2]]) {
+//          return true;
+//        }
+//
+//    return false;
+//
+//  }
+//
+//
+//  setProperty(Map child, List<String> key, value, [int operation=0, bool force=false]) {
+//
+////    operation = operation || 0;
+//
+//    //  As ugly as this approach looks, and although it's limited to a depth of only 4, it's much faster than a for loop or object iteration.
+//
+//    //  0 = Equals
+//    //  1 = Add
+//    //  2 = Subtract
+//    //  3 = Multiply
+//    //  4 = Divide
+//
+//    //  We can't force a property in and the child doesn't have it, so abort.
+//    //  Equally we can't add, subtract, multiply or divide a property value if it doesn't exist, so abort in those cases too.
+//    if (!this.hasProperty(child, key) && (!force || operation > 0)) {
+//      return false;
+//    }
+//
+//    int len = key.length;
+//
+//    if (len == 1) {
+//      if (operation == 0) {
+//        child[key[0]] = value;
+//      }
+//      else if (operation == 1) {
+//        child[key[0]] += value;
+//      }
+//      else if (operation == 2) {
+//          child[key[0]] -= value;
+//        }
+//        else if (operation == 3) {
+//            child[key[0]] *= value;
+//          }
+//          else if (operation == 4) {
+//              child[key[0]] /= value;
+//            }
+//    }
+//    else if (len == 2) {
+//      if (operation == 0) {
+//        child[key[0]][key[1]] = value;
+//      }
+//      else if (operation == 1) {
+//        child[key[0]][key[1]] += value;
+//      }
+//      else if (operation == 2) {
+//          child[key[0]][key[1]] -= value;
+//        }
+//        else if (operation == 3) {
+//            child[key[0]][key[1]] *= value;
+//          }
+//          else if (operation == 4) {
+//              child[key[0]][key[1]] /= value;
+//            }
+//    }
+//    else if (len == 3) {
+//        if (operation == 0) {
+//          child[key[0]][key[1]][key[2]] = value;
+//        }
+//        else if (operation == 1) {
+//          child[key[0]][key[1]][key[2]] += value;
+//        }
+//        else if (operation == 2) {
+//            child[key[0]][key[1]][key[2]] -= value;
+//          }
+//          else if (operation == 3) {
+//              child[key[0]][key[1]][key[2]] *= value;
+//            }
+//            else if (operation == 4) {
+//                child[key[0]][key[1]][key[2]] /= value;
+//              }
+//      }
+//      else if (len == 4) {
+//          if (operation == 0) {
+//            child[key[0]][key[1]][key[2]][key[3]] = value;
+//          }
+//          else if (operation == 1) {
+//            child[key[0]][key[1]][key[2]][key[3]] += value;
+//          }
+//          else if (operation == 2) {
+//              child[key[0]][key[1]][key[2]][key[3]] -= value;
+//            }
+//            else if (operation == 3) {
+//                child[key[0]][key[1]][key[2]][key[3]] *= value;
+//              }
+//              else if (operation == 4) {
+//                  child[key[0]][key[1]][key[2]][key[3]] /= value;
+//                }
+//        }
+//
+//    return true;
+//
+//  }
+//
+//
+//  set(child, String key, num value, [bool checkAlive=false, bool checkVisible=false, int operation, bool force=false]) {
+//
+//    key = key.split('.');
+//
+//    if ((checkAlive == false || (checkAlive && child.alive)) && (checkVisible == false || (checkVisible && child.visible))) {
+//      return this.setProperty(child, key, value, operation, force);
+//    }
+//
+//  }
+//
+//  setAll(String key, num value, [bool checkAlive=false, bool checkVisible =false, int operation = 0, bool force=false]) {
+//
+//    key = key.split('.');
+//
+//    for (var i = 0, len = this.children.length; i < len; i++) {
+//      if ((!checkAlive || (checkAlive && this.children[i].alive)) && (!checkVisible || (checkVisible && this.children[i].visible))) {
+//        this.setProperty(this.children[i], key, value, operation, force);
+//      }
+//    }
+//
+//  }
+//
+//
+//  setAllChildren(String key, num value, [bool checkAlive=false, bool checkVisible =false, int operation=0, bool force=false]) {
+//
+//
+//    for (var i = 0, len = this.children.length; i < len; i++) {
+//      if ((!checkAlive || (checkAlive && this.children[i].alive)) && (!checkVisible || (checkVisible && this.children[i].visible))) {
+//        if (this.children[i] is Group) {
+//          this.children[i].setAllChildren(key, value, checkAlive, checkVisible, operation, force);
+//        }
+//        else {
+//          this.setProperty(this.children[i], key.split('.'), value, operation, force);
+//        }
+//      }
+//    }
+//
+//  }
+//
+//  addAll(String property, num amount, bool checkAlive, bool checkVisible) {
+//    this.setAll(property, amount, checkAlive, checkVisible, 1);
+//  }
+//
+//  subAll(String property, num amount, bool checkAlive, bool checkVisible) {
+//    this.setAll(property, amount, checkAlive, checkVisible, 2);
+//  }
+//
+//  multiplyAll(String property, num amount, bool checkAlive, bool checkVisible) {
+//    this.setAll(property, amount, checkAlive, checkVisible, 3);
+//  }
+//
+//  divideAll(String property, num amount, bool checkAlive, bool checkVisible) {
+//    this.setAll(property, amount, checkAlive, checkVisible, 4);
+//  }
+//
+//  callAllExists(callback, existsValue) {
+//
+//    var args = Array.prototype.splice.call(arguments, 2);
+//
+//    for (var i = 0, len = this.children.length; i < len; i++) {
+//      if (this.children[i].exists == existsValue && this.children[i][callback]) {
+//        this.children[i][callback].apply(this.children[i], args);
+//      }
+//    }
+//
+//  }
+//
+//
+//  callbackFromArray(child, callback, length) {
+//
+//    //  Kinda looks like a Christmas tree
+//
+//    if (length == 1) {
+//      if (child[callback[0]]) {
+//        return child[callback[0]];
+//      }
+//    }
+//    else if (length == 2) {
+//      if (child[callback[0]][callback[1]]) {
+//        return child[callback[0]][callback[1]];
+//      }
+//    }
+//    else if (length == 3) {
+//        if (child[callback[0]][callback[1]][callback[2]]) {
+//          return child[callback[0]][callback[1]][callback[2]];
+//        }
+//      }
+//      else if (length == 4) {
+//          if (child[callback[0]][callback[1]][callback[2]][callback[3]]) {
+//            return child[callback[0]][callback[1]][callback[2]][callback[3]];
+//          }
+//        }
+//        else {
+//          if (child[callback]) {
+//            return child[callback];
+//          }
+//        }
+//
+//    return false;
+//
+//  }
+//
+//  callAll(method, context) {
+//
+//    if (method == null) {
+//      return;
+//    }
+//
+//    //  Extract the method into an array
+//    method = method.split('.');
+//
+//    var methodLength = method.length;
+//
+//    if (context == null || context == null || context == '') {
+//      context = null;
+//    }
+//    else {
+//      //  Extract the context into an array
+//      if (context is String) {
+//        context = context.split('.');
+//        var contextLength = context.length;
+//      }
+//    }
+//
+//    var args = Array.prototype.splice.call(arguments, 2);
+//    var callback = null;
+//    var callbackContext = null;
+//
+//    for (var i = 0, len = this.children.length; i < len; i++) {
+//      callback = this.callbackFromArray(this.children[i], method, methodLength);
+//
+//      if (context && callback) {
+//        callbackContext = this.callbackFromArray(this.children[i], context, contextLength);
+//
+//        if (callback) {
+//          callback.apply(callbackContext, args);
+//        }
+//      }
+//      else if (callback) {
+//        callback.apply(this.children[i], args);
+//      }
+//    }
+//
+//  }
 
   preUpdate() {
 

@@ -1,7 +1,11 @@
 part of Phaser;
 
-class Node {
+//class Node {
+//
+//}
 
+class Bounds {
+  int x, y, width, height, subWidth, subHeight, right, bottom;
 }
 
 class QuadTree {
@@ -9,67 +13,65 @@ class QuadTree {
   int maxLevels = 4;
   int level = 0;
 
-  Object bounds = {
-  };
+  Bounds bounds = null;
+
   List<Object> objects = new List<Object>();
 
-  List<Node> nodes = new List<Node>();
+  List<QuadTree> nodes = new List<QuadTree>();
 
   List _empty = [];
 
-  QuadTree(int x, tnt y, int width, int height, int maxObjects, int maxLevels, int level) {
+  QuadTree(int x, int y, int width, int height, int maxObjects, int maxLevels, int level) {
     reset(x, y, width, height, maxObjects, maxLevels, level);
   }
 
-  reset(x, y, width, height, maxObjects, maxLevels, level) {
+  reset(int x, int y, int width, int height, int maxObjects, int maxLevels, int level) {
 
     this.maxObjects = maxObjects == null ? 10 : maxObjects;
     this.maxLevels = maxLevels == null ? 4 : maxLevels;
     this.level = level == null ? 0 : level;
 
-    this.bounds = {
-        x: Math.round(x),
-        y: Math.round(y),
-        width: width,
-        height: height,
-        subWidth: Math.floor(width / 2),
-        subHeight: Math.floor(height / 2),
-        right: Math.round(x) + Math.floor(width / 2),
-        bottom: Math.round(y) + Math.floor(height / 2)
-    };
+    this.bounds = new Bounds()
+      ..x = Math.round(x)
+      ..y = Math.round(y)
+      ..width = width
+      ..height = height
+      ..subWidth = Math.floor(width / 2)
+      ..subHeight = Math.floor(height / 2)
+      ..right = Math.round(x) + Math.floor(width / 2)
+      ..bottom = Math.round(y) + Math.floor(height / 2);
 
     this.objects.clear();
     this.nodes.clear();
   }
 
+
   populate(Group group) {
     group.forEach(this.populateHandler, this, true);
   }
 
-  populateHandler(Sprite sprite) {
 
-    if (sprite.body && sprite.exists) {
+  populateHandler(Sprite sprite) {
+    if (sprite.body != null && sprite.exists) {
       this.insert(sprite.body);
     }
-
   }
 
-  split() {
 
+  split() {
     this.level++;
 
     //  top right node
-    this.nodes[0] = new Phaser.QuadTree(this.bounds.right, this.bounds.y, this.bounds.subWidth, this.bounds.subHeight, this.maxObjects, this.maxLevels, this.level);
+    this.nodes[0] = new QuadTree(this.bounds.right, this.bounds.y, this.bounds.subWidth, this.bounds.subHeight, this.maxObjects, this.maxLevels, this.level);
 
     //  top left node
-    this.nodes[1] = new Phaser.QuadTree(this.bounds.x, this.bounds.y, this.bounds.subWidth, this.bounds.subHeight, this.maxObjects, this.maxLevels, this.level);
+    this.nodes[1] = new QuadTree(this.bounds.x, this.bounds.y, this.bounds.subWidth, this.bounds.subHeight, this.maxObjects, this.maxLevels, this.level);
 
     //  bottom left node
-    this.nodes[2] = new Phaser.QuadTree(this.bounds.x, this.bounds.bottom, this.bounds.subWidth, this.bounds.subHeight, this.maxObjects, this.maxLevels, this.level);
+    this.nodes[2] = new QuadTree(this.bounds.x, this.bounds.bottom, this.bounds.subWidth, this.bounds.subHeight, this.maxObjects, this.maxLevels, this.level);
 
     //  bottom right node
-    this.nodes[3] = new Phaser.QuadTree(this.bounds.right, this.bounds.bottom, this.bounds.subWidth, this.bounds.subHeight, this.maxObjects, this.maxLevels, this.level);
-
+    this.nodes[3] = new QuadTree(this.bounds.right, this.bounds.bottom, this.bounds.subWidth, this.bounds.subHeight, this.maxObjects, this.maxLevels, this.level);
   }
 
 
@@ -88,7 +90,7 @@ class QuadTree {
       }
     }
 
-    this.objects.push(body);
+    this.objects.add(body);
 
     if (this.objects.length > this.maxObjects && this.level < this.maxLevels) {
       //  Split if we don't already have subnodes
@@ -102,7 +104,7 @@ class QuadTree {
 
         if (index != -1) {
           //  this is expensive - see what we can do about it
-          this.nodes[index].insert(this.objects.splice(i, 1)[0]);
+          this.nodes[index].insert(this.objects.removeAt(i));
         }
         else {
           i++;
@@ -144,23 +146,21 @@ class QuadTree {
   }
 
   retrieve(source) {
-
+    var index = -1;
+    var returnObjects = null;
     if (source is Rectangle) {
-      var returnObjects = this.objects;
-
-      var index = this.getIndex(source);
+      returnObjects = this.objects;
+      index = this.getIndex(source);
     }
     else {
-      if (!source.body) {
+      if (source.body == null) {
         return this._empty;
       }
-
-      var returnObjects = this.objects;
-
-      var index = this.getIndex(source.body);
+      returnObjects = this.objects;
+      index = this.getIndex(source.body);
     }
 
-    if (this.nodes[0]) {
+    if (this.nodes[0] != null) {
       //  If rect fits into a subnode ..
       if (index != -1) {
         returnObjects = returnObjects.concat(this.nodes[index].retrieve(source));
@@ -186,7 +186,7 @@ class QuadTree {
 
     while (i-- != 0) {
       this.nodes[i].clear();
-      this.nodes.splice(i, 1);
+      this.nodes.removeAt(i);
     }
 
     this.nodes.clear();

@@ -184,7 +184,7 @@ class Debug {
     this.context.restore();
     this.context.globalAlpha = this.currentAlpha;
 
-    if (this.sprite)
+    if (this.sprite != null)
     {
       PIXI.updateWebGLTexture(this.baseTexture, this.game.renderer.gl);
     }
@@ -196,7 +196,14 @@ class Debug {
    * @method Phaser.Utils.Debug#line
    * @protected
    */
-  line (String arguments) {
+  line (strs) {
+    List<String> arguments;
+    if(strs is String){
+      arguments=[strs];
+    }
+    else{
+      arguments=strs;
+    }
 
     var x = this.currentX;
 
@@ -230,19 +237,19 @@ class Debug {
   soundInfo (Sound sound, num x, num y, [String color='rgb(255,255,255)']) {
 
     this.start(x, y, color);
-    this.line('Sound: ' + sound.key + ' Locked: ' + sound.game.sound.touchLocked);
-    this.line('Is Ready?: ' + this.game.cache.isSoundReady(sound.key) + ' Pending Playback: ' + sound.pendingPlayback);
-    this.line('Decoded: ' + sound.isDecoded + ' Decoding: ' + sound.isDecoding);
-    this.line('Total Duration: ' + sound.totalDuration + ' Playing: ' + sound.isPlaying);
-    this.line('Time: ' + sound.currentTime);
-    this.line('Volume: ' + sound.volume + ' Muted: ' + sound.mute);
-    this.line('WebAudio: ' + sound.usingWebAudio + ' Audio: ' + sound.usingAudioTag);
+    this.line('Sound: ' + sound.key + ' Locked: ' + sound.game.sound.touchLocked.toString());
+    this.line('Is Ready?: ' + this.game.cache.isSoundReady(sound.key).toString() + ' Pending Playback: ' + sound.pendingPlayback.toString());
+    this.line('Decoded: ' + sound.isDecoded.toString() + ' Decoding: ' + sound.isDecoding.toString());
+    this.line('Total Duration: ' + sound.totalDuration.toString() + ' Playing: ' + sound.isPlaying.toString());
+    this.line('Time: ' + sound.currentTime.toString());
+    this.line('Volume: ' + sound.volume.toString() + ' Muted: ' + sound.mute.toString());
+    this.line('WebAudio: ' + sound.usingWebAudio.toString() + ' Audio: ' + sound.usingAudioTag.toString());
 
     if (sound.currentMarker != '')
     {
-      this.line('Marker: ' + sound.currentMarker + ' Duration: ' + sound.duration + ' (ms: ' + sound.durationMS + ')');
+      this.line('Marker: ' + sound.currentMarker + ' Duration: ' + sound.duration.toString() + ' (ms: ' + sound.durationMS.toString() + ')');
       this.line('Start: ' + sound.markers[sound.currentMarker].start + ' Stop: ' + sound.markers[sound.currentMarker].stop);
-      this.line('Position: ' + sound.position);
+      this.line('Position: ' + sound.position.toString());
     }
 
     this.stop();
@@ -261,10 +268,10 @@ class Debug {
   cameraInfo (Camera camera, num x, num y, [String color='rgb(255,255,255)']) {
 
     this.start(x, y, color);
-    this.line('Camera (' + camera.width + ' x ' + camera.height + ')');
-    this.line('X: ' + camera.x + ' Y: ' + camera.y);
-    this.line('Bounds x: ' + camera.bounds.x + ' Y: ' + camera.bounds.y + ' w: ' + camera.bounds.width + ' h: ' + camera.bounds.height);
-    this.line('View x: ' + camera.view.x + ' Y: ' + camera.view.y + ' w: ' + camera.view.width + ' h: ' + camera.view.height);
+    this.line('Camera (' + camera.width.toString() + ' x ' + camera.height.toString() + ')');
+    this.line('X: ' + camera.x.toString() + ' Y: ' + camera.y.toString());
+    this.line('Bounds x: ' + camera.bounds.x.toString() + ' Y: ' + camera.bounds.y.toString() + ' w: ' + camera.bounds.width.toString() + ' h: ' + camera.bounds.height.toString());
+    this.line('View x: ' + camera.view.x.toString() + ' Y: ' + camera.view.y.toString() + ' w: ' + camera.view.width.toString() + ' h: ' + camera.view.height.toString());
     this.stop();
 
   }
@@ -281,9 +288,9 @@ class Debug {
   timer (Timer timer, num x, num y, [String color='rgb(255,255,255)']) {
 
     this.start(x, y, color);
-    this.line('Timer (running: ' + timer.running + ' expired: ' + timer.expired + ')');
-    this.line('Next Tick: ' + timer.next + ' Duration: ' + timer.duration);
-    this.line('Paused: ' + timer.paused + ' Length: ' + timer.length);
+    this.line('Timer (running: ' + timer.running.toString() + ' expired: ' + timer.expired.toString() + ')');
+    this.line('Next Tick: ' + timer.next.toString() + ' Duration: ' + timer.duration.toString());
+    this.line('Paused: ' + timer.paused.toString() + ' Length: ' + timer.length.toString());
     this.stop();
 
   }
@@ -344,11 +351,11 @@ class Debug {
     this.context.closePath();
 
     //  Render the text
-    this.line('ID: ' + pointer.id + " Active: " + pointer.active);
-    this.line('World X: ' + pointer.worldX + " World Y: " + pointer.worldY);
-    this.line('Screen X: ' + pointer.x + " Screen Y: " + pointer.y);
-    this.line('Duration: ' + pointer.duration + " ms");
-    this.line('is Down: ' + pointer.isDown + " is Up: " + pointer.isUp);
+    this.line('ID: ' + pointer.id.toString() + " Active: " + pointer.active.toString());
+    this.line('World X: ' + pointer.worldX.toString() + " World Y: " + pointer.worldY.toString());
+    this.line('Screen X: ' + pointer.x.toString() + " Screen Y: " + pointer.y.toString());
+    this.line('Duration: ' + pointer.duration.toString() + " ms");
+    this.line('is Down: ' + pointer.isDown.toString() + " is Up: " + pointer.isUp.toString());
     this.stop();
 
   }
@@ -365,11 +372,11 @@ class Debug {
   spriteInputInfo (sprite, num x, num y, [String color='rgb(255,255,255)']) {
 
     this.start(x, y, color);
-    this.line('Sprite Input: (' + sprite.width + ' x ' + sprite.height + ')');
-    this.line('x: ' + sprite.input.pointerX().toFixed(1) + ' y: ' + sprite.input.pointerY().toFixed(1));
-    this.line('over: ' + sprite.input.pointerOver() + ' duration: ' + sprite.input.overDuration().toFixed(0));
-    this.line('down: ' + sprite.input.pointerDown() + ' duration: ' + sprite.input.downDuration().toFixed(0));
-    this.line('just over: ' + sprite.input.justOver() + ' just out: ' + sprite.input.justOut());
+    this.line(['Sprite Input: (${sprite.width} x ${sprite.height})']);
+    this.line('x: ${sprite.input.pointerX().toStringAsFixed(1)}  y: ${sprite.input.pointerY().toStringAsFixed(1)}');
+    this.line(['over: ${sprite.input.pointerOver()} duration: ${sprite.input.overDuration().toStringAsFixed(0)}']);
+    this.line(['down: ${sprite.input.pointerDown()} duration: ${sprite.input.downDuration().toStringAsFixed(0)}']);
+    this.line(['just over: ${sprite.input.justOver()} just out: ${sprite.input.justOut()}']);
     this.stop();
 
   }
@@ -387,9 +394,9 @@ class Debug {
 
     this.start(x, y, color, 150);
 
-    this.line('Key:', key.keyCode, 'isDown:', key.isDown);
-    this.line('justPressed:', key.justPressed(), 'justReleased:', key.justReleased());
-    this.line('Time Down:', key.timeDown.toFixed(0), 'duration:', key.duration.toFixed(0));
+    this.line(['Key:', key.keyCode, 'isDown:', key.isDown]);
+    this.line(['justPressed:', key.justPressed().toString(), 'justReleased:', key.justReleased().toString()]);
+    this.line(['Time Down:', key.timeDown.toStringAsFixed(0), 'duration:', key.duration.toStringAsFixed(0)]);
 
     this.stop();
 
@@ -407,10 +414,10 @@ class Debug {
 
     this.start(x, y, color);
     this.line('Input');
-    this.line('X: ' + this.game.input.x + ' Y: ' + this.game.input.y);
-    this.line('World X: ' + this.game.input.worldX + ' World Y: ' + this.game.input.worldY);
-    this.line('Scale X: ' + this.game.input.scale.x.toFixed(1) + ' Scale Y: ' + this.game.input.scale.x.toFixed(1));
-    this.line('Screen X: ' + this.game.input.activePointer.screenX + ' Screen Y: ' + this.game.input.activePointer.screenY);
+    this.line('X: ' + this.game.input.x.toString() + ' Y: ' + this.game.input.y.toString());
+    this.line('World X: ' + this.game.input.worldX.toString() + ' World Y: ' + this.game.input.worldY.toString());
+    this.line('Scale X: ' + this.game.input.scale.x.toStringAsFixed(1) + ' Scale Y: ' + this.game.input.scale.x.toStringAsFixed(1));
+    this.line('Screen X: ' + this.game.input.activePointer.screenX.toString() + ' Screen Y: ' + this.game.input.activePointer.screenY.toString());
     this.stop();
 
   }
@@ -447,10 +454,10 @@ class Debug {
 
     this.start(x, y, color);
 
-    this.line('Sprite: ' + ' (' + sprite.width + ' x ' + sprite.height + ') anchor: ' + sprite.anchor.x + ' x ' + sprite.anchor.y);
-    this.line('x: ' + sprite.x.toFixed(1) + ' y: ' + sprite.y.toFixed(1));
-    this.line('angle: ' + sprite.angle.toFixed(1) + ' rotation: ' + sprite.rotation.toFixed(1));
-    this.line('visible: ' + sprite.visible + ' in camera: ' + sprite.inCamera);
+    this.line('Sprite: ' + ' (${sprite.width} x ${sprite.height}) anchor: ${sprite.anchor.x} x ${sprite.anchor.y}');
+    this.line('x: ' + sprite.x.toStringAsFixed(1) + ' y: ' + sprite.y.toStringAsFixed(1));
+    this.line('angle: ' + sprite.angle.toStringAsFixed(1) + ' rotation: ' + sprite.rotation.toStringAsFixed(1));
+    this.line('visible: ${sprite.visible} in camera: ${sprite.inCamera}');
 
     this.stop();
 
@@ -474,9 +481,9 @@ class Debug {
       this.line(sprite.name);
     }
 
-    this.line('x:', sprite.x.toFixed(2), 'y:', sprite.y.toFixed(2));
-    this.line('pos x:', sprite.position.x.toFixed(2), 'pos y:', sprite.position.y.toFixed(2));
-    this.line('world x:', sprite.world.x.toFixed(2), 'world y:', sprite.world.y.toFixed(2));
+    this.line(['x:', sprite.x.toStringAsFixed(2), 'y:', sprite.y.toStringAsFixed(2)]);
+    this.line(['pos x:', sprite.position.x.toStringAsFixed(2), 'pos y:', sprite.position.y.toStringAsFixed(2)]);
+    this.line(['world x:', sprite.world.x.toStringAsFixed(2), 'world y:', sprite.world.y.toStringAsFixed(2)]);
 
     this.stop();
 
@@ -494,9 +501,9 @@ class Debug {
   lineInfo (Line line, num x, num y, [String color='rgb(255,255,255)']) {
 
     this.start(x, y, color, 80);
-    this.line('start.x:', line.start.x.toFixed(2), 'start.y:', line.start.y.toFixed(2));
-    this.line('end.x:', line.end.x.toFixed(2), 'end.y:', line.end.y.toFixed(2));
-    this.line('length:', line.length.toFixed(2), 'angle:', line.angle);
+    this.line(['start.x:', line.start.x.toStringAsFixed(2), 'start.y:', line.start.y.toStringAsFixed(2)]);
+    this.line(['end.x:', line.end.x.toStringAsFixed(2), 'end.y:', line.end.y.toStringAsFixed(2)]);
+    this.line(['length:', line.length.toStringAsFixed(2), 'angle:', line.angle]);
     this.stop();
 
   }
@@ -510,7 +517,7 @@ class Debug {
    * @param {string} [color] - Color of the pixel (format is css color string).
    * @param {number} [size=2] - The 'size' to render the pixel at.
    */
-  pixel (num x, num y, String color, [int size =2]) {
+  pixel (num x, num y, [String color='rgba(0,255,0,0.4)', int size =2]) {
 
     //size = size || 2;
 
@@ -530,12 +537,12 @@ class Debug {
    * @param {boolean} [filled=true] - Render the objected as a filled (default, true) or a stroked (false)
    * @param {number} [forceType=0] - Force rendering of a specific type. If 0 no type will be forced, otherwise 1 = Rectangle, 2 = Circle, 3 = Point and 4 = Line.
    */
-  geom (object, String color, [bool filled =true, int forceType=0]) {
+  geom (object, [String color='rgba(0,255,0,0.4)', bool filled =true, int forceType=0]) {
 
     //if (typeof filled === 'undefined') { filled = true; }
     //if (typeof forceType === 'undefined') { forceType = 0; }
 
-    color = color || 'rgba(0,255,0,0.4)';
+    //color = color || ;
 
     this.start();
 
@@ -594,7 +601,7 @@ class Debug {
    * @param {string} [color] - Color of the debug info to be rendered (format is css color string).
    * @param {boolean} [filled=true] - Render the objected as a filled (default, true) or a stroked (false)
    */
-  bool rectangle (Rectangle object, [String color='rgba(0, 255, 0, 0.4)', String filled=true]) {
+  bool rectangle (Rectangle object, [String color='rgba(0, 255, 0, 0.4)', bool filled=true]) {
 
     //if (typeof filled == 'undefined') { filled = true; }
 

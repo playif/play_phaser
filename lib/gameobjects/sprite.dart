@@ -17,7 +17,7 @@ class Sprite extends PIXI.Sprite {
   Point world;
   bool autoCull;
   InputHandler input;
-  Physics.Body body=null;
+  Body body=null;
   bool alive;
   num health;
   bool checkWorldBounds=false;
@@ -61,11 +61,11 @@ class Sprite extends PIXI.Sprite {
   }
 
   bool get inWorld {
-    return this.game.world.bounds.intersects(this.getBounds());
+    return this.game.world.bounds.intersects(new Rectangle()..copyFrom(this.getBounds()));
   }
 
   bool get inCamera {
-    return this.game.world.camera.screenView.intersects(this.getBounds());
+    return this.game.world.camera.screenView.intersects(new Rectangle()..copyFrom(this.getBounds()));
   }
 
   bool get frame {
@@ -196,8 +196,12 @@ class Sprite extends PIXI.Sprite {
     return this._cache[8] == null ? false : this._cache[8];
   }
 
-  Sprite(this.game, [this.x=0, this.y=0, this.key, num frame=0])
+  Sprite(this.game, [int x=0, int y=0, String key, num frame=0])
   :super(PIXI.TextureCache['__default']) {
+
+    this.x=x;
+    this.y=y;
+    this.key=key;
 
     name = '';
     type = SPRITE;

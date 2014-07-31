@@ -82,7 +82,7 @@ class Game {
     }
   }
 
-  Game([this.width=800, this.height=600, this.renderer=AUTO, this.parent='', Map state,
+  Game([this.width=800, this.height=600, int renderer=AUTO, this.parent='', State state,
        this.transparent, this.antialias, this.physicsConfig]) {
 
     GAMES.add(this);
@@ -346,7 +346,7 @@ class Game {
       }
 
       if (renderer != null) {
-        this.renderer = renderer;
+        //this.renderer = renderer;
         this.renderType = renderer;
       }
 
@@ -401,7 +401,7 @@ class Game {
     }
 
     if (config['renderer'] != null) {
-      this.renderer = config['renderer'];
+      //this.renderer = config['renderer'];
       this.renderType = config['renderer'];
     }
 
@@ -513,7 +513,7 @@ class Game {
 
     this.isRunning = true;
 
-    if (this.config && this.config['forceSetTimeOut']) {
+    if (this.config != null && this.config['forceSetTimeOut']) {
       this.raf = new RequestAnimationFrame(this, this.config['forceSetTimeOut']);
     }
     else {

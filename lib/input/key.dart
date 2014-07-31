@@ -230,7 +230,7 @@ class Key {
    * @return {boolean} True if the key is just pressed otherwise false.
    */
 
-  justPressed([int duration=50]) {
+  bool justPressed([int duration=50]) {
 
     //if (typeof duration === "undefined") { duration = 50; }
 
@@ -245,7 +245,7 @@ class Key {
    * @return {boolean} True if the key is just released otherwise false.
    */
 
-  justReleased([int duration=50]) {
+  bool justReleased([int duration=50]) {
     //if (typeof duration === "undefined") { duration = 50; }
 
     return (!this.isDown && ((this.game.time.now - this.timeUp) < duration));

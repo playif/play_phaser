@@ -760,7 +760,7 @@ class Cache {
    * @return {object} The image data.
    */
 
-  Map getImage(String key) {
+  Image getImage(String key) {
     if (this._images[key] != null) {
       return this._images[key]['data'];
     }

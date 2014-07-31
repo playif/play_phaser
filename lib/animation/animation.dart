@@ -77,11 +77,15 @@ class Animation {
     }
   }
 
-  Animation(this.game, this.parent, this.name, this.frameData, [this.frames=[], this.delay, loop]) {
+  Animation(this.game, this._parent, this.name, this._frameData, [this._frames, this.delay=0, this.loop=false]) {
     currentFrame = _frameData.getFrame(this._frames[this._frameIndex]);
     onStart = new Signal();
     onComplete = new Signal();
     onLoop = new Signal();
+
+    if(this._frames == null){
+      this._frames=[];
+    }
 
     //  Set-up some event listeners
     this.game.onPause.add(this.onPause, this);

@@ -7,7 +7,7 @@ class AnimationManager {
   Animation currentAnim;
   bool updateIfVisible = true;
   bool isLoaded = false;
-  final FrameData frameData;
+  FrameData frameData;
 
   Map _anims;
   List _outputFrames = [];
@@ -90,19 +90,23 @@ class AnimationManager {
 
   }
 
-  Animation add(int name, [List frames=[], num frameRate=60, bool loop=false, bool useNumericIndex]) {
+  Animation add(int name, List frames, [num frameRate=60, bool loop=false, bool useNumericIndex]) {
+
+//    if(frames == null){
+//      frames=[];
+//    }
 
     if (this.frameData == null) {
       window.console.warn('No FrameData available for Phaser.Animation ' + name);
       return;
     }
 
-    frameRate = frameRate || 60;
+    //frameRate = frameRate || 60;
 
 
     //  If they didn't set the useNumericIndex then let's at least try and guess it
     if (useNumericIndex == null) {
-      if (frames && frames[0] == 'number') {
+      if (frames[0] is int) {
         useNumericIndex = true;
       }
       else {
