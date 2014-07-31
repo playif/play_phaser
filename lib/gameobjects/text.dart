@@ -1,13 +1,13 @@
 part of Phaser;
 
-class Text extends PIXI.Text {
+class Text extends PIXI.Text implements GameObject {
   Game game;
   num x,y;
   String _text;
   PIXI.TextStyle style;
 
   bool exists;
-  String name;
+  //String name;
   int type;
   int z;
   Point world;
@@ -16,11 +16,14 @@ class Text extends PIXI.Text {
   int _fontSize;
   String _fontWeight;
   int _lineSpacing;
-  Events events;
+  //Events events;
   InputHandler input;
 
   Point cameraOffset;
 
+  int renderOrderID;
+  bool autoCull;
+  bool destroyPhase;
   //this.setStyle(style);
 
   //PIXI.Text.call(this, text, this.style);
@@ -29,6 +32,7 @@ class Text extends PIXI.Text {
 
   List _cache;
   List<Sprite> children;
+
 
   Sprite parent;
 
@@ -253,7 +257,7 @@ class Text extends PIXI.Text {
 
     if (this.canvas.parentNode)
     {
-      this.canvas.parentNode.removeChild(this.canvas);
+      this.canvas.remove();
     }
     else
     {

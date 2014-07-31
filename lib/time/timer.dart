@@ -81,9 +81,9 @@ class Timer {
    * @return {Phaser.TimerEvent} The Phaser.TimerEvent object that was created.
    */
 
-  create(delay, loop, repeatCount, callback, callbackContext, args) {
+  TimerEvent create(int delay, bool loop, int repeatCount, Function callback, args) {
 
-    var tick = delay;
+    int tick = delay;
 
     if (this._now == 0) {
       tick += this.game.time.now;
@@ -92,7 +92,7 @@ class Timer {
       tick += this._now;
     }
 
-    var event = new TimerEvent(this, delay, tick, repeatCount, loop, callback, callbackContext, args);
+    TimerEvent event = new TimerEvent(this, delay, tick, repeatCount, loop, callback, args);
 
     this.events.add(event);
 
@@ -117,10 +117,8 @@ class Timer {
    * @return {Phaser.TimerEvent} The Phaser.TimerEvent object that was created.
    */
 
-  add(delay, callback, callbackContext) {
-
-    return this.create(delay, false, 0, callback, callbackContext, Array.prototype.splice.call(arguments, 3));
-
+  TimerEvent add(int delay, Function callback, List args) {
+    return this.create(delay, false, 0, callback, args);
   }
 
   /**
@@ -138,10 +136,8 @@ class Timer {
    * @return {Phaser.TimerEvent} The Phaser.TimerEvent object that was created.
    */
 
-  repeat(delay, repeatCount, callback, callbackContext) {
-
-    return this.create(delay, false, repeatCount, callback, callbackContext, Array.prototype.splice.call(arguments, 4));
-
+  TimerEvent repeat(int delay, int repeatCount, Function callback, List args) {
+    return this.create(delay, false, repeatCount, callback, args);
   }
 
   /**
@@ -158,10 +154,8 @@ class Timer {
    * @return {Phaser.TimerEvent} The Phaser.TimerEvent object that was created.
    */
 
-  loop(delay, callback, callbackContext) {
-
-    return this.create(delay, true, 0, callback, callbackContext, Array.prototype.splice.call(arguments, 3));
-
+  TimerEvent loop(delay, callback, List args) {
+    return this.create(delay, true, 0, callback, args);
   }
 
   /**
@@ -321,17 +315,17 @@ class Timer {
 
           if (this.events[this._i].loop == true) {
             this.events[this._i].tick = this._newTick;
-            this.events[this._i].callback.apply(this.events[this._i].callbackContext, this.events[this._i].args);
+            this.events[this._i].callback(this.events[this._i].args);
           }
           else if (this.events[this._i].repeatCount > 0) {
             this.events[this._i].repeatCount--;
             this.events[this._i].tick = this._newTick;
-            this.events[this._i].callback.apply(this.events[this._i].callbackContext, this.events[this._i].args);
+            this.events[this._i].callback(this.events[this._i].args);
           }
           else {
             this._marked++;
             this.events[this._i].pendingDelete = true;
-            this.events[this._i].callback.apply(this.events[this._i].callbackContext, this.events[this._i].args);
+            this.events[this._i].callback(this.events[this._i].args);
           }
 
           this._i++;

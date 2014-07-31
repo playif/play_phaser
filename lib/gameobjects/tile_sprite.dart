@@ -1,6 +1,6 @@
 part of Phaser;
 
-class TileSprite extends PIXI.TilingSprite {
+class TileSprite extends PIXI.TilingSprite  implements GameObject {
 
   Game game;
   num x;

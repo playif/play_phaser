@@ -270,7 +270,7 @@ class Time {
   gameResumed () {
 
     //  Level out the elapsed timer to avoid spikes
-    this.time = this.now = Date.now();
+    this.time = this.now = new DateTime.now();
 
     this.pauseDuration = this.time - this._pauseStarted;
 

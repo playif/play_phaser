@@ -1,9 +1,9 @@
 part of Phaser;
 
-typedef num EasingFunction(num k);
+typedef double EasingFunction(double k);
 
 class Tween {
-  final Object _object;
+  final dynamic _object;
   final Game game;
   final TweenManager _manager;
 
@@ -164,11 +164,13 @@ class Tween {
 
   Tween _parent = null;
 
+  Tween _lastChild;
+
   Tween(this._object, this.game, this._manager) {
 
   }
 
-  Tween to(properties, [int duration=1000, EasingFunction ease=null, bool autoStart=false, int delay=0, int repeat=0, bool yoyo=false]) {
+  Tween to(Map properties, [int duration=1000, EasingFunction ease=null, bool autoStart=false, int delay=0, int repeat=0, bool yoyo=false]) {
     if (yoyo && repeat == 0) {
       repeat = 1;
     }
@@ -225,11 +227,11 @@ class Tween {
    * @return {Phaser.Tween} This Tween object.
    */
 
-  Tween from(properties, [int duration=1000, EasingFunction ease=null, bool autoStart=false, int delay=0, bool repeat=0, bool yoyo=false]) {
-    var _cache = {
+  Tween from(Map properties, [int duration=1000, EasingFunction ease=null, bool autoStart=false, int delay=0, int repeat=0, bool yoyo=false]) {
+    Map _cache = {
     };
 
-    for (var prop in properties) {
+    for (String prop in properties.keys) {
       _cache[prop] = this._object[prop];
       this._object[prop] = properties[prop];
     }
@@ -262,23 +264,23 @@ class Tween {
 
     for (var property in this._valuesEnd) {
       // check if an Array was provided as property value
-      if (Array.isArray(this._valuesEnd[property])) {
+      if (this._valuesEnd[property] is List) {
         if (this._valuesEnd[property].length == 0) {
           continue;
         }
 
         // create a local copy of the Array with the start value at the front
-        this._valuesEnd[property] = [this._object[property]].concat(this._valuesEnd[property]);
+        this._valuesEnd[property] = [this._object[property]].addAll(this._valuesEnd[property]);
       }
 
       this._valuesStart[property] = this._object[property];
 
-      if (!Array.isArray(this._valuesStart[property])) {
+      if (this._valuesStart[property] is! List) {
         this._valuesStart[property] *= 1.0;
         // Ensures we're using numbers, not strings
       }
 
-      this._valuesStartRepeat[property] = this._valuesStart[property] || 0;
+      this._valuesStartRepeat[property] = this._valuesStart[property];
 
     }
 
@@ -306,25 +308,25 @@ class Tween {
 
     this._startTime = 0;
 
-    for (var property in this._valuesEnd) {
+    for (String property in this._valuesEnd.keys) {
       // Check if an Array was provided as property value
-      if (Array.isArray(this._valuesEnd[property])) {
+      if (this._valuesEnd[property] is List) {
         if (this._valuesEnd[property].length == 0) {
           continue;
         }
 
         // create a local copy of the Array with the start value at the front
-        this._valuesEnd[property] = [this._object[property]].concat(this._valuesEnd[property]);
+        this._valuesEnd[property] = [this._object[property]].addAll(this._valuesEnd[property]);
       }
 
       this._valuesStart[property] = this._object[property];
 
-      if (!Array.isArray(this._valuesStart[property])) {
+      if (this._valuesStart[property] is! List) {
         this._valuesStart[property] *= 1.0;
         // Ensures we're using numbers, not strings
       }
 
-      this._valuesStartRepeat[property] = this._valuesStart[property] || 0;
+      this._valuesStartRepeat[property] = this._valuesStart[property];
     }
 
     //  Simulate the tween. We will run for frameRate * (this._duration / 1000) (ms)
@@ -332,12 +334,12 @@ class Tween {
     var total = Math.floor(frameRate * (this._duration / 1000));
     var tick = this._duration / total;
 
-    var output = [];
+    List output = [];
 
-    while (total--) {
-      var property;
+    while (total-- >= 0) {
+      String property;
 
-      var elapsed = (time - this._startTime) / this._duration;
+      double elapsed = (time - this._startTime) / this._duration;
       elapsed = elapsed > 1 ? 1 : elapsed;
 
       var value = this._easingFunction(elapsed);
@@ -345,7 +347,7 @@ class Tween {
       };
 
       for (property in this._valuesEnd) {
-        var start = this._valuesStart[property] || 0;
+        var start = this._valuesStart[property];
         var end = this._valuesEnd[property];
 
         if (end is List) {
@@ -353,26 +355,26 @@ class Tween {
         }
         else {
           // Parses relative end values with start as base (e.g.: +10, -3)
-          if (typeof(end) == 'string') {
-            end = start + parseFloat(end, 10);
+          if (end is String) {
+            end = start + double.parse(end);
           }
 
           // protect against non numeric properties.
-          if (typeof(end) == 'number') {
+          if (end is num) {
             blob[property] = start + ( end - start ) * value;
           }
         }
       }
 
-      output.push(blob);
+      output.add(blob);
 
       time += tick;
     }
 
     if (this._yoyo) {
-      var reversed = output.slice();
-      reversed.reverse();
-      output = output.concat(reversed);
+//      List reversed = output.reversed;
+//      reversed.reverse();
+      output = output.addAll(output.reversed);
     }
 
     if (data != null) {
@@ -496,11 +498,14 @@ class Tween {
    * @return {Phaser.Tween} Itself.
    */
 
-  chain() {
-
-    this._chainedTweens = arguments;
+  Tween chainTweens(List<Tween> tweens) {
+    this._chainedTweens = tweens;
     return this;
+  }
 
+  Tween chain(Tween tween) {
+    this._chainedTweens = [tween];
+    return this;
   }
 
   /**
@@ -645,12 +650,12 @@ class Tween {
       }
       else {
         // Parses relative end values with start as base (e.g.: +10, -3)
-        if (typeof(end) == 'string') {
-          end = start + parseFloat(end, 10);
+        if (end is String) {
+          end = start + double.parse(end);
         }
 
         // protect against non numeric properties.
-        if (typeof(end) == 'number') {
+        if (end is num) {
           this._object[property] = start + ( end - start ) * value;
         }
       }
@@ -666,14 +671,14 @@ class Tween {
 
     if (elapsed == 1) {
       if (this._repeat > 0) {
-        if (isFinite(this._repeat)) {
-          this._repeat--;
-        }
+//        if ((this._repeat >= double.MAX_FINITE.toInt())) {
+//          this._repeat--;
+//        }
 
         // reassign starting values, restart by making startTime = now
         for (property in this._valuesStartRepeat) {
           if ((this._valuesEnd[property]) is String) {
-            this._valuesStartRepeat[property] = this._valuesStartRepeat[property] + parseFloat(this._valuesEnd[property], 10);
+            this._valuesStartRepeat[property] = this._valuesStartRepeat[property] + double.parse(this._valuesEnd[property]);
           }
 
           if (this._yoyo) {
@@ -700,7 +705,7 @@ class Tween {
         this.onComplete.dispatch(this._object);
 
         for (var i = 0, numChainedTweens = this._chainedTweens.length; i < numChainedTweens; i ++) {
-          this._chainedTweens[i].start(time);
+          this._chainedTweens[i].start();
         }
 
         return false;

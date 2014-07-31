@@ -21,11 +21,11 @@ class QuadTree {
 
   List _empty = [];
 
-  QuadTree(int x, int y, int width, int height, int maxObjects, int maxLevels, int level) {
+  QuadTree(int x, int y, int width, int height, [int maxObjects, int maxLevels, int level]) {
     reset(x, y, width, height, maxObjects, maxLevels, level);
   }
 
-  reset(int x, int y, int width, int height, int maxObjects, int maxLevels, int level) {
+  reset(int x, int y, int width, int height, [int maxObjects, int maxLevels, int level]) {
 
     this.maxObjects = maxObjects == null ? 10 : maxObjects;
     this.maxLevels = maxLevels == null ? 4 : maxLevels;
@@ -145,9 +145,9 @@ class QuadTree {
 
   }
 
-  retrieve(source) {
+  List retrieve(source) {
     var index = -1;
-    var returnObjects = null;
+    List returnObjects = null;
     if (source is Rectangle) {
       returnObjects = this.objects;
       index = this.getIndex(source);
@@ -163,14 +163,14 @@ class QuadTree {
     if (this.nodes[0] != null) {
       //  If rect fits into a subnode ..
       if (index != -1) {
-        returnObjects = returnObjects.concat(this.nodes[index].retrieve(source));
+        returnObjects = returnObjects.addAll(this.nodes[index].retrieve(source));
       }
       else {
         //  If rect does not fit into a subnode, check it against all subnodes (unrolled for speed)
-        returnObjects = returnObjects.concat(this.nodes[0].retrieve(source));
-        returnObjects = returnObjects.concat(this.nodes[1].retrieve(source));
-        returnObjects = returnObjects.concat(this.nodes[2].retrieve(source));
-        returnObjects = returnObjects.concat(this.nodes[3].retrieve(source));
+        returnObjects = returnObjects.addAll(this.nodes[0].retrieve(source));
+        returnObjects = returnObjects.addAll(this.nodes[1].retrieve(source));
+        returnObjects = returnObjects.addAll(this.nodes[2].retrieve(source));
+        returnObjects = returnObjects.addAll(this.nodes[3].retrieve(source));
       }
     }
 

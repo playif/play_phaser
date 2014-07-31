@@ -118,7 +118,7 @@ class TweenManager {
    */
 
   bool isTweening(object) {
-    return this._tweens.where((tween) {
+    return this._tweens.any((Tween tween) {
       return tween._object == object;
     });
   }

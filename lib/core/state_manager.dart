@@ -320,7 +320,7 @@ class StateManager {
         }
       }
 
-      this.setCurrentState(this._pendingState);
+      this.setCurrentState('default');
 
       if (this.onPreloadCallback != null) {
         this.game.load.reset();
@@ -396,6 +396,8 @@ class StateManager {
    */
 
   link(String key) {
+
+
 
     this.states[key].game = this.game;
     this.states[key].add = this.game.add;

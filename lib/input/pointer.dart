@@ -361,7 +361,7 @@ class Pointer {
       this.game.input.x = this.x;
       this.game.input.y = this.y;
       this.game.input.position.setTo(this.x, this.y);
-      this.game.input.onDown.dispatch(this, event);
+      this.game.input.onDown.dispatch([this, event]);
       this.game.input.resetSpeed(this.x, this.y);
     }
 

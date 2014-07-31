@@ -599,20 +599,20 @@ class Body {
 
     if (this.deltaX() < 0)
     {
-      this.facing = Phaser.LEFT;
+      this.facing = LEFT;
     }
     else if (this.deltaX() > 0)
     {
-      this.facing = Phaser.RIGHT;
+      this.facing = RIGHT;
     }
 
     if (this.deltaY() < 0)
     {
-      this.facing = Phaser.UP;
+      this.facing = UP;
     }
     else if (this.deltaY() > 0)
     {
-      this.facing = Phaser.DOWN;
+      this.facing = DOWN;
     }
 
     if (this.moves)

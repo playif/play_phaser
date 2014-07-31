@@ -1,16 +1,16 @@
 part of Phaser;
 
-class Sprite extends PIXI.Sprite {
+class Sprite extends PIXI.Sprite  implements GameObject {
   Game game;
 //  num x;
 //  num y;
   String key;
 //  num _frame;
 
-  String name;
-  num type;
+  //String name;
+  //num type;
   num z;
-  Events events;
+  //Events events;
   AnimationManager animations;
 
   String _frameName;
@@ -40,9 +40,9 @@ class Sprite extends PIXI.Sprite {
 
   Point camerOffset;
 
-  Group parent;
+  GameObject parent;
 
-  List<Sprite> children;
+  List<GameObject> children;
 
   num get angle {
     return Math.wrapAngle(Math.radToDeg(this.rotation));

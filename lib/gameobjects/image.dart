@@ -1,12 +1,12 @@
 part of Phaser;
 
-class Image extends PIXI.Sprite {
+class Image extends PIXI.Sprite implements GameObject {
   Game game;
-  bool exists;
+  //bool exists;
   String name;
-  int type;
+  //int type;
   int z;
-  Events events;
+  //Events events;
 
   String key;
   Point world;

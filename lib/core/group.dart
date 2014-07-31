@@ -1,6 +1,6 @@
 part of Phaser;
 
-class Group extends PIXI.DisplayObjectContainer {
+class Group extends PIXI.DisplayObjectContainer implements GameObject {
   Game game;
   Group parent;
   String name;
@@ -25,6 +25,8 @@ class Group extends PIXI.DisplayObjectContainer {
   Type classType;
 
   int renderOrderID;
+
+  List<GameObject> children;
 
 
   Group(Game game, [this.parent, this.name='group',
@@ -179,7 +181,7 @@ class Group extends PIXI.DisplayObjectContainer {
   static int SORT_ASCENDING = -1;
   static int SORT_DESCENDING = 1;
 
-  PIXI.DisplayObject add(PIXI.DisplayObject child, [bool silent=false]) {
+  GameObject add(GameObject child, [bool silent=false]) {
 
     if (child.parent != this) {
       if (this.enableBody) {

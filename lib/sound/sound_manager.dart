@@ -21,6 +21,55 @@ class SoundManager {
 
   num _muteVolume;
 
+
+  bool get mute {
+    return this._muted;
+  }
+
+  set mute(bool value) {
+    if (value) {
+      if (this._muted) {
+        return;
+      }
+
+      this._codeMuted = true;
+      this.setMute();
+    }
+    else {
+      if (!this._muted) {
+        return;
+      }
+
+      this._codeMuted = false;
+      this.unsetMute();
+    }
+  }
+
+  double get volume {
+    if (this.usingWebAudio) {
+      return this.masterGain.gain.value;
+    }
+    else {
+      return this._volume;
+    }
+  }
+
+  set volume(double value) {
+    this._volume = value;
+    if (this.usingWebAudio) {
+      this.masterGain.gain.value = value;
+    }
+    else {
+      //  Loop through the sound cache and change the volume of all html audio tags
+      for (var i = 0; i < this._sounds.length; i++) {
+        if (this._sounds[i].usingAudioTag) {
+          this._sounds[i].volume = this._sounds[i].volume * value;
+        }
+      }
+    }
+  }
+
+
   SoundManager(this.game) {
     this.onSoundDecode = new Signal();
     this._codeMuted = false;
@@ -151,11 +200,11 @@ class SoundManager {
 //        this.masterGain = this.context.createGainNode();
 //      }
 //      else {
-      this.masterGain = this.context.createGain();
+    this.masterGain = this.context.createGain();
 //      }
 
-      this.masterGain.gain.value = 1;
-      this.masterGain.connectNode(this.context.destination);
+    this.masterGain.gain.value = 1;
+    this.masterGain.connectNode(this.context.destination);
     //}
 
   }
@@ -217,8 +266,8 @@ class SoundManager {
 
   pauseAll() {
 
-    for (var i = 0; i < this._sounds.length; i++) {
-      if (this._sounds[i]) {
+    for (int i = 0; i < this._sounds.length; i++) {
+      if (this._sounds[i] != null) {
         this._sounds[i].pause();
       }
     }
@@ -233,8 +282,8 @@ class SoundManager {
 
   resumeAll() {
 
-    for (var i = 0; i < this._sounds.length; i++) {
-      if (this._sounds[i]) {
+    for (int i = 0; i < this._sounds.length; i++) {
+      if (this._sounds[i] != null) {
         this._sounds[i].resume();
       }
     }
@@ -249,9 +298,9 @@ class SoundManager {
    * @param {Phaser.Sound} [sound] - Its buffer will be set to decoded data.
    */
 
-  decode(String key, Sound sound) {
+  decode(String key, [Sound sound]) {
 
-    sound = sound || null;
+    //sound = sound || null;
 
     var soundData = this.game.cache.getSoundData(key);
 

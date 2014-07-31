@@ -901,7 +901,7 @@ class Cache {
    * @return {Phaser.Sound} The sound object.
    */
 
-  Sound getSound(String key) {
+  Map getSound(String key) {
     if (this._sounds[key] != null) {
       return this._sounds[key];
     }

@@ -41,6 +41,7 @@ part "gameobjects/bitmap_data.dart";
 part "gameobjects/bitmap_text.dart";
 part "gameobjects/button.dart";
 part "gameobjects/events.dart";
+part "gameobjects/game_object.dart";
 part "gameobjects/game_object_creator.dart";
 part "gameobjects/game_object_factory.dart";
 part "gameobjects/graphics.dart";

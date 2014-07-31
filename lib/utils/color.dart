@@ -2,12 +2,13 @@ part of Phaser;
 
 class Color {
 
-  num r, g, b, a;
+  int r, g, b, a;
+
   int red, green, blue, alpha;
   int color;
   String rgba;
 
-  double h,s,l,v;
+  double h, s, l, v;
 
 //  Color._() {
 //  }
@@ -152,18 +153,18 @@ class Color {
    * @return {object} An object with the hue, saturation and lightness values set in the h, s and l properties.
    */
 
-  static Color RGBtoHSL(num r, num g, num b, [Color out]) {
+  static Color RGBtoHSL(int r, int g, int b, [Color out]) {
 
     if (out == null) {
-      out = Color.createColor(r, g, b, 1.0);
+      out = Color.createColor(r, g, b, 255);
     }
 
-    r /= 255;
-    g /= 255;
-    b /= 255;
+    double dr = r / 255, dg = g / 255, db = b / 255;
+    //g /= 255;
+    //b /= 255;
 
-    var min = Math.minList([r, g, b]);
-    var max = Math.maxList([r, g, b]);
+    num min = Math.minList([r, g, b]);
+    num max = Math.maxList([r, g, b]);
 
     // achromatic by default
     out.h = 0.0;
@@ -176,13 +177,13 @@ class Color {
       out.s = out.l > 0.5 ? d / (2 - max - min) : d / (max + min);
 
       if (max == r) {
-        out.h = (g - b) / d + (g < b ? 6 : 0);
+        out.h = (dg - db) / d + (dg < db ? 6 : 0);
       }
-      else if (max == g) {
-        out.h = (b - r) / d + 2;
+      else if (max == dg) {
+        out.h = (db - dr) / d + 2;
       }
-      else if (max == b) {
-          out.h = (r - g) / d + 4;
+      else if (max == db) {
+          out.h = (dr - dg) / d + 4;
         }
 
       out.h /= 6;
@@ -210,30 +211,27 @@ class Color {
   static Color HSLtoRGB(double h, double s, double l, [Color out]) {
 
     if (out == null) {
-      out = Color.createColor(l, l, l);
+      out = Color.createColor();
     }
-    else {
-      // achromatic by default
-      out.r = l;
-      out.g = l;
-      out.b = l;
-    }
+//    else {
+//      // achromatic by default
+    ////      out.r = l;
+    ////      out.g = l;
+    ////      out.b = l;
+//    }
 
+    double dr = l, dg = l, db = l;
     if (s != 0) {
-      var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-      var p = 2 * l - q;
-      out.r = Color.hueToColor(p, q, h + 1 / 3);
-      out.g = Color.hueToColor(p, q, h);
-      out.b = Color.hueToColor(p, q, h - 1 / 3);
+      double q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      double p = 2 * l - q;
+      dr = Color.hueToColor(p, q, h + 1 / 3);
+      dg = Color.hueToColor(p, q, h);
+      db = Color.hueToColor(p, q, h - 1 / 3);
     }
 
-    // out.r = (out.r * 255 | 0);
-    // out.g = (out.g * 255 | 0);
-    // out.b = (out.b * 255 | 0);
-
-    out.r = Math.floor((out.r * 255 | 0));
-    out.g = Math.floor((out.g * 255 | 0));
-    out.b = Math.floor((out.b * 255 | 0));
+    out.r = Math.floor((dr * 255));
+    out.g = Math.floor((dg * 255));
+    out.b = Math.floor((db * 255));
 
     Color.updateColor(out);
 
@@ -311,7 +309,7 @@ class Color {
   static Color HSVtoRGB(double h, double s, double v, [Color out]) {
 
     if (out == null) {
-      out = Color.createColor(0, 0, 0, 1, h, s, 0.0, v);
+      out = Color.createColor(0, 0, 0, 255, h, s, 0.0, v);
     }
 
     var r, g, b;
@@ -422,11 +420,20 @@ class Color {
    * @return {object} The resulting object with r, g, b, a properties and h, s, l and v.
    */
 
-  static Color createColor([int r, int g, int b, int a, double h, double s, double l, double v]) {
+  static Color createColor([int r =0, int g =0, int b=0, int a=255, double h=0, double s=0, double l=0, double v=0]) {
 
     //var out = { r: r || 0, g: g || 0, b: b || 0, a: a || 1, h: h || 0, s: s || 0, l: l || 0, v: v || 0, color: 0 };
-    Color out = new Color._();
+    Color out = new Color();
     out.r = r;
+    out.g = g;
+    out.b = b;
+
+    out.a = a;
+    out.h = h;
+    out.s = s;
+    out.l = l;
+    out.v = v;
+
     //TODO
 
     out.rgba = 'rgba(' + out.r + ',' + out.g + ',' + out.b + ',' + out.a + ')';
@@ -443,7 +450,8 @@ class Color {
    * @param {object} out - The color object to update.
    * @returns {number} A native color value integer (format: 0xAARRGGBB).
    */
-  static Color updateColor (Color out) {
+
+  static Color updateColor(Color out) {
     out.rgba = 'rgba(' + out.r.toString() + ',' + out.g.toString() + ',' + out.b.toString() + ',' + out.a.toString() + ')';
     return out;
   }
@@ -913,7 +921,7 @@ class Color {
    * @returns {string} A string of length 10 characters in the format 0xAARRGGBB
    */
 
-  static  String RGBtoHexstring(int color) {
+  static String RGBtoHexstring(int color) {
 
     Color argb = Color.getRGB(color);
 
@@ -950,7 +958,7 @@ class Color {
     String digits = "0123456789ABCDEF";
     int lsd = color % 16;
     int msd = (color - lsd) ~/ 16;
-    String hexified = digits.indexOf(msd.toString()) + digits.indexOf(lsd.toString());
+    String hexified = (digits.indexOf(msd.toString()) + digits.indexOf(lsd.toString())).toString();
     return hexified;
   }
 

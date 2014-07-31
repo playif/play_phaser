@@ -7,11 +7,11 @@ class TimerEvent {
   int repeatCount;
   bool loop;
   Function callback;
-  Object callbackContext;
+  //Object callbackContext;
   List args;
   bool pendingDelete;
 
-  TimerEvent(Timer timer, int delay, int tick, int repeatCount, bool loop, Function callback, Object callbackContext, List args) {
+  TimerEvent(Timer timer, int delay, int tick, int repeatCount, bool loop, Function callback, List args) {
     /**
      * @property {Phaser.Timer} timer - The Timer object that this TimerEvent belongs to.
      */
@@ -45,7 +45,7 @@ class TimerEvent {
     /**
      * @property {object} callbackContext - The context in which the callback will be called.
      */
-    this.callbackContext = callbackContext;
+    //this.callbackContext = callbackContext;
 
     /**
      * @property {array} arguments - The values to be passed to the callback.
