@@ -15,7 +15,7 @@ class QuadTree {
 
   Bounds bounds = null;
 
-  List<Object> objects = new List<Object>();
+  List<dynamic> objects = new List<dynamic>();
 
   List<QuadTree> nodes = new List<QuadTree>();
 

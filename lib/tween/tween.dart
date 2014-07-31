@@ -577,14 +577,11 @@ class Tween {
    */
 
   resume() {
-
     if (this._paused) {
       this._paused = false;
       this._codePaused = false;
-
       this._startTime += (this.game.time.now - this._pausedTime);
     }
-
   }
 
   /**

@@ -2,12 +2,12 @@ part of Phaser;
 
 class Color {
 
-  int r, g, b, a;
+  num r, g, b, a;
   int red, green, blue, alpha;
   int color;
   String rgba;
 
-  double h,s,l;
+  double h,s,l,v;
 
 //  Color._() {
 //  }
@@ -113,7 +113,7 @@ class Color {
     out.b = ((rgba & 0x0000ff00) >> 8);
     out.a = ((rgba & 0x000000ff));
 
-    out.rgba = 'rgba(' + out.r + ',' + out.g + ',' + out.b + ',' + out.a + ')';
+    out.rgba = 'rgba(' + out.r.toString() + ',' + out.g.toString() + ',' + out.b.toString() + ',' + out.a.toString() + ')';
 
     return out;
 
@@ -152,10 +152,10 @@ class Color {
    * @return {object} An object with the hue, saturation and lightness values set in the h, s and l properties.
    */
 
-  static Color RGBtoHSL(int r, int g, int b, [Color out]) {
+  static Color RGBtoHSL(num r, num g, num b, [Color out]) {
 
     if (out == null) {
-      out = Color.createColor(r, g, b, 1);
+      out = Color.createColor(r, g, b, 1.0);
     }
 
     r /= 255;
@@ -166,8 +166,8 @@ class Color {
     var max = Math.maxList([r, g, b]);
 
     // achromatic by default
-    out.h = 0;
-    out.s = 0;
+    out.h = 0.0;
+    out.s = 0.0;
     out.l = (max + min) / 2;
 
     if (max != min) {
@@ -207,7 +207,7 @@ class Color {
    * @return {object} An object with the red, green and blue values set in the r, g and b properties.
    */
 
-  static Color HSLtoRGB(double h, double s, double l, Color out) {
+  static Color HSLtoRGB(double h, double s, double l, [Color out]) {
 
     if (out == null) {
       out = Color.createColor(l, l, l);
@@ -271,7 +271,7 @@ class Color {
     var d = max - min;
 
     // achromatic by default
-    out.h = 0;
+    out.h = 0.0;
     out.s = max == 0 ? 0 : d / max;
     out.v = max;
 
@@ -308,10 +308,10 @@ class Color {
    * @return {object} An object with the red, green and blue values set in the r, g and b properties.
    */
 
-  static Color HSVtoRGB(double h, double s, double v, Color out) {
+  static Color HSVtoRGB(double h, double s, double v, [Color out]) {
 
     if (out == null) {
-      out = Color.createColor(0, 0, 0, 1, h, s, 0, v);
+      out = Color.createColor(0, 0, 0, 1, h, s, 0.0, v);
     }
 
     var r, g, b;
@@ -376,7 +376,7 @@ class Color {
    * @return {number} The color component value.
    */
 
-  static int hueToColor(double p, double q, double t) {
+  static double hueToColor(double p, double q, double t) {
 
     if (t < 0) {
       t += 1;
@@ -422,7 +422,7 @@ class Color {
    * @return {object} The resulting object with r, g, b, a properties and h, s, l and v.
    */
 
-  static Color createColor([int r, int g, int b, double a, double h, double s, double l, double v]) {
+  static Color createColor([int r, int g, int b, int a, double h, double s, double l, double v]) {
 
     //var out = { r: r || 0, g: g || 0, b: b || 0, a: a || 1, h: h || 0, s: s || 0, l: l || 0, v: v || 0, color: 0 };
     Color out = new Color._();
@@ -433,6 +433,19 @@ class Color {
 
     return out;
 
+  }
+
+  /**
+   * Takes a color object and updates the rgba property.
+   *
+   * @method Phaser.Color.updateColor
+   * @static
+   * @param {object} out - The color object to update.
+   * @returns {number} A native color value integer (format: 0xAARRGGBB).
+   */
+  static Color updateColor (Color out) {
+    out.rgba = 'rgba(' + out.r.toString() + ',' + out.g.toString() + ',' + out.b.toString() + ',' + out.a.toString() + ')';
+    return out;
   }
 
   /**
@@ -505,7 +518,7 @@ class Color {
 
   static int hexToRGB(String hex) {
 
-    int rgb = Color.hexToColor(hex);
+    Color rgb = Color.hexToColor(hex);
 
     if (rgb == null) {
       return Color.getColor32(rgb.a, rgb.r, rgb.g, rgb.b);
@@ -578,10 +591,10 @@ class Color {
 //  if (typeof s === 'undefined') { s = 1.0; }
 //  if (typeof v === 'undefined') { v = 1.0; }
 
-    var colors = [];
+    List colors = [];
 
     for (var c = 0; c <= 359; c++) {
-      colors.push(Color.HSVtoRGB(c / 359, s, v));
+      colors.add(Color.HSVtoRGB(c / 359, s, v));
     }
 
     return colors;

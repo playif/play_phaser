@@ -674,13 +674,13 @@ class Debug {
     {
       this.context.strokeStyle = color;
       this.context.strokeRect(bounds.x, bounds.y, bounds.width, bounds.height);
-      this.text('size: ' + quadtree.objects.length, bounds.x + 4, bounds.y + 16, 'rgb(0,200,0)', '12px Courier');
+      this.text('size: ' + quadtree.objects.length.toString(), (bounds.x + 4).toString(), (bounds.y + 16).toString(), 'rgb(0,200,0)', '12px Courier');
 
       this.context.strokeStyle = 'rgb(0,255,0)';
 
       for (var i = 0; i < quadtree.objects.length; i++)
       {
-        this.context.strokeRect(quadtree.objects[i].x, quadtree.objects[i].y, quadtree.objects[i].width, quadtree.objects[i].height);
+        this.context.strokeRect(quadtree.objects[i].x.toString(), quadtree.objects[i].y.toString(), quadtree.objects[i].width.toString(), quadtree.objects[i].height.toString());
       }
     }
     else
@@ -712,13 +712,14 @@ class Debug {
       if (sprite.body.type == Physics.ARCADE)
       {
         this.start();
-        Physics.Arcade.Body.render(this.context, sprite.body, color, filled);
+        Body.render(this.context, sprite.body, color, filled);
         this.stop();
       }
       else if (sprite.body.type == Physics.NINJA)
       {
         this.start();
-        Physics.Ninja.Body.render(this.context, sprite.body, color, filled);
+        //TODO
+        //Physics.Ninja.Body.render(this.context, sprite.body, color, filled);
         this.stop();
       }
     }
@@ -741,7 +742,7 @@ class Debug {
       if (sprite.body.type == Physics.ARCADE)
       {
         this.start(x, y, color, 210);
-        Physics.Arcade.Body.renderBodyInfo(this, sprite.body);
+        Body.renderBodyInfo(this, sprite.body);
         this.stop();
       }
     }

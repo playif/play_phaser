@@ -101,7 +101,7 @@ class TweenManager {
 
     //  If there are any new tweens to be added, do so now - otherwise they can be spliced out of the array before ever running
     if (this._add.length > 0) {
-      this._tweens = this._tweens.concat(this._add);
+      this._tweens = this._tweens.addAll(this._add);
       this._add.length = 0;
     }
 
@@ -118,7 +118,7 @@ class TweenManager {
    */
 
   bool isTweening(object) {
-    return this._tweens.some((tween) {
+    return this._tweens.where((tween) {
       return tween._object == object;
     });
   }
@@ -169,7 +169,7 @@ class TweenManager {
 
   resumeAll() {
     for (int i = this._tweens.length - 1; i >= 0; i--) {
-      this._tweens[i].resume(true);
+      this._tweens[i].resume();
     }
   }
 
