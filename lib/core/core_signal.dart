@@ -120,7 +120,7 @@ class Signal {
   }
 
 
-  dispatch(arguments) {
+  dispatch([arguments]) {
 
     if (!this.active) {
       return;

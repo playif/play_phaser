@@ -148,12 +148,10 @@ class Cache {
    * @param {CanvasRenderingContext2D} context - Render context of this canvas.
    */
 
-  addCanvas(key, canvas, context) {
-
+  addCanvas(String key, CanvasElement canvas, CanvasRenderingContext2D context) {
     this._canvases[key] = {
-        canvas: canvas, context: context
+        'canvas': canvas, 'context': context
     };
-
   }
 
   /**
@@ -164,10 +162,8 @@ class Cache {
    * @param {object} binaryData - The binary object to be addded to the cache.
    */
 
-  addBinary(key, binaryData) {
-
+  addBinary(String key, binaryData) {
     this._binary[key] = binaryData;
-
   }
 
   /**
@@ -179,12 +175,9 @@ class Cache {
    * @return {Phaser.BitmapData} The BitmapData object to be addded to the cache.
    */
 
-  addBitmapData(key, bitmapData) {
-
+  BitmapData addBitmapData(String key, BitmapData bitmapData) {
     this._bitmapDatas[key] = bitmapData;
-
     return bitmapData;
-
   }
 
   /**
@@ -196,13 +189,10 @@ class Cache {
    */
 
   addRenderTexture(String key, RenderTexture texture) {
-
-    var frame = new Frame(0, 0, 0, texture.width, texture.height, '', '');
-
+    Frame frame = new Frame(0, 0, 0, texture.width, texture.height, '', '');
     this._textures[key] = {
-        texture: texture, frame: frame
+        'texture': texture, 'frame': frame
     };
-
   }
 
   /**
@@ -219,15 +209,21 @@ class Cache {
    * @param {number} [spacing=0] - If the frames have been drawn with spacing between them, specify the amount here.
    */
 
-  addSpriteSheet(key, url, data, frameWidth, frameHeight, frameMax, margin, spacing) {
+  addSpriteSheet(String key, String url, data, int frameWidth, int frameHeight,[
+  int frameMax=-1, int margin=0, int spacing=0]) {
 
     this._images[key] = {
-        url: url, data: data, spriteSheet: true, frameWidth: frameWidth, frameHeight: frameHeight, margin: margin, spacing: spacing
+        'url': url,
+        'data': data,
+        'spriteSheet': true,
+        'frameWidth': frameWidth,
+        'frameHeight': frameHeight,
+        'margin': margin,
+        'spacing': spacing
     };
 
     PIXI.BaseTextureCache[key] = new PIXI.BaseTexture(data);
-
-    this._images[key].frameData = Phaser.AnimationParser.spriteSheet(this.game, key, frameWidth, frameHeight, frameMax, margin, spacing);
+    this._images[key].frameData = AnimationParser.spriteSheet(this.game, key, frameWidth, frameHeight, frameMax, margin, spacing);
 
   }
 
@@ -241,12 +237,12 @@ class Cache {
    * @param {number} format - The format of the tilemap data.
    */
 
-  addTilemap(key, url, mapData, format) {
-
+  addTilemap(String key, String url, mapData, int format) {
     this._tilemaps[key] = {
-        url: url, data: mapData, format: format
+        'url': url,
+        'data': mapData,
+        'format': format
     };
-
   }
 
   /**
@@ -260,24 +256,23 @@ class Cache {
    * @param {number} format - The format of the texture atlas.
    */
 
-  addTextureAtlas(key, url, data, atlasData, format) {
-
+  addTextureAtlas(String key, String url, data, atlasData, int format) {
     this._images[key] = {
-        url: url, data: data, spriteSheet: true
+        'url': url,
+        'data': data,
+        'spriteSheet': true
     };
 
     PIXI.BaseTextureCache[key] = new PIXI.BaseTexture(data);
-
-    if (format == Phaser.Loader.TEXTURE_ATLAS_JSON_ARRAY) {
-      this._images[key].frameData = Phaser.AnimationParser.JSONData(this.game, atlasData, key);
+    if (format == Loader.TEXTURE_ATLAS_JSON_ARRAY) {
+      this._images[key].frameData = AnimationParser.JSONData(this.game, atlasData, key);
     }
-    else if (format == Phaser.Loader.TEXTURE_ATLAS_JSON_HASH) {
-      this._images[key].frameData = Phaser.AnimationParser.JSONDataHash(this.game, atlasData, key);
+    else if (format == Loader.TEXTURE_ATLAS_JSON_HASH) {
+      this._images[key].frameData = AnimationParser.JSONDataHash(this.game, atlasData, key);
     }
-    else if (format == Phaser.Loader.TEXTURE_ATLAS_XML_STARLING) {
-        this._images[key].frameData = Phaser.AnimationParser.XMLData(this.game, atlasData, key);
+    else if (format == Loader.TEXTURE_ATLAS_XML_STARLING) {
+        this._images[key].frameData = AnimationParser.XMLData(this.game, atlasData, key);
       }
-
   }
 
   /**
@@ -292,16 +287,13 @@ class Cache {
    * @param {number} [ySpacing=0] - If you'd like to add additional vertical spacing between the lines then set the pixel value here.
    */
 
-  addBitmapFont(key, url, data, xmlData, xSpacing, ySpacing) {
-
+  addBitmapFont(String key, String url, data, xmlData, [int xSpacing=0, int ySpacing=0]) {
     this._images[key] = {
-        url: url, data: data, spriteSheet: true
+        'url': url, 'data': data, 'spriteSheet': true
     };
 
     PIXI.BaseTextureCache[key] = new PIXI.BaseTexture(data);
-
-    Phaser.LoaderParser.bitmapFont(this.game, xmlData, key, xSpacing, ySpacing);
-
+    LoaderParser.bitmapFont(this.game, xmlData, key, xSpacing, ySpacing);
   }
 
   /**
@@ -314,12 +306,12 @@ class Cache {
    * @param {number} format - The format of the physics data.
    */
 
-  addPhysicsData(key, url, JSONData, format) {
-
+  addPhysicsData(String key, String url, JSONData, int format) {
     this._physics[key] = {
-        url: url, data: JSONData, format: format
+        'url': url,
+        'data': JSONData,
+        'format': format
     };
-
   }
 
   /**
@@ -330,8 +322,7 @@ class Cache {
    */
 
   addDefaultImage() {
-
-    var img = new ImageElement();
+    ImageElement img = new ImageElement();
     img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAQMAAABJtOi3AAAAA1BMVEX///+nxBvIAAAAAXRSTlMAQObYZgAAABVJREFUeF7NwIEAAAAAgKD9qdeocAMAoAABm3DkcAAAAABJRU5ErkJggg==";
 
     this._images['__default'] = {
@@ -341,7 +332,6 @@ class Cache {
 
     PIXI.BaseTextureCache['__default'] = new PIXI.BaseTexture(img);
     PIXI.TextureCache['__default'] = new PIXI.Texture(PIXI.BaseTextureCache['__default']);
-
   }
 
   /**
@@ -352,8 +342,7 @@ class Cache {
    */
 
   addMissingImage() {
-
-    var img = new ImageElement();
+    ImageElement img = new ImageElement();
     img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJ9JREFUeNq01ssOwyAMRFG46v//Mt1ESmgh+DFmE2GPOBARKb2NVjo+17PXLD8a1+pl5+A+wSgFygymWYHBb0FtsKhJDdZlncG2IzJ4ayoMDv20wTmSMzClEgbWYNTAkQ0Z+OJ+A/eWnAaR9+oxCF4Os0H8htsMUp+pwcgBBiMNnAwF8GqIgL2hAzaGFFgZauDPKABmowZ4GL369/0rwACp2yA/ttmvsQAAAABJRU5ErkJggg==";
 
     this._images['__missing'] = {
@@ -363,7 +352,6 @@ class Cache {
 
     PIXI.BaseTextureCache['__missing'] = new PIXI.BaseTexture(img);
     PIXI.TextureCache['__missing'] = new PIXI.Texture(PIXI.BaseTextureCache['__missing']);
-
   }
 
   /**
@@ -375,12 +363,10 @@ class Cache {
    * @param {object} data - Extra text data.
    */
 
-  addText(key, url, data) {
-
+  addText(String key, String url, data) {
     this._text[key] = {
-        url: url, data: data
+        'url': url, 'data': data
     };
-
   }
 
   /**
@@ -392,12 +378,10 @@ class Cache {
    * @param {object} data - Extra text data.
    */
 
-  addJSON(key, url, data) {
-
+  addJSON(String key, String url, data) {
     this._json[key] = {
-        url: url, data: data
+        'url': url, 'data': data
     };
-
   }
 
   /**
@@ -409,16 +393,13 @@ class Cache {
    * @param {object} data - Extra image data.
    */
 
-  addImage(key, url, data) {
-
+  addImage(String key, String url, data) {
     this._images[key] = {
-        url: url, data: data, spriteSheet: false
+        'url': url, 'data': data, 'spriteSheet': false
     };
 
-    this._images[key].frame = new Phaser.Frame(0, 0, 0, data.width, data.height, key, this.game.rnd.uuid());
-
+    this._images[key]['frame'] = new Frame(0, 0, 0, data.width, data.height, key, this.game.rnd.uuid());
     PIXI.BaseTextureCache[key] = new PIXI.BaseTexture(data);
-
   }
 
   /**
@@ -432,19 +413,25 @@ class Cache {
    * @param {boolean} audioTag - True if the file is using legacy HTML audio.
    */
 
-  addSound(key, url, data, webAudio, audioTag) {
+  addSound(String key, String url, data, [bool webAudio = true, bool audioTag=false]) {
 
-    webAudio = webAudio || true;
-    audioTag = audioTag || false;
+    //webAudio = webAudio || true;
+    //audioTag = audioTag || false;
 
-    var decoded = false;
+    bool decoded = false;
 
     if (audioTag) {
       decoded = true;
     }
 
     this._sounds[key] = {
-        url: url, data: data, isDecoding: false, decoded: decoded, webAudio: webAudio, audioTag: audioTag, locked: this.game.sound.touchLocked
+        'url': url,
+        'data': data,
+        'isDecoding': false,
+        'decoded': decoded,
+        'webAudio': webAudio,
+        'audioTag': audioTag,
+        'locked': this.game.sound.touchLocked
     };
 
   }
@@ -456,18 +443,17 @@ class Cache {
    * @param {string} key - Asset key for the sound.
    */
 
-  reloadSound(key) {
+  reloadSound(String key) {
+    //var _this = this;
 
-    var _this = this;
+    if (this._sounds[key] != null) {
+      this._sounds[key]['data'].src = this._sounds[key].url;
 
-    if (this._sounds[key]) {
-      this._sounds[key].data.src = this._sounds[key].url;
-
-      this._sounds[key].data.addEventListener('canplaythrough', () {
-        return _this.reloadSoundComplete(key);
+      this._sounds[key]['data'].addEventListener('canplaythrough', (e) {
+        return this.reloadSoundComplete(key);
       }, false);
 
-      this._sounds[key].data.load();
+      this._sounds[key]['data'].load();
     }
   }
 
@@ -478,13 +464,11 @@ class Cache {
    * @param {string} key - Asset key for the sound.
    */
 
-  reloadSoundComplete(key) {
-
-    if (this._sounds[key]) {
-      this._sounds[key].locked = false;
+  reloadSoundComplete(String key) {
+    if (this._sounds[key] != null) {
+      this._sounds[key]['locked'] = false;
       this.onSoundUnlock.dispatch(key);
     }
-
   }
 
   /**
@@ -494,12 +478,10 @@ class Cache {
    * @param {string} key - Asset key for the sound.
    */
 
-  updateSound(key, property, value) {
-
+  updateSound(String key, String property, value) {
     if (this._sounds[key]) {
       this._sounds[key][property] = value;
     }
-
   }
 
   /**
@@ -510,12 +492,10 @@ class Cache {
    * @param {object} data - Extra sound data.
    */
 
-  decodedSound(key, data) {
-
-    this._sounds[key].data = data;
-    this._sounds[key].decoded = true;
-    this._sounds[key].isDecoding = false;
-
+  decodedSound(String key, data) {
+    this._sounds[key]['data'] = data;
+    this._sounds[key]['decoded'] = true;
+    this._sounds[key]['isDecoding'] = false;
   }
 
   /**
@@ -526,15 +506,13 @@ class Cache {
    * @return {object} The canvas object.
    */
 
-  getCanvas(key) {
-
-    if (this._canvases[key]) {
-      return this._canvases[key].canvas;
+  getCanvas(String key) {
+    if (this._canvases[key] != null) {
+      return this._canvases[key]['canvas'];
     }
     else {
-      console.warn('Phaser.Cache.getCanvas: Invalid key: "' + key + '"');
+      window.console.warn('Phaser.Cache.getCanvas: Invalid key: "' + key + '"');
     }
-
   }
 
   /**
@@ -545,15 +523,13 @@ class Cache {
    * @return {Phaser.BitmapData} The requested BitmapData object if found, or null if not.
    */
 
-  getBitmapData(key) {
-
-    if (this._bitmapDatas[key]) {
+  getBitmapData(String key) {
+    if (this._bitmapDatas[key]!= null) {
       return this._bitmapDatas[key];
     }
     else {
-      console.warn('Phaser.Cache.getBitmapData: Invalid key: "' + key + '"');
+      window.console.warn('Phaser.Cache.getBitmapData: Invalid key: "' + key + '"');
     }
-
   }
 
   /**
@@ -564,13 +540,13 @@ class Cache {
    * @return {Phaser.BitmapFont} The requested BitmapFont object if found, or null if not.
    */
 
-  getBitmapFont(key) {
+  BitmapFont getBitmapFont(String key) {
 
-    if (this._bitmapFont[key]) {
+    if (this._bitmapFont[key] != null) {
       return this._bitmapFont[key];
     }
     else {
-      console.warn('Phaser.Cache.getBitmapFont: Invalid key: "' + key + '"');
+      window.console.warn('Phaser.Cache.getBitmapFont: Invalid key: "' + key + '"');
     }
   }
 
@@ -584,7 +560,7 @@ class Cache {
    * @return {object} The requested physics object data if found.
    */
 
-  getPhysicsData(key, object, fixtureKey) {
+  getPhysicsData(String key, String object, String fixtureKey) {
 
     if (object == null) {
       //  Get 'em all
@@ -592,16 +568,16 @@ class Cache {
         return this._physics[key].data;
       }
       else {
-        console.warn('Phaser.Cache.getPhysicsData: Invalid key: "' + key + '"');
+        window.console.warn('Phaser.Cache.getPhysicsData: Invalid key: "' + key + '"');
       }
     }
     else {
-      if (this._physics[key] && this._physics[key].data[object]) {
-        var fixtures = this._physics[key].data[object];
+      if (this._physics[key] && this._physics[key]['data'][object]) {
+        Map fixtures = this._physics[key]['data'][object];
 
         //try to find a fixture by it's fixture key if given
-        if (fixtures && fixtureKey) {
-          for (var fixture in fixtures) {
+        if (fixtures != null && fixtureKey != null) {
+          for (var fixture in fixtures.keys) {
             //  This contains the fixture data of a polygon or a circle
             fixture = fixtures[fixture];
 
@@ -613,14 +589,14 @@ class Cache {
           }
 
           //  We did not find the requested fixture
-          console.warn('Phaser.Cache.getPhysicsData: Could not find given fixtureKey: "' + fixtureKey + ' in ' + key + '"');
+          window.console.warn('Phaser.Cache.getPhysicsData: Could not find given fixtureKey: "' + fixtureKey + ' in ' + key + '"');
         }
         else {
           return fixtures;
         }
       }
       else {
-        console.warn('Phaser.Cache.getPhysicsData: Invalid key/object: "' + key + ' / ' + object + '"');
+        window.console.warn('Phaser.Cache.getPhysicsData: Invalid key/object: "' + key + ' / ' + object + '"');
       }
     }
 
@@ -637,14 +613,11 @@ class Cache {
    * @return {boolean} True if the key exists, otherwise false.
    */
 
-  checkKey(type, key) {
-
-    if (this._cacheMap[type][key]) {
+  bool checkKey(int type, String key) {
+    if (this._cacheMap[type][key] != null) {
       return true;
     }
-
     return false;
-
   }
 
   /**
@@ -655,10 +628,8 @@ class Cache {
    * @return {boolean} True if the key exists, otherwise false.
    */
 
-  checkCanvasKey(key) {
-
+  bool checkCanvasKey(String key) {
     return this.checkKey(Cache.CANVAS, key);
-
   }
 
   /**
@@ -669,10 +640,8 @@ class Cache {
    * @return {boolean} True if the key exists, otherwise false.
    */
 
-  checkImageKey(key) {
-
+  bool checkImageKey(String key) {
     return this.checkKey(Cache.IMAGE, key);
-
   }
 
   /**
@@ -683,10 +652,8 @@ class Cache {
    * @return {boolean} True if the key exists, otherwise false.
    */
 
-  checkTextureKey(key) {
-
+  bool checkTextureKey(String key) {
     return this.checkKey(Cache.TEXTURE, key);
-
   }
 
   /**
@@ -697,10 +664,8 @@ class Cache {
    * @return {boolean} True if the key exists, otherwise false.
    */
 
-  checkSoundKey(key) {
-
+  bool checkSoundKey(String key) {
     return this.checkKey(Cache.SOUND, key);
-
   }
 
   /**
@@ -711,10 +676,8 @@ class Cache {
    * @return {boolean} True if the key exists, otherwise false.
    */
 
-  checkTextKey(key) {
-
+  bool checkTextKey(String key) {
     return this.checkKey(Cache.TEXT, key);
-
   }
 
   /**
@@ -725,10 +688,8 @@ class Cache {
    * @return {boolean} True if the key exists, otherwise false.
    */
 
-  checkPhysicsKey(key) {
-
+  bool checkPhysicsKey(String key) {
     return this.checkKey(Cache.PHYSICS, key);
-
   }
 
   /**
@@ -739,10 +700,8 @@ class Cache {
    * @return {boolean} True if the key exists, otherwise false.
    */
 
-  checkTilemapKey(key) {
-
+  bool checkTilemapKey(String key) {
     return this.checkKey(Cache.TILEMAP, key);
-
   }
 
   /**
@@ -753,10 +712,8 @@ class Cache {
    * @return {boolean} True if the key exists, otherwise false.
    */
 
-  checkBinaryKey(key) {
-
+  bool checkBinaryKey(String key) {
     return this.checkKey(Cache.BINARY, key);
-
   }
 
   /**
@@ -767,10 +724,8 @@ class Cache {
    * @return {boolean} True if the key exists, otherwise false.
    */
 
-  checkBitmapDataKey(key) {
-
+  bool checkBitmapDataKey(String key) {
     return this.checkKey(Cache.BITMAPDATA, key);
-
   }
 
   /**
@@ -781,10 +736,8 @@ class Cache {
    * @return {boolean} True if the key exists, otherwise false.
    */
 
-  checkBitmapFontKey(key) {
-
+  bool checkBitmapFontKey(String key) {
     return this.checkKey(Cache.BITMAPFONT, key);
-
   }
 
   /**
@@ -795,10 +748,8 @@ class Cache {
    * @return {boolean} True if the key exists, otherwise false.
    */
 
-  checkJSONKey(key) {
-
+  bool checkJSONKey(String key) {
     return this.checkKey(Cache.JSON, key);
-
   }
 
   /**
@@ -809,15 +760,13 @@ class Cache {
    * @return {object} The image data.
    */
 
-  getImage(key) {
-
-    if (this._images[key]) {
-      return this._images[key].data;
+  Map getImage(String key) {
+    if (this._images[key] != null) {
+      return this._images[key]['data'];
     }
     else {
       window.console.warn('Phaser.Cache.getImage: Invalid key: "' + key + '"');
     }
-
   }
 
   /**
@@ -828,15 +777,13 @@ class Cache {
    * @return {Object} The raw tilemap data in CSV or JSON format.
    */
 
-  getTilemapData(key) {
-
-    if (this._tilemaps[key]) {
+  Map getTilemapData(String key) {
+    if (this._tilemaps[key] != null) {
       return this._tilemaps[key];
     }
     else {
       window.console.warn('Phaser.Cache.getTilemapData: Invalid key: "' + key + '"');
     }
-
   }
 
   /**
@@ -847,12 +794,10 @@ class Cache {
    * @return {Phaser.FrameData} The frame data.
    */
 
-  getFrameData(key) {
-
-    if (this._images[key] && this._images[key].frameData) {
-      return this._images[key].frameData;
+  Map getFrameData(String key) {
+    if (this._images[key] != null && this._images[key]['frameData'] != null) {
+      return this._images[key]['frameData'];
     }
-
     return null;
   }
 
@@ -864,13 +809,11 @@ class Cache {
    * @param {number} frameData - The new FrameData.
    */
 
-  updateFrameData(key, frameData) {
-
-    if (this._images[key]) {
-      this._images[key].spriteSheet = true;
-      this._images[key].frameData = frameData;
+  updateFrameData(String key, int frameData) {
+    if (this._images[key]!=null) {
+      this._images[key]['spriteSheet'] = true;
+      this._images[key]['frameData'] = frameData;
     }
-
   }
 
   /**
@@ -881,12 +824,10 @@ class Cache {
    * @return {Phaser.Frame} The frame object.
    */
 
-  getFrameByIndex(key, frame) {
-
-    if (this._images[key] && this._images[key].frameData) {
-      return this._images[key].frameData.getFrame(frame);
+  Frame getFrameByIndex(String key, Frame frame) {
+    if (this._images[key] != null && this._images[key]['frameData'] != null) {
+      return this._images[key]['frameData'].getFrame(frame);
     }
-
     return null;
   }
 
@@ -898,12 +839,10 @@ class Cache {
    * @return {Phaser.Frame} The frame object.
    */
 
-  getFrameByName(key, frame) {
-
-    if (this._images[key] && this._images[key].frameData) {
-      return this._images[key].frameData.getFrameByName(frame);
+  Frame getFrameByName(String key, Frame frame) {
+    if (this._images[key] != null && this._images[key]['frameData'] != null) {
+      return this._images[key]['frameData'].getFrameByName(frame);
     }
-
     return null;
   }
 
@@ -915,12 +854,10 @@ class Cache {
    * @return {Phaser.Frame} The frame data.
    */
 
-  getFrame(key) {
-
-    if (this._images[key] && this._images[key].spriteSheet == false) {
-      return this._images[key].frame;
+  Frame getFrame(String key) {
+    if (this._images[key] != null && this._images[key]['spriteSheet'] == false) {
+      return this._images[key]['frame'];
     }
-
     return null;
   }
 
@@ -932,12 +869,10 @@ class Cache {
    * @return {Phaser.Frame} The frame data.
    */
 
-  getTextureFrame(key) {
-
-    if (this._textures[key]) {
-      return this._textures[key].frame;
+  Frame getTextureFrame(String key) {
+    if (this._textures[key] != null) {
+      return this._textures[key]['frame'];
     }
-
     return null;
   }
 
@@ -949,15 +884,13 @@ class Cache {
    * @return {Phaser.RenderTexture} The RenderTexture object.
    */
 
-  getTexture(key) {
-
-    if (this._textures[key]) {
+  RenderTexture getTexture(String key) {
+    if (this._textures[key] != null) {
       return this._textures[key];
     }
     else {
       window.console.warn('Phaser.Cache.getTexture: Invalid key: "' + key + '"');
     }
-
   }
 
   /**
@@ -968,15 +901,13 @@ class Cache {
    * @return {Phaser.Sound} The sound object.
    */
 
-  getSound(key) {
-
-    if (this._sounds[key]) {
+  Sound getSound(String key) {
+    if (this._sounds[key] != null) {
       return this._sounds[key];
     }
     else {
-      console.warn('Phaser.Cache.getSound: Invalid key: "' + key + '"');
+      window.console.warn('Phaser.Cache.getSound: Invalid key: "' + key + '"');
     }
-
   }
 
   /**
@@ -987,15 +918,13 @@ class Cache {
    * @return {object} The sound data.
    */
 
-  getSoundData(key) {
-
-    if (this._sounds[key]) {
-      return this._sounds[key].data;
+  Map getSoundData(String key) {
+    if (this._sounds[key] != null) {
+      return this._sounds[key]['data'];
     }
     else {
-      console.warn('Phaser.Cache.getSoundData: Invalid key: "' + key + '"');
+      window.console.warn('Phaser.Cache.getSoundData: Invalid key: "' + key + '"');
     }
-
   }
 
   /**
@@ -1006,12 +935,10 @@ class Cache {
    * @return {boolean} The decoded state of the Sound object.
    */
 
-  isSoundDecoded(key) {
-
-    if (this._sounds[key]) {
-      return this._sounds[key].decoded;
+  bool isSoundDecoded(String key) {
+    if (this._sounds[key] != null) {
+      return this._sounds[key]['decoded'];
     }
-
   }
 
   /**
@@ -1022,10 +949,10 @@ class Cache {
    * @return {boolean} True if the sound is decoded and the device is not touch locked.
    */
 
-  isSoundReady(key) {
-
-    return (this._sounds[key] && this._sounds[key].decoded && this.game.sound.touchLocked == false);
-
+  bool isSoundReady(String key) {
+    return (this._sounds[key] != null &&
+            this._sounds[key]['decoded'] &&
+            this.game.sound.touchLocked == false);
   }
 
   /**
@@ -1036,14 +963,11 @@ class Cache {
    * @return {boolean} True if the image is a sprite sheet.
    */
 
-  isSpriteSheet(key) {
-
-    if (this._images[key]) {
-      return this._images[key].spriteSheet;
+  bool isSpriteSheet(String key) {
+    if (this._images[key] != null) {
+      return this._images[key]['spriteSheet'];
     }
-
     return false;
-
   }
 
   /**
@@ -1054,13 +978,12 @@ class Cache {
    * @return {object} The text data.
    */
 
-  getText(key) {
-
-    if (this._text[key]) {
-      return this._text[key].data;
+  Map getText(String key) {
+    if (this._text[key] != null) {
+      return this._text[key]['data'];
     }
     else {
-      console.warn('Phaser.Cache.getText: Invalid key: "' + key + '"');
+      window.console.warn('Phaser.Cache.getText: Invalid key: "' + key + '"');
     }
 
   }
@@ -1073,15 +996,13 @@ class Cache {
    * @return {object} The JSON object.
    */
 
-  getJSON(key) {
-
-    if (this._json[key]) {
-      return this._json[key].data;
+  Map getJSON(String key) {
+    if (this._json[key] != null) {
+      return this._json[key]['data'];
     }
     else {
-      console.warn('Phaser.Cache.getJSON: Invalid key: "' + key + '"');
+      window.console.warn('Phaser.Cache.getJSON: Invalid key: "' + key + '"');
     }
-
   }
 
   /**
@@ -1092,15 +1013,13 @@ class Cache {
    * @return {object} The binary data object.
    */
 
-  getBinary(key) {
-
-    if (this._binary[key]) {
+  Map getBinary(String key) {
+    if (this._binary[key] != null) {
       return this._binary[key];
     }
     else {
-      console.warn('Phaser.Cache.getBinary: Invalid key: "' + key + '"');
+      window.console.warn('Phaser.Cache.getBinary: Invalid key: "' + key + '"');
     }
-
   }
 
   /**
@@ -1111,69 +1030,67 @@ class Cache {
    * @return {Array} The array of item keys.
    */
 
-  getKeys(type) {
-
-    var array = null;
-
+  List<String> getKeys(int type) {
+    Map array = null;
     switch (type) {
-      case Phaser.Cache.CANVAS:
+      case Cache.CANVAS:
         array = this._canvases;
         break;
 
-      case Phaser.Cache.IMAGE:
-        array = this._images;
-        break;
+      case Cache.IMAGE:
+        return this._images.keys.where( (s) => s != '__default' && s != '__missing');
+        //break;
 
-      case Phaser.Cache.TEXTURE:
+      case Cache.TEXTURE:
         array = this._textures;
         break;
 
-      case Phaser.Cache.SOUND:
+      case Cache.SOUND:
         array = this._sounds;
         break;
 
-      case Phaser.Cache.TEXT:
+      case Cache.TEXT:
         array = this._text;
         break;
 
-      case Phaser.Cache.PHYSICS:
+      case Cache.PHYSICS:
         array = this._physics;
         break;
 
-      case Phaser.Cache.TILEMAP:
+      case Cache.TILEMAP:
         array = this._tilemaps;
         break;
 
-      case Phaser.Cache.BINARY:
+      case Cache.BINARY:
         array = this._binary;
         break;
 
-      case Phaser.Cache.BITMAPDATA:
+      case Cache.BITMAPDATA:
         array = this._bitmapDatas;
         break;
 
-      case Phaser.Cache.BITMAPFONT:
+      case Cache.BITMAPFONT:
         array = this._bitmapFont;
         break;
 
-      case Phaser.Cache.JSON:
+      case Cache.JSON:
         array = this._json;
         break;
     }
 
-    if (!array) {
+    if (array == null) {
       return;
     }
 
-    var output = [];
+//    var output = [];
+//
+//    for (var item in array) {
+//      if (item != '__default' && item != '__missing') {
+//        output.push(item);
+//      }
+//    }
 
-    for (var item in array) {
-      if (item != '__default' && item != '__missing') {
-        output.push(item);
-      }
-    }
-
-    return output;
+    return array.keys;
 
   }
 
@@ -1184,7 +1101,7 @@ class Cache {
    * @param {string} key - Key of the asset you want to remove.
    */
 
-  removeCanvas(key) {
+  removeCanvas(String key) {
     this._canvases.remove(key);
   }
 
@@ -1195,7 +1112,7 @@ class Cache {
    * @param {string} key - Key of the asset you want to remove.
    */
 
-  removeImage(key) {
+  removeImage(String key) {
     this._images.remove(key);
   }
 
@@ -1206,7 +1123,7 @@ class Cache {
    * @param {string} key - Key of the asset you want to remove.
    */
 
-  removeSound(key) {
+  removeSound(String key) {
     this._sounds.remove(key);
   }
 
@@ -1217,7 +1134,7 @@ class Cache {
    * @param {string} key - Key of the asset you want to remove.
    */
 
-  removeText(key) {
+  removeText(String key) {
     this._text.remove(key);
   }
 
@@ -1228,7 +1145,7 @@ class Cache {
    * @param {string} key - Key of the asset you want to remove.
    */
 
-  removeJSON(key) {
+  removeJSON(String key) {
     this._json.remove(key);
   }
 
@@ -1239,7 +1156,7 @@ class Cache {
    * @param {string} key - Key of the asset you want to remove.
    */
 
-  removePhysics(key) {
+  removePhysics(String key) {
     this._physics.remove(key);
   }
 
@@ -1250,7 +1167,7 @@ class Cache {
    * @param {string} key - Key of the asset you want to remove.
    */
 
-  removeTilemap(key) {
+  removeTilemap(String key) {
     this._tilemaps.remove(key);
   }
 
@@ -1261,7 +1178,7 @@ class Cache {
    * @param {string} key - Key of the asset you want to remove.
    */
 
-  removeBinary(key) {
+  removeBinary(String key) {
     this._binary.remove(key);
   }
 
@@ -1272,7 +1189,7 @@ class Cache {
    * @param {string} key - Key of the asset you want to remove.
    */
 
-  removeBitmapData(key) {
+  removeBitmapData(String key) {
     this._bitmapDatas.remove(key);
   }
 
@@ -1283,7 +1200,7 @@ class Cache {
    * @param {string} key - Key of the asset you want to remove.
    */
 
-  removeBitmapFont(key) {
+  removeBitmapFont(String key) {
     this._bitmapFont.remove(key);
   }
 
@@ -1295,49 +1212,49 @@ class Cache {
 
   destroy() {
 
-    for (var item in this._canvases.keys) {
+    for (String item in this._canvases.keys) {
       this._canvases.remove(item);
     }
 
-    for (var item in this._images.keys) {
+    for (String item in this._images.keys) {
       if (item != '__default' && item != '__missing') {
         this._images.remove(item);
       }
     }
 
-    for (var item in this._sounds.keys) {
+    for (String item in this._sounds.keys) {
       this._sounds.remove(item);
     }
 
-    for (var item in this._text.keys) {
+    for (String item in this._text.keys) {
       this._text.remove(item);
     }
 
-    for (var item in this._json.keys) {
+    for (String item in this._json.keys) {
       this._json.remove(item);
     }
 
-    for (var item in this._textures.keys) {
+    for (String item in this._textures.keys) {
       this._textures.remove(item);
     }
 
-    for (var item in this._physics.keys) {
+    for (String item in this._physics.keys) {
       this._physics.remove(item);
     }
 
-    for (var item in this._tilemaps.keys) {
+    for (String item in this._tilemaps.keys) {
       this._tilemaps.remove(item);
     }
 
-    for (var item in this._binary.keys) {
+    for (String item in this._binary.keys) {
       this._binary.remove(item);
     }
 
-    for (var item in this._bitmapDatas.keys) {
+    for (String item in this._bitmapDatas.keys) {
       this._bitmapDatas.remove(item);
     }
 
-    for (var item in this._bitmapFont.keys) {
+    for (String item in this._bitmapFont.keys) {
       this._bitmapFont.remove(item);
     }
 

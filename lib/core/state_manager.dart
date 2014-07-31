@@ -299,7 +299,7 @@ class StateManager {
     if (this._pendingState != null && this.game.isBooted) {
       //  Already got a state running?
       if (this.current != null && this.current != "") {
-        this.onShutDownCallback(this.callbackContext, this.game);
+        this.onShutDownCallback();
 
         this.game.tweens.removeAll();
 
@@ -324,7 +324,7 @@ class StateManager {
 
       if (this.onPreloadCallback != null) {
         this.game.load.reset();
-        this.onPreloadCallback(this.game);
+        this.onPreloadCallback();
 
         //  Is the loader empty?
         if (this.game.load.totalQueuedFiles() == 0 && this.game.load.totalQueuedPacks() == 0) {
@@ -479,7 +479,7 @@ class StateManager {
 
     if (this._created == false && this.onCreateCallback != null) {
       this._created = true;
-      this.onCreateCallback(this.callbackContext, this.game);
+      this.onCreateCallback();
     }
     else {
       this._created = true;
@@ -495,7 +495,7 @@ class StateManager {
   pause() {
 
     if (this._created && this.onPausedCallback != null) {
-      this.onPausedCallback(this.callbackContext, this.game);
+      this.onPausedCallback();
     }
 
   }
@@ -508,7 +508,7 @@ class StateManager {
   resume() {
 
     if (this._created && this.onResumedCallback != null) {
-      this.onResumedCallback(this.callbackContext, this.game);
+      this.onResumedCallback();
     }
 
   }
@@ -521,11 +521,11 @@ class StateManager {
   update() {
 
     if (this._created && this.onUpdateCallback != null) {
-      this.onUpdateCallback(this.callbackContext, this.game);
+      this.onUpdateCallback();
     }
     else {
       if (this.onLoadUpdateCallback != null) {
-        this.onLoadUpdateCallback(this.game);
+        this.onLoadUpdateCallback();
       }
     }
 
@@ -539,11 +539,11 @@ class StateManager {
   pauseUpdate() {
 
     if (this._created && this.onPauseUpdateCallback != null) {
-      this.onPauseUpdateCallback(this.game);
+      this.onPauseUpdateCallback();
     }
     else {
       if (this.onLoadUpdateCallback != null) {
-        this.onLoadUpdateCallback(this.game);
+        this.onLoadUpdateCallback();
       }
     }
 
@@ -557,7 +557,7 @@ class StateManager {
   preRender() {
 
     if (this.onPreRenderCallback != null) {
-      this.onPreRenderCallback(this.game);
+      this.onPreRenderCallback();
     }
 
   }
@@ -575,7 +575,7 @@ class StateManager {
         this.game.context.setTransform(1, 0, 0, 1, 0, 0);
       }
 
-      this.onRenderCallback(this.callbackContext, this.game);
+      this.onRenderCallback();
 
       if (this.game.renderType == CANVAS) {
         this.game.context.restore();
@@ -583,7 +583,7 @@ class StateManager {
     }
     else {
       if (this.onLoadRenderCallback != null) {
-        this.onLoadRenderCallback(this.game);
+        this.onLoadRenderCallback();
       }
     }
 

@@ -159,15 +159,16 @@ class RandomDataGenerator {
    * @return {string} A valid RFC4122 version4 ID hex string
    */
 
-  uuid() {
+  String uuid() {
 
-    var a = '';
-    var b = '';
-
-    for (b = a = ''; a++ < 36; b += ~a % 5 | a * 3 & 4 ? (a ^ 15 ? 8 ^ this.frac() * (a ^ 20 ? 16 : 4) : 4).toString(16) : '-') {
-    }
-
-    return b;
+//    int a = 0;
+//    String b = '';
+//
+//    for (; a++ < 36; b += ((~a % 5 | a * 3 & 4) == 0) ?
+//    a ^ 15) == 0 ? (8 ^ this.frac() * (a ^ 20 ==0 ? 16 : 4) : 4).toRadixString(16) : '-') {
+//    }
+    var uuid = new Uuid();
+    return uuid.v4();
 
   }
 

@@ -322,10 +322,13 @@ class Pointer {
    */
 
   start(event) {
-
-    if (event['pointerId']) {
-      this.pointerId = event.pointerId;
+    if (event is MouseEvent){
+      MouseEvent me=event as MouseEvent;
+      //me.target
     }
+//    if (event['pointerId']) {
+//      this.pointerId = event.pointerId;
+//    }
 
     this.identifier = event.identifier;
     this.target = event.target;
@@ -420,7 +423,7 @@ class Pointer {
    * @param {boolean} [fromClick=false] - Was this called from the click event?
    */
 
-  move(MouseEvent event, [bool fromClick=false]) {
+  bool move(MouseEvent event, [bool fromClick=false]) {
 
     if (this.game.input.pollLocked) {
       return;
@@ -591,18 +594,18 @@ class Pointer {
         this.game.input.multiInputOverride == Input.MOUSE_TOUCH_COMBINE ||
         (this.game.input.multiInputOverride == Input.TOUCH_OVERRIDES_MOUSE &&
          this.game.input.currentPointers == 0)) {
-      this.game.input.onUp.dispatch(this, event);
+      this.game.input.onUp.dispatch([this, event]);
 
 //  Was it a tap?
       if (this.duration >= 0 && this.duration <= this.game.input.tapRate) {
 //  Was it a double-tap?
         if (this.timeUp - this.previousTapTime < this.game.input.doubleTapRate) {
 //  Yes, let's dispatch the signal then with the 2nd parameter set to true
-          this.game.input.onTap.dispatch(this, true);
+          this.game.input.onTap.dispatch([this, true]);
         }
         else {
 //  Wasn't a double-tap, so dispatch a single tap signal
-          this.game.input.onTap.dispatch(this, false);
+          this.game.input.onTap.dispatch([this, false]);
         }
 
         this.previousTapTime = this.timeUp;
@@ -643,12 +646,11 @@ class Pointer {
    * @return {boolean} true if the Pointer was pressed down within the duration given.
    */
 
-  justPressed(duration) {
-
-    duration = duration || this.game.input.justPressedRate;
-
-    return (this.isDown == true && (this.timeDown + duration) > this.game.time.now);
-
+  bool justPressed([int duration]) {
+    if(duration == null){
+      duration = this.game.input.justPressedRate;
+    }
+    return ((this.isDown == true) && (this.timeDown + duration) > this.game.time.now);
   }
 
   /**
@@ -660,10 +662,10 @@ class Pointer {
    * @return {boolean} true if the Pointer was released within the duration given.
    */
 
-  justReleased(duration) {
-
-    duration = duration || this.game.input.justReleasedRate;
-
+  bool justReleased([int duration]) {
+    if(duration == null){
+      duration = this.game.input.justPressedRate;
+    }
     return (this.isUp == true && (this.timeUp + duration) > this.game.time.now);
 
   }

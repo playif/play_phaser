@@ -1,6 +1,6 @@
 part of Phaser;
 
-class tile {
-  tile() {
+class Tile {
+  Tile() {
   }
 }

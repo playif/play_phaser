@@ -10,6 +10,7 @@ import "dart:web_gl";
 import "dart:math" as DMath;
 import "dart:mirrors";
 import "package:play_pixi/pixi.dart" as PIXI;
+import 'package:uuid/uuid_client.dart';
 //import "physics/physics.dart" as Physics;
 
 import "tween/easing.dart" as Easing;

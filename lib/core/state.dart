@@ -117,7 +117,7 @@ class State {
    * @method Phaser.State#preload
    */
 
-  preload([args]) {
+  preload() {
   }
 
   /**
@@ -126,7 +126,7 @@ class State {
    * @method Phaser.State#loadUpdate
    */
 
-  loadUpdate([args]) {
+  loadUpdate() {
   }
 
   /**
@@ -136,7 +136,7 @@ class State {
    * @method Phaser.State#loadRender
    */
 
-  loadRender([args]) {
+  loadRender() {
   }
 
   /**
@@ -146,7 +146,7 @@ class State {
    * @method Phaser.State#create
    */
 
-  create([args]) {
+  create() {
   }
 
   /**
@@ -157,7 +157,7 @@ class State {
    * @method Phaser.State#update
    */
 
-  update([args]) {
+  update() {
   }
 
   /**
@@ -168,7 +168,7 @@ class State {
    * @method Phaser.State#render
    */
 
-  render([args]) {
+  render() {
   }
 
   /**
@@ -177,7 +177,7 @@ class State {
    * @method Phaser.State#paused
    */
 
-  paused([args]) {
+  paused() {
   }
 
   /**
@@ -186,7 +186,7 @@ class State {
    * @method Phaser.State#pauseUpdate
    */
 
-  pauseUpdate([args]) {
+  pauseUpdate() {
   }
 
   /**
@@ -195,14 +195,14 @@ class State {
    * @method Phaser.State#shutdown
    */
 
-  shutdown([args]) {
+  shutdown() {
   }
 
-  preRender([args]){
+  preRender(){
 
   }
 
-  resumed([args]){
+  resumed(){
 
   }
 
