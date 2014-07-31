@@ -40,6 +40,10 @@ class Sprite extends PIXI.Sprite {
 
   Point camerOffset;
 
+  Group parent;
+
+  List<Sprite> children;
+
   num get angle {
     return Math.wrapAngle(Math.radToDeg(this.rotation));
   }
@@ -175,7 +179,7 @@ class Sprite extends PIXI.Sprite {
   set x(num value) {
     this.position.x = value;
 
-    if (this.body != null && this.body.type == ARCADE && this.body.phase == 2) {
+    if (this.body != null && this.body.type == Physics.ARCADE && this.body.phase == 2) {
       this.body._reset = 1;
     }
   }
@@ -187,14 +191,20 @@ class Sprite extends PIXI.Sprite {
   set y(num value) {
     this.position.y = value;
 
-    if (this.body != null && this.body.type == ARCADE && this.body.phase == 2) {
+    if (this.body != null && this.body.type == Physics.ARCADE && this.body.phase == 2) {
       this.body._reset = 1;
     }
+  }
+
+  Point get center{
+    return new Point(x+width/2,y+height/2);
   }
 
   bool get destroyPhase {
     return this._cache[8] == null ? false : this._cache[8];
   }
+
+  bool _outOfBoundsFired=false;
 
   Sprite(this.game, [int x=0, int y=0, String key, num frame=0])
   :super(PIXI.TextureCache['__default']) {
@@ -418,7 +428,7 @@ class Sprite extends PIXI.Sprite {
   postUpdate() {
 
     if (this.key is BitmapData) {
-      this.key.render();
+      (this.key as BitmapData).render();
     }
 
     if (this.exists && this.body) {
@@ -519,7 +529,7 @@ class Sprite extends PIXI.Sprite {
     if (rect == null) {
       //  Clear any crop that may be set
       if (this.texture.hasOwnProperty('sourceWidth')) {
-        this.texture.setFrame(new Phaser.Rectangle(0, 0, this.texture.sourceWidth, this.texture.sourceHeight));
+        this.texture.setFrame(new Rectangle(0, 0, this.texture.sourceWidth, this.texture.sourceHeight));
       }
     }
     else {
@@ -540,7 +550,7 @@ class Sprite extends PIXI.Sprite {
         this.texture = local;
 
         this.texture.updateFrame = true;
-        PIXI.Texture.frameUpdates.push(this.texture);
+        PIXI.Texture.frameUpdates.add(this.texture);
       }
       else {
         this.texture.setFrame(rect);
@@ -725,7 +735,7 @@ class Sprite extends PIXI.Sprite {
 
     this.health = health;
 
-    if (this.body) {
+    if (this.body != null) {
       this.body.reset(x, y, false, false);
     }
 
@@ -746,7 +756,7 @@ class Sprite extends PIXI.Sprite {
 
   bringToTop() {
 
-    if (this.parent) {
+    if (this.parent != null) {
       this.parent.bringToTop(this);
     }
 

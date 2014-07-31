@@ -1,6 +1,6 @@
 part of Phaser;
 
-class Circle {
+class Circle extends PIXI.Circle {
   num x;
   num y;
   num _diameter;

@@ -1,6 +1,6 @@
 part of Phaser;
 
-class Rectangle {
+class Rectangle extends PIXI.Rectangle {
   num x;
   num y;
   num width;

@@ -1,6 +1,6 @@
 part of Phaser;
 
-class Point {
+class Point extends PIXI.Point {
   num x;
   num y;
 

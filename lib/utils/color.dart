@@ -77,7 +77,7 @@ class Color {
     }
 
     out.color = rgba;
-    out.rgba = 'rgba(' + out.r + ',' + out.g + ',' + out.b + ',' + (out.a / 255) + ')';
+    out.rgba = 'rgba(' + out.r.toString() + ',' + out.g.toString() + ',' + out.b.toString() + ',' + (out.a / 255).toString() + ')';
 
     if (hsl) {
       Color.RGBtoHSL(out.r, out.g, out.b, out);

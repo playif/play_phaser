@@ -1,6 +1,6 @@
 part of Phaser;
 
-class Ellipse {
+class Ellipse extends PIXI.Ellipse {
   int type;
   num x, y, width, height;
 
