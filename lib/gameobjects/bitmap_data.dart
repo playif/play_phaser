@@ -83,7 +83,7 @@ class BitmapData {
 //      }
 //    }
 
-    this.pixels = new Uint32List(this.imageData.data);
+    this.pixels = new Uint32List.fromList(this.imageData.data);
 
     /**
      * @property {PIXI.BaseTexture} baseTexture - The PIXI.BaseTexture.
@@ -233,11 +233,11 @@ class BitmapData {
    * @param {number} b - The blue color value, between 0 and 0xFF (255).
    * @param {number} [a=1] - The alpha color value, between 0 and 1.
    */
-  fill (int r, int g, int b, [double a=1]) {
+  fill (int r, int g, int b, [double a=1.0]) {
 
-    if (a == null) { a = 1; }
+    if (a == null) { a = 1.0; }
 
-    this.context.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+    this.context.fillStyle = 'rgba($r,$g,$b,$a)';
     this.context.fillRect(0, 0, this.width, this.height);
     this.dirty = true;
 
@@ -325,7 +325,7 @@ class BitmapData {
 //        this.pixels = this.imageData.data;
 //      }
 //    }
-    this.pixels = new Uint32List(this.imageData.data);
+    this.pixels = new Uint32List.fromList(this.imageData.data);
   }
 
   /**
@@ -736,7 +736,7 @@ class BitmapData {
    * @param {number} [y=0] - The y coordinate to place the image at.
    * @return {Phaser.Image} The newly added Image object.
    */
-  Image addToWorld ([int x=0, int y=0]) {
+  GameObject addToWorld ([int x=0, int y=0]) {
     return this.game.add.image(x, y, this);
   }
 

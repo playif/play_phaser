@@ -106,7 +106,7 @@ class Image extends PIXI.Sprite implements GameObject {
   }
 
   bool get fixedToCamera {
-    return !!this._cache[7];
+    return this._cache[7] == 1;
   }
 
   set fixedToCamera(bool value) {
@@ -125,19 +125,19 @@ class Image extends PIXI.Sprite implements GameObject {
 
   set smoothed(bool value) {
     if (value) {
-      if (this.texture) {
-        this.texture.baseTexture.scaleMode = 0;
+      if (this.texture != null) {
+        this.texture.baseTexture.scaleMode = PIXI.scaleModes.DEFAULT;
       }
     }
     else {
-      if (this.texture) {
-        this.texture.baseTexture.scaleMode = 1;
+      if (this.texture != null) {
+        this.texture.baseTexture.scaleMode = PIXI.scaleModes.LINEAR;
       }
     }
   }
 
   bool get destroyPhase {
-    return !!this._cache[8];
+    return this._cache[8] == 1;
   }
 
   Image(this.game, [int x, int y, String key, Rectangle frame])

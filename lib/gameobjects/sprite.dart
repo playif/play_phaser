@@ -44,6 +44,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
 
   List<GameObject> children;
 
+
   num get angle {
     return Math.wrapAngle(Math.radToDeg(this.rotation));
   }
@@ -416,7 +417,9 @@ class Sprite extends PIXI.Sprite implements GameObject {
    * @method Phaser.Sprite#update
    * @memberof Phaser.Sprite
    */
-  Function update;
+  update(){
+
+  }
 
   /**
    * Internal function called by the World postUpdate cycle.
@@ -724,7 +727,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
    * @return (Phaser.Sprite) This instance.
    */
 
-  reset(x, y, [num health=1]) {
+  Sprite reset(num x, num y, [num health=1]) {
 
     this.world.setTo(x, y);
     this.position.x = x;
@@ -798,11 +801,14 @@ class Sprite extends PIXI.Sprite implements GameObject {
    * @return {boolean} True if the bounds of this Sprite intersects at any point with the bounds of the given display object.
    */
 
-  overlap(GameObject displayObject) {
-
-    return Rectangle.intersects(this.getBounds(), displayObject.getBounds());
-
+  bool overlap(GameObject displayObject) {
+    return this.getBounds().intersects(displayObject.getBounds());
+    //Rectangle.intersects(this.getBounds(), );
   }
+
+//  Rectangle getBounds(){
+//    return new Rectangle super.getBounds()
+//  }
 
 
 }

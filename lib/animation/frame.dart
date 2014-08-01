@@ -1,6 +1,6 @@
 part of Phaser;
 
-class Frame {
+class Frame extends PIXI.Rectangle {
   int index;
   num x;
   num y;

@@ -47,7 +47,7 @@ class QuadTree {
 
 
   populate(Group group) {
-    group.forEach(this.populateHandler, this, true);
+    group.forEach(this.populateHandler, true);
   }
 
 

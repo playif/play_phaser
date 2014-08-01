@@ -4,7 +4,7 @@ class Collision {
   bool none, any, up, down, left, right;
 }
 
-class Body {
+class Body extends Rectangle {
   //TODO extract interface
   addToWorld(){}
   removeFromWorld(){}
@@ -775,9 +775,7 @@ class Body {
    * @return {boolean} True if the given coordinates are inside this Body, otherwise false.
    */
   bool hitTest (x, y) {
-
-    return Rectangle.contains(this, x, y);
-
+    return this.contains(x, y);
   }
 
   /**

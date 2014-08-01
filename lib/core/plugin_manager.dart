@@ -38,10 +38,10 @@ class PluginManager {
    * @return {Phaser.Plugin} The Plugin that was added to the manager.
    */
 
-  Plugin add(Plugin plugin, List args) {
+  Plugin add(Plugin plugin, [List args]) {
 
     //var args = Array.prototype.splice.call(arguments, 1);
-    bool result = false;
+    bool result = true;
 
     //  Prototype?
     //if (plugin is Function) {

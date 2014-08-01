@@ -1,7 +1,7 @@
 part of Phaser;
 
 class Canvas {
-  static CanvasElement create([num width=256, num height=256, int id, bool noCocoon=false]) {
+  static CanvasElement create([num width=256, num height=256, String id, bool noCocoon=false]) {
     CanvasElement canvas = new CanvasElement();
     if (id != null) {
       canvas.dataset['id'] = id;

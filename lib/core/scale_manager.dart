@@ -177,7 +177,13 @@ class ScaleManager {
    * @property {number} _check - Cached size interval var.
    * @private
    */
-  num _check;
+  Timer _check;
+
+  bool isFullScreen;
+
+  int _iterations = 0;
+
+  bool isLandscape;
 
   /**
    * @constant
@@ -447,38 +453,38 @@ class ScaleManager {
    * @param {boolean} antialias - You can toggle the anti-alias feature of the canvas before jumping in to full screen (false = retain pixel art, true = smooth art)
    */
 
-  startFullScreen([bool antialias]) {
-
-    if (this.isFullScreen || !this.game.device.fullscreen) {
-      return;
-    }
-
-    if (antialias != null && this.game.renderType == CANVAS) {
-      this.game.stage.smoothed = antialias;
-    }
-
-    this._width = this.width;
-    this._height = this.height;
-
-    if (this.game.device.fullscreenKeyboard) {
-      this.fullScreenTarget[this.game.device.requestFullscreen](Element.ALLOW_KEYBOARD_INPUT);
-    }
-    else {
-      this.fullScreenTarget[this.game.device.requestFullscreen]();
-    }
-
-  }
+//  startFullScreen([bool antialias]) {
+//
+//    if (this.isFullScreen || !this.game.device.fullscreen) {
+//      return;
+//    }
+//
+//    if (antialias != null && this.game.renderType == CANVAS) {
+//      this.game.stage.smoothed = antialias;
+//    }
+//
+//    this._width = this.width;
+//    this._height = this.height;
+//
+  ////    if (this.game.device.fullscreenKeyboard) {
+  ////      this.fullScreenTarget[this.game.device.requestFullscreen](Element.ALLOW_KEYBOARD_INPUT);
+  ////    }
+  ////    else {
+  ////      this.fullScreenTarget[this.game.device.requestFullscreen]();
+  ////    }
+//
+//  }
 
   /**
    * Stops full screen mode if the browser is in it.
    * @method Phaser.ScaleManager#stopFullScreen
    */
 
-  stopFullScreen() {
-
-    document[this.game.device.cancelFullscreen]();
-
-  }
+//  stopFullScreen() {
+//
+//    document[this.game.device.cancelFullscreen]();
+//
+//  }
 
   /**
    * Called automatically when the browser enters of leaves full screen mode.
@@ -493,8 +499,8 @@ class ScaleManager {
 
     if (this.isFullScreen) {
       if (this.fullScreenScaleMode == ScaleManager.EXACT_FIT) {
-        this.fullScreenTarget.style['width'] = '100%';
-        this.fullScreenTarget.style['height'] = '100%';
+        this.fullScreenTarget.style.width = '100%';
+        this.fullScreenTarget.style.height = '100%';
 
         this.width = window.outerWidth;
         this.height = window.outerHeight;
@@ -512,11 +518,11 @@ class ScaleManager {
         this.refresh();
       }
 
-      this.enterFullScreen.dispatch(this.width, this.height);
+      this.enterFullScreen.dispatch([this.width, this.height]);
     }
     else {
-      this.fullScreenTarget.style['width'] = this.game.width + 'px';
-      this.fullScreenTarget.style['height'] = this.game.height + 'px';
+      this.fullScreenTarget.style.width = this.game.width + 'px';
+      this.fullScreenTarget.style.height = this.game.height + 'px';
 
       this.width = this._width;
       this.height = this._height;
@@ -527,7 +533,7 @@ class ScaleManager {
       this.scaleFactor.x = this.game.width / this.width;
       this.scaleFactor.y = this.game.height / this.height;
 
-      this.leaveFullScreen.dispatch(this.width, this.height);
+      this.leaveFullScreen.dispatch([this.width, this.height]);
     }
 
   }
@@ -542,7 +548,7 @@ class ScaleManager {
    * @param {string} [orientationImage=''] - The string of an image in the Phaser.Cache to display when this game is in the incorrect orientation.
    */
 
-  forceOrientation(forceLandscape, forcePortrait, orientationImage) {
+  forceOrientation(bool forceLandscape, [bool forcePortrait=false, String orientationImage='']) {
 
     if (forcePortrait == null) {
       forcePortrait = false;
@@ -556,7 +562,7 @@ class ScaleManager {
         orientationImage = '__default';
       }
 
-      this.orientationSprite = new Image(this.game, this.game.width / 2, this.game.height / 2, PIXI.TextureCache[orientationImage]);
+      this.orientationSprite = new Image(this.game, this.game.width ~/ 2, this.game.height ~/ 2, PIXI.TextureCache[orientationImage]);
       this.orientationSprite.anchor.set(0.5);
 
       this.checkOrientationState();
@@ -594,7 +600,7 @@ class ScaleManager {
           this.game.world.visible = true;
         }
 
-        if (this.scaleMode != Phaser.ScaleManager.NO_SCALE) {
+        if (this.scaleMode != ScaleManager.NO_SCALE) {
           this.refresh();
         }
       }
@@ -627,13 +633,13 @@ class ScaleManager {
 
     this.event = event;
 
-    this.orientation = window['orientation'];
+    this.orientation = window.orientation;
 
     if (this.isLandscape) {
-      this.enterLandscape.dispatch(this.orientation, true, false);
+      this.enterLandscape.dispatch([this.orientation, true, false]);
     }
     else {
-      this.enterPortrait.dispatch(this.orientation, false, true);
+      this.enterPortrait.dispatch([this.orientation, false, true]);
     }
 
     if (this.scaleMode != ScaleManager.NO_SCALE) {
@@ -648,7 +654,7 @@ class ScaleManager {
    * @param {Event} event - The resize event data.
    */
 
-  checkResize(event) {
+  checkResize([event]) {
 
     this.event = event;
 
@@ -660,13 +666,13 @@ class ScaleManager {
     }
 
     if (this.isLandscape) {
-      this.enterLandscape.dispatch(this.orientation, true, false);
+      this.enterLandscape.dispatch([this.orientation, true, false]);
     }
     else {
-      this.enterPortrait.dispatch(this.orientation, false, true);
+      this.enterPortrait.dispatch([this.orientation, false, true]);
     }
 
-    if (this.scaleMode != Phaser.ScaleManager.NO_SCALE) {
+    if (this.scaleMode != ScaleManager.NO_SCALE) {
       this.refresh();
     }
 
@@ -699,9 +705,9 @@ class ScaleManager {
 
       var _this = this;
 
-      this._check = window.setInterval(() {
+      this._check = new async.Timer.periodic(const Duration(milliseconds:10), (t) {
         return _this.setScreenSize();
-      }, 10);
+      });
 
       this.setScreenSize();
     }
@@ -713,11 +719,11 @@ class ScaleManager {
    * @param {boolean} force - If force is true it will try to resize the game regardless of the document dimensions.
    */
 
-  setScreenSize(force) {
+  setScreenSize([bool force=false]) {
 
-    if (force == null) {
-      force = false;
-    }
+//    if (force == null) {
+//      force = false;
+//    }
 
     if (!this.game.device.iPad && !this.game.device.webApp && !this.game.device.desktop) {
       if (this.game.device.android && !this.game.device.chrome) {
@@ -732,7 +738,7 @@ class ScaleManager {
 
     if (force || window.innerHeight > this._startHeight || this._iterations < 0) {
       // Set minimum height of content to new window height
-      document.documentElement['style'].minHeight = window.innerHeight + 'px';
+      document.documentElement.style.minHeight = window.innerHeight + 'px';
 
       if (this.incorrectOrientation) {
         this.setMaximum();
@@ -755,7 +761,7 @@ class ScaleManager {
       }
 
       this.setSize();
-      clearInterval(this._check);
+      this._check.stop();
       this._check = null;
     }
 
@@ -813,7 +819,7 @@ class ScaleManager {
       }
     }
 
-    Phaser.Canvas.getOffset(this.game.canvas, this.game.stage.offset);
+    Canvas.getOffset(this.game.canvas, this.game.stage.offset);
 
     this.bounds.setTo(this.game.stage.offset.x, this.game.stage.offset.y, this.width, this.height);
 
@@ -825,7 +831,7 @@ class ScaleManager {
     this.scaleFactorInversed.x = this.width / this.game.width;
     this.scaleFactorInversed.y = this.height / this.game.height;
 
-    this.hasResized.dispatch(this.width, this.height);
+    this.hasResized.dispatch([this.width, this.height]);
 
     this.checkOrientationState();
 
@@ -864,17 +870,17 @@ class ScaleManager {
 
   setExactFit() {
 
-    var availableWidth = window.innerWidth;
-    var availableHeight = window.innerHeight;
+    int availableWidth = window.innerWidth;
+    int availableHeight = window.innerHeight;
 
-    if (this.maxWidth && availableWidth > this.maxWidth) {
+    if (this.maxWidth != null && availableWidth > this.maxWidth) {
       this.width = this.maxWidth;
     }
     else {
       this.width = availableWidth;
     }
 
-    if (this.maxHeight && availableHeight > this.maxHeight) {
+    if (this.maxHeight != null && availableHeight > this.maxHeight) {
       this.height = this.maxHeight;
     }
     else {

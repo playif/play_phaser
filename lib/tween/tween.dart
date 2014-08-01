@@ -166,7 +166,7 @@ class Tween {
 
   Tween _lastChild;
 
-  Tween(this._object, this.game, this._manager) {
+  Tween(this._object, this.game, [this._manager]) {
 
   }
 

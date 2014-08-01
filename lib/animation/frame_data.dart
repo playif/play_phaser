@@ -50,7 +50,7 @@ class FrameData {
     return output;
   }
 
-  List<Frame> getFrames([List<num> frames, bool useNumericIndex, List<Frame> output]) {
+  List<Frame> getFrames([List frames, bool useNumericIndex, List<Frame> output]) {
     if (useNumericIndex == null) {
       useNumericIndex = true;
     }
@@ -66,7 +66,7 @@ class FrameData {
     }
     else {
       //  Input array given, loop through that instead
-      for (var i = 0, len = frames.length; i < len; i++) {
+      for (int i = 0, len = frames.length; i < len; i++) {
         //  Does the input array contain names or indexes?
         if (useNumericIndex) {
           //  The actual frame

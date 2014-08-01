@@ -1,7 +1,7 @@
 part of Phaser;
 
 class InputHandler {
-  Sprite sprite;
+  GameObject sprite;
   Game game;
   bool enabled;
   int priorityID;

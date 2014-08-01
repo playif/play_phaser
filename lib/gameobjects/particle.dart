@@ -131,7 +131,7 @@ class Particle extends Sprite {
    * @param {number} [health=1] - The health to give the Particle.
    * @return (Phaser.Particle) This instance.
    */
-  reset (x, y, health) {
+  Particle reset (num x, num y, [num health=1]) {
 
     if ( health == null) { health = 1; }
 

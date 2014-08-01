@@ -1,14 +1,22 @@
 part of Phaser;
 
-abstract class GameObject {
+abstract class GameObject extends PIXI.DisplayInterface {
+  Game game;
   bool exists;
+  bool alive;
   Events events;
   int type;
   String name;
 
   Rectangle _currentBounds;
 
-  int renderOrderID;
+  Point scale;
+  List<num> _cache;
+  bool visible;
+  PIXI.Texture texture;
+  Point anchor;
+
+  num get renderOrderID;
 
   num x;
   num y;
@@ -17,13 +25,21 @@ abstract class GameObject {
   Rectangle getBounds();
   preUpdate();
   postUpdate();
+  update();
   destroy(bool destroyChildren);
   removeChild(GameObject child);
+  bringToTop();
   GameObject parent;
+
+  bool fixedToCamera;
+  Point cameraOffset;
+
+  num width;
+  num height;
 
   bool autoCull;
 
   List<GameObject> children;
 
-  bool destroyPhase;
+  bool get destroyPhase;
 }

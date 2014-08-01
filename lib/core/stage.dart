@@ -16,6 +16,11 @@ class Stage extends PIXI.Stage {
 
   Function _onChange;
 
+  PIXI.scaleModes scaleModel;
+
+  bool fullScreenScaleMode;
+
+
   /**
    * @name Phaser.Stage#backgroundColor
    * @property {number|string} backgroundColor - Gets and sets the background color of the stage. The color can be given as a number: 0xff0000 or a hex string: '#ff0000'
@@ -51,7 +56,10 @@ class Stage extends PIXI.Stage {
 //    }
   }
 
-  Stage(this.game, num width, num height) {
+  List<GameObject> children=[];
+
+  Stage(this.game, num width, num height)
+  :super() {
     /**
      * @property {Phaser.Point} offset - Holds the offset coordinates of the Game.canvas from the top-left of the browser window (used by Input and other classes)
      */
@@ -274,7 +282,7 @@ class Stage extends PIXI.Stage {
       return;
     }
 
-    if (document.hidden || document.mozHidden || document.msHidden || document.webkitHidden) {
+    if (document.hidden) {
       this.game.gamePaused(event);
     }
     else {
@@ -283,7 +291,7 @@ class Stage extends PIXI.Stage {
 
   }
 
-  setBackgroundColor(int backgroundColor) {
+  setBackgroundColor(backgroundColor) {
     Color rgb;
     if (backgroundColor is String) {
       rgb = Color.hexToColor(backgroundColor);

@@ -332,7 +332,7 @@ class Camera {
     this.view.x = x;
     this.view.y = y;
 
-    if (this.bounds) {
+    if (this.bounds != null) {
       this.checkBounds();
     }
 

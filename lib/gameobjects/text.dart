@@ -2,20 +2,27 @@ part of Phaser;
 
 class Text extends PIXI.Text implements GameObject {
   Game game;
-  num x,y;
+  num x, y;
   String _text;
+
+  String name;
+
+
   PIXI.TextStyle style;
 
   bool exists;
+
   //String name;
   int type;
   int z;
   Point world;
+
   //String _text;
   String _font;
   int _fontSize;
   String _fontWeight;
   int _lineSpacing;
+
   //Events events;
   InputHandler input;
 
@@ -24,6 +31,7 @@ class Text extends PIXI.Text implements GameObject {
   int renderOrderID;
   bool autoCull;
   bool destroyPhase;
+
   //this.setStyle(style);
 
   //PIXI.Text.call(this, text, this.style);
@@ -35,6 +43,8 @@ class Text extends PIXI.Text implements GameObject {
 
 
   Sprite parent;
+
+  Events events;
 
   /**
    * A small internal cache:
@@ -54,11 +64,11 @@ class Text extends PIXI.Text implements GameObject {
 
 
   Text(this.game, [ this.x, this.y, String text='', PIXI.TextStyle style])
-  :super(text,style){
+  :super(text, style) {
 
-    this.style=style;
-    if(this.style == null){
-      this.style=new PIXI.TextStyle();
+    this.style = style;
+    if (this.style == null) {
+      this.style = new PIXI.TextStyle();
     }
 
     /**
@@ -164,34 +174,31 @@ class Text extends PIXI.Text implements GameObject {
    * Automatically called by World.preUpdate.
    * @method Phaser.Text.prototype.preUpdate
    */
-  preUpdate () {
+
+  preUpdate() {
 
     this._cache[0] = this.world.x;
     this._cache[1] = this.world.y;
     this._cache[2] = this.rotation;
 
-    if (!this.exists || !this.parent.exists)
-    {
+    if (!this.exists || !this.parent.exists) {
       this.renderOrderID = -1;
       return false;
     }
 
-    if (this.autoCull)
-    {
+    if (this.autoCull) {
       //  Won't get rendered but will still get its transform updated
       this.renderable = this.game.world.camera.screenView.intersects(this.getBounds());
     }
 
     this.world.setTo(this.game.camera.x + this.worldTransform.tx, this.game.camera.y + this.worldTransform.ty);
 
-    if (this.visible)
-    {
+    if (this.visible) {
       this._cache[3] = this.game.stage.currentRenderOrderID++;
     }
 
     //  Update any Children
-    for (var i = 0, len = this.children.length; i < len; i++)
-    {
+    for (var i = 0, len = this.children.length; i < len; i++) {
       this.children[i].preUpdate();
     }
 
@@ -205,6 +212,7 @@ class Text extends PIXI.Text implements GameObject {
    * @method Phaser.Text#update
    * @memberof Phaser.Text
    */
+
   update() {
 
   }
@@ -213,17 +221,16 @@ class Text extends PIXI.Text implements GameObject {
    * Automatically called by World.postUpdate.
    * @method Phaser.Text.prototype.postUpdate
    */
-  postUpdate  () {
 
-    if (this._cache[7] == 1)
-    {
+  postUpdate() {
+
+    if (this._cache[7] == 1) {
       this.position.x = (this.game.camera.view.x + this.cameraOffset.x) / this.game.camera.scale.x;
       this.position.y = (this.game.camera.view.y + this.cameraOffset.y) / this.game.camera.scale.y;
     }
 
     //  Update any Children
-    for (var i = 0, len = this.children.length; i < len; i++)
-    {
+    for (var i = 0, len = this.children.length; i < len; i++) {
       this.children[i].postUpdate();
     }
 
@@ -233,51 +240,47 @@ class Text extends PIXI.Text implements GameObject {
    * @method Phaser.Text.prototype.destroy
    * @param {boolean} [destroyChildren=true] - Should every child of this object have its destroy method called?
    */
-  destroy ([bool destroyChildren]) {
 
-    if (this.game == null || this.destroyPhase) { return; }
+  destroy([bool destroyChildren]) {
 
-    if (destroyChildren == null) { destroyChildren = true; }
+    if (this.game == null || this.destroyPhase) {
+      return;
+    }
+
+    if (destroyChildren == null) {
+      destroyChildren = true;
+    }
 
     this._cache[8] = 1;
 
-    if (this.parent !=null)
-    {
-      if (this.parent is Group)
-      {
+    if (this.parent != null) {
+      if (this.parent is Group) {
         (this.parent as Group).remove(this);
       }
-      else
-      {
+      else {
         this.parent.removeChild(this);
       }
     }
 
     this.texture.destroy();
 
-    if (this.canvas.parentNode != null)
-    {
+    if (this.canvas.parentNode != null) {
       this.canvas.remove();
     }
-    else
-    {
+    else {
       this.canvas = null;
       this.context = null;
     }
 
     var i = this.children.length;
 
-    if (destroyChildren)
-    {
-      while (i--)
-      {
+    if (destroyChildren) {
+      while (i--) {
         this.children[i].destroy(destroyChildren);
       }
     }
-    else
-    {
-      while (i--)
-      {
+    else {
+      while (i--) {
         this.removeChild(this.children[i]);
       }
     }
@@ -300,7 +303,8 @@ class Text extends PIXI.Text implements GameObject {
    * @param {string} [color='rgba(0,0,0,0)'] - The color of the shadow, as given in CSS rgba format. Set the alpha component to 0 to disable the shadow.
    * @param {number} [blur=0] - The shadowBlur value. Make the shadow softer by applying a Gaussian blur to it. A number from 0 (no blur) up to approx. 10 (depending on scene).
    */
-  setShadow ([num x = 0, num y = 0, String color = 'rgba(0,0,0,0)', num blur = 0]) {
+
+  setShadow([num x = 0, num y = 0, String color = 'rgba(0,0,0,0)', num blur = 0]) {
     this.style.shadowOffsetX = x;
     this.style.shadowOffsetY = y;
     this.style.shadowColor = color ;
@@ -321,7 +325,8 @@ class Text extends PIXI.Text implements GameObject {
    * @param [style.wordWrap=false] {Boolean} Indicates if word wrap should be used
    * @param [style.wordWrapWidth=100] {Number} The width at which text will wrap
    */
-  setStyle (PIXI.TextStyle style) {
+
+  setStyle(PIXI.TextStyle style) {
 
     //style = style || {};
     style.font = style.font;
@@ -348,9 +353,9 @@ class Text extends PIXI.Text implements GameObject {
    * @private
    */
 
-  static RegExp linesReg=new RegExp("(?:\r\n|\r|\n)");
+  static RegExp linesReg = new RegExp("(?:\r\n|\r|\n)");
 
-  updateText  () {
+  updateText() {
 
     this.context.font = this.style.font;
 
@@ -358,130 +363,117 @@ class Text extends PIXI.Text implements GameObject {
 
     // word wrap
     // preserve original text
-    if (this.style.wordWrap)
-    {
+    if (this.style.wordWrap) {
       outputText = this.runWordWrap(this.text);
     }
 
     //split text into lines
     var lines = outputText.split(linesReg);
 
-  //calculate text width
-  var lineWidths = [];
-  var maxLineWidth = 0;
+    //calculate text width
+    var lineWidths = [];
+    var maxLineWidth = 0;
 
-  for (var i = 0; i < lines.length; i++)
-  {
-  var lineWidth = this.context.measureText(lines[i]).width;
-  lineWidths[i] = lineWidth;
-  maxLineWidth = Math.max(maxLineWidth, lineWidth);
+    for (var i = 0; i < lines.length; i++) {
+      var lineWidth = this.context.measureText(lines[i]).width;
+      lineWidths[i] = lineWidth;
+      maxLineWidth = Math.max(maxLineWidth, lineWidth);
+    }
+
+    this.canvas.width = maxLineWidth + this.style.strokeThickness;
+
+    //calculate text height
+    var lineHeight = this.determineFontHeight('font: ' + this.style.font + ';') + this.style.strokeThickness + this._lineSpacing + this.style.shadowOffsetY;
+
+    this.canvas.height = lineHeight * lines.length;
+
+    if (game.device.cocoonJS) {
+      this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+
+    //set canvas text styles
+    this.context.fillStyle = this.style.fill;
+    this.context.font = this.style.font;
+
+    this.context.strokeStyle = this.style.stroke;
+    this.context.lineWidth = this.style.strokeThickness;
+
+    this.context.shadowOffsetX = this.style.shadowOffsetX;
+    this.context.shadowOffsetY = this.style.shadowOffsetY;
+    this.context.shadowColor = this.style.shadowColor;
+    this.context.shadowBlur = this.style.shadowBlur;
+
+    this.context.textBaseline = 'top';
+    this.context.lineCap = 'round';
+    this.context.lineJoin = 'round';
+
+    //draw lines line by line
+    for (int i = 0; i < lines.length; i++) {
+      var linePosition = new PIXI.Point(this.style.strokeThickness / 2, this.style.strokeThickness / 2 + i * lineHeight);
+
+      if (this.style.align == 'right') {
+        linePosition.x += maxLineWidth - lineWidths[i];
+      }
+      else if (this.style.align == 'center') {
+        linePosition.x += (maxLineWidth - lineWidths[i]) / 2;
+      }
+
+      linePosition.y += this._lineSpacing;
+
+      if (this.style.stroke != null && this.style.strokeThickness != 0) {
+        this.context.strokeText(lines[i], linePosition.x, linePosition.y);
+      }
+
+      if (this.style.fill != null) {
+        this.context.fillText(lines[i], linePosition.x, linePosition.y);
+      }
+    }
+
+    this.updateTexture();
   }
 
-  this.canvas.width = maxLineWidth + this.style.strokeThickness;
+  /**
+   * Greedy wrapping algorithm that will wrap words as the line grows longer than its horizontal bounds.
+   *
+   * @method Phaser.Text.prototype.runWordWrap
+   * @private
+   */
 
-  //calculate text height
-  var lineHeight = this.determineFontHeight('font: ' + this.style.font + ';') + this.style.strokeThickness + this._lineSpacing + this.style.shadowOffsetY;
+  runWordWrap(String text) {
 
-  this.canvas.height = lineHeight * lines.length;
+    var result = '';
+    var lines = text.split('\n');
 
-  if (navigator.isCocoonJS)
-  {
-  this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-  }
+    for (var i = 0; i < lines.length; i++) {
+      var spaceLeft = this.style.wordWrapWidth;
+      var words = lines[i].split(' ');
 
-  //set canvas text styles
-  this.context.fillStyle = this.style.fill;
-  this.context.font = this.style.font;
+      for (var j = 0; j < words.length; j++) {
+        var wordWidth = this.context.measureText(words[j]).width;
+        var wordWidthWithSpace = wordWidth + this.context.measureText(' ').width;
 
-  this.context.strokeStyle = this.style.stroke;
-  this.context.lineWidth = this.style.strokeThickness;
-
-  this.context.shadowOffsetX = this.style.shadowOffsetX;
-  this.context.shadowOffsetY = this.style.shadowOffsetY;
-  this.context.shadowColor = this.style.shadowColor;
-  this.context.shadowBlur = this.style.shadowBlur;
-
-  this.context.textBaseline = 'top';
-  this.context.lineCap = 'round';
-  this.context.lineJoin = 'round';
-
-  //draw lines line by line
-  for (int i = 0; i < lines.length; i++)
-  {
-  var linePosition = new PIXI.Point(this.style.strokeThickness / 2, this.style.strokeThickness / 2 + i * lineHeight);
-
-  if (this.style.align == 'right')
-  {
-  linePosition.x += maxLineWidth - lineWidths[i];
-  }
-  else if (this.style.align == 'center')
-  {
-  linePosition.x += (maxLineWidth - lineWidths[i]) / 2;
-  }
-
-  linePosition.y += this._lineSpacing;
-
-  if (this.style.stroke && this.style.strokeThickness)
-  {
-  this.context.strokeText(lines[i], linePosition.x, linePosition.y);
-  }
-
-  if (this.style.fill)
-  {
-  this.context.fillText(lines[i], linePosition.x, linePosition.y);
-  }
-  }
-
-  this.updateTexture();
-}
-
-/**
- * Greedy wrapping algorithm that will wrap words as the line grows longer than its horizontal bounds.
- *
- * @method Phaser.Text.prototype.runWordWrap
- * @private
- */
-runWordWrap  (String text) {
-
-  var result = '';
-  var lines = text.split('\n');
-
-  for (var i = 0; i < lines.length; i++)
-  {
-    var spaceLeft = this.style.wordWrapWidth;
-    var words = lines[i].split(' ');
-
-    for (var j = 0; j < words.length; j++)
-    {
-      var wordWidth = this.context.measureText(words[j]).width;
-      var wordWidthWithSpace = wordWidth + this.context.measureText(' ').width;
-
-      if (wordWidthWithSpace > spaceLeft)
-      {
-        // Skip printing the newline if it's the first word of the line that is greater than the word wrap width.
-        if (j > 0)
-        {
-          result += '\n';
+        if (wordWidthWithSpace > spaceLeft) {
+          // Skip printing the newline if it's the first word of the line that is greater than the word wrap width.
+          if (j > 0) {
+            result += '\n';
+          }
+          result += words[j] + ' ';
+          spaceLeft = this.style.wordWrapWidth - wordWidth;
         }
-        result += words[j] + ' ';
-        spaceLeft = this.style.wordWrapWidth - wordWidth;
+        else {
+          spaceLeft -= wordWidthWithSpace;
+          result += words[j] + ' ';
+        }
       }
-      else
-      {
-        spaceLeft -= wordWidthWithSpace;
-        result += words[j] + ' ';
+
+      if (i < lines.length - 1) {
+        result += '\n';
       }
     }
 
-    if (i < lines.length-1)
-    {
-      result += '\n';
-    }
+    return result;
+
   }
-
-  return result;
-
-}
 
 
 }

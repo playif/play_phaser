@@ -337,7 +337,7 @@ class Keyboard {
 
     this._i = this._keys.length;
 
-    while (this._i-- >=0) {
+    while (this._i-- >0) {
       if (this._keys[this._i] != null) {
         this._keys[this._i].update();
       }

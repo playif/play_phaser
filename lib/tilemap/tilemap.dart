@@ -82,7 +82,7 @@ class Tilemap {
   /**
    * @property {array} debugMap - Map data used for debug values only.
    */
-  List debugMap;
+  Map<Tile,String> debugMap;
 
   /**
    * @property {array} _results - Internal var.
@@ -484,8 +484,8 @@ class Tilemap {
 
         group.add(sprite);
 
-        for (int property in this.objects[name][i].properties) {
-          group.set(sprite, property, this.objects[name][i].properties[property], false, false, 0, true);
+        for (String property in this.objects[name][i].properties.keys) {
+          group.set(sprite, property, this.objects[name][i].properties[property], false, false, 0);
         }
       }
     }
@@ -1540,7 +1540,7 @@ class Tilemap {
    * @param {number} value
    */
 
-  swapHandler(num value) {
+  swapHandler(Tile value) {
 
     if (value.index == this._tempA) {
       //  Swap A with B
@@ -1752,7 +1752,7 @@ class Tilemap {
 
         if (this.layers[this.currentLayer].data[y][x] != null) {
           if (this.debugMap[this.layers[this.currentLayer].data[y][x]] !=null) {
-            args.add("background: " + this.debugMap[this.layers[this.currentLayer].data[y][x]]);
+            args.add("background: ${this.debugMap[this.layers[this.currentLayer].data[y][x]]}");
           }
           else {
             args.add("background: #ffffff");

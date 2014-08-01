@@ -23,6 +23,14 @@ class Graphics extends PIXI.Graphics implements GameObject {
 
   int renderOrderID;
 
+  PIXI.Texture texture;
+  Point anchor;
+  bool autoCull;
+
+  bringToTop(){
+
+  }
+
   num x;
   num y;
   num z;

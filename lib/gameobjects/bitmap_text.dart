@@ -1,6 +1,6 @@
 part of Phaser;
 
-class BitmapText extends PIXI.BitmapText {
+class BitmapText extends PIXI.BitmapText implements GameObject {
   Game game;
 
   num x;
@@ -29,10 +29,20 @@ class BitmapText extends PIXI.BitmapText {
   int renderOrderID;
   bool autoCull;
 
+  Point scale;
+  bool visible;
+  PIXI.Texture texture;
+  Point anchor;
+
 
   List<GameObject> children;
   Group parent;
 
+  bringToTop(){
+
+  }
+
+  Rectangle _currentBounds;
   //bool destroyPhase;
 
 
@@ -176,7 +186,7 @@ class BitmapText extends PIXI.BitmapText {
 
   bool get inputEnabled {
 
-    return (this.input && this.input.enabled);
+    return (this.input !=null && this.input.enabled);
 
   }
 
@@ -187,12 +197,12 @@ class BitmapText extends PIXI.BitmapText {
         this.input = new InputHandler(this);
         this.input.start();
       }
-      else if (this.input && !this.input.enabled) {
+      else if (this.input != null && !this.input.enabled) {
         this.input.start();
       }
     }
     else {
-      if (this.input && this.input.enabled) {
+      if (this.input != null && this.input.enabled) {
         this.input.stop();
       }
     }
@@ -234,9 +244,7 @@ class BitmapText extends PIXI.BitmapText {
    */
 
   bool get destroyPhase {
-
-    return !!this._cache[8];
-
+    return this._cache[8] == 1;
   }
 
 
@@ -439,7 +447,7 @@ class BitmapText extends PIXI.BitmapText {
 
     this._cache[8] = 1;
 
-    if (this.parent) {
+    if (this.parent != null) {
       if (this.parent is Group) {
         this.parent.remove(this);
       }
@@ -448,20 +456,21 @@ class BitmapText extends PIXI.BitmapText {
       }
     }
 
-    var i = this.children.length;
+    int i = this.children.length;
 
     if (destroyChildren) {
-      while (i--) {
-        if (this.children[i].destroy) {
-          this.children[i].destroy(destroyChildren);
-        }
-        else {
-          this.removeChild(this.children[i]);
-        }
+      while (i-- >= 0) {
+//        if (this.children[i].destroy) {
+//
+//        }
+//        else {
+//          this.removeChild(this.children[i]);
+//        }
+        this.children[i].destroy(destroyChildren);
       }
     }
     else {
-      while (i--) {
+      while (i-- >= 0) {
         this.removeChild(this.children[i]);
       }
     }

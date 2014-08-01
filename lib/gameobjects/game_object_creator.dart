@@ -51,7 +51,7 @@ class GameObjectCreator {
    */
   Tween tween (obj) {
 
-    return new Phaser.Tween(obj, this.game);
+    return new Tween(obj, this.game);
 
   }
 

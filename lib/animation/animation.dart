@@ -359,7 +359,8 @@ class Animation {
       for (int i = start; i <= stop; i++) {
         if (zeroPad is num) {
           //  str, len, pad, dir
-          frame = Utils.pad(i.toString(), zeroPad, '0', 1);
+          //frame = Utils.pad(i.toString(), zeroPad, '0', 1);
+          frame=i.toString().padLeft(zeroPad, '0');
         }
         else {
           frame = i.toString();
@@ -374,7 +375,8 @@ class Animation {
       for (var i = start; i >= stop; i--) {
         if (zeroPad is num) {
           //  str, len, pad, dir
-          frame = Utils.pad(i.toString(), zeroPad, '0', 1);
+          //frame = Utils.pad(i.toString(), zeroPad, '0', 1);
+          frame=i.toString().padLeft(zeroPad, '0');
         }
         else {
           frame = i.toString();

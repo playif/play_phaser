@@ -102,31 +102,31 @@ class Utils {
    * @return {string} The padded string
    */
 
-  static String pad(String str, [int len =0, String pad =' ', int dir=3]) {
-
-    int padlen = 0;
-
-    if (len + 1 >= str.length) {
-      switch (dir) {
-        case 1:
-          str = new String(len + 1 - str.length).join(pad) + str;
-          break;
-
-        case 3:
-          var right = Math.ceil((padlen = len - str.length) / 2);
-          var left = padlen - right;
-          str = new String(left + 1).join(pad) + str + new String(right + 1).join(pad);
-          break;
-
-        default:
-          str = str + new String(len + 1 - str.length).join(pad);
-          break;
-      }
-    }
-
-    return str;
-
-  }
+//  static String pad(String str, [int len =0, String pad =' ', int dir=3]) {
+//
+//    int padlen = 0;
+//
+//    if (len + 1 >= str.length) {
+//      switch (dir) {
+//        case 1:
+//          str = new String(len + 1 - str.length).join(pad) + str;
+//          break;
+//
+//        case 3:
+//          var right = Math.ceil((padlen = len - str.length) / 2);
+//          var left = padlen - right;
+//          str = new String(left + 1).join(pad) + str + new String(right + 1).join(pad);
+//          break;
+//
+//        default:
+//          str = str + new String(len + 1 - str.length).join(pad);
+//          break;
+//      }
+//    }
+//
+//    return str;
+//
+//  }
 
   /**
    * This is a slightly modified version of jQuery.isPlainObject. A plain object is an object whose internal class property is [object Object].

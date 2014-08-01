@@ -1,6 +1,7 @@
 part of Phaser;
 
 class Emitter {
-  Emitter() {
+  Game game;
+  Emitter(this.game, x, y, maxParticles) {
   }
 }

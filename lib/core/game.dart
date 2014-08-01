@@ -602,16 +602,17 @@ class Game {
       this.canvas = Canvas.create(this.width, this.height);
     }
 
-    if (this.config['canvasStyle']) {
-      this.canvas.style = this.config['canvasStyle'];
-    }
+//    if (this.config['canvasStyle']) {
+//      this.canvas.style = this.config['canvasStyle'];
+//    }
 //    else {
 //      this.canvas.style['-webkit-full-screen'] = 'width: 100%; height: 100%';
 //    }
 
     if (this.device.cocoonJS) {
+      //canvas.requestFullscreen();
       //  Enable screencanvas for Cocoon on this Canvas object only
-      this.canvas.dataset['screencanvas'] = true;
+      this.canvas.dataset['screencanvas'] = 'true';
     }
 
     if (this.renderType == HEADLESS || this.renderType == CANVAS || (this.renderType == AUTO && this.device.webGL == false)) {
