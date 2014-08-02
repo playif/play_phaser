@@ -61,6 +61,8 @@ class Body extends Rectangle {
   Collision blocked;
   Point tilePadding;
 
+  bool safeRemove;
+
   /**
    * @property {number} phaser - Is this Body in a preUpdate (1) or postUpdate (2) state?
    */

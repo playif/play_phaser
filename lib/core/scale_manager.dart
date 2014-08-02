@@ -775,19 +775,19 @@ class ScaleManager {
   setSize() {
 
     if (!this.incorrectOrientation) {
-      if (this.maxWidth && this.width > this.maxWidth) {
+      if (this.maxWidth != null && this.width > this.maxWidth) {
         this.width = this.maxWidth;
       }
 
-      if (this.maxHeight && this.height > this.maxHeight) {
+      if (this.maxHeight != null && this.height > this.maxHeight) {
         this.height = this.maxHeight;
       }
 
-      if (this.minWidth && this.width < this.minWidth) {
+      if (this.minWidth != null && this.width < this.minWidth) {
         this.width = this.minWidth;
       }
 
-      if (this.minHeight && this.height < this.minHeight) {
+      if (this.minHeight != null && this.height < this.minHeight) {
         this.height = this.minHeight;
       }
     }

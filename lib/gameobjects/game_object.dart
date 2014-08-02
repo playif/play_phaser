@@ -15,6 +15,7 @@ abstract class GameObject extends PIXI.DisplayInterface {
   bool visible;
   PIXI.Texture texture;
   Point anchor;
+  Point position;
 
   num get renderOrderID;
 
@@ -25,6 +26,7 @@ abstract class GameObject extends PIXI.DisplayInterface {
   Rectangle getBounds();
   preUpdate();
   postUpdate();
+
   update();
   destroy(bool destroyChildren);
   removeChild(GameObject child);
