@@ -794,7 +794,7 @@ class Cache {
    * @return {Phaser.FrameData} The frame data.
    */
 
-  Map getFrameData(String key) {
+  FrameData getFrameData(String key) {
     if (this._images[key] != null && this._images[key]['frameData'] != null) {
       return this._images[key]['frameData'];
     }
@@ -809,7 +809,7 @@ class Cache {
    * @param {number} frameData - The new FrameData.
    */
 
-  updateFrameData(String key, int frameData) {
+  updateFrameData(String key, FrameData frameData) {
     if (this._images[key]!=null) {
       this._images[key]['spriteSheet'] = true;
       this._images[key]['frameData'] = frameData;

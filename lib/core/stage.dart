@@ -20,6 +20,7 @@ class Stage extends PIXI.Stage {
 
   bool fullScreenScaleMode;
 
+  PIXI.scaleModes scaleMode;
 
   /**
    * @name Phaser.Stage#backgroundColor
@@ -56,7 +57,7 @@ class Stage extends PIXI.Stage {
 //    }
   }
 
-  List<GameObject> children=[];
+  List<GameObject> children = [];
 
   Stage(this.game, num width, num height)
   :super() {
@@ -188,25 +189,25 @@ class Stage extends PIXI.Stage {
 
   }
 
-  parseConfig(config) {
+  parseConfig(Map config) {
 
-    if (config['checkOffsetInterval']) {
+    if (config.containsKey('checkOffsetInterval')) {
       this.checkOffsetInterval = config['checkOffsetInterval'];
     }
 
-    if (config['disableVisibilityChange']) {
+    if (config.containsKey('disableVisibilityChange')) {
       this.disableVisibilityChange = config['disableVisibilityChange'];
     }
 
-    if (config['fullScreenScaleMode']) {
+    if (config.containsKey('fullScreenScaleMode')) {
       this.fullScreenScaleMode = config['fullScreenScaleMode'];
     }
 
-    if (config['scaleMode']) {
+    if (config.containsKey('scaleMode')) {
       this.scaleMode = config['scaleMode'];
     }
 
-    if (config['backgroundColor']) {
+    if (config.containsKey('backgroundColor')) {
       this.backgroundColor = config['backgroundColor'];
     }
 

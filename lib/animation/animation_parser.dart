@@ -51,12 +51,12 @@ class AnimationParser {
 
       data.addFrame(new Frame(i, x, y, frameWidth, frameHeight, '', uuid));
 
-      PIXI.TextureCache[uuid] = new PIXI.Texture(PIXI.BaseTextureCache[key], {
-          x: x,
-          y: y,
-          width: frameWidth,
-          height: frameHeight
-      });
+      PIXI.TextureCache[uuid] = new PIXI.Texture(PIXI.BaseTextureCache[key], new PIXI.Rectangle()
+          ..x= x
+          ..y= y
+          ..width= frameWidth
+          ..height= frameHeight
+      );
 
       x += frameWidth + spacing;
 

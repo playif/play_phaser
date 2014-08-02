@@ -43,7 +43,7 @@ class Filter {
 
   //});
 
-  Filter(this.game, Map uniforms, List<String> fragmentSrc) {
+  Filter(this.game, [Map uniforms, List<String> fragmentSrc]) {
 
     /**
      * @property {number} type - The const type of this object, either Phaser.WEBGL_FILTER or Phaser.CANVAS_FILTER.

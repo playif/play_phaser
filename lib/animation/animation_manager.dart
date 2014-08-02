@@ -1,7 +1,7 @@
 part of Phaser;
 
 class AnimationManager {
-  Sprite sprite;
+  GameObject sprite;
   Game game;
   Frame currentFrame;
   Animation currentAnim;
@@ -78,14 +78,13 @@ class AnimationManager {
 
   AnimationManager(this.sprite) {
     game = sprite.game;
-
   }
 
 
-  loadFrameData(FrameData frameData) {
+  loadFrameData(FrameData frameData,[int frame=0]) {
 
     this.frameData = frameData;
-    this.frame = 0;
+    this.frame = frame;
     this.isLoaded = true;
 
   }
@@ -220,7 +219,7 @@ class AnimationManager {
 
   refreshFrame() {
     this.sprite.setTexture(PIXI.TextureCache[this.currentFrame.uuid]);
-    if (this.sprite.__tilePattern) {
+    if (this.sprite.__tilePattern !=null) {
       this.__tilePattern = false;
       this.tilingTexture = false;
     }

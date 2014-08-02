@@ -15,6 +15,9 @@ class Graphics extends PIXI.Graphics implements GameObject {
   List<GameObject> children;
 
   bool exists;
+  bool alive;
+  bool autoCull;
+
   Events events;
   int type;
   String name;
@@ -25,7 +28,13 @@ class Graphics extends PIXI.Graphics implements GameObject {
 
   PIXI.Texture texture;
   Point anchor;
-  bool autoCull;
+
+  CanvasPattern __tilePattern;
+
+  setTexture(PIXI.Texture texture){
+
+  }
+
 
   bringToTop(){
 

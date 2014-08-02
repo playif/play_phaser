@@ -46,6 +46,14 @@ class Text extends PIXI.Text implements GameObject {
 
   Events events;
 
+  bool alive;
+
+  CanvasPattern __tilePattern;
+
+  setTexture(PIXI.Texture texture){
+
+  }
+
   /**
    * A small internal cache:
    * 0 = previous position.x
@@ -62,6 +70,28 @@ class Text extends PIXI.Text implements GameObject {
    */
   //this._cache = [ 0, 0, 0, 0, 1, 0, 1, 0, 0 ];
 
+  bool get fixedToCamera {
+    return this._cache[7] == null ? false : this._cache[7];
+  }
+
+  set fixedToCamera(bool value) {
+    if (value) {
+      this._cache[7] = 1;
+      this.cameraOffset.set(this.x, this.y);
+    }
+    else {
+      this._cache[7] = 0;
+    }
+  }
+
+  bringToTop() {
+    if (this.parent != null) {
+      this.parent.bringToTop();
+    }
+    return this;
+  }
+
+  Rectangle _currentBounds;
 
   Text(this.game, [ this.x, this.y, String text='', PIXI.TextStyle style])
   :super(text, style) {

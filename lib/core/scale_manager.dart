@@ -177,7 +177,7 @@ class ScaleManager {
    * @property {number} _check - Cached size interval var.
    * @private
    */
-  Timer _check;
+  async.Timer _check;
 
   bool isFullScreen;
 
@@ -371,7 +371,7 @@ class ScaleManager {
      * @property {number} aspectRatio - The aspect ratio of the scaled game.
      * @readonly
      */
-    this.aspectRatio = 0;
+    this.aspectRatio = 0.0;
 
     /**
      * @property {number} sourceAspectRatio - The aspect ratio (width / height) of the original game dimensions.
@@ -521,8 +521,8 @@ class ScaleManager {
       this.enterFullScreen.dispatch([this.width, this.height]);
     }
     else {
-      this.fullScreenTarget.style.width = this.game.width + 'px';
-      this.fullScreenTarget.style.height = this.game.height + 'px';
+      this.fullScreenTarget.style.width = this.game.width.toString() + 'px';
+      this.fullScreenTarget.style.height = this.game.height.toString() + 'px';
 
       this.width = this._width;
       this.height = this._height;
@@ -595,7 +595,7 @@ class ScaleManager {
         this.incorrectOrientation = false;
         this.leaveIncorrectOrientation.dispatch();
 
-        if (this.orientationSprite) {
+        if (this.orientationSprite !=null) {
           this.orientationSprite.visible = false;
           this.game.world.visible = true;
         }
@@ -611,7 +611,7 @@ class ScaleManager {
         this.incorrectOrientation = true;
         this.enterIncorrectOrientation.dispatch();
 
-        if (this.orientationSprite && this.orientationSprite.visible == false) {
+        if (this.orientationSprite != null && this.orientationSprite.visible == false) {
           this.orientationSprite.visible = true;
           this.game.world.visible = false;
         }
@@ -738,7 +738,7 @@ class ScaleManager {
 
     if (force || window.innerHeight > this._startHeight || this._iterations < 0) {
       // Set minimum height of content to new window height
-      document.documentElement.style.minHeight = window.innerHeight + 'px';
+      document.documentElement.style.minHeight = window.innerHeight.toString() + 'px';
 
       if (this.incorrectOrientation) {
         this.setMaximum();
@@ -761,7 +761,7 @@ class ScaleManager {
       }
 
       this.setSize();
-      this._check.stop();
+      this._check.cancel();
       this._check = null;
     }
 
@@ -792,15 +792,15 @@ class ScaleManager {
       }
     }
 
-    this.game.canvas.style.width = this.width + 'px';
-    this.game.canvas.style.height = this.height + 'px';
+    this.game.canvas.style.width = this.width.toString() + 'px';
+    this.game.canvas.style.height = this.height.toString() + 'px';
 
     this.game.input.scale.setTo(this.game.width / this.width, this.game.height / this.height);
 
     if (this.pageAlignHorizontally) {
       if (this.width < window.innerWidth && !this.incorrectOrientation) {
         this.margin.x = Math.round((window.innerWidth - this.width) / 2);
-        this.game.canvas.style.marginLeft = this.margin.x + 'px';
+        this.game.canvas.style.marginLeft = this.margin.x.toString() + 'px';
       }
       else {
         this.margin.x = 0;
@@ -811,7 +811,7 @@ class ScaleManager {
     if (this.pageAlignVertically) {
       if (this.height < window.innerHeight && !this.incorrectOrientation) {
         this.margin.y = Math.round((window.innerHeight - this.height) / 2);
-        this.game.canvas.style.marginTop = this.margin.y + 'px';
+        this.game.canvas.style.marginTop = this.margin.y.toString() + 'px';
       }
       else {
         this.margin.y = 0;

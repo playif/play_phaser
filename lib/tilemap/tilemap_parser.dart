@@ -36,7 +36,7 @@ class TilemapParser {
    * @param {number} [height=10] - The height of the map in tiles. If this map is created from Tiled or CSV data you don't need to specify this.
    * @return {object} The parsed map object.
    */
-  static Tilemap parse(Game game, [String key, num tileWidth, num tileHeight, num width, num height]) {
+  static TilemapData parse(Game game, [String key, num tileWidth, num tileHeight, num width, num height]) {
 
     if (tileWidth == null) {
       tileWidth = 32;

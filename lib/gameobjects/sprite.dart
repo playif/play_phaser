@@ -5,12 +5,11 @@ class Sprite extends PIXI.Sprite implements GameObject {
 //  num x;
 //  num y;
   String key;
-//  num _frame;
 
-  //String name;
-  //num type;
+  String name;
+  num type;
   num z;
-  //Events events;
+  Events events;
   AnimationManager animations;
 
   String _frameName;
@@ -29,7 +28,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
   List<num> _cache;
   Rectangle _crop;
 
-  Rectangle _frame;
+  int _frame;
   Rectangle _bounds;
 
   num lifespan;
@@ -43,6 +42,8 @@ class Sprite extends PIXI.Sprite implements GameObject {
   Group parent;
 
   List<GameObject> children;
+
+  Rectangle _currentBounds;
 
 
   num get angle {
@@ -544,7 +545,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
         var local = {
         };
 
-        Utils.extend(true, local, this.texture);
+        //Utils.extend(true, local, this.texture);
 
         local.sourceWidth = local.width;
         local.sourceHeight = local.height;

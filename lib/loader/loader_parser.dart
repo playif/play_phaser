@@ -2,48 +2,49 @@ part of Phaser;
 
 class LoaderParser {
 
-  static bitmapFont(Game game, xml, String cacheKey, int xSpacing, int ySpacing) {
+  static bitmapFont(Game game, XmlDocument xml, String cacheKey, int xSpacing, int ySpacing) {
 
-    var data = {};
-    var info = xml.getElementsByTagName('info')[0];
-    var common = xml.getElementsByTagName('common')[0];
+    Map data = {
+    };
+    String info = xml.getElementsByTagName('info')[0];
+    String common = xml.getElementsByTagName('common')[0];
 
-    data.font = info.getAttribute('face');
-    data.size = parseInt(info.getAttribute('size'), 10);
-    data.lineHeight = parseInt(common.getAttribute('lineHeight'), 10) + ySpacing;
-    data.chars = {};
+    data['font'] = info.getAttribute('face');
+    data['size'] = int.parse(info.getAttribute('size'));
+    data['lineHeight'] = int.parse(common.getAttribute('lineHeight')) + ySpacing;
+    data['chars'] = {
+    };
 
-    var letters = xml.getElementsByTagName('char');
+    List<Element> letters = xml.getElementsByTagName('char');
 
-    for (var i = 0; i < letters.length; i++)
-    {
-      var charCode = parseInt(letters[i].getAttribute('id'), 10);
+    for (int i = 0; i < letters.length; i++) {
+      int charCode = int.parse(letters[i].getAttribute('id'));
 
-      var textureRect = new PIXI.Rectangle(
-          parseInt(letters[i].getAttribute('x'), 10),
-          parseInt(letters[i].getAttribute('y'), 10),
-          parseInt(letters[i].getAttribute('width'), 10),
-          parseInt(letters[i].getAttribute('height'), 10)
+      PIXI.Rectangle textureRect = new PIXI.Rectangle(
+          int.parse(letters[i].getAttribute('x')),
+          int.parse(letters[i].getAttribute('y')),
+          int.parse(letters[i].getAttribute('width')),
+          int.parse(letters[i].getAttribute('height'))
       );
 
-      data.chars[charCode] = {
-          xOffset: parseInt(letters[i].getAttribute('xoffset'), 10),
-          yOffset: parseInt(letters[i].getAttribute('yoffset'), 10),
-          xAdvance: parseInt(letters[i].getAttribute('xadvance'), 10) + xSpacing,
-          kerning: {},
-          texture: PIXI.TextureCache[cacheKey] = new PIXI.Texture(PIXI.BaseTextureCache[cacheKey], textureRect)
+      data['chars'][charCode] = {
+          'xOffset': int.parse(letters[i].getAttribute('xoffset')),
+          'yOffset': int.parse(letters[i].getAttribute('yoffset')),
+          'xAdvance': int.parse(letters[i].getAttribute('xadvance')) + xSpacing,
+          'kerning': {
+          },
+          'texture': PIXI.TextureCache[cacheKey] = new PIXI.Texture(PIXI.BaseTextureCache[cacheKey], textureRect)
       };
     }
 
-    var kernings = xml.getElementsByTagName('kerning');
+    List<Element> kernings = xml.getElementsByTagName('kerning');
 
-    for (i = 0; i < kernings.length; i++)
-    {
-      var first = parseInt(kernings[i].getAttribute('first'), 10);
-      var second = parseInt(kernings[i].getAttribute('second'), 10);
-      var amount = parseInt(kernings[i].getAttribute('amount'), 10);
+    for (int i = 0; i < kernings.length; i++) {
+      int first = int.parse(kernings[i].getAttribute('first'));
+      int second = int.parse(kernings[i].getAttribute('second'));
+      int amount = int.parse(kernings[i].getAttribute('amount'));
 
-      data.chars[second].kerning[first] = amount;
+      data['chars'][second].kerning[first] = amount;
     }
 
     PIXI.BitmapText.fonts[cacheKey] = data;

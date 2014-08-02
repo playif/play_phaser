@@ -666,7 +666,7 @@ class TilemapLayer extends Image {
       {
         this._column = this.layer.data[y - this.map.height];
       }
-      else if (this.layer.data[y])
+      else if (this.layer.data[y] != null)
         {
           this._column = this.layer.data[y];
         }
@@ -685,7 +685,7 @@ class TilemapLayer extends Image {
           {
             tile = this._column[x - this.map.width];
           }
-          else if (this._column[x])
+          else if (this._column[x] != null)
             {
               tile = this._column[x];
             }
@@ -763,16 +763,16 @@ class TilemapLayer extends Image {
       {
         this._column = this.layer.data[y - this.map.height];
       }
-      else if (this.layer.data[y])
+      else if (this.layer.data[y] !=null)
         {
           this._column = this.layer.data[y];
         }
 
-      if (this._column)
+      if (this._column !=null)
       {
-        for (var x = this._mc.startX, lenX = this._mc.startX + this._mc.maxX; x < lenX; x++)
+        for (int x = this._mc.startX, lenX = this._mc.startX + this._mc.maxX; x < lenX; x++)
         {
-          var tile = null;
+          Tile tile = null;
 
           if (x < 0 && this.wrap)
           {
@@ -782,12 +782,12 @@ class TilemapLayer extends Image {
           {
             tile = this._column[x - this.map.width];
           }
-          else if (this._column[x])
+          else if (this._column[x] !=null)
             {
               tile = this._column[x];
             }
 
-          if (tile && (tile.faceTop || tile.faceBottom || tile.faceLeft || tile.faceRight))
+          if (tile !=null && (tile.faceTop || tile.faceBottom || tile.faceLeft || tile.faceRight))
           {
             this._mc.tx = Math.floor(this._mc.tx);
 

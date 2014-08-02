@@ -13,7 +13,7 @@ class TilemapData{
 
 
   num format;
-  num version;
+  String version;
   Map properties;
   num widthInPixels;
   num heightInPixels;
@@ -29,6 +29,11 @@ class TilemapData{
 class Tilemap {
   static const int CSV = 0;
   static const int TILED_JSON = 1;
+
+  static const Map<String, int> Format = {
+      "CSV":0,
+      "TILED_JSON":1,
+  };
 
   static const int NORTH = 0;
   static const int EAST = 1;
@@ -96,7 +101,7 @@ class Tilemap {
 
   bool preventingRecalculate=false;
 
-  Map needToRecalculate=false;
+  Map needToRecalculate={};
 
   List data;
 
@@ -106,7 +111,7 @@ class Tilemap {
    */
   //Object.defineProperty(Phaser.Tilemap.prototype, "layer", {
 
-  TilemapLayer get layer {
+  TilemapLayerData get layer {
     return this.layers[this.currentLayer];
   }
 
@@ -170,7 +175,7 @@ class Tilemap {
     /**
      * @property {number} version - The version of the map data (as specified in Tiled, usually 1).
      */
-    this.version = data.version;
+    this.version = int.parse(data.version);
 
     /**
      * @property {object} properties - Map specific properties as specified in Tiled.
@@ -230,7 +235,7 @@ class Tilemap {
     /**
      * @property {array} debugMap - Map data used for debug values only.
      */
-    this.debugMap = [];
+    this.debugMap = {};
 
     /**
      * @property {array} _results - Internal var.
@@ -556,7 +561,7 @@ class Tilemap {
 
     if (this.getLayerIndex(name) != null) {
       window.console.warn('Tilemap.createBlankLayer: Layer with matching name already exists');
-      return;
+      return null;
     }
 
     TilemapLayerData layer = new TilemapLayerData()
@@ -1412,9 +1417,9 @@ class Tilemap {
 
     layer = this.getLayer(layer);
 
-    if (!this.layers[layer]) {
-      this._results.length = 0;
-      return;
+    if (this.layers[layer] == null) {
+      this._results.clear();
+      return null;
     }
 
     if (x == null) {
@@ -1483,7 +1488,7 @@ class Tilemap {
 
     layer = this.getLayer(layer);
 
-    if (tileblock = null || tileblock.length < 2) {
+    if (tileblock == null || tileblock.length < 2) {
       return;
     }
 

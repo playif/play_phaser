@@ -405,16 +405,13 @@ class GameObjectFactory {
    * @return {Phaser.Filter} The newly created Phaser.Filter object.
    */
 
-  Filter filter(String filter) {
+  Filter filter(Type filterType, [List args]) {
     //TODO
     //var args = Array.prototype.splice.call(arguments, 1);
-
-    //var filter = new Filter[filter](this.game);
-
-    //filter.init.apply(filter, args);
-
+    args.insert(0, this.game);
+    Filter filter = reflectClass(filterType).newInstance(null, args).reflectee;
+    filter.init();
     return filter;
-
   }
 
   /**

@@ -81,6 +81,14 @@ class Loader {
    */
   static const int PHYSICS_PHASER_JSON = 4;
 
+  static const Map<String, int> Format = {
+      "TEXTURE_ATLAS_JSON_ARRAY":0,
+      "TEXTURE_ATLAS_JSON_HASH":1,
+      "TEXTURE_ATLAS_XML_STARLING":2,
+      "PHYSICS_LIME_CORONA_JSON":3,
+      "PHYSICS_PHASER_JSON":3
+  };
+
 
   Loader(this.game) {
     /**
@@ -105,7 +113,7 @@ class Loader {
      * @property {number} progressFloat - The non-rounded load progress value (from 0.0 to 100.0)
      * @default
      */
-    this.progressFloat = 0;
+    this.progressFloat = 0.0;
 
     /**
      * You can optionally link a sprite to the preloader.
@@ -535,17 +543,20 @@ class Loader {
 
   Loader script(String key, String url, [Function callback]) {
 
-    if (callback == null) {
-      callback = false;
+    //TODO
+    if (callback != null) {
+      this.addToFileList('script', key, url, {
+          'callback': callback
+      });
+      //callback = (){};
     }
 //    if (callback != false && callbackContext == null) {
 //      callbackContext = callback;
 //    }
 
-    this.addToFileList('script', key, url, {
-        'callback': callback
-//        'callbackContext: callbackContext
-    });
+//    this.addToFileList('script', key, url, {
+//        'callback': callback
+//    });
 
     return this;
 
@@ -566,17 +577,16 @@ class Loader {
 
   Loader binary(String key, String url, [Function callback]) {
 
-    if (callback == null) {
-      callback = false;
+    if (callback != null) {
+      //callback = false;
+      this.addToFileList('binary', key, url, {
+          'callback': callback
+      });
     }
 //    if (callback != false && callbackContext == null) {
 //      callbackContext = callback;
 //    }
 
-    this.addToFileList('binary', key, url, {
-        'callback': callback
-        //, callbackContext: callbackContext
-    });
 
     return this;
 
@@ -899,7 +909,7 @@ class Loader {
     }
 
     //  A URL to a json/xml file has been given
-    if (atlasURL) {
+    if (atlasURL != null) {
       this.addToFileList('textureatlas', key, textureURL, {
           'atlasURL': atlasURL,
           'format': format
@@ -1047,7 +1057,7 @@ class Loader {
   loadPack() {
 
     if (this._packList[this._packIndex] == null) {
-      window.console.warn('Phaser.Loader loadPackList invalid index ' + this._packIndex);
+      window.console.warn('Phaser.Loader loadPackList invalid index ' + this._packIndex.toString());
       return;
     }
 
@@ -1058,7 +1068,7 @@ class Loader {
     }
     else {
       //  Load it
-      this.xhrLoad(this._packIndex, this.baseURL + pack['url'], 'text', 'packLoadComplete', 'packLoadError');
+      this.xhrLoad(this._packIndex, this.baseURL + pack['url'], 'text', packLoadComplete, packError);
     }
 
   }
@@ -1079,7 +1089,7 @@ class Loader {
 //    }
 
     if (this._packList[index] == null) {
-      window.console.warn('Phaser.Loader packLoadComplete invalid index ' + index);
+      window.console.warn('Phaser.Loader packLoadComplete invalid index ' + index.toString());
       return;
     }
 
@@ -1131,11 +1141,11 @@ class Loader {
             break;
 
           case "tilemap":
-            this.tilemap(file['key'], file['url'], file['data'], Tilemap[file['format']]);
+            this.tilemap(file['key'], file['url'], file['data'], Tilemap.Format[file['format']]);
             break;
 
           case "physics":
-            this.physics(file['key'], file['url'], file['data'], Loader[file['format']]);
+            this.physics(file['key'], file['url'], file['data'], Format[file['format']]);
             break;
 
           case "bitmapFont":
@@ -1156,7 +1166,7 @@ class Loader {
             break;
 
           case "atlas":
-            this.atlas(file['key'], file['textureURL'], file['atlasURL'], file['atlasData'], Loader[file['format']]);
+            this.atlas(file['key'], file['textureURL'], file['atlasURL'], file['atlasData'], Format[file['format']]);
             break;
         }
       }
@@ -1441,7 +1451,7 @@ class Loader {
   fileComplete(int index) {
 
     if (this._fileList[index] == null) {
-      window.console.warn('Phaser.Loader fileComplete invalid index ' + index);
+      window.console.warn('Phaser.Loader fileComplete invalid index ' + index.toString());
       return;
     }
 

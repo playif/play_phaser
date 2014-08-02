@@ -24,6 +24,31 @@ class Image extends PIXI.Sprite implements GameObject {
 
   String _frameName;
   bool alive;
+  GameObject parent;
+
+  bringToTop() {
+    if (this.parent != null) {
+      this.parent.bringToTop();
+    }
+    return this;
+  }
+
+  destroy(destroyChildren){
+
+  }
+
+  PIXI.Texture texture;
+  CanvasPattern __tilePattern;
+
+  setTexture(PIXI.Texture texture){
+
+  }
+
+  Events events;
+
+  Point anchor;
+  Rectangle _currentBounds;
+  bool exists;
 
 
   num get angle {
@@ -140,7 +165,7 @@ class Image extends PIXI.Sprite implements GameObject {
     return this._cache[8] == 1;
   }
 
-  Image(this.game, [int x, int y, String key, Rectangle frame])
+  Image(this.game, [int x, int y, String key, int frame])
   :super(PIXI.TextureCache['__default']) {
     x = x || 0;
     y = y || 0;

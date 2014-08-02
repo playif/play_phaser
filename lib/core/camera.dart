@@ -214,7 +214,7 @@ class Camera {
    * @method Phaser.Camera#focusOn
    * @param {any} displayObject - The display object to focus the camera on. Must have visible x/y properties.
    */
-  focusOn(displayObject) {
+  focusOn(GameObject displayObject) {
     this.setPosition(Math.round(displayObject.x - this.view.halfWidth), Math.round(displayObject.y - this.view.halfHeight));
   }
 
@@ -236,11 +236,11 @@ class Camera {
    */
   update() {
 
-    if (this.target) {
+    if (this.target !=null) {
       this.updateTarget();
     }
 
-    if (this.bounds) {
+    if (this.bounds !=null) {
       this.checkBounds();
     }
 
@@ -256,7 +256,7 @@ class Camera {
    */
   updateTarget() {
 
-    if (this.deadzone) {
+    if (this.deadzone != null) {
       this._edge = this.target.x - this.view.x;
 
       if (this._edge < this.deadzone.left) {

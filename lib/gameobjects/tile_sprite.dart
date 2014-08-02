@@ -3,6 +3,10 @@ part of Phaser;
 class TileSprite extends PIXI.TilingSprite implements GameObject {
 
   Game game;
+  String name;
+  num type;
+  Events events;
+  bool alive;
 
   GameObject parent;
 
@@ -10,6 +14,11 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
   InputHandler input;
   AnimationManager animations;
   String key;
+
+  num z;
+
+  List<num> _cache;
+  Rectangle _currentBounds;
 
   int _frame;
   String _frameName;
@@ -20,6 +29,22 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
 
   bool checkWorldBounds;
   bool _outOfBoundsFired;
+
+  bool autoCull;
+  Point cameraOffset;
+
+  CanvasPattern __tilePattern;
+
+  setTexture(PIXI.Texture texture){
+
+  }
+
+  bringToTop() {
+//    if (this.parent != null) {
+//      this.parent.bringToTop();
+//    }
+    return this;
+  }
 
   num get renderOrderID {
     return this._cache[3];
@@ -61,8 +86,7 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
 
   set frame(num value) {
 
-    if (value != this.animations.frame)
-    {
+    if (value != this.animations.frame) {
       this.animations.frame = value;
     }
 
@@ -76,14 +100,13 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
    */
   //Object.defineProperty(Phaser.TileSprite.prototype, "frameName", {
 
-  String get frameName  {
+  String get frameName {
     return this.animations.frameName;
   }
 
-  set frameName (String value) {
+  set frameName(String value) {
 
-    if (value != this.animations.frameName)
-    {
+    if (value != this.animations.frameName) {
       this.animations.frameName = value;
     }
 
@@ -103,19 +126,17 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
 
   bool get fixedToCamera {
 
-    return this._cache[7]==1;
+    return this._cache[7] == 1;
 
   }
 
-  set fixedToCamera (bool value) {
+  set fixedToCamera(bool value) {
 
-    if (value)
-    {
+    if (value) {
       this._cache[7] = 1;
       this.cameraOffset.set(this.x, this.y);
     }
-    else
-    {
+    else {
       this._cache[7] = 0;
     }
   }
@@ -132,33 +153,29 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
    */
   //Object.defineProperty(Phaser.TileSprite.prototype, "exists", {
 
-  bool get  exists{
+  bool get exists {
 
-    return this._cache[6]==1;
+    return this._cache[6] == 1;
 
   }
 
-  set exists (bool value) {
+  set exists(bool value) {
 
-    if (value)
-    {
+    if (value) {
       //  exists = true
       this._cache[6] = 1;
 
-      if (this.body && this.body.type == Physics.P2JS)
-      {
+      if (this.body != null && this.body.type == Physics.P2JS) {
         this.body.addToWorld();
       }
 
       this.visible = true;
     }
-    else
-    {
+    else {
       //  exists = false
       this._cache[6] = 0;
 
-      if (this.body && this.body.type == Physics.P2JS)
-      {
+      if (this.body != null && this.body.type == Physics.P2JS) {
         this.body.safeRemove = true;
       }
 
@@ -180,28 +197,23 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
 
   bool get inputEnabled {
 
-    return (this.input!=null && this.input.enabled);
+    return (this.input != null && this.input.enabled);
 
   }
 
-  set inputEnabled (bool value) {
+  set inputEnabled(bool value) {
 
-    if (value)
-    {
-      if (this.input == null)
-      {
+    if (value) {
+      if (this.input == null) {
         this.input = new InputHandler(this);
         this.input.start();
       }
-      else if (this.input && !this.input.enabled)
-      {
+      else if (this.input != null && !this.input.enabled) {
         this.input.start();
       }
     }
-    else
-    {
-      if (this.input && this.input.enabled)
-      {
+    else {
+      if (this.input != null && this.input.enabled) {
         this.input.stop();
       }
     }
@@ -224,13 +236,12 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
 
   }
 
-  set x (value) {
+  set x(value) {
 
     this.position.x = value;
 
-    if (this.body && this.body.type == Physics.ARCADE && this.body.phase == 2)
-    {
-      this.body._reset = 1;
+    if (this.body != null && this.body.type == Physics.ARCADE && this.body.phase == 2) {
+      this.body._reset = true;
     }
 
   }
@@ -251,13 +262,12 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
 
   }
 
-  set y (value) {
+  set y(value) {
 
     this.position.y = value;
 
-    if (this.body && this.body.type == Physics.ARCADE && this.body.phase == 2)
-    {
-      this.body._reset = 1;
+    if (this.body != null && this.body.type == Physics.ARCADE && this.body.phase == 2) {
+      this.body._reset = true;
     }
 
   }
@@ -272,7 +282,7 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
 
   bool get destroyPhase {
 
-    return this._cache[8]==1;
+    return this._cache[8] == 1;
 
   }
 
@@ -280,7 +290,7 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
 
 
   TileSprite(this.game, [num x=0, num y=0, int width=256, int height=256, key, frame])
-  :super( PIXI.TextureCache['__default'], width, height){
+  :super(PIXI.TextureCache['__default'], width, height) {
     //x = x || 0;
     //y = y || 0;
     //width = width || 256;
@@ -420,10 +430,10 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
    * @method Phaser.TileSprite#preUpdate
    * @memberof Phaser.TileSprite
    */
-  preUpdate () {
 
-    if (this._cache[4] == 1 && this.exists)
-    {
+  preUpdate() {
+
+    if (this._cache[4] == 1 && this.exists) {
       this.world.setTo(this.parent.position.x + this.position.x, this.parent.position.y + this.position.y);
       this.worldTransform.tx = this.world.x;
       this.worldTransform.ty = this.world.y;
@@ -431,8 +441,7 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
       this._cache[1] = this.world.y;
       this._cache[2] = this.rotation;
 
-      if (this.body)
-      {
+      if (this.body != null) {
         this.body.preUpdate();
       }
 
@@ -445,35 +454,29 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
     this._cache[1] = this.world.y;
     this._cache[2] = this.rotation;
 
-    if (!this.exists || !this.parent.exists)
-    {
+    if (!this.exists || !this.parent.exists) {
       //  Reset the renderOrderID
       this._cache[3] = -1;
       return false;
     }
 
     //  Cache the bounds if we need it
-    if (this.autoCull || this.checkWorldBounds)
-    {
+    if (this.autoCull || this.checkWorldBounds) {
       this._bounds.copyFrom(this.getBounds());
     }
 
-    if (this.autoCull)
-    {
+    if (this.autoCull) {
       //  Won't get rendered but will still get its transform updated
       this.renderable = this.game.world.camera.screenView.intersects(this._bounds);
     }
 
-    if (this.checkWorldBounds)
-    {
+    if (this.checkWorldBounds) {
       //  The Sprite is already out of the world bounds, so let's check to see if it has come back again
-      if (this._cache[5] == 1 && this.game.world.bounds.intersects(this._bounds))
-      {
+      if (this._cache[5] == 1 && this.game.world.bounds.intersects(this._bounds)) {
         this._cache[5] = 0;
         this.events.onEnterBounds.dispatch(this);
       }
-      else if (this._cache[5] == 0 && !this.game.world.bounds.intersects(this._bounds))
-      {
+      else if (this._cache[5] == 0 && !this.game.world.bounds.intersects(this._bounds)) {
         //  The Sprite WAS in the screen, but has now left.
         this._cache[5] = 1;
         this.events.onOutOfBounds.dispatch(this);
@@ -482,31 +485,26 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
 
     this.world.setTo(this.game.camera.x + this.worldTransform.tx, this.game.camera.y + this.worldTransform.ty);
 
-    if (this.visible)
-    {
+    if (this.visible) {
       this._cache[3] = this.game.stage.currentRenderOrderID++;
     }
 
     this.animations.update();
 
-    if (this._scroll.x != 0)
-    {
+    if (this._scroll.x != 0) {
       this.tilePosition.x += this._scroll.x * this.game.time.physicsElapsed;
     }
 
-    if (this._scroll.y != 0)
-    {
+    if (this._scroll.y != 0) {
       this.tilePosition.y += this._scroll.y * this.game.time.physicsElapsed;
     }
 
-    if (this.body)
-    {
+    if (this.body != null) {
       this.body.preUpdate();
     }
 
 //  Update any Children
-    for (var i = 0, len = this.children.length; i < len; i++)
-    {
+    for (var i = 0, len = this.children.length; i < len; i++) {
       this.children[i].preUpdate();
     }
 
@@ -520,7 +518,8 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
    * @method Phaser.TileSprite#update
    * @memberof Phaser.TileSprite
    */
-  update () {
+
+  update() {
 
   }
 
@@ -530,23 +529,21 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
    * @method Phaser.TileSprite#postUpdate
    * @memberof Phaser.TileSprite
    */
-  postUpdate () {
 
-    if (this.exists && this.body)
-    {
+  postUpdate() {
+
+    if (this.exists && this.body != null) {
       this.body.postUpdate();
     }
 
     //  Fixed to Camera?
-    if (this._cache[7] == 1)
-    {
+    if (this._cache[7] == 1) {
       this.position.x = this.game.camera.view.x + this.cameraOffset.x;
       this.position.y = this.game.camera.view.y + this.cameraOffset.y;
     }
 
     //  Update any Children
-    for (var i = 0, len = this.children.length; i < len; i++)
-    {
+    for (int i = 0, len = this.children.length; i < len; i++) {
       this.children[i].postUpdate();
     }
 
@@ -561,10 +558,9 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
    * @method Phaser.TileSprite#autoScroll
    * @memberof Phaser.TileSprite
    */
-  autoScroll (x, y) {
 
+  autoScroll(num x, num y) {
     this._scroll.set(x, y);
-
   }
 
   /**
@@ -573,10 +569,9 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
    * @method Phaser.TileSprite#stopScroll
    * @memberof Phaser.TileSprite
    */
-  stopScroll () {
 
+  stopScroll() {
     this._scroll.set(0, 0);
-
   }
 
   /**
@@ -588,211 +583,205 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
    * @param {string|Phaser.RenderTexture|Phaser.BitmapData|PIXI.Texture} key - This is the image or texture used by the TileSprite during rendering. It can be a string which is a reference to the Cache entry, or an instance of a RenderTexture, BitmapData or PIXI.Texture.
    * @param {string|number} frame - If this TileSprite is using part of a sprite sheet or texture atlas you can specify the exact frame to use by giving a string or numeric index.
    */
-  loadTexture  (key, frame) {
 
-    frame = frame || 0;
+  loadTexture(key, int frame) {
+
+    //frame = frame || 0;
 
     this.key = key;
 
-    if (key is RenderTexture)
-    {
+    if (key is RenderTexture) {
       this.key = key.key;
       this.setTexture(key);
     }
-    else if (key is BitmapData)
-    {
+    else if (key is BitmapData) {
       this.setTexture(key.texture);
     }
-    else if (key is PIXI.Texture)
-      {
+    else if (key is PIXI.Texture) {
         this.setTexture(key);
       }
-      else
-      {
-        if (key == null)
-        {
+      else {
+        if (key == null) {
           this.key = '__default';
           this.setTexture(PIXI.TextureCache[this.key]);
         }
-        else if (key is String && !this.game.cache.checkImageKey(key))
-  {
-  window.console.warn("Texture with key '" + key + "' not found.");
-  this.key = '__missing';
-  this.setTexture(PIXI.TextureCache[this.key]);
+        else if (key is String && !this.game.cache.checkImageKey(key)) {
+          window.console.warn("Texture with key '" + key + "' not found.");
+          this.key = '__missing';
+          this.setTexture(PIXI.TextureCache[this.key]);
+        }
+        else {
+          this.setTexture(new PIXI.Texture(PIXI.BaseTextureCache[key]));
+          this.animations.loadFrameData(this.game.cache.getFrameData(key), frame);
+        }
+      }
+
   }
-  else
-  {
-  this.setTexture(new PIXI.Texture(PIXI.BaseTextureCache[key]));
-  this.animations.loadFrameData(this.game.cache.getFrameData(key), frame);
-  }
-}
 
-}
+  /**
+   * Sets the Texture frame the TileSprite uses for rendering.
+   * This is primarily an internal method used by TileSprite.loadTexture, although you may call it directly.
+   *
+   * @method Phaser.TileSprite#setFrame
+   * @memberof Phaser.TileSprite
+   * @param {Phaser.Frame} frame - The Frame to be used by the TileSprite texture.
+   */
 
-/**
- * Sets the Texture frame the TileSprite uses for rendering.
- * This is primarily an internal method used by TileSprite.loadTexture, although you may call it directly.
- *
- * @method Phaser.TileSprite#setFrame
- * @memberof Phaser.TileSprite
- * @param {Phaser.Frame} frame - The Frame to be used by the TileSprite texture.
- */
-setFrame (frame) {
+  setFrame(Frame frame) {
 
-  this.texture.frame.x = frame.x;
-  this.texture.frame.y = frame.y;
-  this.texture.frame.width = frame.width;
-  this.texture.frame.height = frame.height;
+    this.texture.frame.x = frame.x;
+    this.texture.frame.y = frame.y;
+    this.texture.frame.width = frame.width;
+    this.texture.frame.height = frame.height;
 
-  this.texture.crop.x = frame.x;
-  this.texture.crop.y = frame.y;
-  this.texture.crop.width = frame.width;
-  this.texture.crop.height = frame.height;
+    this.texture.crop.x = frame.x;
+    this.texture.crop.y = frame.y;
+    this.texture.crop.width = frame.width;
+    this.texture.crop.height = frame.height;
 
-  if (frame.trimmed)
-  {
-    if (this.texture.trim)
-    {
-      this.texture.trim.x = frame.spriteSourceSizeX;
-      this.texture.trim.y = frame.spriteSourceSizeY;
-      this.texture.trim.width = frame.sourceSizeW;
-      this.texture.trim.height = frame.sourceSizeH;
+    if (frame.trimmed) {
+      if (this.texture.trim != null) {
+        this.texture.trim.x = frame.spriteSourceSizeX;
+        this.texture.trim.y = frame.spriteSourceSizeY;
+        this.texture.trim.width = frame.sourceSizeW;
+        this.texture.trim.height = frame.sourceSizeH;
+      }
+      else {
+        this.texture.trim = new PIXI.Rectangle()
+          ..x = frame.spriteSourceSizeX
+          .. y = frame.spriteSourceSizeY
+          .. width = frame.sourceSizeW
+          .. height = frame.sourceSizeH;
+        //};
+      }
+
+      this.texture.width = frame.sourceSizeW;
+      this.texture.height = frame.sourceSizeH;
+      this.texture.frame.width = frame.sourceSizeW;
+      this.texture.frame.height = frame.sourceSizeH;
     }
-    else
-    {
-      this.texture.trim = { x: frame.spriteSourceSizeX, y: frame.spriteSourceSizeY, width: frame.sourceSizeW, height: frame.sourceSizeH };
+
+    if (this.game.renderType == WEBGL) {
+      PIXI.WebGLRenderer.updateTextureFrame(this.texture);
     }
 
-    this.texture.width = frame.sourceSizeW;
-    this.texture.height = frame.sourceSizeH;
-    this.texture.frame.width = frame.sourceSizeW;
-    this.texture.frame.height = frame.sourceSizeH;
   }
 
-  if (this.game.renderType == WEBGL)
-  {
-    PIXI.WebGLRenderer.updateTextureFrame(this.texture);
-  }
+  /**
+   * Destroys the TileSprite. This removes it from its parent group, destroys the event and animation handlers if present
+   * and nulls its reference to game, freeing it up for garbage collection.
+   *
+   * @method Phaser.TileSprite#destroy
+   * @memberof Phaser.TileSprite
+   * @param {boolean} [destroyChildren=true] - Should every child of this object have its destroy method called?
+   */
 
-}
+  destroy(bool destroyChildren) {
 
-/**
- * Destroys the TileSprite. This removes it from its parent group, destroys the event and animation handlers if present
- * and nulls its reference to game, freeing it up for garbage collection.
- *
- * @method Phaser.TileSprite#destroy
- * @memberof Phaser.TileSprite
- * @param {boolean} [destroyChildren=true] - Should every child of this object have its destroy method called?
- */
-destroy (destroyChildren) {
+    if (this.game == null || this.destroyPhase) {
+      return;
+    }
 
-  if (this.game == null || this.destroyPhase) { return; }
+    if (destroyChildren == null) {
+      destroyChildren = true;
+    }
 
-  if ( destroyChildren == null) { destroyChildren = true; }
+    this._cache[8] = 1;
 
-  this._cache[8] = 1;
+    if (this.filters != null) {
+      this.filters = null;
+    }
 
-  if (this.filters)
-  {
+    if (this.parent != null) {
+      if (this.parent is Group) {
+        (this.parent as Group).remove(this);
+      }
+      else {
+        this.parent.removeChild(this);
+      }
+    }
+
+    this.animations.destroy();
+
+    this.events.destroy();
+
+    var i = this.children.length;
+
+    if (destroyChildren) {
+      while (i-- > 0) {
+        this.children[i].destroy(destroyChildren);
+      }
+    }
+    else {
+      while (i-- > 0) {
+        this.removeChild(this.children[i]);
+      }
+    }
+
+    this.exists = false;
+    this.visible = false;
+
     this.filters = null;
+    this.mask = null;
+    this.game = null;
+
+    this._cache[8] = 0;
+
   }
 
-  if (this.parent)
-  {
-    if (this.parent is Group)
-    {
-      (this.parent as Group).remove(this);
+  /**
+   * Play an animation based on the given key. The animation should previously have been added via sprite.animations.add()
+   * If the requested animation is already playing this request will be ignored. If you need to reset an already running animation do so directly on the Animation object itself.
+   *
+   * @method Phaser.TileSprite#play
+   * @memberof Phaser.TileSprite
+   * @param {string} name - The name of the animation to be played, e.g. "fire", "walk", "jump".
+   * @param {number} [frameRate=null] - The framerate to play the animation at. The speed is given in frames per second. If not provided the previously set frameRate of the Animation is used.
+   * @param {boolean} [loop=false] - Should the animation be looped after playback. If not provided the previously set loop value of the Animation is used.
+   * @param {boolean} [killOnComplete=false] - If set to true when the animation completes (only happens if loop=false) the parent Sprite will be killed.
+   * @return {Phaser.Animation} A reference to playing Animation instance.
+   */
+
+  Animation play(String name, num frameRate, [bool loop, bool killOnComplete]) {
+
+    return this.animations.play(name, frameRate, loop, killOnComplete);
+
+  }
+
+  /**
+   * Resets the TileSprite. This places the TileSprite at the given x/y world coordinates, resets the tilePosition and then
+   * sets alive, exists, visible and renderable all to true. Also resets the outOfBounds state.
+   * If the TileSprite has a physics body that too is reset.
+   *
+   * @method Phaser.TileSprite#reset
+   * @memberof Phaser.TileSprite
+   * @param {number} x - The x coordinate (in world space) to position the Sprite at.
+   * @param {number} y - The y coordinate (in world space) to position the Sprite at.
+   * @return (Phaser.TileSprite) This instance.
+   */
+
+  reset(x, y) {
+
+    this.world.setTo(x, y);
+    this.position.x = x;
+    this.position.y = y;
+    this.alive = true;
+    this.exists = true;
+    this.visible = true;
+    this.renderable = true;
+    this._outOfBoundsFired = false;
+
+    this.tilePosition.x = 0;
+    this.tilePosition.y = 0;
+
+    if (this.body != null) {
+      this.body.reset(x, y, false, false);
     }
-    else
-    {
-      this.parent.removeChild(this);
-    }
+
+    this._cache[4] = 1;
+
+    return this;
+
   }
-
-  this.animations.destroy();
-
-  this.events.destroy();
-
-  var i = this.children.length;
-
-  if (destroyChildren)
-  {
-    while (i-- > 0)
-    {
-      this.children[i].destroy(destroyChildren);
-    }
-  }
-  else
-  {
-    while (i-- >0)
-    {
-      this.removeChild(this.children[i]);
-    }
-  }
-
-  this.exists = false;
-  this.visible = false;
-
-  this.filters = null;
-  this.mask = null;
-  this.game = null;
-
-  this._cache[8] = 0;
-
-}
-
-/**
- * Play an animation based on the given key. The animation should previously have been added via sprite.animations.add()
- * If the requested animation is already playing this request will be ignored. If you need to reset an already running animation do so directly on the Animation object itself.
- *
- * @method Phaser.TileSprite#play
- * @memberof Phaser.TileSprite
- * @param {string} name - The name of the animation to be played, e.g. "fire", "walk", "jump".
- * @param {number} [frameRate=null] - The framerate to play the animation at. The speed is given in frames per second. If not provided the previously set frameRate of the Animation is used.
- * @param {boolean} [loop=false] - Should the animation be looped after playback. If not provided the previously set loop value of the Animation is used.
- * @param {boolean} [killOnComplete=false] - If set to true when the animation completes (only happens if loop=false) the parent Sprite will be killed.
- * @return {Phaser.Animation} A reference to playing Animation instance.
- */
-play  (name, frameRate, loop, killOnComplete) {
-
-  return this.animations.play(name, frameRate, loop, killOnComplete);
-
-}
-
-/**
- * Resets the TileSprite. This places the TileSprite at the given x/y world coordinates, resets the tilePosition and then
- * sets alive, exists, visible and renderable all to true. Also resets the outOfBounds state.
- * If the TileSprite has a physics body that too is reset.
- *
- * @method Phaser.TileSprite#reset
- * @memberof Phaser.TileSprite
- * @param {number} x - The x coordinate (in world space) to position the Sprite at.
- * @param {number} y - The y coordinate (in world space) to position the Sprite at.
- * @return (Phaser.TileSprite) This instance.
- */
-reset (x, y) {
-
-  this.world.setTo(x, y);
-  this.position.x = x;
-  this.position.y = y;
-  this.alive = true;
-  this.exists = true;
-  this.visible = true;
-  this.renderable = true;
-  this._outOfBoundsFired = false;
-
-  this.tilePosition.x = 0;
-  this.tilePosition.y = 0;
-
-  if (this.body)
-  {
-    this.body.reset(x, y, false, false);
-  }
-
-  this._cache[4] = 1;
-
-  return this;
-
-}
 
 }

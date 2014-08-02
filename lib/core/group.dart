@@ -34,6 +34,18 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
     return false;
   }
 
+  Events events;
+
+  Point anchor;
+  Rectangle _currentBounds;
+
+  PIXI.Texture texture;
+  CanvasPattern __tilePattern;
+
+  setTexture(PIXI.Texture texture){
+
+  }
+
 
   Group(Game game, [this.parent, this.name='group',
   this.addToStage=false, this.enableBody=false, this.physicsBodyType=0])
@@ -48,7 +60,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
       this.game.stage.addChild(this);
     }
     else {
-      if (parent) {
+      if (parent !=null) {
         parent.addChild(this);
       }
     }

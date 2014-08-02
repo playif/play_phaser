@@ -9,6 +9,7 @@ class Particle extends Sprite {
   int _a;
 
 
+
   Particle(Game game, num x,num y,String key,num frame)
   :super(game, x, y, key, frame) {
     /**

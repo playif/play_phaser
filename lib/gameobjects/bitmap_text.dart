@@ -28,10 +28,17 @@ class BitmapText extends PIXI.BitmapText implements GameObject {
 
   int renderOrderID;
   bool autoCull;
+  bool alive;
 
   Point scale;
   bool visible;
   PIXI.Texture texture;
+  CanvasPattern __tilePattern;
+
+  setTexture(PIXI.Texture texture){
+
+  }
+
   Point anchor;
 
 

@@ -587,7 +587,7 @@ class Device {
 //    }
 //  }
 
-    this.cancelFullscreen = true;
+    this.cancelFullscreen = 'cancelFullScreen';
 
     //TODO
     this.fullscreenKeyboard = true;

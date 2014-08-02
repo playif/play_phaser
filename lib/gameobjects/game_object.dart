@@ -14,6 +14,9 @@ abstract class GameObject extends PIXI.DisplayInterface {
   List<num> _cache;
   bool visible;
   PIXI.Texture texture;
+  CanvasPattern __tilePattern;
+
+  setTexture(PIXI.Texture texture);
   Point anchor;
   Point position;
 
