@@ -13,7 +13,7 @@ class Keyboard {
   Function onPressCallback = null;
   Function onUpCallback = null;
   List<Key> _keys;
-  List<bool> _capture;
+  Map _capture;
 
   Function _onKeyDown;
   Function _onKeyPress;
@@ -84,7 +84,7 @@ class Keyboard {
      * @property {array} _capture - The array the key capture values are stored in.
      * @private
      */
-    this._capture = [];
+    this._capture = {};
 
     /**
      * @property {function} _onKeyDown
@@ -423,7 +423,7 @@ class Keyboard {
     }
 
     if (this._keys[event.keyCode] == null) {
-      this._keys[event.keyCode] = new Phaser.Key(this.game, event.keyCode);
+      this._keys[event.keyCode] = new Key(this.game, event.keyCode);
     }
 
     this._keys[event.keyCode].processKeyUp(event);

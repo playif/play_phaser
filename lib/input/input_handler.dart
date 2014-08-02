@@ -272,7 +272,7 @@ class InputHandler {
       this._wasEnabled = true;
 
       //  Create the signals the Input component will emit
-      if (this.sprite.events && this.sprite.events.onInputOver == null) {
+      if (this.sprite.events != null && this.sprite.events.onInputOver == null) {
         this.sprite.events.onInputOver = new Signal();
         this.sprite.events.onInputOut = new Signal();
         this.sprite.events.onInputDown = new Signal();
@@ -282,8 +282,8 @@ class InputHandler {
       }
     }
 
-    this.sprite.events.onAddedToGroup.add(this.addedToGroup, this);
-    this.sprite.events.onRemovedFromGroup.add(this.removedFromGroup, this);
+    this.sprite.events.onAddedToGroup.add(this.addedToGroup);
+    this.sprite.events.onRemovedFromGroup.add(this.removedFromGroup);
 
     return this.sprite;
 
@@ -383,7 +383,7 @@ class InputHandler {
 
   destroy() {
 
-    if (this.sprite) {
+    if (this.sprite != null) {
       if (this._setHandCursor) {
         this.game.canvas.style.cursor = "default";
         this._setHandCursor = false;
@@ -628,7 +628,7 @@ class InputHandler {
 
   bool checkPointerDown(Pointer pointer) {
 
-    if (!pointer.isDown || !this.enabled || this.sprite == null || this.sprite.parent ==null || !this.sprite.visible || !this.sprite.parent.visible) {
+    if (!pointer.isDown || !this.enabled || this.sprite == null || this.sprite.parent == null || !this.sprite.visible || !this.sprite.parent.visible) {
       return false;
     }
 
@@ -655,7 +655,7 @@ class InputHandler {
 
   bool checkPointerOver(Pointer pointer) {
 
-    if (!this.enabled || this.sprite==null || this.sprite.parent ==null || !this.sprite.visible || !this.sprite.parent.visible) {
+    if (!this.enabled || this.sprite == null || this.sprite.parent == null || !this.sprite.visible || !this.sprite.parent.visible) {
       return false;
     }
 
@@ -783,7 +783,7 @@ class InputHandler {
         this._setHandCursor = true;
       }
 
-      if (this.sprite && this.sprite.events) {
+      if (this.sprite != null && this.sprite.events != null) {
         this.sprite.events.onInputOver.dispatch([this.sprite, pointer]);
       }
     }
@@ -813,7 +813,7 @@ class InputHandler {
       this._setHandCursor = false;
     }
 
-    if (this.sprite && this.sprite.events) {
+    if (this.sprite != null && this.sprite.events != null) {
       this.sprite.events.onInputOut.dispatch([this.sprite, pointer]);
     }
 
@@ -842,7 +842,7 @@ class InputHandler {
       this._pointerData[pointer.id].isUp = false;
       this._pointerData[pointer.id].timeDown = this.game.time.now;
 
-      if (this.sprite && this.sprite.events) {
+      if (this.sprite != null && this.sprite.events != null) {
         this.sprite.events.onInputDown.dispatch([this.sprite, pointer]);
       }
 
@@ -885,13 +885,13 @@ class InputHandler {
       //  Only release the InputUp signal if the pointer is still over this sprite
       if (this.checkPointerOver(pointer)) {
         //  Release the inputUp signal and provide optional parameter if pointer is still over the sprite or not
-        if (this.sprite && this.sprite.events) {
+        if (this.sprite != null && this.sprite.events != null) {
           this.sprite.events.onInputUp.dispatch([this.sprite, pointer, true]);
         }
       }
       else {
         //  Release the inputUp signal and provide optional parameter if pointer is still over the sprite or not
-        if (this.sprite && this.sprite.events) {
+        if (this.sprite != null && this.sprite.events != null) {
           this.sprite.events.onInputUp.dispatch([this.sprite, pointer, false]);
         }
 
@@ -933,11 +933,11 @@ class InputHandler {
         this.sprite.cameraOffset.y = pointer.y + this._dragPoint.y + this.dragOffset.y;
       }
 
-      if (this.boundsRect) {
+      if (this.boundsRect != null) {
         this.checkBoundsRect();
       }
 
-      if (this.boundsSprite) {
+      if (this.boundsSprite != null) {
         this.checkBoundsSprite();
       }
 
@@ -955,11 +955,11 @@ class InputHandler {
         this.sprite.y = pointer.y + this._dragPoint.y + this.dragOffset.y;
       }
 
-      if (this.boundsRect) {
+      if (this.boundsRect != null) {
         this.checkBoundsRect();
       }
 
-      if (this.boundsSprite) {
+      if (this.boundsSprite != null) {
         this.checkBoundsSprite();
       }
 

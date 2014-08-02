@@ -400,6 +400,7 @@ class Cache {
 
     this._images[key]['frame'] = new Frame(0, 0, 0, data.width, data.height, key, this.game.rnd.uuid());
     PIXI.BaseTextureCache[key] = new PIXI.BaseTexture(data);
+    PIXI.TextureCache[key] = new PIXI.Texture(PIXI.BaseTextureCache[key]);
   }
 
   /**

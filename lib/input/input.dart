@@ -138,7 +138,7 @@ class Input {
      * @property {number} pollRate - How often should the input pointers be checked for updates? A value of 0 means every single frame (60fps); a value of 1 means every other frame (30fps) and so on.
      * @default
      */
-    this.pollRate = 0;
+    this.pollRate = 0.0;
 
     /**
      * You can disable all Input by setting Input.disabled = true. While set all new input related events will be ignored.
@@ -582,28 +582,28 @@ class Input {
     this.pointers[1].update();
     this.pointers[2].update();
 
-    if (this.pointers[3]) {
+    if (this.pointers[3] != null) {
       this.pointers[3].update();
     }
-    if (this.pointers[4]) {
+    if (this.pointers[4] != null) {
       this.pointers[4].update();
     }
-    if (this.pointers[5]) {
+    if (this.pointers[5] != null) {
       this.pointers[5].update();
     }
-    if (this.pointers[6]) {
+    if (this.pointers[6] != null) {
       this.pointers[6].update();
     }
-    if (this.pointers[7]) {
+    if (this.pointers[7] != null) {
       this.pointers[7].update();
     }
-    if (this.pointers[8]) {
+    if (this.pointers[8] != null) {
       this.pointers[8].update();
     }
-    if (this.pointers[9]) {
+    if (this.pointers[9] != null) {
       this.pointers[9].update();
     }
-    if (this.pointers[10]) {
+    if (this.pointers[10] != null) {
       this.pointers[10].update();
     }
 

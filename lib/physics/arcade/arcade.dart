@@ -306,10 +306,10 @@ class Arcade {
       velocity += (this.gravity.y + body.gravity.y) * this.game.time.physicsElapsed;
     }
 
-    if (acceleration) {
+    if (acceleration !=0) {
       velocity += acceleration * this.game.time.physicsElapsed;
     }
-    else if (drag) {
+    else if (drag != 0) {
       this._drag = drag * this.game.time.physicsElapsed;
 
       if (velocity - this._drag > 0) {

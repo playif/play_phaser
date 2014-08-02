@@ -4,8 +4,6 @@ class SignalBinding {
   Function _listener;
   bool _isOnce;
 
-  Object context;
-
   int _priority;
 
   Signal _signal;
@@ -15,7 +13,7 @@ class SignalBinding {
   List params;
 
 
-  SignalBinding(this._signal, this._listener, [this._isOnce=false, this.context, this._priority=0]) {
+  SignalBinding(this._signal, this._listener, [this._isOnce=false, this._priority=0]) {
     if (this._priority == null) {
       this._priority = 0;
     }
@@ -23,16 +21,23 @@ class SignalBinding {
 
   execute(List paramsArr) {
 
-    var handlerReturn, params;
+    var handlerReturn;
+    List params;
 
-    if (this.active && !!this._listener) {
+    if (this.active && this._listener != null) {
       if (this.params == null) {
         this.params = paramsArr;
       }
       else {
         this.params.addAll(paramsArr);
       }
-      handlerReturn = this._listener(this.context, params);
+      if(params != null && params.length != 0){
+        handlerReturn = this._listener( params);
+      }
+      else{
+        handlerReturn = this._listener();
+      }
+
 
       if (this._isOnce) {
         this.detach();
@@ -45,7 +50,7 @@ class SignalBinding {
 
 
   detach() {
-    return this.isBound() ? this._signal.remove(this._listener, this.context) : null;
+    return this.isBound() ? this._signal.remove(this._listener) : null;
   }
 
   isBound() {
@@ -68,7 +73,7 @@ class SignalBinding {
   _destroy() {
     this._signal = null;
     this._listener = null;
-    this.context = null;
+    //this.context = null;
   }
 
 

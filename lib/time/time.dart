@@ -2,28 +2,28 @@ part of Phaser;
 
 class Time {
   Game game;
-  int time=0;
-  int now=0;
-  int elapsed=0;
-  int pausedTime=0;
+  double time=0.0;
+  double now=0.0;
+  double elapsed=0.0;
+  double pausedTime=0.0;
   bool advancedTiming=false;
 
-  double fps=0;
+  double fps=0.0;
 
-  double fpsMin=1000;
+  double fpsMin=1000.0;
 
-  double fpsMax=0;
+  double fpsMax=0.0;
 
-  int msMin=1000;
+  double msMin=1000.0;
 
-  int msMax=0;
+  double msMax=0.0;
 
-  int physicsElapsed=0;
+  double physicsElapsed=0.0;
 
   /**
    * @property {number} deltaCap - If you need to cap the delta timer, set the value here. For 60fps the delta should be 0.016, so try variances just above this.
    */
-  int deltaCap = 0;
+  double deltaCap = 0.0;
 
   /**
    * @property {number} timeCap - If the difference in time between two frame updates exceeds this value, the frame time is reset to avoid huge elapsed counts.
@@ -38,17 +38,17 @@ class Time {
   /**
    * @property {number} pauseDuration - Records how long the game was paused for in miliseconds.
    */
-  int pauseDuration = 0;
+  double pauseDuration = 0.0;
 
   /**
    * @property {number} timeToCall - The value that setTimeout needs to work out when to next update
    */
-  int timeToCall = 0;
+  double timeToCall = 0.00;
 
   /**
    * @property {number} lastTime - Internal value used by timeToCall as part of the setTimeout loop
    */
-  int lastTime = 0;
+  double lastTime = 0.0;
 
   /**
    * @property {Phaser.Timer} events - This is a Phaser.Timer object bound to the master clock to which you can add timed events.
@@ -109,7 +109,7 @@ class Time {
    * @protected
    */
   boot () {
-    this._started = new DateTime.now();
+    this._started = new DateTime.now().millisecondsSinceEpoch;
     this.events.start();
 
   }
@@ -186,7 +186,10 @@ class Time {
     }
 
     //  Calculate physics elapsed, ensure it's > 0, use 1/60 as a fallback
-    this.physicsElapsed = this.elapsed / 1000 || 1 / 60;
+    this.physicsElapsed = this.elapsed / 1000 ;
+    if(this.physicsElapsed == 0){
+      this.physicsElapsed = 1 / 60;
+    }
 
     if (this.deltaCap > 0 && this.physicsElapsed > this.deltaCap)
     {
@@ -195,16 +198,16 @@ class Time {
 
     if (this.advancedTiming)
     {
-      this.msMin = this.game.math.min(this.msMin, this.elapsed);
-      this.msMax = this.game.math.max(this.msMax, this.elapsed);
+      this.msMin = Math.min(this.msMin, this.elapsed);
+      this.msMax = Math.max(this.msMax, this.elapsed);
 
       this.frames++;
 
       if (this.now > this._timeLastSecond + 1000)
       {
         this.fps = Math.round((this.frames * 1000) / (this.now - this._timeLastSecond));
-        this.fpsMin = this.game.math.min(this.fpsMin, this.fps);
-        this.fpsMax = this.game.math.max(this.fpsMax, this.fps);
+        this.fpsMin = Math.min(this.fpsMin, this.fps);
+        this.fpsMax = Math.max(this.fpsMax, this.fps);
         this._timeLastSecond = this.now;
         this.frames = 0;
       }
@@ -270,7 +273,7 @@ class Time {
   gameResumed () {
 
     //  Level out the elapsed timer to avoid spikes
-    this.time = this.now = new DateTime.now();
+    this.time = this.now = new DateTime.now().millisecondsSinceEpoch.toDouble();
 
     this.pauseDuration = this.time - this._pauseStarted;
 
@@ -278,7 +281,7 @@ class Time {
 
     var i = this._timers.length;
 
-    while (i--)
+    while (i-- > 0)
     {
       this._timers[i]._resume();
     }

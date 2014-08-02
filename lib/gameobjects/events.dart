@@ -53,7 +53,7 @@ class Events {
     this.onRevived.dispose();
     this.onOutOfBounds.dispose();
 
-    if (this.onInputOver)
+    if (this.onInputOver != null)
     {
       this.onInputOver.dispose();
       this.onInputOut.dispose();
@@ -63,7 +63,7 @@ class Events {
       this.onDragStop.dispose();
     }
 
-    if (this.onAnimationStart)
+    if (this.onAnimationStart != null)
     {
       this.onAnimationStart.dispose();
       this.onAnimationComplete.dispose();

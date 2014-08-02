@@ -39,6 +39,10 @@ class BitmapText extends PIXI.BitmapText implements GameObject {
 
   }
 
+  centerOn(num x, num y){
+    throw new Exception("Not implement yet!");
+  }
+
   Point anchor;
 
 

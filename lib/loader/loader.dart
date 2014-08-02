@@ -40,7 +40,7 @@ class Loader {
 
   int _fileIndex;
 
-  int _progressChunk;
+  num _progressChunk;
 
   HttpRequest _xhr;
 
@@ -81,7 +81,7 @@ class Loader {
    */
   static const int PHYSICS_PHASER_JSON = 4;
 
-  static const Map<String, int> Format = {
+  static const Map<String, int> Format = const {
       "TEXTURE_ATLAS_JSON_ARRAY":0,
       "TEXTURE_ATLAS_JSON_HASH":1,
       "TEXTURE_ATLAS_XML_STARLING":2,
@@ -725,7 +725,7 @@ class Loader {
    * @return {Phaser.Loader} This Loader instance.
    */
 
-  Loader physics(String key, [String url, data, String format]) {
+  Loader physics(String key, [String url, data, int format]) {
 
 //    if (url == null) {
 //      url = null;
@@ -744,7 +744,7 @@ class Loader {
     }
 
     //  A map data object has been given
-    if (data) {
+    if (data != null) {
       if (data == String) {
         data = JSON.decode(data);
       }
@@ -1026,7 +1026,7 @@ class Loader {
   beginLoad() {
 
     this.progress = 0;
-    this.progressFloat = 0;
+    this.progressFloat = 0.0;
     this.hasLoaded = false;
     this.isLoading = true;
 
@@ -1039,7 +1039,7 @@ class Loader {
     }
     else {
       this.progress = 100;
-      this.progressFloat = 100;
+      this.progressFloat = 100.0;
       this.hasLoaded = true;
       this.isLoading = false;
       this.onLoadComplete.dispatch();
@@ -1616,7 +1616,7 @@ class Loader {
   csvLoadComplete(int index) {
 
     if (this._fileList[index] == null) {
-      window.console.warn('Phaser.Loader csvLoadComplete invalid index ' + index);
+      window.console.warn('Phaser.Loader csvLoadComplete invalid index ' + index.toString());
       return;
     }
 

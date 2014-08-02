@@ -5,7 +5,7 @@ typedef double EasingFunction(double k);
 class Tween {
   final dynamic _object;
   final Game game;
-  final TweenManager _manager;
+  TweenManager _manager;
 
   /**
    * @property {object} _valuesStart - Private value object.
@@ -61,14 +61,14 @@ class Tween {
    * @private
    * @default
    */
-  int _delayTime = 0;
+  double _delayTime = 0.0;
 
   /**
    * @property {number} _startTime - Private start time counter.
    * @private
    * @default null
    */
-  int _startTime = null;
+  double _startTime = null;
 
   /**
    * @property {function} _easingFunction - The easing function used for the tween.
@@ -121,7 +121,7 @@ class Tween {
    * @private
    * @default
    */
-  int _pausedTime = 0;
+  double _pausedTime = 0.0;
 
   /**
    * @property {boolean} _codePaused - Was the Tween paused by code or by Game focus loss?
@@ -306,7 +306,7 @@ class Tween {
       return null;
     }
 
-    this._startTime = 0;
+    this._startTime = 0.0;
 
     for (String property in this._valuesEnd.keys) {
       // Check if an Array was provided as property value
@@ -636,13 +636,13 @@ class Tween {
       this._onStartCallbackFired = true;
     }
 
-    var elapsed = (time - this._startTime) / this._duration;
+    double elapsed = (time - this._startTime) / this._duration;
     elapsed = elapsed > 1 ? 1 : elapsed;
 
     var value = this._easingFunction(elapsed);
 
-    for (property in this._valuesEnd) {
-      var start = this._valuesStart[property] || 0;
+    for (property in this._valuesEnd.keys) {
+      var start = this._valuesStart[property];
       var end = this._valuesEnd[property];
 
       if (end is List) {

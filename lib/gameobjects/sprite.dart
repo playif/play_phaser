@@ -41,10 +41,14 @@ class Sprite extends PIXI.Sprite implements GameObject {
 
   Group parent;
 
-  List<GameObject> children;
+  List<GameObject> children=[];
 
   Rectangle _currentBounds;
 
+
+  centerOn(num x, num y){
+    throw new Exception("Not implement yet!");
+  }
 
   num get angle {
     return Math.wrapAngle(Math.radToDeg(this.rotation));
@@ -334,7 +338,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
       this._cache[1] = this.world.y;
       this._cache[2] = this.rotation;
 
-      if (this.body) {
+      if (this.body!= null) {
         this.body.preUpdate();
       }
 
@@ -398,7 +402,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
 
     this.animations.update();
 
-    if (this.body) {
+    if (this.body!= null) {
       this.body.preUpdate();
     }
 
@@ -435,7 +439,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
       (this.key as BitmapData).render();
     }
 
-    if (this.exists && this.body) {
+    if (this.exists && this.body != null) {
       this.body.postUpdate();
     }
 
@@ -462,9 +466,9 @@ class Sprite extends PIXI.Sprite implements GameObject {
    * @param {string|number} frame - If this Sprite is using part of a sprite sheet or texture atlas you can specify the exact frame to use by giving a string or numeric index.
    */
 
-  loadTexture(key, frame) {
+  loadTexture(key, [frame=0]) {
 
-    frame = frame || 0;
+    //frame = frame || 0;
 
     if (key is RenderTexture) {
       this.key = key.key;
@@ -482,7 +486,8 @@ class Sprite extends PIXI.Sprite implements GameObject {
         return;
       }
       else {
-        if (key == null || key == null) {
+        print (key);
+        if (key == null) {
           this.key = '__default';
           this.setTexture(PIXI.TextureCache[this.key]);
           return;

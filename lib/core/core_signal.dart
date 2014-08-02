@@ -25,9 +25,9 @@ class Signal {
     }
   }
 
-  _registerListener(Function listener, bool isOnce, Object listenerContext, [int priority]) {
+  _registerListener(Function listener, bool isOnce, [int priority]) {
 
-    var prevIndex = this._indexOfListener(listener, listenerContext),
+    var prevIndex = this._indexOfListener(listener),
     binding;
 
     if (prevIndex != -1) {
@@ -36,7 +36,7 @@ class Signal {
         throw new Exception('You cannot add${(isOnce ? '' : 'Once')}() then add${(!isOnce ? '' : 'Once')}() the same listener without removing the relationship first.');
       }
     } else {
-      binding = new SignalBinding(this, listener, isOnce, listenerContext, priority);
+      binding = new SignalBinding(this, listener, isOnce, priority);
       this._addBinding(binding);
     }
 
@@ -52,17 +52,17 @@ class Signal {
     var n = this._bindings.length;
     do {
       --n;
-    } while (n>=0 && this._bindings[n] != null && binding._priority <= this._bindings[n]._priority);
+    } while (n >= 0 && this._bindings[n] != null && binding._priority <= this._bindings[n]._priority);
     this._bindings.insert(n + 1, binding);
   }
 
 
-  _indexOfListener(Function listener, context) {
+  _indexOfListener(Function listener) {
     int n = this._bindings.length;
     SignalBinding cur;
     while (n-- != 0) {
       cur = this._bindings[n];
-      if (cur._listener == listener && cur.context == context) {
+      if (cur._listener == listener) {
         return n;
       }
     }
@@ -70,28 +70,28 @@ class Signal {
   }
 
 
-  has(Function listener, context) {
-    return this._indexOfListener(listener, context) != -1;
+  has(Function listener) {
+    return this._indexOfListener(listener) != -1;
   }
 
 
-  add(Function listener, listenerContext, [int priority]) {
+  add(Function listener, [int priority]) {
     this.validateListener(listener, 'add');
-    return this._registerListener(listener, false, listenerContext, priority);
+    return this._registerListener(listener, false, priority);
   }
 
 
-  addOnce(Function listener, listenerContext, [int priority]) {
+  addOnce(Function listener, [int priority]) {
     this.validateListener(listener, 'addOnce');
-    return this._registerListener(listener, true, listenerContext, priority);
+    return this._registerListener(listener, true, priority);
   }
 
 
-  remove(Function listener, context) {
+  remove(Function listener) {
 
     this.validateListener(listener, 'remove');
 
-    var i = this._indexOfListener(listener, context);
+    var i = this._indexOfListener(listener);
 
     if (i != -1) {
       this._bindings[i]._destroy(); //no reason to a Phaser.SignalBinding exist if it isn't attached to a signal
@@ -127,11 +127,11 @@ class Signal {
     }
     List paramsArr;
 
-    if(arguments is List){
-      paramsArr=arguments;
+    if (arguments is List) {
+      paramsArr = arguments;
     }
-    else{
-      paramsArr=[arguments];
+    else {
+      paramsArr = [arguments];
     }
 
     // = new List.from(arguments);
@@ -154,7 +154,7 @@ class Signal {
     //reverse loop since listeners with higher priority will be added at the end of the list
     do {
       n--;
-    } while (n>=0 && bindings[n] != null && this._shouldPropagate && bindings[n].execute(paramsArr) != false);
+    } while (n >= 0 && bindings[n] != null && this._shouldPropagate && bindings[n].execute(paramsArr) != false);
 
   }
 

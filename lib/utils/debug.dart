@@ -88,7 +88,7 @@ class Debug {
      * @property {number} currentAlpha - The current alpha the debug information will be rendered at.
      * @default
      */
-    this.currentAlpha = 1;
+    this.currentAlpha = 1.0;
 
     /**
      * @property {boolean} dirty - Does the canvas need re-rendering?
@@ -129,7 +129,7 @@ class Debug {
    */
   preUpdate () {
 
-    if (this.dirty && this.sprite)
+    if (this.dirty && this.sprite != null)
     {
       this.context.clearRect(0, 0, this.game.width, this.game.height);
       this.dirty = false;
@@ -160,7 +160,7 @@ class Debug {
     this.currentAlpha = this.context.globalAlpha;
     this.columnWidth = columnWidth;
 
-    if (this.sprite)
+    if (this.sprite != null)
     {
       this.dirty = true;
     }

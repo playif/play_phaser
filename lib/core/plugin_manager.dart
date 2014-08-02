@@ -88,8 +88,8 @@ class PluginManager {
         plugin.visible = true;
       }
 
-      this._len = this.plugins.add(plugin);
-
+      this.plugins.add(plugin);
+      this._len = this.plugins.length;
       // Allows plugins to run potentially destructive code outside of the constructor, and only if being added to the PluginManager
 //      if (plugin['init'] is Function) {
 //        plugin.init.apply(plugin, args);

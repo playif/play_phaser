@@ -6,8 +6,8 @@ class LoaderParser {
 
     Map data = {
     };
-    String info = xml.getElementsByTagName('info')[0];
-    String common = xml.getElementsByTagName('common')[0];
+    Element info = xml.getElementsByTagName('info')[0];
+    Element common = xml.getElementsByTagName('common')[0];
 
     data['font'] = info.getAttribute('face');
     data['size'] = int.parse(info.getAttribute('size'));

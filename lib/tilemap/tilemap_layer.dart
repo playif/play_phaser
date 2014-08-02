@@ -671,7 +671,7 @@ class TilemapLayer extends Image {
           this._column = this.layer.data[y];
         }
 
-      if (this._column)
+      if (this._column !=null)
       {
         for (var x = this._mc.startX, lenX = this._mc.startX + this._mc.maxX; x < lenX; x++)
         {

@@ -2,11 +2,11 @@ part of Phaser;
 
 class Image extends PIXI.Sprite implements GameObject {
   Game game;
-  //bool exists;
+  bool exists;
   String name;
-  //int type;
+  int type;
   int z;
-  //Events events;
+  Events events;
 
   String key;
   Point world;
@@ -36,6 +36,9 @@ class Image extends PIXI.Sprite implements GameObject {
   destroy(destroyChildren){
 
   }
+  centerOn(num x, num y){
+    throw new Exception("Not implement yet!");
+  }
 
   PIXI.Texture texture;
   CanvasPattern __tilePattern;
@@ -44,11 +47,10 @@ class Image extends PIXI.Sprite implements GameObject {
 
   }
 
-  Events events;
 
   Point anchor;
   Rectangle _currentBounds;
-  bool exists;
+
 
 
   num get angle {
@@ -119,12 +121,12 @@ class Image extends PIXI.Sprite implements GameObject {
         this.input = new InputHandler(this);
         this.input.start();
       }
-      else if (this.input && !this.input.enabled) {
+      else if (this.input!= null && !this.input.enabled) {
         this.input.start();
       }
     }
     else {
-      if (this.input && this.input.enabled) {
+      if (this.input != null && this.input.enabled) {
         this.input.stop();
       }
     }
@@ -165,12 +167,12 @@ class Image extends PIXI.Sprite implements GameObject {
     return this._cache[8] == 1;
   }
 
-  Image(this.game, [int x, int y, String key, int frame])
+  Image(this.game, [int x=0, int y=0, String key, int frame])
   :super(PIXI.TextureCache['__default']) {
-    x = x || 0;
-    y = y || 0;
-    key = key || null;
-    frame = frame || null;
+    //x = x || 0;
+    //y = y || 0;
+    //key = key || null;
+    //frame = frame || null;
 
     /**
      * @property {Phaser.Game} game - A reference to the currently running Game.
@@ -376,9 +378,9 @@ class Image extends PIXI.Sprite implements GameObject {
    * @param {string|number} frame - If this Image is using part of a sprite sheet or texture atlas you can specify the exact frame to use by giving a string or numeric index.
    */
 
-  loadTexture(String key, num frame) {
+  loadTexture(key, [frame=0]) {
 
-    frame = frame || 0;
+    //frame = frame || 0;
 
     this.key = key;
 

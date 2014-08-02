@@ -20,7 +20,7 @@ class Key {
   Signal onDown = new Signal();
   Function onHoldCallback;
 
-  var onHoldContext;
+  //var onHoldContext;
   Signal onUp;
 
   Key(this.game, int keycode) {
@@ -110,7 +110,7 @@ class Key {
     /**
      * @property {object} onHoldContext - The context under which the onHoldCallback will be called.
      */
-    this.onHoldContext = null;
+    //this.onHoldContext = null;
 
     /**
      * @property {Phaser.Signal} onUp - This Signal is dispatched every time this Key is pressed down. It is only dispatched once (until the key is released again).
@@ -128,8 +128,8 @@ class Key {
       this.duration = this.game.time.now - this.timeDown;
       this.repeats++;
 
-      if (this.onHoldCallback) {
-        this.onHoldCallback.call(this.onHoldContext, this);
+      if (this.onHoldCallback != null) {
+        this.onHoldCallback( this);
       }
     }
 
@@ -218,7 +218,7 @@ class Key {
       this.onDown.removeAll();
       this.onUp.removeAll();
       this.onHoldCallback = null;
-      this.onHoldContext = null;
+      //this.onHoldContext = null;
     }
 
   }

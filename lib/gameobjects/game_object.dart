@@ -34,6 +34,7 @@ abstract class GameObject extends PIXI.DisplayInterface {
   destroy(bool destroyChildren);
   removeChild(GameObject child);
   bringToTop();
+  centerOn(num x, num y);
   GameObject parent;
 
   bool fixedToCamera;

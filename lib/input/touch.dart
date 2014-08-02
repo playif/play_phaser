@@ -4,7 +4,8 @@ class Touch {
   Game game;
 
   bool disabled;
-  var callbackContext;
+
+  //var callbackContext;
 
   Function touchStartCallback;
   Function touchMoveCallback;
@@ -35,7 +36,7 @@ class Touch {
     /**
      * @property {Object} callbackContext - The context under which callbacks are called.
      */
-    this.callbackContext = this.game;
+    //this.callbackContext = this.game;
 
     /**
      * @property {function} touchStartCallback - A callback that can be fired on a touchStart event.
@@ -128,39 +129,38 @@ class Touch {
    * Starts the event listeners running.
    * @method Phaser.Touch#start
    */
-  start () {
 
-    if (this._onTouchStart != null)
-    {
+  start() {
+
+    if (this._onTouchStart != null) {
       //  Avoid setting multiple listeners
       return;
     }
 
     var _this = this;
 
-    if (this.game.device.touch)
-    {
-      this._onTouchStart =  (event) {
+    if (this.game.device.touch) {
+      this._onTouchStart = (event) {
         return _this.onTouchStart(event);
       };
 
-      this._onTouchMove =  (event) {
+      this._onTouchMove = (event) {
         return _this.onTouchMove(event);
       };
 
-      this._onTouchEnd =  (event) {
+      this._onTouchEnd = (event) {
         return _this.onTouchEnd(event);
       };
 
-      this._onTouchEnter =  (event) {
+      this._onTouchEnter = (event) {
         return _this.onTouchEnter(event);
       };
 
-      this._onTouchLeave =  (event) {
+      this._onTouchLeave = (event) {
         return _this.onTouchLeave(event);
       };
 
-      this._onTouchCancel =  (event) {
+      this._onTouchCancel = (event) {
         return _this.onTouchCancel(event);
       };
 
@@ -169,8 +169,7 @@ class Touch {
       this.game.canvas.addEventListener('touchend', this._onTouchEnd, false);
       this.game.canvas.addEventListener('touchcancel', this._onTouchCancel, false);
 
-      if (!this.game.device.cocoonJS)
-      {
+      if (!this.game.device.cocoonJS) {
         this.game.canvas.addEventListener('touchenter', this._onTouchEnter, false);
         this.game.canvas.addEventListener('touchleave', this._onTouchLeave, false);
       }
@@ -182,7 +181,8 @@ class Touch {
    * Consumes all touchmove events on the document (only enable this if you know you need it!).
    * @method Phaser.Touch#consumeTouchMove
    */
-  consumeDocumentTouches () {
+
+  consumeDocumentTouches() {
 
     this._documentTouchMove = (event) {
       event.preventDefault();
@@ -196,30 +196,27 @@ class Touch {
    * @method Phaser.Touch#onTouchStart
    * @param {TouchEvent} event - The native event from the browser. This gets stored in Touch.event.
    */
-  onTouchStart (TouchEvent event) {
+
+  onTouchStart(TouchEvent event) {
 
     this.event = event;
 
-    if (this.touchStartCallback)
-    {
-      this.touchStartCallback.call(this.callbackContext, event);
+    if (this.touchStartCallback != null) {
+      this.touchStartCallback(event);
     }
 
-    if (this.game.input.disabled || this.disabled)
-    {
+    if (this.game.input.disabled || this.disabled) {
       return;
     }
 
-    if (this.preventDefault)
-    {
+    if (this.preventDefault) {
       event.preventDefault();
     }
 
     //  event.targetTouches = list of all touches on the TARGET ELEMENT (i.e. game dom element)
     //  event.touches = list of all touches on the ENTIRE DOCUMENT, not just the target element
     //  event.changedTouches = the touches that CHANGED in this event, not the total number of them
-    for (var i = 0; i < event.changedTouches.length; i++)
-    {
+    for (var i = 0; i < event.changedTouches.length; i++) {
       this.game.input.startPointer(event.changedTouches[i]);
     }
 
@@ -231,29 +228,26 @@ class Touch {
    * @method Phaser.Touch#onTouchCancel
    * @param {TouchEvent} event - The native event from the browser. This gets stored in Touch.event.
    */
-  onTouchCancel (TouchEvent event) {
+
+  onTouchCancel(TouchEvent event) {
 
     this.event = event;
 
-    if (this.touchCancelCallback)
-    {
-      this.touchCancelCallback.call(this.callbackContext, event);
+    if (this.touchCancelCallback != null) {
+      this.touchCancelCallback(event);
     }
 
-    if (this.game.input.disabled || this.disabled)
-    {
+    if (this.game.input.disabled || this.disabled) {
       return;
     }
 
-    if (this.preventDefault)
-    {
+    if (this.preventDefault) {
       event.preventDefault();
     }
 
     //  Touch cancel - touches that were disrupted (perhaps by moving into a plugin or browser chrome)
     //  http://www.w3.org/TR/touch-events/#dfn-touchcancel
-    for (var i = 0; i < event.changedTouches.length; i++)
-    {
+    for (var i = 0; i < event.changedTouches.length; i++) {
       this.game.input.stopPointer(event.changedTouches[i]);
     }
 
@@ -265,22 +259,20 @@ class Touch {
    * @method Phaser.Touch#onTouchEnter
    * @param {TouchEvent} event - The native event from the browser. This gets stored in Touch.event.
    */
-  onTouchEnter (TouchEvent event) {
+
+  onTouchEnter(TouchEvent event) {
 
     this.event = event;
 
-    if (this.touchEnterCallback)
-    {
-      this.touchEnterCallback.call(this.callbackContext, event);
+    if (this.touchEnterCallback != null) {
+      this.touchEnterCallback(event);
     }
 
-    if (this.game.input.disabled || this.disabled)
-    {
+    if (this.game.input.disabled || this.disabled) {
       return;
     }
 
-    if (this.preventDefault)
-    {
+    if (this.preventDefault) {
       event.preventDefault();
     }
 
@@ -292,17 +284,16 @@ class Touch {
    * @method Phaser.Touch#onTouchLeave
    * @param {TouchEvent} event - The native event from the browser. This gets stored in Touch.event.
    */
-  onTouchLeave (TouchEvent event) {
+
+  onTouchLeave(TouchEvent event) {
 
     this.event = event;
 
-    if (this.touchLeaveCallback)
-    {
-      this.touchLeaveCallback.call(this.callbackContext, event);
+    if (this.touchLeaveCallback != null) {
+      this.touchLeaveCallback(event);
     }
 
-    if (this.preventDefault)
-    {
+    if (this.preventDefault) {
       event.preventDefault();
     }
 
@@ -313,22 +304,20 @@ class Touch {
    * @method Phaser.Touch#onTouchMove
    * @param {TouchEvent} event - The native event from the browser. This gets stored in Touch.event.
    */
-  onTouchMove (TouchEvent event) {
+
+  onTouchMove(TouchEvent event) {
 
     this.event = event;
 
-    if (this.touchMoveCallback)
-    {
-      this.touchMoveCallback.call(this.callbackContext, event);
+    if (this.touchMoveCallback != null) {
+      this.touchMoveCallback(event);
     }
 
-    if (this.preventDefault)
-    {
+    if (this.preventDefault) {
       event.preventDefault();
     }
 
-    for (var i = 0; i < event.changedTouches.length; i++)
-    {
+    for (var i = 0; i < event.changedTouches.length; i++) {
       this.game.input.updatePointer(event.changedTouches[i]);
     }
 
@@ -339,25 +328,23 @@ class Touch {
    * @method Phaser.Touch#onTouchEnd
    * @param {TouchEvent} event - The native event from the browser. This gets stored in Touch.event.
    */
-  onTouchEnd (TouchEvent event) {
+
+  onTouchEnd(TouchEvent event) {
 
     this.event = event;
 
-    if (this.touchEndCallback)
-    {
-      this.touchEndCallback.call(this.callbackContext, event);
+    if (this.touchEndCallback != null) {
+      this.touchEndCallback(event);
     }
 
-    if (this.preventDefault)
-    {
+    if (this.preventDefault) {
       event.preventDefault();
     }
 
     //  For touch end its a list of the touch points that have been removed from the surface
     //  https://developer.mozilla.org/en-US/docs/DOM/TouchList
     //  event.changedTouches = the touches that CHANGED in this event, not the total number of them
-    for (var i = 0; i < event.changedTouches.length; i++)
-    {
+    for (var i = 0; i < event.changedTouches.length; i++) {
       this.game.input.stopPointer(event.changedTouches[i]);
     }
 
@@ -367,10 +354,10 @@ class Touch {
    * Stop the event listeners.
    * @method Phaser.Touch#stop
    */
-  stop () {
 
-    if (this.game.device.touch)
-    {
+  stop() {
+
+    if (this.game.device.touch) {
       this.game.canvas.removeEventListener('touchstart', this._onTouchStart);
       this.game.canvas.removeEventListener('touchmove', this._onTouchMove);
       this.game.canvas.removeEventListener('touchend', this._onTouchEnd);

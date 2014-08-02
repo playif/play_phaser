@@ -81,7 +81,7 @@ class SoundManager {
      * @default
      */
     this._unlockSource = null;
-    this._volume = 1;
+    this._volume = 1.0;
     this._sounds = [];
     this.context = null;
 
@@ -136,9 +136,9 @@ class SoundManager {
     }
 
     if (!this.game.device.cocoonJS && this.game.device.iOS) {
-      this.game.input.touch.callbackContext = this;
+      //this.game.input.touch.callbackContext = this;
       this.game.input.touch.touchStartCallback = this.unlock;
-      this.game.input.mouse.callbackContext = this;
+      //this.game.input.mouse.callbackContext = this;
       this.game.input.mouse.mouseDownCallback = this.unlock;
       this.touchLocked = true;
     }
@@ -226,9 +226,9 @@ class SoundManager {
       //  Create an Audio tag?
       this.touchLocked = false;
       this._unlockSource = null;
-      this.game.input.touch.callbackContext = null;
+      //this.game.input.touch.callbackContext = null;
       this.game.input.touch.touchStartCallback = null;
-      this.game.input.mouse.callbackContext = null;
+      //this.game.input.mouse.callbackContext = null;
       this.game.input.mouse.mouseDownCallback = null;
     }
     else {
@@ -334,7 +334,7 @@ class SoundManager {
         if ((this._unlockSource.playbackState == this._unlockSource.PLAYING_STATE || this._unlockSource.playbackState == this._unlockSource.FINISHED_STATE)) {
           this.touchLocked = false;
           this._unlockSource = null;
-          this.game.input.touch.callbackContext = null;
+          //this.game.input.touch.callbackContext = null;
           this.game.input.touch.touchStartCallback = null;
         }
       }

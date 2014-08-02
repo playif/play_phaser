@@ -141,9 +141,9 @@ class StateManager {
 
   boot() {
 
-    this.game.onPause.add(this.pause, this);
-    this.game.onResume.add(this.resume, this);
-    this.game.load.onLoadComplete.add(this.loadComplete, this);
+    this.game.onPause.add(this.pause);
+    this.game.onResume.add(this.resume);
+    this.game.load.onLoadComplete.add(this.loadComplete);
 
     if (this._pendingState != null) {
 //      if (this._pendingState is String) {
@@ -190,7 +190,7 @@ class StateManager {
         this.start(key);
       }
       else {
-        this._pendingState = key;
+        this._pendingState = state;
       }
     }
 

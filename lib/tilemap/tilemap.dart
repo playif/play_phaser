@@ -30,7 +30,7 @@ class Tilemap {
   static const int CSV = 0;
   static const int TILED_JSON = 1;
 
-  static const Map<String, int> Format = {
+  static const Map<String, int> Format = const {
       "CSV":0,
       "TILED_JSON":1,
   };

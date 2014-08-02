@@ -9,7 +9,7 @@ class AnimationManager {
   bool isLoaded = false;
   FrameData frameData;
 
-  Map _anims;
+  Map<String,Animation> _anims;
   List _outputFrames = [];
   int _frameIndex = 0;
 
@@ -27,7 +27,7 @@ class AnimationManager {
   }
 
   int get frame {
-    if (this.currentFrame) {
+    if (this.currentFrame != null) {
       return this._frameIndex;
     }
     return -1;
@@ -37,11 +37,11 @@ class AnimationManager {
     if (value is num && this.frameData != null && this.frameData.getFrame(value) != null) {
       this.currentFrame = this.frameData.getFrame(value);
 
-      if (this.currentFrame) {
+      if (this.currentFrame != null) {
         this._frameIndex = value;
         this.sprite.setTexture(PIXI.TextureCache[this.currentFrame.uuid]);
 
-        if (this.sprite.__tilePattern) {
+        if (this.sprite.__tilePattern != null) {
           this.__tilePattern = false;
           this.tilingTexture = false;
         }
@@ -50,7 +50,7 @@ class AnimationManager {
   }
 
   String get frameName {
-    if (this.currentFrame) {
+    if (this.currentFrame != null) {
       return this.currentFrame.name;
     }
     else return null;
@@ -59,11 +59,11 @@ class AnimationManager {
   set frameName(String value) {
     if (value is String && this.frameData != null && this.frameData.getFrameByName(value) != null) {
       this.currentFrame = this.frameData.getFrameByName(value);
-      if (this.currentFrame) {
+      if (this.currentFrame != null) {
         this._frameIndex = this.currentFrame.index;
         this.sprite.setTexture(PIXI.TextureCache[this.currentFrame.uuid]);
 
-        if (this.sprite.__tilePattern) {
+        if (this.sprite.__tilePattern != null) {
           this.__tilePattern = false;
           this.tilingTexture = false;
         }
@@ -89,7 +89,7 @@ class AnimationManager {
 
   }
 
-  Animation add(int name, List frames, [num frameRate=60, bool loop=false, bool useNumericIndex]) {
+  Animation add(String name, List frames, [num frameRate=60, bool loop=false, bool useNumericIndex]) {
 
 //    if(frames == null){
 //      frames=[];
@@ -97,7 +97,7 @@ class AnimationManager {
 
     if (this.frameData == null) {
       window.console.warn('No FrameData available for Phaser.Animation ' + name);
-      return;
+      return this;
     }
 
     //frameRate = frameRate || 60;
@@ -129,7 +129,7 @@ class AnimationManager {
     this.currentFrame = this.currentAnim.currentFrame;
     this.sprite.setTexture(PIXI.TextureCache[this.currentFrame.uuid]);
 
-    if (this.sprite.__tilePattern) {
+    if (this.sprite.__tilePattern != null) {
       this.__tilePattern = false;
       this.tilingTexture = false;
     }
@@ -187,7 +187,7 @@ class AnimationManager {
       }
     }
     else {
-      if (this.currentAnim) {
+      if (this.currentAnim !=null) {
         this.currentAnim.stop(resetFrame);
       }
     }
@@ -199,7 +199,7 @@ class AnimationManager {
       return false;
     }
 
-    if (this.currentAnim && this.currentAnim.update() == true) {
+    if (this.currentAnim != null && this.currentAnim.update() == true) {
       this.currentFrame = this.currentAnim.currentFrame;
       return true;
     }
@@ -208,7 +208,7 @@ class AnimationManager {
 
   }
 
-  Animation getAnimation(name) {
+  Animation getAnimation(String name) {
     if (name is String) {
       if (this._anims[name] != null) {
         return this._anims[name];

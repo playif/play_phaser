@@ -16,10 +16,10 @@ class Timer {
   bool paused = false;
   bool _codePaused = false;
 
-  int _started = 0;
-  int _pauseStarted = 0;
-  int _pauseTotal = 0;
-  int _now = new DateTime.now().millisecondsSinceEpoch;
+  double _started = 0.0;
+  double _pauseStarted = 0.0;
+  double _pauseTotal = 0.0;
+  double _now = new DateTime.now().millisecondsSinceEpoch;
 
   int _len = 0;
 
@@ -261,7 +261,7 @@ class Timer {
 
     this._i = this.events.length;
 
-    while (this._i--) {
+    while (this._i-- > 0) {
       if (this.events[this._i].pendingDelete) {
         this.events.removeAt(this._i);
       }

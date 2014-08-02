@@ -231,7 +231,7 @@ class GameObjectFactory {
       group = this.world;
     }
 
-    return group.add(new Button(this.game, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame));
+    return group.add(new Button(this.game, x, y, key, callback, overFrame, outFrame, downFrame, upFrame));
 
   }
 

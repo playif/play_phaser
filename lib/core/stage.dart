@@ -155,7 +155,7 @@ class Stage extends PIXI.Stage {
 
   postUpdate() {
 
-    if (this.game.world.camera.target) {
+    if (this.game.world.camera.target != null) {
       this.game.world.camera.target.postUpdate();
 
       this.game.world.camera.update();

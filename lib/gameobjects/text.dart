@@ -91,6 +91,10 @@ class Text extends PIXI.Text implements GameObject {
     return this;
   }
 
+  centerOn(num x, num y){
+    throw new Exception("Not implement yet!");
+  }
+
   Rectangle _currentBounds;
 
   Text(this.game, [ this.x, this.y, String text='', PIXI.TextStyle style])

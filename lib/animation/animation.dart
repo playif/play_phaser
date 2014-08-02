@@ -26,8 +26,8 @@ class Animation {
   Signal onComplete;
   Signal onLoop;
 
-  int _timeLastFrame;
-  int _timeNextFrame;
+  double _timeLastFrame;
+  double _timeNextFrame;
 
 //  bool __tilePattern;
 
@@ -88,8 +88,8 @@ class Animation {
     }
 
     //  Set-up some event listeners
-    this.game.onPause.add(this.onPause, this);
-    this.game.onResume.add(this.onResume, this);
+    this.game.onPause.add(this.onPause);
+    this.game.onResume.add(this.onResume);
   }
 
   play(num frameRate, bool loop, bool killOnComplete) {
@@ -266,10 +266,10 @@ class Animation {
           this._frameIndex %= this._frames.length;
           this.currentFrame = this._frameData.getFrame(this._frames[this._frameIndex]);
 
-          if (this.currentFrame) {
+          if (this.currentFrame != null) {
             this._parent.setTexture(PIXI.TextureCache[this.currentFrame.uuid]);
 
-            if (this._parent.__tilePattern) {
+            if (this._parent.__tilePattern != null) {
               this._parent.__tilePattern = false;
               this._parent.tilingTexture = false;
             }
@@ -286,10 +286,10 @@ class Animation {
       else {
         this.currentFrame = this._frameData.getFrame(this._frames[this._frameIndex]);
 
-        if (this.currentFrame) {
+        if (this.currentFrame != null) {
           this._parent.setTexture(PIXI.TextureCache[this.currentFrame.uuid]);
 
-          if (this._parent.__tilePattern) {
+          if (this._parent.__tilePattern != null) {
             this._parent.__tilePattern = false;
             this._parent.tilingTexture = false;
           }
@@ -310,8 +310,8 @@ class Animation {
    */
 
   destroy() {
-    this.game.onPause.remove(this.onPause, this);
-    this.game.onResume.remove(this.onResume, this);
+    this.game.onPause.remove(this.onPause);
+    this.game.onResume.remove(this.onResume);
 
     this.game = null;
     this._parent = null;

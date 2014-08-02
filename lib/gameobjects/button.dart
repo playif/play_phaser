@@ -33,14 +33,14 @@ class Button extends Image {
   bool inputEnabled;
 
 
-  Button(Game game,num x, num y, String key, Function callback,
-         callbackContext, overFrame, outFrame, downFrame, upFrame)
+  Button(Game game, [num x=0, num y=0, String key, Function callback,
+          overFrame, outFrame, downFrame, upFrame])
   :super(game, x, y, key, outFrame) {
-    x = x || 0;
-    y = y || 0;
-    key = key || null;
-    callback = callback || null;
-    callbackContext = callbackContext || this;
+    //x = x || 0;
+    //y = y || 0;
+    //key = key || null;
+    //callback = callback || null;
+    //callbackContext = callbackContext || this;
 
     //Image.call(this, game, x, y, key, outFrame);
 
@@ -197,16 +197,15 @@ class Button extends Image {
 
     this.setFrames(overFrame, outFrame, downFrame, upFrame);
 
-    if (callback != null)
-    {
-      this.onInputUp.add(callback, callbackContext);
+    if (callback != null) {
+      this.onInputUp.add(callback);
     }
 
     //  Redirect the input events to here so we can handle animation updates, etc
-    this.events.onInputOver.add(this.onInputOverHandler, this);
-    this.events.onInputOut.add(this.onInputOutHandler, this);
-    this.events.onInputDown.add(this.onInputDownHandler, this);
-    this.events.onInputUp.add(this.onInputUpHandler, this);
+    this.events.onInputOver.add(this.onInputOverHandler);
+    this.events.onInputOut.add(this.onInputOutHandler);
+    this.events.onInputDown.add(this.onInputDownHandler);
+    this.events.onInputUp.add(this.onInputUpHandler);
 
   }
 
@@ -216,7 +215,8 @@ class Button extends Image {
    *
    * @method Phaser.Button.prototype.clearFrames
    */
-  clearFrames () {
+
+  clearFrames() {
 
     this._onOverFrameName = null;
     this._onOverFrameID = null;
@@ -241,93 +241,74 @@ class Button extends Image {
    * @param {string|number} [downFrame] - This is the frame or frameName that will be set when this button is in a down state. Give either a number to use a frame ID or a string for a frame name.
    * @param {string|number} [upFrame] - This is the frame or frameName that will be set when this button is in an up state. Give either a number to use a frame ID or a string for a frame name.
    */
-  setFrames (overFrame, outFrame, downFrame, upFrame) {
+
+  setFrames(overFrame, outFrame, downFrame, upFrame) {
 
     this.clearFrames();
 
-    if (overFrame != null)
-    {
-      if ( overFrame is String)
-      {
+    if (overFrame != null) {
+      if (overFrame is String) {
         this._onOverFrameName = overFrame;
 
-        if (this.input.pointerOver())
-        {
+        if (this.input.pointerOver()) {
           this.frameName = overFrame;
         }
       }
-      else
-      {
+      else {
         this._onOverFrameID = overFrame;
 
-        if (this.input.pointerOver())
-        {
+        if (this.input.pointerOver()) {
           this.frame = overFrame;
         }
       }
     }
 
-    if (outFrame != null)
-    {
-      if ( outFrame is String)
-      {
+    if (outFrame != null) {
+      if (outFrame is String) {
         this._onOutFrameName = outFrame;
 
-        if (this.input.pointerOver() == false)
-        {
+        if (this.input.pointerOver() == false) {
           this.frameName = outFrame;
         }
       }
-      else
-      {
+      else {
         this._onOutFrameID = outFrame;
 
-        if (this.input.pointerOver() == false)
-        {
+        if (this.input.pointerOver() == false) {
           this.frame = outFrame;
         }
       }
     }
 
-    if (downFrame != null)
-    {
-      if ( downFrame is String)
-      {
+    if (downFrame != null) {
+      if (downFrame is String) {
         this._onDownFrameName = downFrame;
 
-        if (this.input.pointerDown())
-        {
+        if (this.input.pointerDown()) {
           this.frameName = downFrame;
         }
       }
-      else
-      {
+      else {
         this._onDownFrameID = downFrame;
 
-        if (this.input.pointerDown())
-        {
+        if (this.input.pointerDown()) {
           this.frame = downFrame;
         }
       }
     }
 
-    if (upFrame != null)
-    {
-      if ( upFrame is String)
-      {
+    if (upFrame != null) {
+      if (upFrame is String) {
         this._onUpFrameName = upFrame;
 
-        if (this.input.pointerUp())
-        {
+        if (this.input.pointerUp()) {
           this.frameName = upFrame;
         }
       }
-      else
-      {
+      else {
         this._onUpFrameID = upFrame;
 
-        if (this.input.pointerUp())
-        {
+        if (this.input.pointerUp()) {
           this.frame = upFrame;
         }
       }
@@ -350,7 +331,8 @@ class Button extends Image {
    * @param {Phaser.Sound} [upSound] - Up Button Sound.
    * @param {string} [upMarker] - Up Button Sound Marker.
    */
-  setSounds  (overSound, overMarker, downSound, downMarker, outSound, outMarker, upSound, upMarker) {
+
+  setSounds(overSound, overMarker, downSound, downMarker, outSound, outMarker, upSound, upMarker) {
 
     this.setOverSound(overSound, overMarker);
     this.setOutSound(outSound, outMarker);
@@ -366,18 +348,17 @@ class Button extends Image {
    * @param {Phaser.Sound} sound - The Sound that will be played.
    * @param {string} [marker] - A Sound Marker that will be used in the playback.
    */
-  setOverSound (sound, marker) {
+
+  setOverSound(sound, marker) {
 
     this.onOverSound = null;
     this.onOverSoundMarker = '';
 
-    if (sound is Sound)
-    {
+    if (sound is Sound) {
       this.onOverSound = sound;
     }
 
-    if ( marker is String)
-    {
+    if (marker is String) {
       this.onOverSoundMarker = marker;
     }
 
@@ -390,18 +371,17 @@ class Button extends Image {
    * @param {Phaser.Sound} sound - The Sound that will be played.
    * @param {string} [marker] - A Sound Marker that will be used in the playback.
    */
-  setOutSound  (sound, marker) {
+
+  setOutSound(sound, marker) {
 
     this.onOutSound = null;
     this.onOutSoundMarker = '';
 
-    if (sound is Sound)
-    {
+    if (sound is Sound) {
       this.onOutSound = sound;
     }
 
-    if ( marker is String)
-    {
+    if (marker is String) {
       this.onOutSoundMarker = marker;
     }
 
@@ -414,18 +394,17 @@ class Button extends Image {
    * @param {Phaser.Sound} sound - The Sound that will be played.
    * @param {string} [marker] - A Sound Marker that will be used in the playback.
    */
-  setDownSound (sound, marker) {
+
+  setDownSound(sound, marker) {
 
     this.onDownSound = null;
     this.onDownSoundMarker = '';
 
-    if (sound is Sound)
-    {
+    if (sound is Sound) {
       this.onDownSound = sound;
     }
 
-    if ( marker is String)
-    {
+    if (marker is String) {
       this.onDownSoundMarker = marker;
     }
 
@@ -438,18 +417,17 @@ class Button extends Image {
    * @param {Phaser.Sound} sound - The Sound that will be played.
    * @param {string} [marker] - A Sound Marker that will be used in the playback.
    */
-  setUpSound (sound, marker) {
+
+  setUpSound(sound, marker) {
 
     this.onUpSound = null;
     this.onUpSoundMarker = '';
 
-    if (sound is Sound)
-    {
+    if (sound is Sound) {
       this.onUpSound = sound;
     }
 
-    if ( marker is String)
-    {
+    if (marker is String) {
       this.onUpSoundMarker = marker;
     }
 
@@ -463,26 +441,23 @@ class Button extends Image {
    * @param {Phaser.Button} sprite - The Button that the event occured on.
    * @param {Phaser.Pointer} pointer - The Pointer that activated the Button.
    */
-  onInputOverHandler (sprite, pointer) {
 
-    if (this.freezeFrames == false)
-    {
+  onInputOverHandler(sprite, pointer) {
+
+    if (this.freezeFrames == false) {
       this.setState(1);
     }
 
-    if (this.onOverMouseOnly && !pointer.isMouse)
-    {
+    if (this.onOverMouseOnly != null && !pointer.isMouse) {
       return;
     }
 
-    if (this.onOverSound)
-    {
+    if (this.onOverSound != null) {
       this.onOverSound.play(this.onOverSoundMarker);
     }
 
-    if (this.onInputOver)
-    {
-      this.onInputOver.dispatch(this, pointer);
+    if (this.onInputOver != null) {
+      this.onInputOver.dispatch([this, pointer]);
     }
 
   }
@@ -495,21 +470,19 @@ class Button extends Image {
    * @param {Phaser.Button} sprite - The Button that the event occured on.
    * @param {Phaser.Pointer} pointer - The Pointer that activated the Button.
    */
-  onInputOutHandler (sprite, pointer) {
 
-    if (this.freezeFrames == false)
-    {
+  onInputOutHandler(sprite, pointer) {
+
+    if (this.freezeFrames == false) {
       this.setState(2);
     }
 
-    if (this.onOutSound)
-    {
+    if (this.onOutSound != null) {
       this.onOutSound.play(this.onOutSoundMarker);
     }
 
-    if (this.onInputOut)
-    {
-      this.onInputOut.dispatch(this, pointer);
+    if (this.onInputOut != null) {
+      this.onInputOut.dispatch([this, pointer]);
     }
   }
 
@@ -521,21 +494,19 @@ class Button extends Image {
    * @param {Phaser.Button} sprite - The Button that the event occured on.
    * @param {Phaser.Pointer} pointer - The Pointer that activated the Button.
    */
-  onInputDownHandler (sprite, pointer) {
 
-    if (this.freezeFrames == false)
-    {
+  onInputDownHandler(sprite, pointer) {
+
+    if (this.freezeFrames == false) {
       this.setState(3);
     }
 
-    if (this.onDownSound)
-    {
+    if (this.onDownSound != null) {
       this.onDownSound.play(this.onDownSoundMarker);
     }
 
-    if (this.onInputDown)
-    {
-      this.onInputDown.dispatch(this, pointer);
+    if (this.onInputDown != null) {
+      this.onInputDown.dispatch([this, pointer]);
     }
   }
 
@@ -547,42 +518,34 @@ class Button extends Image {
    * @param {Phaser.Button} sprite - The Button that the event occured on.
    * @param {Phaser.Pointer} pointer - The Pointer that activated the Button.
    */
-  onInputUpHandler (sprite, pointer, isOver) {
 
-    if (this.onUpSound)
-    {
+  onInputUpHandler(sprite, pointer, isOver) {
+
+    if (this.onUpSound != null) {
       this.onUpSound.play(this.onUpSoundMarker);
     }
 
-    if (this.onInputUp)
-    {
-      this.onInputUp.dispatch(this, pointer, isOver);
+    if (this.onInputUp != null) {
+      this.onInputUp.dispatch([this, pointer, isOver]);
     }
 
-    if (this.freezeFrames)
-    {
+    if (this.freezeFrames) {
       return;
     }
 
-    if (this.forceOut)
-    {
+    if (this.forceOut) {
       //  Button should be forced to the Out frame when released.
       this.setState(2);
     }
-    else
-    {
-      if (this._onUpFrameName != null || this._onUpFrameID != null)
-      {
+    else {
+      if (this._onUpFrameName != null || this._onUpFrameID != null) {
         this.setState(4);
       }
-      else
-      {
-        if (isOver)
-        {
+      else {
+        if (isOver) {
           this.setState(1);
         }
-        else
-        {
+        else {
           this.setState(2);
         }
       }
@@ -597,53 +560,42 @@ class Button extends Image {
    * @method Phaser.Button.prototype.setState
    * @param {number} newState - The new State of the Button.
    */
-  setState (newState) {
 
-    if (newState == 1)
-    {
+  setState(newState) {
+
+    if (newState == 1) {
       //  Over
-      if (this._onOverFrameName != null)
-      {
+      if (this._onOverFrameName != null) {
         this.frameName = this._onOverFrameName;
       }
-      else if (this._onOverFrameID != null)
-      {
+      else if (this._onOverFrameID != null) {
         this.frame = this._onOverFrameID;
       }
     }
-    else if (newState == 2)
-    {
+    else if (newState == 2) {
       //  Out
-      if (this._onOutFrameName != null)
-      {
+      if (this._onOutFrameName != null) {
         this.frameName = this._onOutFrameName;
       }
-      else if (this._onOutFrameID != null)
-      {
+      else if (this._onOutFrameID != null) {
         this.frame = this._onOutFrameID;
       }
     }
-    else if (newState == 3)
-      {
+    else if (newState == 3) {
         //  Down
-        if (this._onDownFrameName != null)
-        {
+        if (this._onDownFrameName != null) {
           this.frameName = this._onDownFrameName;
         }
-        else if (this._onDownFrameID != null)
-        {
+        else if (this._onDownFrameID != null) {
           this.frame = this._onDownFrameID;
         }
       }
-      else if (newState == 4)
-        {
+      else if (newState == 4) {
           //  Up
-          if (this._onUpFrameName != null)
-          {
+          if (this._onUpFrameName != null) {
             this.frameName = this._onUpFrameName;
           }
-          else if (this._onUpFrameID != null)
-          {
+          else if (this._onUpFrameID != null) {
             this.frame = this._onUpFrameID;
           }
         }

@@ -73,10 +73,10 @@ class AnimationParser {
   static FrameData JSONData(game, json, cacheKey) {
 
     //  Malformed?
-    if (!json['frames']) {
+    if (json['frames'] == null) {
       window.console.warn("Phaser.AnimationParser.JSONData: Invalid Texture Atlas JSON given, missing 'frames' array");
       window.console.log(json);
-      return;
+      return null;
     }
 
     //  Let's create some frames then
@@ -129,10 +129,10 @@ class AnimationParser {
   static FrameData JSONDataHash(game, json, cacheKey) {
 
     //  Malformed?
-    if (!json['frames']) {
+    if (json['frames'] == null) {
       window.console.warn("Phaser.AnimationParser.JSONDataHash: Invalid Texture Atlas JSON given, missing 'frames' object");
       window.console.log(json);
-      return;
+      return null;
     }
 
     //  Let's create some frames then
@@ -187,9 +187,9 @@ class AnimationParser {
   static FrameData XMLData(game, xml, cacheKey) {
 
     //  Malformed?
-    if (!xml.getElementsByTagName('TextureAtlas')) {
+    if (xml.getElementsByTagName('TextureAtlas') == null) {
       window.console.warn("Phaser.AnimationParser.XMLData: Invalid Texture Atlas XML given, missing <TextureAtlas> tag");
-      return;
+      return null;
     }
 
     //  Let's create some frames then

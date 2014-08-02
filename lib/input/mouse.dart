@@ -3,7 +3,7 @@ part of Phaser;
 class Mouse {
   Game game;
 
-  var callbackContext;
+  //var callbackContext;
   Function mouseDownCallback;
 
   /**
@@ -155,7 +155,7 @@ class Mouse {
     /**
      * @property {Object} callbackContext - The context under which callbacks are called.
      */
-    this.callbackContext = this.game;
+    //this.callbackContext = this.game;
 
     /**
      * @property {function} mouseDownCallback - A callback that can be fired when the mouse is pressed down.
@@ -342,8 +342,8 @@ class Mouse {
 
     this.button = event.button;
 
-    if (this.mouseDownCallback) {
-      this.mouseDownCallback.call(this.callbackContext, event);
+    if (this.mouseDownCallback != null) {
+      this.mouseDownCallback(event);
     }
 
     if (this.game.input.disabled || this.disabled) {
@@ -370,8 +370,8 @@ class Mouse {
       event.preventDefault();
     }
 
-    if (this.mouseMoveCallback) {
-      this.mouseMoveCallback.call(this.callbackContext, event);
+    if (this.mouseMoveCallback != null) {
+      this.mouseMoveCallback(event);
     }
 
     if (this.game.input.disabled || this.disabled) {
@@ -400,8 +400,8 @@ class Mouse {
 
     this.button = Mouse.NO_BUTTON;
 
-    if (this.mouseUpCallback) {
-      this.mouseUpCallback.call(this.callbackContext, event);
+    if (this.mouseUpCallback != null) {
+      this.mouseUpCallback(event);
     }
 
     if (this.game.input.disabled || this.disabled) {
@@ -429,8 +429,8 @@ class Mouse {
       event.preventDefault();
     }
 
-    if (this.mouseOutCallback) {
-      this.mouseOutCallback.call(this.callbackContext, event);
+    if (this.mouseOutCallback != null) {
+      this.mouseOutCallback(event);
     }
 
     if (this.game.input.disabled || this.disabled) {
@@ -439,7 +439,7 @@ class Mouse {
 
     this.game.input.mousePointer.withinGame = false;
 
-    if (this.stopOnGameOut) {
+    if (this.stopOnGameOut != null) {
       //event['identifier'] = 0;
 
       this.game.input.mousePointer.stop(event);
@@ -462,11 +462,16 @@ class Mouse {
       event.preventDefault();
     }
 
-    // reverse detail for firefox
-    this.wheelDelta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
+    num val = event.wheelDelta;
+    if (val == null || val == 0) {
+      val = -event.detail;
+    }
 
-    if (this.mouseWheelCallback) {
-      this.mouseWheelCallback.call(this.callbackContext, event);
+    // reverse detail for firefox
+    this.wheelDelta = Math.max(-1, Math.min(1, val));
+
+    if (this.mouseWheelCallback != null) {
+      this.mouseWheelCallback(event);
     }
 
   }
@@ -486,8 +491,8 @@ class Mouse {
       event.preventDefault();
     }
 
-    if (this.mouseOverCallback) {
-      this.mouseOverCallback.call(this.callbackContext, event);
+    if (this.mouseOverCallback != null) {
+      this.mouseOverCallback(event);
     }
 
     if (this.game.input.disabled || this.disabled) {

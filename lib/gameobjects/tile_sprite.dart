@@ -46,6 +46,10 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
     return this;
   }
 
+  centerOn(num x, num y){
+    throw new Exception("Not implement yet!");
+  }
+
   num get renderOrderID {
     return this._cache[3];
   }

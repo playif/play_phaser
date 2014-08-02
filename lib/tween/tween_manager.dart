@@ -8,8 +8,8 @@ class TweenManager {
 
   TweenManager(this.game) {
 
-    this.game.onPause.add(this._pauseAll, this);
-    this.game.onResume.add(this._resumeAll, this);
+    this.game.onPause.add(this._pauseAll);
+    this.game.onResume.add(this._resumeAll);
   }
 
   /**
@@ -101,7 +101,7 @@ class TweenManager {
 
     //  If there are any new tweens to be added, do so now - otherwise they can be spliced out of the array before ever running
     if (this._add.length > 0) {
-      this._tweens = this._tweens.addAll(this._add);
+      this._tweens.addAll(this._add);
       this._add.length = 0;
     }
 

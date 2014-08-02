@@ -25,7 +25,7 @@ class Sound {
   bool usingWebAudio;
   bool usingAudioTag;
   Map externalNode;
-  Map masterGainNode;
+  AudioNode masterGainNode;
   GainNode gainNode;
   bool loop;
 
@@ -40,7 +40,7 @@ class Sound {
   double _volume;
   var _buffer;
   bool _muted;
-  int _tempMarker;
+  String _tempMarker;
   int _tempPosition;
   double _tempVolume;
   bool _tempLoop = false;
@@ -243,7 +243,7 @@ class Sound {
       }
     }
     else {
-      if (this.game.cache.getSound(key) && this.game.cache.isSoundReady(key)) {
+      if (this.game.cache.getSound(key) != null && this.game.cache.isSoundReady(key)) {
         this._sound = this.game.cache.getSoundData(key);
         this.totalDuration = 0;
 
@@ -252,7 +252,7 @@ class Sound {
         }
       }
       else {
-        this.game.cache.onSoundUnlock.add(this.soundHasUnlocked, this);
+        this.game.cache.onSoundUnlock.add(this.soundHasUnlocked);
       }
     }
 
@@ -318,7 +318,7 @@ class Sound {
      * @property {number} _tempMarker - Internal marker var.
      * @private
      */
-    this._tempMarker = 0;
+    this._tempMarker = '';
 
     /**
      * @property {number} _tempPosition - Internal marker var.
@@ -330,13 +330,13 @@ class Sound {
      * @property {number} _tempVolume - Internal marker var.
      * @private
      */
-    this._tempVolume = 0;
+    this._tempVolume = 0.0;
 
     /**
      * @property {boolean} _tempLoop - Internal marker var.
      * @private
      */
-    this._tempLoop = 0;
+    this._tempLoop = false;
 
     /**
      * @property {boolean} _paused - Was this sound paused via code or a game event?
@@ -539,7 +539,7 @@ class Sound {
       }
     }
     else {
-      position = position || 0;
+      //position = position || 0;
 
       if (volume == null) {
         volume = this._volume;
@@ -571,7 +571,7 @@ class Sound {
         this._sound = this.context.createBufferSource();
         this._sound.buffer = this._buffer;
 
-        if (this.externalNode) {
+        if (this.externalNode !=null) {
           this._sound.connectNode(this.externalNode);
         }
         else {
@@ -610,18 +610,18 @@ class Sound {
       else {
         this.pendingPlayback = true;
 
-        if (this.game.cache.getSound(this.key) && this.game.cache.getSound(this.key)['isDecoding'] == false) {
+        if (this.game.cache.getSound(this.key) != null && this.game.cache.getSound(this.key)['isDecoding'] == false) {
           this.game.sound.decode(this.key, this);
         }
       }
     }
     else {
-      if (this.game.cache.getSound(this.key) && this.game.cache.getSound(this.key)['locked']) {
+      if (this.game.cache.getSound(this.key) !=null && this.game.cache.getSound(this.key)['locked']) {
         this.game.cache.reloadSound(this.key);
         this.pendingPlayback = true;
       }
       else {
-        if (this._sound && (this.game.device.cocoonJS || this._sound.readyState == 4)) {
+        if (this._sound != null && (this.game.device.cocoonJS || this._sound.readyState == 4)) {
           this._sound.play();
           //  This doesn't become available until you call play(), wonderful ...
           this.totalDuration = this._sound.duration;
@@ -698,7 +698,7 @@ class Sound {
         this._sound = this.context.createBufferSource();
         this._sound.buffer = this._buffer;
 
-        if (this.externalNode) {
+        if (this.externalNode !=null) {
           this._sound.connectNode(this.externalNode);
         }
         else {

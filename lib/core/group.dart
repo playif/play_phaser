@@ -46,6 +46,10 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
 
   }
 
+  centerOn(num x, num y){
+    throw new Exception("Not implement yet!");
+  }
+
 
   Group(Game game, [this.parent, this.name='group',
   this.addToStage=false, this.enableBody=false, this.physicsBodyType=0])
@@ -266,7 +270,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
 
     //var child = new this.classType(this.game, x, y, key, frame);
 
-    var child = reflectClass(classType).newInstance('', [this.game, x, y, key, frame]);
+    GameObject child = reflectClass(classType).newInstance(const Symbol(""), [this.game, x, y, key, frame]).reflectee;
 
     if (this.enableBody) {
       this.game.physics.enable(child, this.physicsBodyType);
@@ -280,8 +284,8 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
 
     child.z = this.children.length;
 
-    if (child.events) {
-      child.events.onAddedToGroup.dispatch(child, this);
+    if (child.events != null) {
+      child.events.onAddedToGroup.dispatch([child, this]);
     }
 
     if (this.cursor == null) {
@@ -864,7 +868,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
     }).forEach(callback);
   }
 
-  sort([int index, int order]) {
+  sort([String index, int order]) {
 
     if (this.children.length < 2) {
       //  Nothing to swap

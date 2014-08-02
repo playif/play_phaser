@@ -2,7 +2,7 @@ part of Phaser;
 
 class FrameData {
   List<Frame> _frames = [];
-  List<num> _frameNames = [];
+  Map<String,int> _frameNames = {};
 
   int get total => _frames.length;
 
@@ -81,7 +81,7 @@ class FrameData {
     return output;
   }
 
-  List<int> getFrameIndexes([List<num> frames, bool useNumericIndex, List<int> output]) {
+  List<int> getFrameIndexes([List frames, bool useNumericIndex, List<int> output]) {
 
     if (useNumericIndex == null) {
       useNumericIndex = true;
@@ -104,7 +104,7 @@ class FrameData {
           output.add(frames[i]);
         }
         else {
-          if (this.getFrameByName(frames[i])) {
+          if (this.getFrameByName(frames[i]) != null) {
             output.add(this.getFrameByName(frames[i]).index);
           }
         }

@@ -35,6 +35,10 @@ class Graphics extends PIXI.Graphics implements GameObject {
 
   }
 
+  centerOn(num x, num y){
+    throw new Exception("Not implement yet!");
+  }
+
 
   bringToTop(){
 

@@ -322,8 +322,8 @@ class Pointer {
    */
 
   start(event) {
-    if (event is MouseEvent){
-      MouseEvent me=event as MouseEvent;
+    if (event is MouseEvent) {
+      MouseEvent me = event as MouseEvent;
       //me.target
     }
 //    if (event['pointerId']) {
@@ -355,9 +355,9 @@ class Pointer {
     this.positionDown.setTo(this.x, this.y);
 
     if (this.game.input.multiInputOverride == Input.MOUSE_OVERRIDES_TOUCH ||
-        this.game.input.multiInputOverride == Input.MOUSE_TOUCH_COMBINE ||
-        (this.game.input.multiInputOverride == Input.TOUCH_OVERRIDES_MOUSE &&
-         this.game.input.currentPointers == 0)) {
+    this.game.input.multiInputOverride == Input.MOUSE_TOUCH_COMBINE ||
+    (this.game.input.multiInputOverride == Input.TOUCH_OVERRIDES_MOUSE &&
+    this.game.input.currentPointers == 0)) {
       this.game.input.x = this.x;
       this.game.input.y = this.y;
       this.game.input.position.setTo(this.x, this.y);
@@ -390,9 +390,9 @@ class Pointer {
     if (this.active) {
       if (this._holdSent == false && this.duration >= this.game.input.holdRate) {
         if (this.game.input.multiInputOverride == Input.MOUSE_OVERRIDES_TOUCH ||
-            this.game.input.multiInputOverride == Input.MOUSE_TOUCH_COMBINE ||
-            (this.game.input.multiInputOverride == Input.TOUCH_OVERRIDES_MOUSE &&
-             this.game.input.currentPointers == 0)) {
+        this.game.input.multiInputOverride == Input.MOUSE_TOUCH_COMBINE ||
+        (this.game.input.multiInputOverride == Input.TOUCH_OVERRIDES_MOUSE &&
+        this.game.input.currentPointers == 0)) {
           this.game.input.onHold.dispatch(this);
         }
 
@@ -423,10 +423,10 @@ class Pointer {
    * @param {boolean} [fromClick=false] - Was this called from the click event?
    */
 
-  bool move(MouseEvent event, [bool fromClick=false]) {
+  Pointer move(MouseEvent event, [bool fromClick=false]) {
 
     if (this.game.input.pollLocked) {
-      return;
+      return this;
     }
 
 //    if (fromClick == null) {
@@ -462,9 +462,9 @@ class Pointer {
     this.circle.y = this.y;
 
     if (this.game.input.multiInputOverride == Input.MOUSE_OVERRIDES_TOUCH ||
-        this.game.input.multiInputOverride == Input.MOUSE_TOUCH_COMBINE ||
-        (this.game.input.multiInputOverride == Input.TOUCH_OVERRIDES_MOUSE &&
-         this.game.input.currentPointers == 0)) {
+    this.game.input.multiInputOverride == Input.MOUSE_TOUCH_COMBINE ||
+    (this.game.input.multiInputOverride == Input.TOUCH_OVERRIDES_MOUSE &&
+    this.game.input.currentPointers == 0)) {
       this.game.input.activePointer = this;
       this.game.input.x = this.x;
       this.game.input.y = this.y;
@@ -487,7 +487,7 @@ class Pointer {
 
     var i = this.game.input.moveCallbacks.length;
 
-    while (i--) {
+    while (i-- > 0) {
       this.game.input.moveCallbacks[i].callback.call(this.game.input.moveCallbacks[i].context, this, this.x, this.y);
     }
 
@@ -591,9 +591,9 @@ class Pointer {
     this.timeUp = this.game.time.now;
 
     if (this.game.input.multiInputOverride == Input.MOUSE_OVERRIDES_TOUCH ||
-        this.game.input.multiInputOverride == Input.MOUSE_TOUCH_COMBINE ||
-        (this.game.input.multiInputOverride == Input.TOUCH_OVERRIDES_MOUSE &&
-         this.game.input.currentPointers == 0)) {
+    this.game.input.multiInputOverride == Input.MOUSE_TOUCH_COMBINE ||
+    (this.game.input.multiInputOverride == Input.TOUCH_OVERRIDES_MOUSE &&
+    this.game.input.currentPointers == 0)) {
       this.game.input.onUp.dispatch([this, event]);
 
 //  Was it a tap?
@@ -629,7 +629,9 @@ class Pointer {
       this.game.input.currentPointers--;
     }
 
-    this.game.input.interactiveItems.callAll('_releasedHandler', this);
+    this.game.input.interactiveItems.forEach((InputHandler e) {
+      e._releasedHandler(this);
+    });
 
     this.targetObject = null;
 
@@ -647,7 +649,7 @@ class Pointer {
    */
 
   bool justPressed([int duration]) {
-    if(duration == null){
+    if (duration == null) {
       duration = this.game.input.justPressedRate;
     }
     return ((this.isDown == true) && (this.timeDown + duration) > this.game.time.now);
@@ -663,7 +665,7 @@ class Pointer {
    */
 
   bool justReleased([int duration]) {
-    if(duration == null){
+    if (duration == null) {
       duration = this.game.input.justPressedRate;
     }
     return (this.isUp == true && (this.timeUp + duration) > this.game.time.now);
