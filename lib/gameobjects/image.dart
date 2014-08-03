@@ -15,12 +15,13 @@ class Image extends PIXI.Sprite implements GameObject {
   InputHandler input;
 
   Point cameraOffset;
+  Point anchor;
 
   Rectangle cropRect;
 
   List _cache;
   Rectangle _crop;
-  int _frame;
+  Rectangle _frame;
   Rectangle _bounds;
 
   String _frameName;
@@ -50,7 +51,7 @@ class Image extends PIXI.Sprite implements GameObject {
   }
 
 
-  Point anchor;
+  //Point anchor;
   Rectangle _currentBounds;
 
 
@@ -239,6 +240,8 @@ class Image extends PIXI.Sprite implements GameObject {
      */
     this.cameraOffset = new Point();
 
+    this.anchor=new Point();
+
     /**
      * @property {Phaser.Rectangle} cropRect - The Rectangle used to crop the texture. Set this via Sprite.crop. Any time you modify this property directly you must call Sprite.updateCrop.
      * @default
@@ -415,7 +418,7 @@ class Image extends PIXI.Sprite implements GameObject {
       }
     }
 
-    this._frame = Rectangle.clone(this.texture.frame);
+    this._frame=new Rectangle().copyFrom(this.texture.frame);
 
   }
 

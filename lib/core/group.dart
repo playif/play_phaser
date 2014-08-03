@@ -825,8 +825,10 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
   }
 
   forEach(Function callback, [bool checkExists=false]) {
-    for (var i = 0, len = this.children.length; i < len; i++) {
+    for (int i = 0, len = this.children.length; i < len; i++) {
       if (checkExists && this.children[i].exists) {
+
+      }else{
         callback(this.children[i]);
       }
     }
