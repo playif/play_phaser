@@ -595,7 +595,7 @@ class Game {
       this.renderType = CANVAS;
     }
 
-    if (this.config['canvasID']) {
+    if (this.config['canvasID'] != null) {
       this.canvas = Canvas.create(this.width, this.height, this.config['canvasID']);
     }
     else {
