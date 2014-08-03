@@ -270,7 +270,7 @@ class Tween {
         }
 
         // create a local copy of the Array with the start value at the front
-        this._valuesEnd[property] = [this._object[property]].addAll(this._valuesEnd[property]);
+        [this._object[property]].addAll(this._valuesEnd[property]);
       }
 
       this._valuesStart[property] = this._object[property];
@@ -316,7 +316,7 @@ class Tween {
         }
 
         // create a local copy of the Array with the start value at the front
-        this._valuesEnd[property] = [this._object[property]].addAll(this._valuesEnd[property]);
+        [this._object[property]].addAll(this._valuesEnd[property]);
       }
 
       this._valuesStart[property] = this._object[property];
