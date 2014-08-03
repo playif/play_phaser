@@ -97,7 +97,7 @@ class AnimationManager {
 
     if (this.frameData == null) {
       window.console.warn('No FrameData available for Phaser.Animation ' + name);
-      return this;
+      return null;
     }
 
     //frameRate = frameRate || 60;
@@ -159,7 +159,7 @@ class AnimationManager {
 
   play(name, num frameRate, bool loop, bool killOnComplete) {
 
-    if (this._anims[name]) {
+    if (this._anims[name] != null) {
       if (this.currentAnim == this._anims[name]) {
         if (this.currentAnim.isPlaying == false) {
           this.currentAnim.paused = false;

@@ -420,7 +420,7 @@ class Color {
    * @return {object} The resulting object with r, g, b, a properties and h, s, l and v.
    */
 
-  static Color createColor([int r =0, int g =0, int b=0, int a=255, double h=0, double s=0, double l=0, double v=0]) {
+  static Color createColor([int r =0, int g =0, int b=0, int a=255, double h=0.0, double s=0.0, double l=0.0, double v=0.0]) {
 
     //var out = { r: r || 0, g: g || 0, b: b || 0, a: a || 1, h: h || 0, s: s || 0, l: l || 0, v: v || 0, color: 0 };
     Color out = new Color();
@@ -528,10 +528,11 @@ class Color {
 
     Color rgb = Color.hexToColor(hex);
 
-    if (rgb == null) {
+    if (rgb != null) {
       return Color.getColor32(rgb.a, rgb.r, rgb.g, rgb.b);
     }
 
+    return null;
   }
 
   /**
@@ -625,7 +626,7 @@ class Color {
     var colors = [];
 
     for (var c = 0; c <= 359; c++) {
-      colors.push(Color.HSLtoRGB(c / 359, s, l));
+      colors.add(Color.HSLtoRGB(c / 359, s, l));
     }
 
     return colors;
@@ -812,7 +813,7 @@ class Color {
 
   static String getWebRGB(color) {
 
-    if (color is Object) {
+    if (color is Color) {
       return 'rgba(' + color.r.toString() + ',' + color.g.toString() + ',' + color.b.toString() + ',' + (color.a / 255).toString() + ')';
     }
     else {

@@ -20,7 +20,7 @@ class GameObjectCreator {
    * @param {string|number} [frame] - If the sprite uses an image from a texture atlas or sprite sheet you can pass the frame here. Either a number for a frame ID or a string for a frame name.
    * @returns {Phaser.Sprite} the newly created sprite object.
    */
-  Sprite image (x, y, key, frame) {
+  Image image (x, y, key, frame) {
 
     return new Image(this.game, x, y, key, frame);
 

@@ -52,7 +52,7 @@ class Net {
    * @return {string} If redirect is false then the modified url and query string is returned.
    */
 
-  String updateQueryString(STring key, String value, bool redirect, String url) {
+  String updateQueryString(String key, String value, bool redirect, String url) {
 
     if (redirect == null) {
       redirect = false;
@@ -66,7 +66,7 @@ class Net {
     var re2 = new RegExp("(&|\?)\$");
 
 
-    if (re.test(url)) {
+    if (re.hasMatch(url)) {
       if (value != null && value != null) {
         output = url.replaceAll(re, '\$1$key=$value\$2\$3');
       }
@@ -94,6 +94,7 @@ class Net {
 
     if (redirect) {
       window.location.href = output;
+      return null;
     }
     else {
       return output;

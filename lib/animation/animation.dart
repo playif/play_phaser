@@ -123,9 +123,9 @@ class Animation {
     this._parent.setTexture(PIXI.TextureCache[this.currentFrame.uuid]);
 
     //  TODO: Double check if required
-    if (this._parent.__tilePattern) {
-      this._parent.__tilePattern = false;
-      this._parent.tilingTexture = false;
+    if (this._parent.__tilePattern != null) {
+      this._parent.__tilePattern = null;
+      this._parent.tilingTexture = null;
     }
 
     this._parent.events.onAnimationStart.dispatch([this._parent, this]);
@@ -270,8 +270,8 @@ class Animation {
             this._parent.setTexture(PIXI.TextureCache[this.currentFrame.uuid]);
 
             if (this._parent.__tilePattern != null) {
-              this._parent.__tilePattern = false;
-              this._parent.tilingTexture = false;
+              this._parent.__tilePattern = null;
+              this._parent.tilingTexture = null;
             }
           }
 
@@ -290,8 +290,8 @@ class Animation {
           this._parent.setTexture(PIXI.TextureCache[this.currentFrame.uuid]);
 
           if (this._parent.__tilePattern != null) {
-            this._parent.__tilePattern = false;
-            this._parent.tilingTexture = false;
+            this._parent.__tilePattern = null;
+            this._parent.tilingTexture = null;
           }
         }
       }

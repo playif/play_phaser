@@ -12,9 +12,9 @@ class Key {
   bool altKey;
   bool ctrlKey;
   bool shiftKey;
-  int timeDown;
-  int duration;
-  int timeUp;
+  double timeDown;
+  double duration;
+  double timeUp;
   int repeats;
   int keyCode;
   Signal onDown = new Signal();
@@ -70,7 +70,7 @@ class Key {
     /**
      * @property {number} timeDown - The timestamp when the key was last pressed down. This is based on Game.time.now.
      */
-    this.timeDown = 0;
+    this.timeDown = 0.0;
 
     /**
      * If the key is down this value holds the duration of that key press and is constantly updated.
@@ -78,13 +78,13 @@ class Key {
      * @property {number} duration - The number of milliseconds this key has been held down for.
      * @default
      */
-    this.duration = 0;
+    this.duration = 0.0;
 
     /**
      * @property {number} timeUp - The timestamp when the key was last released. This is based on Game.time.now.
      * @default
      */
-    this.timeUp = -2500;
+    this.timeUp = -2500.0;
 
     /**
      * @property {number} repeats - If a key is held down this holds down the number of times the key has 'repeated'.
@@ -161,7 +161,7 @@ class Key {
     this.isDown = true;
     this.isUp = false;
     this.timeDown = this.game.time.now;
-    this.duration = 0;
+    this.duration = 0.0;
     this.repeats = 0;
 
     this.onDown.dispatch(this);
@@ -211,7 +211,7 @@ class Key {
     this.isDown = false;
     this.isUp = true;
     this.timeUp = this.game.time.now;
-    this.duration = 0;
+    this.duration = 0.0;
     this.enabled = true;
 
     if (hard) {

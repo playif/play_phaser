@@ -1,10 +1,12 @@
 part of Phaser;
 
 class Point extends PIXI.Point {
-  num x;
-  num y;
+//  num x;
+//  num y;
 
-  Point([this.x=0, this.y=0]) {
+  Point([num x=0, num y=0])
+  :super(x,y){
+
   }
 
   Point copyFrom(Point source) {

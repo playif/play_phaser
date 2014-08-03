@@ -4,7 +4,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
   Game game;
 //  num x;
 //  num y;
-  String key;
+  var key;
 
   String name;
   num type;
@@ -34,8 +34,8 @@ class Sprite extends PIXI.Sprite implements GameObject {
   num lifespan;
 
 
-  bool __tilePattern;
-  bool tilingTexture;
+  CanvasPattern __tilePattern;
+  PIXI.Texture tilingTexture;
 
   Point camerOffset;
 
@@ -78,11 +78,11 @@ class Sprite extends PIXI.Sprite implements GameObject {
     return this.game.world.camera.screenView.intersects(new Rectangle()..copyFrom(this.getBounds()));
   }
 
-  bool get frame {
+  int get frame {
     return this.animations.frame;
   }
 
-  set frame(bool value) {
+  set frame(int value) {
     this.animations.frame = value;
   }
 
@@ -120,7 +120,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
   }
 
   bool get exists {
-    return this._cache[6] == null ? false : this._cache[6] ;
+    return this._cache[6] == 1 ;
   }
 
   set exists(bool value) {
@@ -148,7 +148,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
   }
 
   bool get fixedToCamera {
-    return this._cache[7] == null ? false : this._cache[7];
+    return this._cache[7] ==1;
   }
 
   set fixedToCamera(bool value) {
@@ -186,7 +186,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
     this.position.x = value;
 
     if (this.body != null && this.body.type == Physics.ARCADE && this.body.phase == 2) {
-      this.body._reset = 1;
+      this.body._reset = true;
     }
   }
 
@@ -198,7 +198,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
     this.position.y = value;
 
     if (this.body != null && this.body.type == Physics.ARCADE && this.body.phase == 2) {
-      this.body._reset = 1;
+      this.body._reset = true;
     }
   }
 
@@ -547,8 +547,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
       //  Do we need to clone the PIXI.Texture object?
       if (this.texture is PIXI.Texture) {
         //  Yup, let's rock it ...
-        var local = {
-        };
+        PIXI.Texture local = new PIXI.Texture(this.texture.baseTexture);
 
         //Utils.extend(true, local, this.texture);
 
@@ -617,7 +616,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
     this.exists = false;
     this.visible = false;
 
-    if (this.events) {
+    if (this.events !=null) {
       this.events.onKilled.dispatch(this);
     }
 
@@ -646,7 +645,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
 
     this._cache[8] = 1;
 
-    if (this.parent) {
+    if (this.parent != null) {
       if (this.parent is Group) {
         this.parent.remove(this);
       }
@@ -655,19 +654,19 @@ class Sprite extends PIXI.Sprite implements GameObject {
       }
     }
 
-    if (this.input) {
+    if (this.input != null) {
       this.input.destroy();
     }
 
-    if (this.animations) {
+    if (this.animations != null) {
       this.animations.destroy();
     }
 
-    if (this.body) {
+    if (this.body != null) {
       this.body.destroy();
     }
 
-    if (this.events) {
+    if (this.events != null) {
       this.events.destroy();
     }
 

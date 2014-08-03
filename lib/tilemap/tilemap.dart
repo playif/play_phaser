@@ -1,13 +1,13 @@
 part of Phaser;
 
-class TilemapData{
+class TilemapData {
   String name;
-  num width,height,tileWidth,tileHeight;
+  num width, height, tileWidth, tileHeight;
   String orientation;
 
 
-  Map<String,List> objects;
-  Map<String,List> collision;
+  Map<String, List> objects;
+  Map<String, List> collision;
 
   List<TilemapImageData> images;
 
@@ -31,8 +31,8 @@ class Tilemap {
   static const int TILED_JSON = 1;
 
   static const Map<String, int> Format = const {
-      "CSV":0,
-      "TILED_JSON":1,
+    "CSV": 0,
+    "TILED_JSON": 1,
   };
 
   static const int NORTH = 0;
@@ -64,8 +64,8 @@ class Tilemap {
   List<Tileset> tilesets;
   List<List<int>> tiles;
 
-  Map<String,List> objects;
-  Map<String,List> collision;
+  Map<String, List> objects;
+  Map<String, List> collision;
 
   List<int> collideIndexes;
 
@@ -87,7 +87,7 @@ class Tilemap {
   /**
    * @property {array} debugMap - Map data used for debug values only.
    */
-  Map<Tile,String> debugMap;
+  Map<Tile, String> debugMap;
 
   /**
    * @property {array} _results - Internal var.
@@ -99,9 +99,9 @@ class Tilemap {
   num _tempA;
   num _tempB;
 
-  bool preventingRecalculate=false;
+  bool preventingRecalculate = false;
 
-  Map needToRecalculate={};
+  Map needToRecalculate = {};
 
   List data;
 
@@ -124,7 +124,7 @@ class Tilemap {
   //});
 
 
-  Tilemap(Game game, [String key, num tileWidth =32, num tileHeight=32, num width=10, num height=10]) {
+  Tilemap(Game game, [String key, num tileWidth = 32, num tileHeight = 32, num width = 10, num height = 10]) {
 
     /**
      * @property {Phaser.Game} game - A reference to the currently running Game.
@@ -355,8 +355,7 @@ class Tilemap {
           window.console.warn('Phaser.Tilemap.addTilesetImage: Invalid image key given: "' + key + '"');
           return null;
         }
-      }
-      else {
+      } else {
         return null;
       }
     }
@@ -373,10 +372,8 @@ class Tilemap {
     if (this.tilesets[tileset] != null) {
       this.tilesets[tileset].setImage(this.game.cache.getImage(key));
       return this.tilesets[tileset];
-    }
-    else {
-      Tileset newSet = new Tileset(key, gid, tileWidth, tileHeight, tileMargin, tileSpacing, {
-      });
+    } else {
+      Tileset newSet = new Tileset(key, gid, tileWidth, tileHeight, tileMargin, tileSpacing, {});
 
       newSet.setImage(this.game.cache.getImage(key));
 
@@ -467,14 +464,10 @@ class Tilemap {
 
     var sprite;
 
-    for (int i = 0, len = this.objects[name].length; i < len; i++) {
+    for (int i = 0,
+        len = this.objects[name].length; i < len; i++) {
       if (this.objects[name][i].gid == gid) {
-        sprite = reflectClass(CustomClass).newInstance(null,[
-            this.game,
-            this.objects[name][i].x,
-            this.objects[name][i].y,
-            key, frame
-        ]).reflectee;
+        sprite = reflectClass(CustomClass).newInstance(null, [this.game, this.objects[name][i].x, this.objects[name][i].y, key, frame]).reflectee;
 
         //sprite = new CustomClass(this.game, this.objects[name][i].x, this.objects[name][i].y, key, frame);
 
@@ -566,21 +559,20 @@ class Tilemap {
 
     TilemapLayerData layer = new TilemapLayerData()
 
-        ..name= name
-        ..x= 0
-        ..y= 0
-        ..width= width
-        ..height= height
-        ..widthInPixels= width * tileWidth
-        ..heightInPixels= height * tileHeight
-        ..alpha= 1
-        ..visible= true
-        ..properties= {
-        }
-        ..indexes= []
-        ..callbacks= []
-        ..bodies= []
-        ..data= null;
+        ..name = name
+        ..x = 0
+        ..y = 0
+        ..width = width
+        ..height = height
+        ..widthInPixels = width * tileWidth
+        ..heightInPixels = height * tileHeight
+        ..alpha = 1
+        ..visible = true
+        ..properties = {}
+        ..indexes = []
+        ..callbacks = []
+        ..bodies = []
+        ..data = null;
 
 
 
@@ -707,9 +699,9 @@ class Tilemap {
       //  This may seem a bit wasteful, because it will cause empty array elements to be created, but the look-up cost is much
       //  less than having to iterate through the callbacks array hunting down tile indexes each frame, so I'll take the small memory hit.
       this.layers[layer].callbacks[indexes] = callback;
-    }
-    else {
-      for (var i = 0, len = indexes.length; i < len; i++) {
+    } else {
+      for (var i = 0,
+          len = indexes.length; i < len; i++) {
         this.layers[layer].callbacks[indexes[i]] = callback;
       }
     }
@@ -752,7 +744,7 @@ class Tilemap {
    * @param {boolean} [recalculate=true] - Recalculates the tile faces after the update.
    */
 
-  setCollision(indexes, [bool collides=true, layer, bool recalculate=true]) {
+  setCollision(indexes, [bool collides = true, layer, bool recalculate = true]) {
 
     if (collides == null) {
       collides = true;
@@ -765,10 +757,10 @@ class Tilemap {
 
     if (indexes is int) {
       return this.setCollisionByIndex(indexes, collides, layer, true);
-    }
-    else {
+    } else {
       //  Collide all of the IDs given in the indexes array
-      for (var i = 0, len = indexes.length; i < len; i++) {
+      for (var i = 0,
+          len = indexes.length; i < len; i++) {
         this.setCollisionByIndex(indexes[i], collides, layer, false);
       }
 
@@ -793,7 +785,7 @@ class Tilemap {
    * @param {boolean} [recalculate=true] - Recalculates the tile faces after the update.
    */
 
-  setCollisionBetween(num start, num stop, [bool collides=true, layer, bool recalculate=true]) {
+  setCollisionBetween(num start, num stop, [bool collides = true, layer, bool recalculate = true]) {
 
     if (collides == null) {
       collides = true;
@@ -842,7 +834,8 @@ class Tilemap {
     layer = this.getLayer(layer);
 
     //  Collide everything, except the IDs given in the indexes array
-    for (var i = 0, len = this.tiles.length; i < len; i++) {
+    for (var i = 0,
+        len = this.tiles.length; i < len; i++) {
       if (indexes.indexOf(i) == -1) {
         this.setCollisionByIndex(i, collides, layer, false);
       }
@@ -881,8 +874,7 @@ class Tilemap {
 
     if (collides) {
       this.collideIndexes.add(index);
-    }
-    else {
+    } else {
       int i = this.collideIndexes.indexOf(index);
 
       if (i > -1) {
@@ -897,8 +889,7 @@ class Tilemap {
         if (tile && tile.index == index) {
           if (collides) {
             tile.setCollision(true, true, true, true);
-          }
-          else {
+          } else {
             tile.resetCollision();
           }
 
@@ -932,17 +923,15 @@ class Tilemap {
 
     if (layer == null) {
       layer = this.currentLayer;
-    }
-    // else if (typeof layer === 'number')
+    } // else if (typeof layer === 'number')
     // {
     //     layer = layer;
     // }
     else if (layer is String) {
       layer = this.getLayerIndex(layer);
+    } else if (layer is TilemapLayer) {
+      layer = layer.index;
     }
-    else if (layer is TilemapLayer) {
-        layer = layer.index;
-      }
 
     return layer;
 
@@ -960,8 +949,7 @@ class Tilemap {
   setPreventRecalculate(bool value) {
     if ((value == true) && (this.preventingRecalculate != true)) {
       this.preventingRecalculate = true;
-      this.needToRecalculate = {
-      };
+      this.needToRecalculate = {};
     }
     if ((value == false) && (this.preventingRecalculate == true)) {
       this.preventingRecalculate = false;
@@ -992,8 +980,10 @@ class Tilemap {
     var left = null;
     var right = null;
 
-    for (int y = 0, h = this.layers[layer].height; y < h; y++) {
-      for (int x = 0, w = this.layers[layer].width; x < w; x++) {
+    for (int y = 0,
+        h = this.layers[layer].height; y < h; y++) {
+      for (int x = 0,
+          w = this.layers[layer].width; x < w; x++) {
         Tile tile = this.layers[layer].data[y][x];
 
         if (tile != null) {
@@ -1170,7 +1160,7 @@ class Tilemap {
         return tile;
       }
     }
-
+    return null;
   }
 
   /**
@@ -1219,26 +1209,22 @@ class Tilemap {
 
         if (this.hasTile(x, y, layer)) {
           this.layers[layer].data[y][x].copy(tile);
-        }
-        else {
+        } else {
           this.layers[layer].data[y][x] = new Tile(layer, index, x, y, tile.width, tile.height);
         }
-      }
-      else {
+      } else {
         index = tile;
 
         if (this.hasTile(x, y, layer)) {
           this.layers[layer].data[y][x].index = index;
-        }
-        else {
+        } else {
           this.layers[layer].data[y][x] = new Tile(this.layers[layer], index, x, y, this.tileWidth, this.tileHeight);
         }
       }
 
       if (this.collideIndexes.indexOf(index) > -1) {
         this.layers[layer].data[y][x].setCollision(true, true, true, true);
-      }
-      else {
+      } else {
         this.layers[layer].data[y][x].resetCollision();
       }
 
@@ -1287,7 +1273,7 @@ class Tilemap {
    * @return {Phaser.Tile} The first (or n skipped) tile with the matching index.
    */
 
-  Tile searchTileIndex(int index, [int skip=0, bool reverse=false, layer]) {
+  Tile searchTileIndex(int index, [int skip = 0, bool reverse = false, layer]) {
 
     if (skip == null) {
       skip = 0;
@@ -1306,22 +1292,19 @@ class Tilemap {
           if (this.layers[layer].data[y][x].index == index) {
             if (c == skip) {
               return this.layers[layer].data[y][x];
-            }
-            else {
+            } else {
               c++;
             }
           }
         }
       }
-    }
-    else {
+    } else {
       for (var y = 0; y < this.layers[layer].height; y++) {
         for (var x = 0; x < this.layers[layer].width; x++) {
           if (this.layers[layer].data[y][x].index == index) {
             if (c == skip) {
               return this.layers[layer].data[y][x];
-            }
-            else {
+            } else {
               c++;
             }
           }
@@ -1356,16 +1339,13 @@ class Tilemap {
       if (this.layers[layer].data[y][x].index == -1) {
         if (nonNull) {
           return this.layers[layer].data[y][x];
-        }
-        else {
+        } else {
           return null;
         }
-      }
-      else {
+      } else {
         return this.layers[layer].data[y][x];
       }
-    }
-    else {
+    } else {
       return null;
     }
 
@@ -1454,7 +1434,11 @@ class Tilemap {
     this._results.length = 0;
 
     this._results.add({
-        'x': x, 'y': y, 'width': width, 'height': height, 'layer': layer
+      'x': x,
+      'y': y,
+      'width': width,
+      'height': height,
+      'layer': layer
     });
 
     for (var ty = y; ty < y + height; ty++) {
@@ -1497,7 +1481,7 @@ class Tilemap {
     var diffY = tileblock[1].y - y;
 
     for (int i = 1; i < tileblock.length; i++) {
-      this.layers[layer].data[ diffY + tileblock[i].y ][ diffX + tileblock[i].x ].copy(tileblock[i]);
+      this.layers[layer].data[diffY + tileblock[i].y][diffX + tileblock[i].x].copy(tileblock[i]);
     }
 
     this.layers[layer].dirty = true;
@@ -1550,8 +1534,7 @@ class Tilemap {
     if (value.index == this._tempA) {
       //  Swap A with B
       value.index = this._tempB;
-    }
-    else if (value.index == this._tempB) {
+    } else if (value.index == this._tempB) {
       //  Swap B with A
       value.index = this._tempA;
     }
@@ -1756,14 +1739,12 @@ class Tilemap {
         txt += "%c  ";
 
         if (this.layers[this.currentLayer].data[y][x] != null) {
-          if (this.debugMap[this.layers[this.currentLayer].data[y][x]] !=null) {
+          if (this.debugMap[this.layers[this.currentLayer].data[y][x]] != null) {
             args.add("background: ${this.debugMap[this.layers[this.currentLayer].data[y][x]]}");
-          }
-          else {
+          } else {
             args.add("background: #ffffff");
           }
-        }
-        else {
+        } else {
           args.add("background: rgb(0, 0, 0)");
         }
       }

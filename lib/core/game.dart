@@ -652,7 +652,7 @@ class Game {
    * @param {number} time - The current time as provided by RequestAnimationFrame.
    */
 
-  update(int time) {
+  update(double time) {
 
     this.time.update(time);
 

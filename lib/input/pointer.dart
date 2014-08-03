@@ -13,7 +13,7 @@ class Pointer {
   bool _holdSent;
   List _history;
 
-  int _nextDrop;
+  double _nextDrop;
   bool _stateReset;
   bool withinGame;
   int clientX;
@@ -40,20 +40,20 @@ class Pointer {
   bool isOver;
   bool isOut;
 
-  int timeOver;
-  int timeOut;
-  int timeDown;
-  int timeUp;
+  double timeOver;
+  double timeOut;
+  double timeDown;
+  double timeUp;
 
-  int downDuration;
+  double downDuration;
 
   bool isDragged;
 
-  int previousTapTime;
+  double previousTapTime;
   int totalTouches;
 
   //TODO
-  int msSinceLastClick = 999999999;
+  double msSinceLastClick = 999999999.0;
 
   var targetObject;
 
@@ -68,9 +68,9 @@ class Pointer {
 
   Circle circle;
 
-  int get duration {
+  double get duration {
     if (this.isUp) {
-      return -1;
+      return -1.0;
     }
 
     return this.game.time.now - this.timeDown;
@@ -149,7 +149,7 @@ class Pointer {
      * @property {number} _nextDrop - Local private variable storing the time at which the next history drop should occur.
      * @private
      */
-    this._nextDrop = 0;
+    this._nextDrop = 0.0;
 
     /**
      * @property {boolean} _stateReset - Monitor events outside of a state reset loop.
@@ -250,19 +250,19 @@ class Pointer {
      * @property {number} timeDown - A timestamp representing when the Pointer first touched the touchscreen.
      * @default
      */
-    this.timeDown = 0;
+    this.timeDown = 0.0;
 
     /**
      * @property {number} timeUp - A timestamp representing when the Pointer left the touchscreen.
      * @default
      */
-    this.timeUp = 0;
+    this.timeUp = 0.0;
 
     /**
      * @property {number} previousTapTime - A timestamp representing when the Pointer was last tapped or clicked.
      * @default
      */
-    this.previousTapTime = 0;
+    this.previousTapTime = 0.0;
 
     /**
      * @property {number} totalTouches - The total number of times this Pointer has been touched to the touchscreen.
@@ -274,7 +274,7 @@ class Pointer {
      * @property {number} msSinceLastClick - The number of milliseconds since the last click or touch event.
      * @default
      */
-    this.msSinceLastClick = 999999999;
+    this.msSinceLastClick = 999999999.0;
 
     /**
      * @property {any} targetObject - The Game Object this Pointer is currently over / touching / dragging.
@@ -581,11 +581,11 @@ class Pointer {
    * @param {MouseEvent|PointerEvent|TouchEvent} event - The event passed up from the input handler.
    */
 
-  stop(event) {
+  Pointer stop(event) {
 
     if (this._stateReset) {
       event.preventDefault();
-      return;
+      return this;
     }
 
     this.timeUp = this.game.time.now;

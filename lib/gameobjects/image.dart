@@ -20,11 +20,13 @@ class Image extends PIXI.Sprite implements GameObject {
 
   List _cache;
   Rectangle _crop;
-  Rectangle _frame;
+  int _frame;
+  Rectangle _bounds;
 
   String _frameName;
   bool alive;
   GameObject parent;
+  List<GameObject> children = [];
 
   bringToTop() {
     if (this.parent != null) {
@@ -33,17 +35,17 @@ class Image extends PIXI.Sprite implements GameObject {
     return this;
   }
 
-  destroy(destroyChildren){
+  destroy(destroyChildren) {
 
   }
-  centerOn(num x, num y){
+  centerOn(num x, num y) {
     throw new Exception("Not implement yet!");
   }
 
   PIXI.Texture texture;
   CanvasPattern __tilePattern;
 
-  setTexture(PIXI.Texture texture){
+  setTexture(PIXI.Texture texture) {
 
   }
 
@@ -78,7 +80,7 @@ class Image extends PIXI.Sprite implements GameObject {
   }
 
   num get frame {
-    return this._cache[9];
+    return this._frame;
   }
 
   set frame(num value) {
@@ -86,8 +88,8 @@ class Image extends PIXI.Sprite implements GameObject {
       var frameData = this.game.cache.getFrameData(this.key);
 
       if (frameData && value < frameData.total && frameData.getFrame(value)) {
-        this._cache[9] = value;
-        this.setFrame(frameData.getFrame(value));
+        this.setTexture(PIXI.TextureCache[frameData.getFrame(value).uuid]);
+        this._frame = value;
       }
     }
   }
@@ -101,8 +103,8 @@ class Image extends PIXI.Sprite implements GameObject {
       var frameData = this.game.cache.getFrameData(this.key);
 
       if (frameData && frameData.getFrameByName(value)) {
+        this.setTexture(PIXI.TextureCache[frameData.getFrameByName(value).uuid]);
         this._frameName = value;
-        this.setFrame(frameData.getFrameByName(value));
       }
     }
   }
@@ -120,12 +122,10 @@ class Image extends PIXI.Sprite implements GameObject {
       if (this.input == null) {
         this.input = new InputHandler(this);
         this.input.start();
-      }
-      else if (this.input!= null && !this.input.enabled) {
+      } else if (this.input != null && !this.input.enabled) {
         this.input.start();
       }
-    }
-    else {
+    } else {
       if (this.input != null && this.input.enabled) {
         this.input.stop();
       }
@@ -140,8 +140,7 @@ class Image extends PIXI.Sprite implements GameObject {
     if (value) {
       this._cache[7] = 1;
       this.cameraOffset.set(this.x, this.y);
-    }
-    else {
+    } else {
       this._cache[7] = 0;
     }
   }
@@ -155,8 +154,7 @@ class Image extends PIXI.Sprite implements GameObject {
       if (this.texture != null) {
         this.texture.baseTexture.scaleMode = PIXI.scaleModes.DEFAULT;
       }
-    }
-    else {
+    } else {
       if (this.texture != null) {
         this.texture.baseTexture.scaleMode = PIXI.scaleModes.LINEAR;
       }
@@ -167,8 +165,8 @@ class Image extends PIXI.Sprite implements GameObject {
     return this._cache[8] == 1;
   }
 
-  Image(this.game, [int x=0, int y=0, String key, int frame])
-  :super(PIXI.TextureCache['__default']) {
+  Image(this.game, [int x = 0, int y = 0, String key, int frame])
+      : super(PIXI.TextureCache['__default']) {
     //x = x || 0;
     //y = y || 0;
     //key = key || null;
@@ -263,7 +261,7 @@ class Image extends PIXI.Sprite implements GameObject {
      * @property {Array} _cache
      * @private
      */
-    this._cache = [ 0, 0, 0, 0, 1, 0, 1, 0, 0 ];
+    this._cache = [0, 0, 0, 0, 1, 0, 1, 0, 0];
 
     /**
      * @property {Phaser.Rectangle} _crop - Internal cache var.
@@ -323,7 +321,8 @@ class Image extends PIXI.Sprite implements GameObject {
     }
 
     //  Update any Children
-    for (var i = 0, len = this.children.length; i < len; i++) {
+    for (var i = 0,
+        len = this.children.length; i < len; i++) {
       this.children[i].preUpdate();
     }
 
@@ -352,7 +351,8 @@ class Image extends PIXI.Sprite implements GameObject {
   postUpdate() {
 
     if (this.key is BitmapData) {
-      this.key.render();
+
+      (this.key as BitmapData).render();
     }
 
     //  Fixed to Camera?
@@ -362,7 +362,8 @@ class Image extends PIXI.Sprite implements GameObject {
     }
 
     //  Update any Children
-    for (var i = 0, len = this.children.length; i < len; i++) {
+    for (var i = 0,
+        len = this.children.length; i < len; i++) {
       this.children[i].postUpdate();
     }
 
@@ -378,7 +379,7 @@ class Image extends PIXI.Sprite implements GameObject {
    * @param {string|number} frame - If this Image is using part of a sprite sheet or texture atlas you can specify the exact frame to use by giving a string or numeric index.
    */
 
-  loadTexture(key, [frame=0]) {
+  loadTexture(key, [frame = 0]) {
 
     //frame = frame || 0;
 
@@ -387,39 +388,32 @@ class Image extends PIXI.Sprite implements GameObject {
     if (key is RenderTexture) {
       this.key = key.key;
       this.setTexture(key);
-    }
-    else if (key is BitmapData) {
+    } else if (key is BitmapData) {
       this.setTexture(key.texture);
-    }
-    else if (key is PIXI.Texture) {
-        this.setTexture(key);
-      }
-      else {
-        if (key == null || key == null) {
-          this.key = '__default';
-          this.setTexture(PIXI.TextureCache[this.key]);
-        }
-        else if (key is String && !this.game.cache.checkImageKey(key)) {
-          window.console.warn("Texture with key '" + key + "' not found.");
-          this.key = '__missing';
-          this.setTexture(PIXI.TextureCache[this.key]);
-        }
-        else {
-          if (this.game.cache.isSpriteSheet(key)) {
-            var frameData = this.game.cache.getFrameData(key);
+    } else if (key is PIXI.Texture) {
+      this.setTexture(key);
+    } else {
+      if (key == null || key == null) {
+        this.key = '__default';
+        this.setTexture(PIXI.TextureCache[this.key]);
+      } else if (key is String && !this.game.cache.checkImageKey(key)) {
+        window.console.warn("Texture with key '" + key + "' not found.");
+        this.key = '__missing';
+        this.setTexture(PIXI.TextureCache[this.key]);
+      } else {
+        if (this.game.cache.isSpriteSheet(key)) {
+          var frameData = this.game.cache.getFrameData(key);
 
-            if (frame is String) {
-              this.setTexture(new PIXI.Texture(PIXI.BaseTextureCache[key], frameData.getFrameByName(frame)));
-            }
-            else {
-              this.setTexture(new PIXI.Texture(PIXI.BaseTextureCache[key], frameData.getFrame(frame)));
-            }
+          if (frame is String) {
+            this.setTexture(new PIXI.Texture(PIXI.BaseTextureCache[key], frameData.getFrameByName(frame)));
+          } else {
+            this.setTexture(new PIXI.Texture(PIXI.BaseTextureCache[key], frameData.getFrame(frame)));
           }
-          else {
-            this.setTexture(new PIXI.Texture(PIXI.BaseTextureCache[key]));
-          }
+        } else {
+          this.setTexture(new PIXI.Texture(PIXI.BaseTextureCache[key]));
         }
       }
+    }
 
     this._frame = Rectangle.clone(this.texture.frame);
 

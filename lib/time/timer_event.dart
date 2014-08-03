@@ -2,8 +2,8 @@ part of Phaser;
 
 class TimerEvent {
   Timer timer;
-  int delay;
-  int tick;
+  double delay;
+  double tick;
   int repeatCount;
   bool loop;
   Function callback;
@@ -11,7 +11,7 @@ class TimerEvent {
   List args;
   bool pendingDelete;
 
-  TimerEvent(Timer timer, int delay, int tick, int repeatCount, bool loop, Function callback, List args) {
+  TimerEvent(Timer timer, double delay, double tick, int repeatCount, bool loop, Function callback, List args) {
     /**
      * @property {Phaser.Timer} timer - The Timer object that this TimerEvent belongs to.
      */

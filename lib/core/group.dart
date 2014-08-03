@@ -265,7 +265,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
     }
   }
 
-  create(x, y, String key, int frame, [bool exists]) {
+  create(num x, num y, String key, int frame, [bool exists=true]) {
 
 
     //var child = new this.classType(this.game, x, y, key, frame);
@@ -1001,12 +1001,14 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
     if (this.children.length > 0) {
       return this.children[this.children.length - 1];
     }
+    return null;
   }
 
   GameObject getBottom() {
     if (this.children.length > 0) {
       return this.children[0];
     }
+    return null;
   }
 
   int countLiving() {
@@ -1116,7 +1118,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
     }
 
     if (startIndex > endIndex || startIndex < 0 || endIndex > this.children.length) {
-      return false;
+      return;
     }
 
     int i = endIndex;
@@ -1163,7 +1165,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
     this.filters = null;
 
     if (!soft) {
-      if (this.parent) {
+      if (this.parent != null) {
         this.parent.removeChild(this);
       }
 

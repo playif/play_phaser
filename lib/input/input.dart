@@ -633,7 +633,7 @@ class Input {
     //this.gamepad.reset();
 
     for (var i = 1; i <= 10; i++) {
-      if (this.pointers[i]) {
+      if (this.pointers[i] != null) {
         this.pointers[i].reset();
       }
     }

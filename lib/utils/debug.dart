@@ -601,7 +601,7 @@ class Debug {
    * @param {string} [color] - Color of the debug info to be rendered (format is css color string).
    * @param {boolean} [filled=true] - Render the objected as a filled (default, true) or a stroked (false)
    */
-  bool rectangle (Rectangle object, [String color='rgba(0, 255, 0, 0.4)', bool filled=true]) {
+  rectangle (Rectangle object, [String color='rgba(0, 255, 0, 0.4)', bool filled=true]) {
 
     //if (typeof filled == 'undefined') { filled = true; }
 
@@ -674,7 +674,7 @@ class Debug {
     {
       this.context.strokeStyle = color;
       this.context.strokeRect(bounds.x, bounds.y, bounds.width, bounds.height);
-      this.text('size: ' + quadtree.objects.length.toString(), (bounds.x + 4).toString(), (bounds.y + 16).toString(), 'rgb(0,200,0)', '12px Courier');
+      this.text('size: ' + quadtree.objects.length.toString(), (bounds.x + 4), (bounds.y + 16), 'rgb(0,200,0)', '12px Courier');
 
       this.context.strokeStyle = 'rgb(0,255,0)';
 
@@ -707,7 +707,7 @@ class Debug {
    */
   body (Sprite sprite, [String color='rgba(0,255,0,0.4)', bool filled=true]) {
 
-    if (sprite.body)
+    if (sprite.body != null)
     {
       if (sprite.body.type == Physics.ARCADE)
       {

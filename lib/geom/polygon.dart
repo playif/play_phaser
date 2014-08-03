@@ -133,7 +133,7 @@ class Polygon {
     var points = [];
 
     for (var i = 0; i < this.points.length; i++) {
-      points.push(this.points[i].clone());
+      points.add(this.points[i].clone());
     }
 
     return new Polygon(points);

@@ -2,18 +2,18 @@ part of Phaser;
 
 class RandomDataGenerator {
   int c = 1;
-  int s0 = 0;
-  int s1 = 0;
-  int s2 = 0;
+  double s0 = 0.0;
+  double s1 = 0.0;
+  double s2 = 0.0;
 
   RandomDataGenerator(List seeds) {
   }
 
-  int rnd() {
+  double rnd() {
 
     num t = 2091639 * this.s0 + this.c * 2.3283064365386963e-10; // 2^-32
 
-    this.c = t .floor();
+    this.c = t.floor();
     this.s0 = this.s1;
     this.s1 = this.s2;
     this.s2 = t - this.c;
@@ -47,13 +47,13 @@ class RandomDataGenerator {
 
   hash(data) {
 
-    var h, i, n;
+    int h, i, n;
     n = 0xefc8249d;
     data = data.toString();
 
     for (i = 0; i < data.length; i++) {
       n += data.charCodeAt(i);
-      h = 0.02519603282416938 * n;
+      h = (0.02519603282416938 * n).toInt();
       n = h >> 0;
       h -= n;
       h *= n;
@@ -76,7 +76,7 @@ class RandomDataGenerator {
    */
 
   int integer() {
-    return this.rnd() * 0x100000000;
+    return (this.rnd() * 0x100000000).floor();
     // 2^32
   }
 
@@ -88,7 +88,7 @@ class RandomDataGenerator {
    */
 
   double frac() {
-    return this.rnd() + (this.rnd() * 0x200000 | 0) * 1.1102230246251565e-16;
+    return this.rnd() + ((this.rnd() * 0x200000).toInt()) * 1.1102230246251565e-16;
     // 2^-53
   }
 

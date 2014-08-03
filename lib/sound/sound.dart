@@ -9,15 +9,15 @@ class Sound {
   bool autoplay;
 
   int totalDuration;
-  int startTime;
-  int currentTime;
+  double startTime;
+  double currentTime;
   int duration;
   int durationMS;
   int position;
-  int stopTime;
+  double stopTime;
   bool paused;
-  int pausedPosition;
-  int pausedTime;
+  double pausedPosition;
+  double pausedTime;
   bool isPlaying;
   String currentMarker;
   bool pendingPlayback;
@@ -111,7 +111,7 @@ class Sound {
     }
   }
 
-  Sound(this.game, String key, [ double volume=1, bool loop=false, bool connect]) {
+  Sound(this.game, String key, [ double volume=1.0, bool loop=false, bool connect]) {
 
     if (connect == null) {
       connect = game.sound.connectToMaster;
@@ -129,12 +129,12 @@ class Sound {
      * @property {number} startTime - The time the Sound starts at (typically 0 unless starting from a marker)
      * @default
      */
-    this.startTime = 0;
+    this.startTime = 0.0;
 
     /**
      * @property {number} currentTime - The current time the sound is at.
      */
-    this.currentTime = 0;
+    this.currentTime = 0.0;
 
     /**
      * @property {number} duration - The duration of the current sound marker in seconds.
@@ -154,7 +154,7 @@ class Sound {
     /**
      * @property {number} stopTime - The time the sound stopped.
      */
-    this.stopTime = 0;
+    this.stopTime = 0.0;
 
     /**
      * @property {boolean} paused - true if the sound is paused, otherwise false.
@@ -165,12 +165,12 @@ class Sound {
     /**
      * @property {number} pausedPosition - The position the sound had reached when it was paused.
      */
-    this.pausedPosition = 0;
+    this.pausedPosition = 0.0;
 
     /**
      * @property {number} pausedTime - The game time at which the sound was paused.
      */
-    this.pausedTime = 0;
+    this.pausedTime = 0.0;
 
     /**
      * @property {boolean} isPlaying - true if the sound is currently playing, otherwise false.
@@ -444,7 +444,7 @@ class Sound {
             this.onLoop.dispatch(this);
 
             if (this.currentMarker == '') {
-              this.currentTime = 0;
+              this.currentTime = 0.0;
               this.startTime = this.game.time.now;
             }
             else {
@@ -603,7 +603,7 @@ class Sound {
 
         this.isPlaying = true;
         this.startTime = this.game.time.now;
-        this.currentTime = 0;
+        this.currentTime = 0.0;
         this.stopTime = this.startTime + this.durationMS;
         this.onPlay.dispatch(this);
       }
@@ -643,7 +643,7 @@ class Sound {
 
           this.isPlaying = true;
           this.startTime = this.game.time.now;
-          this.currentTime = 0;
+          this.currentTime = 0.0;
           this.stopTime = this.startTime + this.durationMS;
           this.onPlay.dispatch(this);
         }
@@ -667,7 +667,7 @@ class Sound {
    * @param {boolean} [loop=false] - Loop when it finished playing?
    */
 
-  restart([String marker = '', int position =0 , double volume = 1, bool loop=false]) {
+  restart([String marker = '', int position =0 , double volume = 1.0, bool loop=false]) {
 //    marker = marker;
 //    position = position;
 //    volume = volume;

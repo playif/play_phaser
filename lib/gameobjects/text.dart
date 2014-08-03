@@ -2,7 +2,8 @@ part of Phaser;
 
 class Text extends PIXI.Text implements GameObject {
   Game game;
-  num x, y;
+
+  //num x, y;
   String _text;
 
   String name;
@@ -39,7 +40,7 @@ class Text extends PIXI.Text implements GameObject {
   //this.position.set(x, y);
 
   List _cache;
-  List<Sprite> children;
+  List<GameObject> children = [];
 
 
   Sprite parent;
@@ -50,8 +51,25 @@ class Text extends PIXI.Text implements GameObject {
 
   CanvasPattern __tilePattern;
 
-  setTexture(PIXI.Texture texture){
+  setTexture(PIXI.Texture texture) {
 
+  }
+
+
+  num get x {
+    return this.position.x;
+  }
+
+  set x(num value) {
+    this.position.x = value;
+  }
+
+  num get y {
+    return this.position.y;
+  }
+
+  set y(num value) {
+    this.position.y = value;
   }
 
   /**
@@ -91,14 +109,17 @@ class Text extends PIXI.Text implements GameObject {
     return this;
   }
 
-  centerOn(num x, num y){
+  centerOn(num x, num y) {
     throw new Exception("Not implement yet!");
   }
 
   Rectangle _currentBounds;
 
-  Text(this.game, [ this.x, this.y, String text='', PIXI.TextStyle style])
+  Text(this.game, [ num x, num y, String text='', PIXI.TextStyle style])
   :super(text, style) {
+
+    this.x = x;
+    this.y = y;
 
     this.style = style;
     if (this.style == null) {
@@ -405,13 +426,13 @@ class Text extends PIXI.Text implements GameObject {
     var lines = outputText.split(linesReg);
 
     //calculate text width
-    var lineWidths = [];
-    var maxLineWidth = 0;
+    List lineWidths = new List(lines.length);
+    int maxLineWidth = 0;
 
     for (var i = 0; i < lines.length; i++) {
       var lineWidth = this.context.measureText(lines[i]).width;
       lineWidths[i] = lineWidth;
-      maxLineWidth = Math.max(maxLineWidth, lineWidth);
+      maxLineWidth = Math.max(maxLineWidth, lineWidth).floor();
     }
 
     this.canvas.width = maxLineWidth + this.style.strokeThickness;

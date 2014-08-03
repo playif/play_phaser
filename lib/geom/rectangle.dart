@@ -114,7 +114,7 @@ class Rectangle extends PIXI.Rectangle {
    * @return {Phaser.Rectangle} This Rectangle object.
    */
 
-  Rectangle offset(num dx, num dy) {
+  Rectangle offsetRect(num dx, num dy) {
     this.x += dx;
     this.y += dy;
     return this;
@@ -129,7 +129,7 @@ class Rectangle extends PIXI.Rectangle {
    */
 
   Rectangle offsetPoint(Point point) {
-    return this.offset(point.x, point.y);
+    return this.offsetRect(point.x, point.y);
   }
 
   /**

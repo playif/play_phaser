@@ -515,7 +515,7 @@ class Mouse {
     if (this.game.device.pointerLock) {
       var element = this.game.canvas;
 
-      element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+      element.requestPointerLock = element.requestPointerLock;
 
       element.requestPointerLock();
 

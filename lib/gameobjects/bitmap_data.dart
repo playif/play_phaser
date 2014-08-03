@@ -698,6 +698,8 @@ class BitmapData {
     {
       return this.pixels[y * this.width + x];
     }
+    
+    return null;
   }
 
   /**

@@ -425,12 +425,12 @@ class Arcade {
    * @param {boolean} overlapOnly - Just run an overlap or a full collision.
    */
 
-  bool collideHandler(GameObject object1, object2, Function collideCallback, Function processCallback, bool overlapOnly) {
+  collideHandler(GameObject object1, object2, Function collideCallback, Function processCallback, bool overlapOnly) {
 
     //  Only collide valid objects
     if (object2 == null && (object1.type == GROUP || object1.type == EMITTER)) {
       this.collideGroupVsSelf(object1, collideCallback, processCallback, overlapOnly);
-      return false;
+      return;
     }
 
     if (object1 != null && object2 != null && object1.exists && object2.exists) {
@@ -585,6 +585,7 @@ class Arcade {
       }
     }
 
+    return true;
   }
 
   /**
@@ -612,6 +613,7 @@ class Arcade {
       }
     }
 
+    return true;
   }
 
   /**
@@ -666,6 +668,8 @@ class Arcade {
         }
       }
     }
+    
+    return true;
 
   }
 
@@ -693,6 +697,8 @@ class Arcade {
         this.collideSpriteVsTilemapLayer(group.children[i], tilemapLayer, collideCallback, processCallback);
       }
     }
+    
+    return true;
 
   }
 
@@ -1187,6 +1193,7 @@ class Arcade {
       body.velocity.x = -body.velocity.x * body.bounce.x;
     }
 
+    return true;
   }
 
   /**
@@ -1216,6 +1223,7 @@ class Arcade {
       body.velocity.y = -body.velocity.y * body.bounce.y;
     }
 
+    return true;
   }
 
   /**

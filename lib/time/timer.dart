@@ -6,11 +6,11 @@ class Timer {
   bool running = false;
   bool expired = false;
   int elapsed = 0;
-  final List<TimerEvent> events = [];
+  List<TimerEvent> events = [];
 
   Signal onComplete = new Signal();
 
-  int nextTick = 0;
+  double nextTick = 0.0;
   int timeCap = 1000;
 
   bool paused = false;
@@ -19,7 +19,7 @@ class Timer {
   double _started = 0.0;
   double _pauseStarted = 0.0;
   double _pauseTotal = 0.0;
-  double _now = new DateTime.now().millisecondsSinceEpoch;
+  double _now = new DateTime.now().millisecondsSinceEpoch.toDouble();
 
   int _len = 0;
 
@@ -27,35 +27,35 @@ class Timer {
 
   int _i = 0;
   int _diff = 0;
-  int _newTick = 0;
+  double _newTick = 0.0;
 
-  static const int MINUTE = 60000;
-  static const int SECOND = 1000;
-  static const int HALF = 500;
-  static const int QUARTER = 250;
+  static const double MINUTE = 60000.0;
+  static const double SECOND = 1000.0;
+  static const double HALF = 500.0;
+  static const double QUARTER = 250.0;
 
   Timer(this.game, [bool autoDestroy=true]) {
   }
 
-  int get next => nextTick;
+  double get next => nextTick;
 
-  int get duration {
+  double get duration {
     if (this.running && this.nextTick > this._now) {
       return this.nextTick - this._now;
     }
     else {
-      return 0;
+      return 0.0;
     }
   }
 
   int get length => events.length;
 
-  int get ms {
+  double get ms {
     if (this.running) {
       return this._now - this._started - this._pauseTotal;
     }
     else {
-      return 0;
+      return 0.0;
     }
   }
 
@@ -81,9 +81,9 @@ class Timer {
    * @return {Phaser.TimerEvent} The Phaser.TimerEvent object that was created.
    */
 
-  TimerEvent create(int delay, bool loop, int repeatCount, Function callback, args) {
+  TimerEvent create(double delay, bool loop, int repeatCount, Function callback, args) {
 
-    int tick = delay;
+    double tick = delay;
 
     if (this._now == 0) {
       tick += this.game.time.now;
@@ -117,7 +117,7 @@ class Timer {
    * @return {Phaser.TimerEvent} The Phaser.TimerEvent object that was created.
    */
 
-  TimerEvent add(int delay, Function callback, List args) {
+  TimerEvent add(double delay, Function callback, List args) {
     return this.create(delay, false, 0, callback, args);
   }
 
@@ -136,7 +136,7 @@ class Timer {
    * @return {Phaser.TimerEvent} The Phaser.TimerEvent object that was created.
    */
 
-  TimerEvent repeat(int delay, int repeatCount, Function callback, List args) {
+  TimerEvent repeat(double delay, int repeatCount, Function callback, List args) {
     return this.create(delay, false, repeatCount, callback, args);
   }
 

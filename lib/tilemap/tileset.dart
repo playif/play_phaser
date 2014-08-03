@@ -13,6 +13,7 @@ class Tileset {
   num tileSpacing;
 
   Map properties;
+  Map tileProperties;
 
   var image;
 

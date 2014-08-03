@@ -170,7 +170,7 @@ class Tween {
 
   }
 
-  Tween to(Map properties, [int duration=1000, EasingFunction ease=null, bool autoStart=false, int delay=0, int repeat=0, bool yoyo=false]) {
+  Tween to(Map properties, [int duration=1000, EasingFunction ease=null, bool autoStart=false, double delay=0.0, int repeat=0, bool yoyo=false]) {
     if (yoyo && repeat == 0) {
       repeat = 1;
     }
@@ -227,7 +227,7 @@ class Tween {
    * @return {Phaser.Tween} This Tween object.
    */
 
-  Tween from(Map properties, [int duration=1000, EasingFunction ease=null, bool autoStart=false, int delay=0, int repeat=0, bool yoyo=false]) {
+  Tween from(Map properties, [int duration=1000, EasingFunction ease=null, bool autoStart=false, double delay=0.0, int repeat=0, bool yoyo=false]) {
     Map _cache = {
     };
 
@@ -251,7 +251,7 @@ class Tween {
   start() {
 
     if (this.game == null || this._object == null) {
-      return;
+      return null;
     }
 
     this._manager.add(this);

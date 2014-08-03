@@ -302,7 +302,7 @@ class SoundManager {
 
     //sound = sound || null;
 
-    var soundData = this.game.cache.getSoundData(key);
+    ByteBuffer soundData = this.game.cache.getSoundData(key);
 
     if (soundData) {
       if (this.game.cache.isSoundDecoded(key) == false) {
@@ -312,7 +312,7 @@ class SoundManager {
 
         this.context.decodeAudioData(soundData).then((buffer) {
           that.game.cache.decodedSound(key, buffer);
-          if (sound) {
+          if (sound!=null) {
             that.onSoundDecode.dispatch([key, sound]);
           }
         });
@@ -357,7 +357,7 @@ class SoundManager {
    * @return {Phaser.Sound} The new sound instance.
    */
 
-  add(String key, [double volume=1, bool loop=false, connect]) {
+  add(String key, [double volume=1.0, bool loop=false, connect]) {
 
     if (connect == null) {
       connect = this.connectToMaster;

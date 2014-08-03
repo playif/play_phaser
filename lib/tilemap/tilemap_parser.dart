@@ -21,6 +21,9 @@ class TilemapObjectData {
   num height;
 
   List polyline;
+  List polygon;
+  
+  bool rectangle;
 }
 
 class TilemapParser {
@@ -64,15 +67,14 @@ class TilemapParser {
     if (map != null) {
       if (map['format'] == Tilemap.CSV) {
         return parseCSV(key, map['data'], tileWidth, tileHeight);
-      }
-      else if (map['format'] == null || map['format'] == Tilemap.TILED_JSON) {
+      } else if (map['format'] == null || map['format'] == Tilemap.TILED_JSON) {
         return parseTiledJSON(map['data']);
       }
-    }
-    else {
+    } else {
       window.console.warn('Phaser.TilemapParser.parse - No map data found for key ' + key);
+      
     }
-
+    return null;
   }
 
   /**
@@ -85,7 +87,7 @@ class TilemapParser {
    * @return {object} Generated map data.
    */
 
-  static TilemapData parseCSV(String key, String data, [num tileWidth =32, num tileHeight=32]) {
+  static TilemapData parseCSV(String key, String data, [num tileWidth = 32, num tileHeight = 32]) {
 
     TilemapData map = getEmptyData();
 
@@ -161,28 +163,26 @@ class TilemapParser {
 
     map.orientation = 'orthogonal';
     map.version = '1';
-    map.properties = {
-    };
+    map.properties = {};
     map.widthInPixels = 0;
     map.heightInPixels = 0;
 
     List<TilemapLayerData> layers = [];
 
     TilemapLayerData layer = new TilemapLayerData()
-      ..name = 'layer'
-      ..x = 0
-      ..y = 0
-      ..width = 0
-      ..height = 0
-      ..widthInPixels = 0
-      ..heightInPixels = 0
-      ..alpha = 1
-      ..visible = true
-      ..properties = {
-    }
-      ..indexes = []
-      ..callbacks = []
-      ..data = [];
+        ..name = 'layer'
+        ..x = 0
+        ..y = 0
+        ..width = 0
+        ..height = 0
+        ..widthInPixels = 0
+        ..heightInPixels = 0
+        ..alpha = 1
+        ..visible = true
+        ..properties = {}
+        ..indexes = []
+        ..callbacks = []
+        ..data = [];
 
 
     //  fill with nulls?
@@ -191,10 +191,8 @@ class TilemapParser {
 
     map.layers = layers;
     map.images = [];
-    map.objects = {
-    };
-    map.collision = {
-    };
+    map.objects = {};
+    map.collision = {};
     map.tilesets = [];
     map.tiles = [];
 
@@ -239,20 +237,19 @@ class TilemapParser {
       }
 
       TilemapLayerData layer = new TilemapLayerData()
-        ..name = json['layers'][i]['name']
-        ..x = json['layers'][i]['x']
-        ..y = json['layers'][i]['y']
-        ..width = json['layers'][i]['width']
-        ..height = json['layers'][i]['height']
-        ..widthInPixels = json['layers'][i]['width'] * json['tilewidth']
-        ..heightInPixels = json['layers'][i]['height'] * json['tileheight']
-        ..alpha = json['layers'][i]['opacity']
-        ..visible = json['layers'][i]['visible']
-        ..properties = {
-      }
-        ..indexes = []
-        ..callbacks = []
-        ..bodies = [];
+          ..name = json['layers'][i]['name']
+          ..x = json['layers'][i]['x']
+          ..y = json['layers'][i]['y']
+          ..width = json['layers'][i]['width']
+          ..height = json['layers'][i]['height']
+          ..widthInPixels = json['layers'][i]['width'] * json['tilewidth']
+          ..heightInPixels = json['layers'][i]['height'] * json['tileheight']
+          ..alpha = json['layers'][i]['opacity']
+          ..visible = json['layers'][i]['visible']
+          ..properties = {}
+          ..indexes = []
+          ..callbacks = []
+          ..bodies = [];
 
 
       if (json['layers'][i]['properties'] != null) {
@@ -269,12 +266,12 @@ class TilemapParser {
       //  If the map contains multiple tilesets then the indexes are relative to that which the set starts from.
       //  Need to set which tileset in the cache = which tileset in the JSON, if you do this manually it means you can use the same map data but a new tileset.
 
-      for (int t = 0, len = json['layers'][i].data.length; t < len; t++) {
+      for (int t = 0,
+          len = json['layers'][i].data.length; t < len; t++) {
         //  index, x, y, width, height
         if (json['layers'][i].data[t] > 0) {
           row.add(new Tile(layer, json['layers'][i].data[t], x, output.length, json['tilewidth'], json['tileheight']));
-        }
-        else {
+        } else {
           row.add(new Tile(layer, -1, x, output.length, json['tilewidth'], json['tileheight']));
         }
 
@@ -305,14 +302,13 @@ class TilemapParser {
 
       TilemapImageData image = new TilemapImageData()
 
-        ..name = json['layers'][i]['name']
-        ..image = json['layers'][i]['image']
-        ..x = json['layers'][i]['x']
-        ..y = json['layers'][i]['y']
-        ..alpha = json['layers'][i]['opacity']
-        ..visible = json['layers'][i]['visible']
-        ..properties = {
-      };
+          ..name = json['layers'][i]['name']
+          ..image = json['layers'][i]['image']
+          ..x = json['layers'][i]['x']
+          ..y = json['layers'][i]['y']
+          ..alpha = json['layers'][i]['opacity']
+          ..visible = json['layers'][i]['visible']
+          ..properties = {};
 
       //};
 
@@ -331,21 +327,20 @@ class TilemapParser {
 
     for (int i = 0; i < json['tilesets'].length; i++) {
       //  name, firstgid, width, height, margin, spacing, properties
-      var set = json['tilesets'][i];
-      var newSet = new Tileset(set.name, set.firstgid, set.tilewidth, set.tileheight, set.margin, set.spacing, set.properties);
+      Map set = json['tilesets'][i];
+      Tileset newSet = new Tileset(set['name'], set['firstgid'], set['tilewidth'], set['tileheight'], set['margin'], set['spacing'], set['properties']);
 
-      if (set.tileproperties) {
-        newSet.tileProperties = set.tileproperties;
+      if (set['tileproperties'] != null) {
+        newSet.tileProperties = set['tileproperties'];
       }
 
-      newSet.rows = Math.round((set.imageheight - set.margin) / (set.tileheight + set.spacing));
-      newSet.columns = Math.round((set.imagewidth - set.margin) / (set.tilewidth + set.spacing));
+      newSet.rows = Math.round((set['imageheight'] - set['margin']) / (set['tileheight'] + set['spacing']));
+      newSet.columns = Math.round((set['imagewidth'] - set['margin']) / (set['tilewidth'] + set['spacing']));
       newSet.total = newSet.rows * newSet.columns;
 
       if (newSet.rows % 1 != 0 || newSet.columns % 1 != 0) {
         window.console.warn('TileSet image dimensions do not match expected dimensions. Tileset width/height must be evenly divisible by Tilemap tile width/height.');
-      }
-      else {
+      } else {
         tilesets.add(newSet);
       }
     }
@@ -353,14 +348,11 @@ class TilemapParser {
     map.tilesets = tilesets;
 
     //  Objects & Collision Data (polylines, etc)
-    Map<String,List> objects = {
-    };
-    Map<String,List> collision = {
-    };
+    Map<String, List> objects = {};
+    Map<String, List> collision = {};
 
     slice(obj, fields) {
-      var sliced = {
-      };
+      var sliced = {};
       for (var k in fields) {
         var key = fields[k];
         sliced[key] = obj[key];
@@ -376,29 +368,29 @@ class TilemapParser {
       objects[json['layers'][i]['name']] = [];
       collision[json['layers'][i]['name']] = [];
 
-      for (int v = 0, len = json['layers'][i]['objects'].length; v < len; v++) {
+      for (int v = 0,
+          len = json['layers'][i]['objects'].length; v < len; v++) {
         //  Object Tiles
         if (json['layers'][i]['objects'][v].gid) {
           TilemapObjectData object = new TilemapObjectData()
-            ..gid = json['layers'][i]['objects'][v]['gid']
-            ..name = json['layers'][i]['objects'][v]['name']
-            ..x = json['layers'][i]['objects'][v]['x']
-            ..y = json['layers'][i]['objects'][v]['y']
-            ..visible = json['layers'][i]['objects'][v]['visible']
-            ..properties = json['layers'][i]['objects'][v]['properties'];
+              ..gid = json['layers'][i]['objects'][v]['gid']
+              ..name = json['layers'][i]['objects'][v]['name']
+              ..x = json['layers'][i]['objects'][v]['x']
+              ..y = json['layers'][i]['objects'][v]['y']
+              ..visible = json['layers'][i]['objects'][v]['visible']
+              ..properties = json['layers'][i]['objects'][v]['properties'];
 
 
           objects[json['layers'][i]['name']].add(object);
-        }
-        else if (json['layers'][i]['objects'][v]['polyline']) {
+        } else if (json['layers'][i]['objects'][v]['polyline']) {
           TilemapObjectData object = new TilemapObjectData()
-            ..name = json['layers'][i]['objects'][v]['name']
-            ..x = json['layers'][i]['objects'][v]['x']
-            ..y = json['layers'][i]['objects'][v]['y']
-            ..width = json['layers'][i]['objects'][v]['width']
-            ..height = json['layers'][i]['objects'][v]['height']
-            ..visible = json['layers'][i]['objects'][v]['visible']
-            ..properties = json['layers'][i]['objects'][v]['properties'];
+              ..name = json['layers'][i]['objects'][v]['name']
+              ..x = json['layers'][i]['objects'][v]['x']
+              ..y = json['layers'][i]['objects'][v]['y']
+              ..width = json['layers'][i]['objects'][v]['width']
+              ..height = json['layers'][i]['objects'][v]['height']
+              ..visible = json['layers'][i]['objects'][v]['visible']
+              ..properties = json['layers'][i]['objects'][v]['properties'];
 
           //};
 
@@ -406,37 +398,31 @@ class TilemapParser {
 
           //  Parse the polyline into an array
           for (var p = 0; p < json['layers'][i]['objects'][v]['polyline'].length; p++) {
-            object.polyline.add([ json['layers'][i]['objects'][v]['polyline'][p]['x'], json['layers'][i]['objects'][v]['polyline'][p]['y'] ]);
+            object.polyline.add([json['layers'][i]['objects'][v]['polyline'][p]['x'], json['layers'][i]['objects'][v]['polyline'][p]['y']]);
           }
 
           collision[json['layers'][i]['name']].add(object);
-        }
-        // polygon
+        } // polygon
         else if (json['layers'][i]['objects'][v]['polygon']) {
-            var object = slice(json['layers'][i]['objects'][v],
-            ["name", "x", "y", "visible", "properties" ]);
+          TilemapObjectData object = slice(json['layers'][i]['objects'][v], ["name", "x", "y", "visible", "properties"]);
 
-            //  Parse the polygon into an array
-            object.polygon = [];
-            for (var p = 0; p < json['layers'][i]['objects'][v]['polygon'].length; p++) {
-              object.polygon.add([ json['layers'][i]['objects'][v]['polygon'][p]['x'], json['layers'][i]['objects'][v]['polygon'][p]['y'] ]);
-            }
-            objects[json['layers'][i]['name']].add(object);
-
+          //  Parse the polygon into an array
+          object.polygon = [];
+          for (var p = 0; p < json['layers'][i]['objects'][v]['polygon'].length; p++) {
+            object.polygon.add([json['layers'][i]['objects'][v]['polygon'][p]['x'], json['layers'][i]['objects'][v]['polygon'][p]['y']]);
           }
-          // ellipse
-          else if (json['layers'][i]['objects'][v]['ellipse']) {
-              var object = slice(json['layers'][i]['objects'][v],
-              ["name", "ellipse", "x", "y", "width", "height", "visible", "properties" ]);
-              objects[json['layers'][i].name].add(object);
-            }
-            // otherwise it's a rectangle
-            else {
-              var object = slice(json['layers'][i]['objects'][v],
-              ["name", "x", "y", "width", "height", "visible", "properties" ]);
-              object.rectangle = true;
-              objects[json['layers'][i]['name']].add(object);
-            }
+          objects[json['layers'][i]['name']].add(object);
+
+        } // ellipse
+        else if (json['layers'][i]['objects'][v]['ellipse']) {
+          var object = slice(json['layers'][i]['objects'][v], ["name", "ellipse", "x", "y", "width", "height", "visible", "properties"]);
+          objects[json['layers'][i].name].add(object);
+        } // otherwise it's a rectangle
+        else {
+          TilemapObjectData object = slice(json['layers'][i]['objects'][v], ["name", "x", "y", "width", "height", "visible", "properties"]);
+          object.rectangle = true;
+          objects[json['layers'][i]['name']].add(object);
+        }
       }
     }
 

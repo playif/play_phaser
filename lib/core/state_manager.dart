@@ -355,7 +355,7 @@ class StateManager {
    * @return {boolean} true if the State has the required functions, otherwise false.
    */
 
-  checkState(State key) {
+  checkState(String key) {
 
     if (this.states[key] != null) {
 //      var valid = false;

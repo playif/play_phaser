@@ -59,19 +59,19 @@ class Time {
    * @property {number} _started - The time at which the Game instance started.
    * @private
    */
-  int _started = 0;
+  double _started = 0.0;
 
   /**
    * @property {number} _timeLastSecond - The time (in ms) that the last second counter ticked over.
    * @private
    */
-  int _timeLastSecond = 0;
+  double _timeLastSecond = 0.0;
 
   /**
    * @property {number} _pauseStarted - The time the game started being paused.
    * @private
    */
-  int _pauseStarted = 0;
+  double _pauseStarted = 0.0;
 
   /**
    * @property {boolean} _justResumed - Internal value used to recover from the game pause state.
@@ -109,7 +109,7 @@ class Time {
    * @protected
    */
   boot () {
-    this._started = new DateTime.now().millisecondsSinceEpoch;
+    this._started = new DateTime.now().millisecondsSinceEpoch.toDouble();
     this.events.start();
 
   }
@@ -168,7 +168,7 @@ class Time {
    * @protected
    * @param {number} time - The current timestamp.
    */
-  update (int time) {
+  update (double time) {
 
     this.now = time;
 

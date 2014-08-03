@@ -214,22 +214,21 @@ class InputHandler {
      * @property {array} _pointerData - Internal cache var.
      * @private
      */
-    this._pointerData = [];
+    this._pointerData = new List<Pointer>(11);
 
-    this._pointerData.add(new Pointer(sprite.game, 0)
+    this._pointerData[0]=new Pointer(sprite.game, 0)
       ..x = 0
       ..y = 0
       ..isDown = false
       ..isUp = false
       ..isOver = false
       ..isOut = false
-      ..timeOver = 0
-      ..timeOut = 0
-      ..timeDown = 0
-      ..timeUp = 0
-      ..downDuration = 0
-      ..isDragged = false
-    );
+      ..timeOver = 0.0
+      ..timeOut = 0.0
+      ..timeDown = 0.0
+      ..timeUp = 0.0
+      ..downDuration = 0.0
+      ..isDragged = false;
 
   }
 
@@ -259,11 +258,11 @@ class InputHandler {
           ..isUp = false
           ..isOver = false
           ..isOut = false
-          ..timeOver = 0
-          ..timeOut = 0
-          ..timeDown = 0
-          ..timeUp = 0
-          ..downDuration = 0
+          ..timeOver = 0.0
+          ..timeOut = 0.0
+          ..timeDown = 0.0
+          ..timeUp = 0.0
+          ..downDuration = 0.0
           ..isDragged = false;
       }
 
@@ -348,11 +347,11 @@ class InputHandler {
         ..isUp = false
         ..isOver = false
         ..isOut = false
-        ..timeOver = 0
-        ..timeOut = 0
-        ..timeDown = 0
-        ..timeUp = 0
-        ..downDuration = 0
+        ..timeOver = 0.0
+        ..timeOut = 0.0
+        ..timeDown = 0.0
+        ..timeUp = 0.0
+        ..downDuration = 0.0
         ..isDragged = false;
     }
   }
@@ -499,7 +498,7 @@ class InputHandler {
    * @return {number}
    */
 
-  int pointerTimeDown([int pointer=0]) {
+  double pointerTimeDown([int pointer=0]) {
 
     //pointer = pointer || 0;
 
@@ -514,7 +513,7 @@ class InputHandler {
    * @return {number}
    */
 
-  int pointerTimeUp([int pointer=0]) {
+  double pointerTimeUp([int pointer=0]) {
 
     //pointer = pointer || 0;
 
@@ -581,7 +580,7 @@ class InputHandler {
    * @return {number}
    */
 
-  int pointerTimeOver([int pointer=0]) {
+  double pointerTimeOver([int pointer=0]) {
 
     //pointer = pointer || 0;
 
@@ -596,7 +595,7 @@ class InputHandler {
    * @return {number}
    */
 
-  int pointerTimeOut([int pointer=0]) {
+  double pointerTimeOut([int pointer=0]) {
 
     //pointer = pointer || 0;
 
@@ -729,11 +728,11 @@ class InputHandler {
    * @param {Phaser.Pointer} pointer
    */
 
-  update(Pointer pointer) {
+  bool update(Pointer pointer) {
 
     if (this.sprite == null || this.sprite.parent == null) {
       //  Abort. We've been destroyed.
-      return;
+      return false;
     }
 
     if (!this.enabled || !this.sprite.visible || !this.sprite.parent.visible) {
@@ -755,6 +754,8 @@ class InputHandler {
         return false;
       }
     }
+    
+    return true;
   }
 
   /**
@@ -826,16 +827,16 @@ class InputHandler {
    * @param {Phaser.Pointer} pointer
    */
 
-  _touchedHandler(Pointer pointer) {
+  bool _touchedHandler(Pointer pointer) {
 
     if (this.sprite == null) {
       //  Abort. We've been destroyed.
-      return;
+      return false;
     }
 
     if (this._pointerData[pointer.id].isDown == false && this._pointerData[pointer.id].isOver == true) {
       if (this.pixelPerfectClick && !this.checkPixel(null, null, pointer)) {
-        return;
+        return false;
       }
 
       this._pointerData[pointer.id].isDown = true;
@@ -1047,7 +1048,7 @@ class InputHandler {
    * @return {number} The number of milliseconds the pointer has been over the Sprite, or -1 if not over.
    */
 
-  int overDuration([int pointer = 0]) {
+  double overDuration([int pointer = 0]) {
 
     //pointer = pointer || 0;
 
@@ -1055,7 +1056,7 @@ class InputHandler {
       return this.game.time.now - this._pointerData[pointer].timeOver;
     }
 
-    return -1;
+    return -1.0;
 
   }
 
@@ -1066,7 +1067,7 @@ class InputHandler {
    * @return {number} The number of milliseconds the pointer has been pressed down on the Sprite, or -1 if not over.
    */
 
-  int downDuration([int pointer]) {
+  double downDuration([int pointer]) {
 
     //pointer = pointer;
 
@@ -1074,7 +1075,7 @@ class InputHandler {
       return this.game.time.now - this._pointerData[pointer].timeDown;
     }
 
-    return -1;
+    return -1.0;
 
   }
 

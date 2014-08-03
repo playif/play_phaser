@@ -404,8 +404,8 @@ class Math {
         l = objects.length - startIndex;
       }
       if (l > 0) {
-        var idx = startIndex + Math.random() * l;
-        var removed = objects.removeAt(idx);
+        int idx = (startIndex + Math.random() * l).toInt();
+        List<GameObject> removed = objects.removeAt(idx);
         return removed[0];
       }
     }

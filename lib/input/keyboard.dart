@@ -449,7 +449,7 @@ class Keyboard {
 
     var i = this._keys.length;
 
-    while (i-- >=0) {
+    while (i-- >0) {
       if (this._keys[i] != null) {
         this._keys[i].reset(hard);
       }

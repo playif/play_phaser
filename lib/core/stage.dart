@@ -45,6 +45,8 @@ class Stage extends PIXI.Stage {
    */
 
   bool get smoothed {
+    //TODO
+    return true;
     //return PIXI.scaleModes.LINEAR ;
   }
 

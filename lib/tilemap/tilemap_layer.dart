@@ -630,7 +630,7 @@ class TilemapLayer extends Image {
 
     if (!this.dirty || !this.visible)
     {
-      return;
+      return false;
     }
 
     this._mc.prevX = this._mc.dx;

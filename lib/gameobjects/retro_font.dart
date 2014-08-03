@@ -494,13 +494,13 @@ class RetroFont extends RenderTexture {
    * @param {number} customSpacingX - Custom X spacing.
    */
 
-  num pasteLine(String line, num x, num y, num customSpacingX) {
+  pasteLine(String line, num x, num y, num customSpacingX) {
 
     var p = new Point();
 
     for (var c = 0; c < line.length; c++) {
       //  If it's a space then there is no point copying, so leave a blank space
-      if (line.indexOf(c) == " ") {
+      if (line[c] == " ") {
         x += this.characterWidth + customSpacingX;
       }
       else {
@@ -561,10 +561,10 @@ class RetroFont extends RenderTexture {
 
     for (var c = 0; c < this._text.length; c++) {
       var aChar = this._text[c];
-      var code = aChar.charCodeAt(0);
+      var code = aChar.codeUnitAt(0);
 
       if (this.grabData[code] >= 0 || (!stripCR && aChar == "\n")) {
-        newString = newString.concat(aChar);
+        newString = newString+(aChar);
       }
     }
 
