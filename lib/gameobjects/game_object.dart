@@ -25,6 +25,8 @@ abstract class GameObject extends PIXI.DisplayInterface {
   num x;
   num y;
   num z;
+  num alpha;
+  num rotation;
 
   Rectangle getBounds([PIXI.Matrix matrix]);
   preUpdate();

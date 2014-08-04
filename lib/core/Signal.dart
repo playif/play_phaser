@@ -1,0 +1,4 @@
+class Signal {
+  Signal() {
+  }
+}

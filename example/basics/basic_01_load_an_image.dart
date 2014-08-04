@@ -22,7 +22,7 @@ class basic_01_load_an_image extends Phaser.State {
     //  string by which we'll identify the image later in our code.
 
     //  The second parameter is the URL of the image (relative)
-    game.load.image('einstein', 'assets/pics/ra_einstein.png');
+    game.load.image('einstein', 'assets/sprites/car.png');
 
   }
 
@@ -30,13 +30,13 @@ class basic_01_load_an_image extends Phaser.State {
 
     //  This creates a simple sprite that is using our loaded image and
     //  displays it on-screen
-    for (int i = 0 ;i < 200;i++) {
+    for (int i = 0 ;i < 3000;i++) {
       image = game.add.sprite(game.world.centerX, game.world.centerY, 'einstein');
 
       //  Moves the image anchor to the middle, so it centers inside the game properly
       image.anchor.set(0.5);
       image.scale.set(0.5);
-      image.position.set(0 + i + 0.5);
+      image.position.set(game.rnd.integerInRange(0,800),game.rnd.integerInRange(0,600));
     }
 //
     //image.position=new Phaser.Point(200,200);
@@ -54,7 +54,13 @@ class basic_01_load_an_image extends Phaser.State {
 
   update() {
     game.world.forEach((Phaser.GameObject o) {
-      o.x += 1;
+      o.x +=game.rnd.frac();
+      if(o.x>800){
+        o.x=0;
+      }
+      o.scale.set(game.rnd.frac()*5);
+      o.alpha=0.5;
+      o.rotation+= game.rnd.frac()*0.1;
     });
     //image.anchor.set(t);
     //image.x += 1;
