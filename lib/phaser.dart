@@ -9,7 +9,7 @@ import "dart:convert";
 import "dart:web_gl";
 import "dart:math" as DMath;
 
-@MirrorsUsed(targets: const [Sprite], override: '*')
+@MirrorsUsed(targets: const [Sprite], symbols: const ["call"], override: '*')
 import "dart:mirrors";
 
 import "package:play_pixi/pixi.dart" as PIXI;

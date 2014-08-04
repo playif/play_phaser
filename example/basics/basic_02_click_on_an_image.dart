@@ -58,7 +58,7 @@ class basic_02_click_on_an_image extends Phaser.State {
     //t+=0.01;
   }
 
-  listener() {
+  listener(Phaser.Sprite s, Phaser.Pointer p) {
     //print("here");
     counter++;
     text.setText("You clicked " + counter.toString() + " times!");

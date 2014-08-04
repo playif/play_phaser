@@ -24,6 +24,8 @@ class Events {
   GameObject parent;
 
   Events(this.sprite) {
+    parent = sprite.parent;
+
     this.onAddedToGroup = new Signal();
     this.onRemovedFromGroup = new Signal();
     this.onKilled = new Signal();
@@ -44,7 +46,7 @@ class Events {
 
   }
 
-  destroy () {
+  destroy() {
 
     this.parent = null;
     this.onAddedToGroup.dispose();
@@ -53,8 +55,7 @@ class Events {
     this.onRevived.dispose();
     this.onOutOfBounds.dispose();
 
-    if (this.onInputOver != null)
-    {
+    if (this.onInputOver != null) {
       this.onInputOver.dispose();
       this.onInputOut.dispose();
       this.onInputDown.dispose();
@@ -63,8 +64,7 @@ class Events {
       this.onDragStop.dispose();
     }
 
-    if (this.onAnimationStart != null)
-    {
+    if (this.onAnimationStart != null) {
       this.onAnimationStart.dispose();
       this.onAnimationComplete.dispose();
       this.onAnimationLoop.dispose();
