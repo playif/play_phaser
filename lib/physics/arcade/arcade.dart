@@ -225,7 +225,7 @@ class Arcade {
         else {
           this.enableBody(object[i]);
 
-          if (children && object[i].hasOwnProperty('children') && object[i].children.length > 0) {
+          if (children && object[i].children.length > 0) {
             this.enable(object[i], true);
           }
         }
@@ -239,7 +239,7 @@ class Arcade {
       else {
         this.enableBody(object);
 
-        if (children && object.hasOwnProperty('children') && object.children.length > 0) {
+        if (children && object.children.length > 0) {
           this.enable(object.children, true);
         }
       }
@@ -255,9 +255,9 @@ class Arcade {
    * @param {object} object - The game object to create the physics body on. A body will only be created if this object has a null `body` property.
    */
 
-  enableBody(object) {
+  enableBody(Sprite object) {
 
-    if (object.hasOwnProperty('body') && object.body == null) {
+    if (object.body == null) {
       object.body = new Body(object);
     }
 

@@ -89,11 +89,12 @@ class AnimationManager {
 
   }
 
-  Animation add(String name, List frames, [num frameRate=60, bool loop=false, bool useNumericIndex]) {
+  Animation add(String name, [List frames, num frameRate=60, bool loop=true, bool useNumericIndex]) {
 
-//    if(frames == null){
-//      frames=[];
-//    }
+    if(frames == null){
+      frames=[];
+      useNumericIndex=true;
+    }
 
     if (this.frameData == null) {
       window.console.warn('No FrameData available for Phaser.Animation ' + name);
@@ -103,6 +104,8 @@ class AnimationManager {
     //frameRate = frameRate || 60;
 
 
+
+    
     //  If they didn't set the useNumericIndex then let's at least try and guess it
     if (useNumericIndex == null) {
       if (frames[0] is int) {
@@ -157,7 +160,7 @@ class AnimationManager {
 
   }
 
-  play(name, num frameRate, bool loop, bool killOnComplete) {
+  play(name, num frameRate, [bool loop=true, bool killOnComplete=false]) {
 
     if (this._anims[name] != null) {
       if (this.currentAnim == this._anims[name]) {

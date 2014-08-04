@@ -9,9 +9,6 @@ class basic_01_load_an_image extends Phaser.State {
 
   double t = 0.5;
 
-  basic_01_load_an_image() {
-    //this.game=game;
-  }
 
   preload() {
 

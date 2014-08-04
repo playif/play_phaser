@@ -255,11 +255,11 @@ class Cache {
 
     PIXI.BaseTextureCache[key] = new PIXI.BaseTexture(data);
     if (format == Loader.TEXTURE_ATLAS_JSON_ARRAY) {
-      this._images[key].frameData = AnimationParser.JSONData(this.game, atlasData, key);
+      this._images[key]['frameData'] = AnimationParser.JSONData(this.game, atlasData, key);
     } else if (format == Loader.TEXTURE_ATLAS_JSON_HASH) {
-      this._images[key].frameData = AnimationParser.JSONDataHash(this.game, atlasData, key);
+      this._images[key]['frameData'] = AnimationParser.JSONDataHash(this.game, atlasData, key);
     } else if (format == Loader.TEXTURE_ATLAS_XML_STARLING) {
-      this._images[key].frameData = AnimationParser.XMLData(this.game, atlasData, key);
+      this._images[key]['frameData'] = AnimationParser.XMLData(this.game, atlasData, key);
     }
   }
 

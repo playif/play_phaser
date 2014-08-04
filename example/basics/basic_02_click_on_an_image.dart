@@ -9,9 +9,6 @@ class basic_02_click_on_an_image extends Phaser.State {
 
   double t = 0.5;
 
-  basic_01_load_an_image() {
-    //this.game=game;
-  }
 
   preload() {
     //  You can fill the preloader with as many assets as your game requires

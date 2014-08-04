@@ -6,10 +6,15 @@ import "dart:html";
 
 part "basics/basic_01_load_an_image.dart";
 part "basics/basic_02_click_on_an_image.dart";
+part "basics/basic_03_image_follow_input.dart";
+part "basics/basic_04_load_animation.dart";
 
 Map<String, Phaser.State> examples = {
   "basic_01_load_an_image": new basic_01_load_an_image(),
   "basic_02_click_on_an_image": new basic_02_click_on_an_image(),
+  "basic_03_image_follow_input":new basic_03_image_follow_input(),
+  "basic_04_load_animation":new basic_04_load_animation(),
+  
 };
 
 main() {
@@ -23,11 +28,8 @@ main() {
   }
   
   select.onChange.listen((Event e) {
-    
-    //game.state.restart();
     game.state.start(select.children[select.selectedIndex].text);
   });
 
-  game.state.start("basic_01_load_an_image");
-  //new basic_01_load_an_image();
+  game.state.start("basic_04_load_animation");
 }

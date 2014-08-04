@@ -76,11 +76,11 @@ class Pointer {
     return this.game.time.now - this.timeDown;
   }
 
-  int get worldX {
+  double get worldX {
     return this.game.world.camera.x + this.x;
   }
 
-  int get worldY {
+  double get worldY {
     return this.game.world.camera.y + this.y;
   }
 
