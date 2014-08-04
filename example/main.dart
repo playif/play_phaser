@@ -28,6 +28,6 @@ main() {
     game.state.start(select.children[select.selectedIndex].text);
   });
 
-  game.state.start("basic_02_click_on_an_image");
+  game.state.start("basic_01_load_an_image");
   //new basic_01_load_an_image();
 }

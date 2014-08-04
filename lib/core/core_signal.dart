@@ -103,7 +103,7 @@ class Signal {
 
   removeAll() {
     int n = this._bindings.length;
-    while (n-- != 0) {
+    while (n-- > 0) {
       this._bindings[n]._destroy();
     }
     this._bindings.length = 0;
