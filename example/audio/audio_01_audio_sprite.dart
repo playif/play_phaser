@@ -39,7 +39,7 @@ class audio_01_audio_sprite extends State {
     fx.addMarker('squit', 19, 0.3);
 
     //	Make some buttons to trigger the sounds
-    btn= makeButton('alien death', 000, 100);
+    btn= makeButton('alien death', 600, 100);
     makeButton('boss hit', 600, 140);
     makeButton('escape', 600, 180);
     makeButton('meow', 600, 220);
