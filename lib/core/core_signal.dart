@@ -127,7 +127,7 @@ class Signal {
     }
     List paramsArr;
 
-    if (arguments is List) {
+    if (arguments is List || arguments == null) {
       paramsArr = arguments;
     }
     else {

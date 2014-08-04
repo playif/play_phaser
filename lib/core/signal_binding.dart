@@ -13,28 +13,26 @@ class SignalBinding {
   List params;
 
 
-  SignalBinding(this._signal, this._listener, [this._isOnce=false, this._priority=0]) {
+  SignalBinding(this._signal, this._listener, [this._isOnce = false, this._priority = 0]) {
     if (this._priority == null) {
       this._priority = 0;
     }
   }
 
-  execute(List paramsArr) {
+  execute(List params) {
 
     var handlerReturn;
-    List params;
+    //List params;
 
     if (this.active && this._listener != null) {
       if (this.params == null) {
-        this.params = paramsArr;
+        this.params = params;
+      } else {
+        this.params.addAll(params);
       }
-      else {
-        this.params.addAll(paramsArr);
-      }
-      if(params != null && params.length != 0){
-        handlerReturn = this._listener( params);
-      }
-      else{
+      if (params != null && params.length != 0) {
+        handlerReturn = Function.apply(this._listener, params);
+      } else {
         handlerReturn = this._listener();
       }
 

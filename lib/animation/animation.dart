@@ -92,14 +92,14 @@ class Animation {
     this.game.onResume.add(this.onResume);
   }
 
-  play(num frameRate, bool loop, bool killOnComplete) {
+  play(num frameRate, [bool loop=true, bool killOnComplete]) {
 
     if (frameRate is num) {
       //  If they set a new frame rate then use it, otherwise use the one set on creation
       this.delay = 1000 / frameRate;
     }
 
-    if (loop == bool) {
+    if (loop is bool) {
       //  If they set a new loop value then use it, otherwise use the one set on creation
       this.loop = loop;
     }

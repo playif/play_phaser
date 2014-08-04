@@ -55,10 +55,6 @@ class Image extends PIXI.Sprite implements GameObject {
   PIXI.Texture texture;
   CanvasPattern __tilePattern;
 
-  setTexture(PIXI.Texture texture) {
-
-  }
-
 
   //Point anchor;
   Rectangle _currentBounds;
@@ -401,9 +397,10 @@ class Image extends PIXI.Sprite implements GameObject {
       this.key = key.key;
       this.setTexture(key);
     } else if (key is BitmapData) {
-      //this.key = key;
+      this.key = key;
       this.setTexture(key.texture);
     } else if (key is PIXI.Texture) {
+      this.key=key;
       this.setTexture(key);
     } else {
       if (key == null) {
@@ -420,13 +417,16 @@ class Image extends PIXI.Sprite implements GameObject {
           if (frame is String) {
             this._frame=0;
             this._frameName=frame;
+            this.key=key;
             this.setTexture(new PIXI.Texture(PIXI.BaseTextureCache[key], frameData.getFrameByName(frame)));
           } else {
             this._frame=frame;
             this._frameName='';
+            this.key=key;
             this.setTexture(new PIXI.Texture(PIXI.BaseTextureCache[key], frameData.getFrame(frame)));
           }
         } else {
+          this.key=key;
           this.setTexture(new PIXI.Texture(PIXI.BaseTextureCache[key]));
         }
       }

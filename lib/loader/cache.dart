@@ -213,7 +213,7 @@ class Cache {
     };
 
     PIXI.BaseTextureCache[key] = new PIXI.BaseTexture(data);
-    this._images[key].frameData = AnimationParser.spriteSheet(this.game, key, frameWidth, frameHeight, frameMax, margin, spacing);
+    this._images[key]['frameData'] = AnimationParser.spriteSheet(this.game, key, frameWidth, frameHeight, frameMax, margin, spacing);
 
   }
 

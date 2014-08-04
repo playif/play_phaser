@@ -784,7 +784,7 @@ class Game {
       this._paused = true;
       this.time.gamePaused();
       this.sound.setMute();
-      this.onPause.dispatch(event);
+      this.onPause.dispatch();
     }
 
   }
@@ -805,7 +805,7 @@ class Game {
       this.time.gameResumed();
       this.input.reset();
       this.sound.unsetMute();
-      this.onResume.dispatch(event);
+      this.onResume.dispatch();
     }
 
   }

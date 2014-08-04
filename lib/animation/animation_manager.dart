@@ -231,7 +231,7 @@ class AnimationManager {
   destroy() {
 
 
-    for (Animation anim in this._anims.keys) {
+    for (String anim in this._anims.keys) {
       this._anims[anim].destroy();
     }
     this._anims = {
