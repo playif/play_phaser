@@ -2,7 +2,7 @@ part of Phaser;
 
 class Loader {
   Game game;
- 
+
   bool isLoading;
   bool hasLoaded;
 
@@ -344,7 +344,7 @@ class Loader {
    * @param {object} properties - Any additional properties needed to load the file.
    */
 
-  addToFileList(String type, String key, String url, [Map properties]) {
+  addToFileList(String type, String key, url, [Map properties]) {
 
     Map entry = {
       'type': type,
@@ -636,7 +636,7 @@ class Loader {
    * @return {Phaser.Loader} This Loader instance.
    */
 
-  Loader audio(String key, String url, [bool autoDecode = true]) {
+  Loader audio(String key, url, [bool autoDecode = true]) {
 
 //    if (autoDecode == null) {
 //      autoDecode = true;
@@ -1372,24 +1372,25 @@ class Loader {
    * @param {array|string} urls - Either an array of audio file URLs or a string containing a single URL path.
    */
 
-  getAudioURL(String url) {
+  getAudioURL(urls) {
 
     //String extension;
 
-//    if (urls is String) {
-//      urls = [urls];
-//    }
-
-    //for (var i = 0; i < urls.length; i++) {
-    //extension = urls[i].toLowerCase();
-    //extension = extension.substr((Math.max(0, extension.lastIndexOf(".")) || Infinity) + 1);
-
-    if (this.game.device.canPlayAudio(url.split('.').last)) {
-      //return urls[i];
-      return url;
+    if (urls is String) {
+      urls = [urls];
     }
 
-    //}
+    for (var i = 0; i < urls.length; i++) {
+      var url = urls[i];
+      //extension = urls[i].toLowerCase();
+      //extension = extension.substr((Math.max(0, extension.lastIndexOf(".")) || Infinity) + 1);
+
+      if (this.game.device.canPlayAudio(url.split('.').last)) {
+        //return urls[i];
+        return url;
+      }
+
+    }
 
     return null;
 
@@ -1481,7 +1482,7 @@ class Loader {
       case 'audio':
 
         if (this.game.sound.usingWebAudio) {
-          file['data'] = this._xhr.response;
+          file['data'] = (this._xhr.response as Uint8List).buffer;
 
           this.game.cache.addSound(file['key'], file['url'], file['data'], true, false);
 
@@ -1490,8 +1491,8 @@ class Loader {
             String key = file['key'];
 
             this.game.cache.updateSound(key, 'isDecoding', true);
-
-            this.game.sound.context.decodeAudioData(file['data']).then((buffer) {
+            ByteBuffer buffer=file['data'];
+            this.game.sound.context.decodeAudioData(buffer.asByteData()).then((AudioBuffer buffer) {
               if (buffer != null) {
                 that.game.cache.decodedSound(key, buffer);
                 that.game.sound.onSoundDecode.dispatch([key, that.game.cache.getSound(key)]);

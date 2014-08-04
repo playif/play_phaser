@@ -14,18 +14,19 @@ part "animation/animation_01_events.dart";
 
 
 part "audio/audio_01_audio_sprite.dart";
-
+part "audio/audio_02_play_music.dart";
 
 Map<String, State> examples = {
   "basic_01_load_an_image": new basic_01_load_an_image(),
   "basic_02_click_on_an_image": new basic_02_click_on_an_image(),
-  "basic_03_image_follow_input":new basic_03_image_follow_input(),
-  "basic_04_load_animation":new basic_04_load_animation(),
-  
-  
-  "animation_01_events":new animation_01_events(),
+  "basic_03_image_follow_input": new basic_03_image_follow_input(),
+  "basic_04_load_animation": new basic_04_load_animation(),
 
-    "audio_01_audio_sprite":new audio_01_audio_sprite(),
+
+  "animation_01_events": new animation_01_events(),
+
+  "audio_01_audio_sprite": new audio_01_audio_sprite(),
+  "audio_02_play_music": new audio_02_play_music(),
 };
 
 main() {

@@ -478,7 +478,7 @@ class Cache {
    */
 
   updateSound(String key, String property, value) {
-    if (this._sounds[key]) {
+    if (this._sounds[key] != null) {
       this._sounds[key][property] = value;
     }
   }

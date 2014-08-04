@@ -44,6 +44,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
   List<GameObject> children=[];
 
   Rectangle _currentBounds;
+  Point anchor=new Point();
 
 
   centerOn(num x, num y){
