@@ -71,9 +71,7 @@ class basic_01_load_an_image extends Phaser.State {
   }
 
   listener() {
-
     counter++;
     text.text = "You clicked " + counter.toString() + " times!";
-
   }
 }

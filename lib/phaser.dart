@@ -8,7 +8,10 @@ import "dart:html";
 import "dart:convert";
 import "dart:web_gl";
 import "dart:math" as DMath;
+
+@MirrorsUsed(targets: const [Sprite], override: '*')
 import "dart:mirrors";
+
 import "package:play_pixi/pixi.dart" as PIXI;
 import 'package:uuid/uuid_client.dart';
 //import "physics/physics.dart" as Physics;
@@ -166,4 +169,3 @@ const int ELLIPSE = 16;
 const int SPRITEBATCH = 17;
 const int RETROFONT = 17;
 const int POINTER = 19;
-

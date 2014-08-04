@@ -51,6 +51,8 @@ class Text extends PIXI.Text implements GameObject {
 
   CanvasPattern __tilePattern;
 
+  String text;
+
   setTexture(PIXI.Texture texture) {
 
   }
@@ -102,11 +104,20 @@ class Text extends PIXI.Text implements GameObject {
     }
   }
 
-  bringToTop() {
-    if (this.parent != null) {
-      this.parent.bringToTop();
+  GameObject bringToTop([GameObject child]) {
+    if(child == null){
+      if (this.parent != null) {
+        this.parent.bringToTop(this);
+      }
+      return this; 
     }
-    return this;
+    else{
+      if (child.parent == this && this.children.indexOf(child) < this.children.length) {
+        this.removeChild(child);
+        this.addChild(child);
+      }
+      return this;
+    }
   }
 
   centerOn(num x, num y) {

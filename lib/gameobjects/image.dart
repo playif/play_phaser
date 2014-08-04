@@ -21,7 +21,7 @@ class Image extends PIXI.Sprite implements GameObject {
 
   List _cache;
   Rectangle _crop;
-  Rectangle _frame;
+  int _frame;
   Rectangle _bounds;
 
   String _frameName;
@@ -29,11 +29,20 @@ class Image extends PIXI.Sprite implements GameObject {
   GameObject parent;
   List<GameObject> children = [];
 
-  bringToTop() {
-    if (this.parent != null) {
-      this.parent.bringToTop();
+  GameObject bringToTop([GameObject child]) {
+    if(child == null){
+      if (this.parent != null) {
+        this.parent.bringToTop(this);
+      }
+      return this; 
     }
-    return this;
+    else{
+      if (child.parent == this && this.children.indexOf(child) < this.children.length) {
+        this.removeChild(child);
+        this.addChild(child);
+      }
+      return this;
+    }
   }
 
   destroy(destroyChildren) {
@@ -80,11 +89,11 @@ class Image extends PIXI.Sprite implements GameObject {
     return this.game.world.camera.screenView.intersects(new Rectangle()..copyFrom(this.getBounds()));
   }
 
-  num get frame {
+  int get frame {
     return this._frame;
   }
 
-  set frame(num value) {
+  set frame(int value) {
     if (value != this.frame && this.game.cache.isSpriteSheet(this.key)) {
       var frameData = this.game.cache.getFrameData(this.key);
 
@@ -392,11 +401,12 @@ class Image extends PIXI.Sprite implements GameObject {
       this.key = key.key;
       this.setTexture(key);
     } else if (key is BitmapData) {
+      //this.key = key;
       this.setTexture(key.texture);
     } else if (key is PIXI.Texture) {
       this.setTexture(key);
     } else {
-      if (key == null || key == null) {
+      if (key == null) {
         this.key = '__default';
         this.setTexture(PIXI.TextureCache[this.key]);
       } else if (key is String && !this.game.cache.checkImageKey(key)) {
@@ -405,11 +415,15 @@ class Image extends PIXI.Sprite implements GameObject {
         this.setTexture(PIXI.TextureCache[this.key]);
       } else {
         if (this.game.cache.isSpriteSheet(key)) {
-          var frameData = this.game.cache.getFrameData(key);
+          FrameData frameData = this.game.cache.getFrameData(key);
 
           if (frame is String) {
+            this._frame=0;
+            this._frameName=frame;
             this.setTexture(new PIXI.Texture(PIXI.BaseTextureCache[key], frameData.getFrameByName(frame)));
           } else {
+            this._frame=frame;
+            this._frameName='';
             this.setTexture(new PIXI.Texture(PIXI.BaseTextureCache[key], frameData.getFrame(frame)));
           }
         } else {
@@ -418,7 +432,7 @@ class Image extends PIXI.Sprite implements GameObject {
       }
     }
 
-    this._frame=new Rectangle().copyFrom(this.texture.frame);
+    //this._frame=new Rectangle().copyFrom(this.texture.frame);
 
   }
 

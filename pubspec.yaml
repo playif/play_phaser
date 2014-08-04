@@ -11,7 +11,7 @@ dependencies:
     path: ../play_pixi
 transformers:
 - $dart2js:
-    checked: true
+    checked: false
     minify: false
     suppressWarnings: false
     suppressHints: false

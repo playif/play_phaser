@@ -82,11 +82,11 @@ class Loader {
   static const int PHYSICS_PHASER_JSON = 4;
 
   static const Map<String, int> Format = const {
-      "TEXTURE_ATLAS_JSON_ARRAY":0,
-      "TEXTURE_ATLAS_JSON_HASH":1,
-      "TEXTURE_ATLAS_XML_STARLING":2,
-      "PHYSICS_LIME_CORONA_JSON":3,
-      "PHYSICS_PHASER_JSON":3
+    "TEXTURE_ATLAS_JSON_ARRAY": 0,
+    "TEXTURE_ATLAS_JSON_HASH": 1,
+    "TEXTURE_ATLAS_XML_STARLING": 2,
+    "PHYSICS_LIME_CORONA_JSON": 3,
+    "PHYSICS_PHASER_JSON": 3
   };
 
 
@@ -224,23 +224,22 @@ class Loader {
    * @param {number} [direction=0] - A value of zero means the sprite will be cropped horizontally, a value of 1 means its will be cropped vertically.
    */
 
-  setPreloadSprite(sprite, [int direction=0]) {
+  setPreloadSprite(sprite, [int direction = 0]) {
 
     //direction = direction || 0;
 
     this.preloadSprite = {
-        'sprite': sprite,
-        'direction': direction,
-        'width': sprite.width,
-        'height': sprite.height,
-        'rect': null
+      'sprite': sprite,
+      'direction': direction,
+      'width': sprite.width,
+      'height': sprite.height,
+      'rect': null
     };
 
     if (direction == 0) {
       //  Horizontal rect
       this.preloadSprite['rect'] = new Rectangle(0, 0, 1, sprite.height);
-    }
-    else {
+    } else {
       //  Vertical rect
       this.preloadSprite['rect'] = new Rectangle(0, 0, sprite.width, 1);
     }
@@ -306,7 +305,8 @@ class Loader {
       for (var i = 0; i < this._fileList.length; i++) {
         if (this._fileList[i]['type'] == type && this._fileList[i]['key'] == key) {
           return {
-              ['index']: i, ['file']: this._fileList[i]
+            ['index']: i,
+            ['file']: this._fileList[i]
           };
         }
       }
@@ -347,12 +347,12 @@ class Loader {
   addToFileList(String type, String key, String url, [Map properties]) {
 
     Map entry = {
-        'type': type,
-        'key': key,
-        'url': url,
-        'data': null,
-        'error': false,
-        'loaded': false
+      'type': type,
+      'key': key,
+      'url': url,
+      'data': null,
+      'error': false,
+      'loaded': false
     };
 
     if (properties != null) {
@@ -381,12 +381,12 @@ class Loader {
   replaceInFileList(String type, String key, String url, [Map properties]) {
 
     Map entry = {
-        'type': type,
-        'key': key,
-        'url': url,
-        'data': null,
-        'error': false,
-        'loaded': false
+      'type': type,
+      'key': key,
+      'url': url,
+      'data': null,
+      'error': false,
+      'loaded': false
     };
 
     if (properties != null) {
@@ -399,8 +399,7 @@ class Loader {
 
     if (index == -1) {
       this._fileList.add(entry);
-    }
-    else {
+    } else {
       this._fileList[index] = entry;
     }
 
@@ -417,7 +416,7 @@ class Loader {
    * @return {Phaser.Loader} This Loader instance.
    */
 
-  Loader pack(String key, [String url=null, data=null]) {
+  Loader pack(String key, [String url = null, data = null]) {
 //
 //    if (callbackContext == null) {
 //      callbackContext = this;
@@ -436,12 +435,12 @@ class Loader {
     }
 
     this._packList.add({
-        'key': key,
-        'url': url,
-        'data': data,
-        'loaded': false,
-        'error': false
-        //callbackContext: callbackContext
+      'key': key,
+      'url': url,
+      'data': data,
+      'loaded': false,
+      'error': false
+    //callbackContext: callbackContext
     });
 
     return this;
@@ -458,7 +457,7 @@ class Loader {
    * @return {Phaser.Loader} This Loader instance.
    */
 
-  Loader image(String key, String url, [bool overwrite=false]) {
+  Loader image(String key, String url, [bool overwrite = false]) {
 
     if (overwrite == null) {
       overwrite = false;
@@ -466,8 +465,7 @@ class Loader {
 
     if (overwrite) {
       this.replaceInFileList('image', key, url);
-    }
-    else {
+    } else {
       this.addToFileList('image', key, url);
     }
 
@@ -485,7 +483,7 @@ class Loader {
    * @return {Phaser.Loader} This Loader instance.
    */
 
-  Loader text(String key, String url, [bool overwrite=false]) {
+  Loader text(String key, String url, [bool overwrite = false]) {
 
     if (overwrite == null) {
       overwrite = false;
@@ -493,8 +491,7 @@ class Loader {
 
     if (overwrite) {
       this.replaceInFileList('text', key, url);
-    }
-    else {
+    } else {
       this.addToFileList('text', key, url);
     }
 
@@ -512,7 +509,7 @@ class Loader {
    * @return {Phaser.Loader} This Loader instance.
    */
 
-  Loader json(String key, String url, [bool overwrite=false]) {
+  Loader json(String key, String url, [bool overwrite = false]) {
 
     if (overwrite == null) {
       overwrite = false;
@@ -520,8 +517,7 @@ class Loader {
 
     if (overwrite) {
       this.replaceInFileList('json', key, url);
-    }
-    else {
+    } else {
       this.addToFileList('json', key, url);
     }
 
@@ -546,7 +542,7 @@ class Loader {
     //TODO
     if (callback != null) {
       this.addToFileList('script', key, url, {
-          'callback': callback
+        'callback': callback
       });
       //callback = (){};
     }
@@ -580,7 +576,7 @@ class Loader {
     if (callback != null) {
       //callback = false;
       this.addToFileList('binary', key, url, {
-          'callback': callback
+        'callback': callback
       });
     }
 //    if (callback != false && callbackContext == null) {
@@ -606,8 +602,7 @@ class Loader {
    * @return {Phaser.Loader} This Loader instance.
    */
 
-  Loader spritesheet(String key, String url, int frameWidth, int frameHeight, [int frameMax=-1,
-  int margin=0, int spacing=0]) {
+  Loader spritesheet(String key, String url, int frameWidth, int frameHeight, [int frameMax = -1, int margin = 0, int spacing = 0]) {
 
 //    if (frameMax == null) {
 //      frameMax = -1;
@@ -620,11 +615,11 @@ class Loader {
 //    }
 
     this.addToFileList('spritesheet', key, url, {
-        'frameWidth': frameWidth,
-        'frameHeight': frameHeight,
-        'frameMax': frameMax,
-        'margin': margin,
-        'spacing': spacing
+      'frameWidth': frameWidth,
+      'frameHeight': frameHeight,
+      'frameMax': frameMax,
+      'margin': margin,
+      'spacing': spacing
     });
 
     return this;
@@ -641,15 +636,15 @@ class Loader {
    * @return {Phaser.Loader} This Loader instance.
    */
 
-  Loader audio(String key, String url, [bool autoDecode=true]) {
+  Loader audio(String key, String url, [bool autoDecode = true]) {
 
 //    if (autoDecode == null) {
 //      autoDecode = true;
 //    }
 
     this.addToFileList('audio', key, url, {
-        'buffer': null,
-        'autoDecode': autoDecode
+      'buffer': null,
+      'autoDecode': autoDecode
     });
 
     return this;
@@ -688,11 +683,11 @@ class Loader {
     //  A map data object has been given
     if (data != null) {
       switch (format) {
-      //  A csv string or object has been given
+        //  A csv string or object has been given
         case Tilemap.CSV:
           break;
 
-      //  An xml string or object has been given
+        //  An xml string or object has been given
         case Tilemap.TILED_JSON:
 
           if (data is String) {
@@ -702,10 +697,9 @@ class Loader {
       }
 
       this.game.cache.addTilemap(key, null, data, format);
-    }
-    else {
+    } else {
       this.addToFileList('tilemap', key, url, {
-          'format': format
+        'format': format
       });
     }
 
@@ -734,7 +728,7 @@ class Loader {
 //      data = null;
 //    }
     if (format == null) {
-      format = Physics.LIME_CORONA_JSON;
+      format = 0; //Physics.LIME_CORONA_JSON;
     }
 
     if (url == null && data == null) {
@@ -750,10 +744,9 @@ class Loader {
       }
 
       this.game.cache.addPhysicsData(key, null, data, format);
-    }
-    else {
+    } else {
       this.addToFileList('physics', key, url, {
-          'format': format
+        'format': format
       });
     }
 
@@ -774,8 +767,7 @@ class Loader {
    * @return {Phaser.Loader} This Loader instance.
    */
 
-  Loader bitmapFont(String key, String textureURL, [
-  String xmlURL, xmlData, int xSpacing=0, int ySpacing=0]) {
+  Loader bitmapFont(String key, String textureURL, [String xmlURL, xmlData, int xSpacing = 0, int ySpacing = 0]) {
 
 //    if (xmlURL == null) {
 //      xmlURL = null;
@@ -793,12 +785,11 @@ class Loader {
     //  A URL to a json/xml file has been given
     if (xmlURL != null) {
       this.addToFileList('bitmapfont', key, textureURL, {
-          'xmlURL': xmlURL,
-          'xSpacing': xSpacing,
-          'ySpacing': ySpacing
+        'xmlURL': xmlURL,
+        'xSpacing': xSpacing,
+        'ySpacing': ySpacing
       });
-    }
-    else {
+    } else {
       //  An xml string or object has been given
       if (xmlData is String) {
         var xml;
@@ -814,20 +805,18 @@ class Loader {
 //          }
           var domparser = new DomParser();
           xml = domparser.parseFromString(xmlData, "text/xml");
-        }
-        catch (e) {
+        } catch (e) {
           xml = null;
         }
 
         if (xml == null) {
           throw new Exception("Phaser.Loader. Invalid Bitmap Font XML given");
-        }
-        else {
+        } else {
           this.addToFileList('bitmapfont', key, textureURL, {
-              'xmlURL': null,
-              'xmlData': xml,
-              'xSpacing': xSpacing,
-              'ySpacing': ySpacing
+            'xmlURL': null,
+            'xmlData': xml,
+            'xSpacing': xSpacing,
+            'ySpacing': ySpacing
           });
         }
       }
@@ -911,13 +900,12 @@ class Loader {
     //  A URL to a json/xml file has been given
     if (atlasURL != null) {
       this.addToFileList('textureatlas', key, textureURL, {
-          'atlasURL': atlasURL,
-          'format': format
+        'atlasURL': atlasURL,
+        'format': format
       });
-    }
-    else {
+    } else {
       switch (format) {
-      //  A json string or object has been given
+        //  A json string or object has been given
         case Loader.TEXTURE_ATLAS_JSON_ARRAY:
 
           if (atlasData is String) {
@@ -925,7 +913,7 @@ class Loader {
           }
           break;
 
-      //  An xml string or object has been given
+        //  An xml string or object has been given
         case Loader.TEXTURE_ATLAS_XML_STARLING:
 
           if (atlasData is String) {
@@ -942,15 +930,13 @@ class Loader {
 //              }
               var domparser = new DomParser();
               xml = domparser.parseFromString(atlasData, "text/xml");
-            }
-            catch (e) {
+            } catch (e) {
               xml = null;
             }
 
             if (xml == null) {
               throw new Exception("Phaser.Loader. Invalid Texture Atlas XML given");
-            }
-            else {
+            } else {
               atlasData = xml;
             }
           }
@@ -958,9 +944,9 @@ class Loader {
       }
 
       this.addToFileList('textureatlas', key, textureURL, {
-          'atlasURL': null,
-          'atlasData': atlasData,
-          'format': format
+        'atlasURL': null,
+        'atlasData': atlasData,
+        'format': format
       });
 
     }
@@ -1009,8 +995,7 @@ class Loader {
     if (this._packList.length > 0) {
       this._packIndex = 0;
       this.loadPack();
-    }
-    else {
+    } else {
       this.beginLoad();
     }
 
@@ -1036,8 +1021,7 @@ class Loader {
       this._fileIndex = 0;
       this._progressChunk = 100 / this._fileList.length;
       this.loadFile();
-    }
-    else {
+    } else {
       this.progress = 100;
       this.progressFloat = 100.0;
       this.hasLoaded = true;
@@ -1065,8 +1049,7 @@ class Loader {
 
     if (pack['data'] != null) {
       this.packLoadComplete(this._packIndex, false);
-    }
-    else {
+    } else {
       //  Load it
       this.xhrLoad(this._packIndex, this.baseURL + pack['url'], 'text', packLoadComplete, packError);
     }
@@ -1082,7 +1065,7 @@ class Loader {
    * @param {boolean} [parse=true] - Automatically parse the JSON data?
    */
 
-  packLoadComplete(int index, [ bool parse=true]) {
+  packLoadComplete(int index, [bool parse = true]) {
 
 //    if (parse == null) {
 //      parse = true;
@@ -1099,8 +1082,7 @@ class Loader {
     var data;
     if (parse) {
       data = JSON.decode(this._xhr.responseText);
-    }
-    else {
+    } else {
       data = this._packList[index]['data'];
     }
 
@@ -1132,8 +1114,7 @@ class Loader {
             break;
 
           case "spritesheet":
-            this.spritesheet(file['key'], file['url'], file['frameWidth'],
-            file['frameHeight'], file['frameMax'], file['margin'], file['spacing']);
+            this.spritesheet(file['key'], file['url'], file['frameWidth'], file['frameHeight'], file['frameMax'], file['margin'], file['spacing']);
             break;
 
           case "audio":
@@ -1149,8 +1130,7 @@ class Loader {
             break;
 
           case "bitmapFont":
-            this.bitmapFont(file['key'], file['textureURL'], file['xmlURL'],
-            file['xmlData'], file['xSpacing'], file['ySpacing']);
+            this.bitmapFont(file['key'], file['textureURL'], file['xmlURL'], file['xmlData'], file['xSpacing'], file['ySpacing']);
             break;
 
           case "atlasJSONArray":
@@ -1212,8 +1192,7 @@ class Loader {
 
     if (this._packIndex < this._packList.length) {
       this.loadPack();
-    }
-    else {
+    } else {
       this.beginLoad();
     }
 
@@ -1245,14 +1224,14 @@ class Loader {
       case 'textureatlas':
       case 'bitmapfont':
         file['data'] = new ImageElement()
-          ..dataset['name'] = file['key']
-        //file['data']['name'] = ;
-          ..onLoad.listen((e) {
-          return _this.fileComplete(_this._fileIndex);
-        })
-          ..onError.listen((e) {
-          return _this.fileError(_this._fileIndex);
-        });
+            ..dataset['name'] = file['key']
+            //file['data']['name'] = ;
+            ..onLoad.listen((e) {
+              return _this.fileComplete(_this._fileIndex);
+            })
+            ..onError.listen((e) {
+              return _this.fileError(_this._fileIndex);
+            });
         //..crossOrigin;
 
         if (this.crossOrigin != null) {
@@ -1268,30 +1247,27 @@ class Loader {
           //  WebAudio or Audio Tag?
           if (this.game.sound.usingWebAudio) {
             this.xhrLoad(this._fileIndex, this.baseURL + file['url'], 'arraybuffer', fileComplete, fileError);
-          }
-          else if (this.game.sound.usingAudioTag) {
+          } else if (this.game.sound.usingAudioTag) {
             if (this.game.sound.touchLocked) {
               //  If audio is locked we can't do this yet, so need to queue this load request. Bum.
               file['data'] = new AudioElement()
-                ..dataset['name'] = file['key']
-                ..preload = 'auto'
-                ..src = this.baseURL + file['url'];
+                  ..dataset['name'] = file['key']
+                  ..preload = 'auto'
+                  ..src = this.baseURL + file['url'];
               this.fileComplete(this._fileIndex);
-            }
-            else {
+            } else {
               file['data'] = new AudioElement()
-                ..dataset['name'] = file['key']
-                ..onError.listen((e) {
-                return _this.fileError(_this._fileIndex);
-              })
-                ..preload = 'auto'
-                ..src = this.baseURL + file['url']
-                ..addEventListener('canplaythrough', GAMES[this.game.id].load.fileComplete(this._fileIndex), false)
-                ..load();
+                  ..dataset['name'] = file['key']
+                  ..onError.listen((e) {
+                    return _this.fileError(_this._fileIndex);
+                  })
+                  ..preload = 'auto'
+                  ..src = this.baseURL + file['url']
+                  ..addEventListener('canplaythrough', GAMES[this.game.id].load.fileComplete(this._fileIndex), false)
+                  ..load();
             }
           }
-        }
-        else {
+        } else {
           this.fileError(this._fileIndex);
         }
 
@@ -1337,11 +1313,9 @@ class Loader {
 
         if (file['format'] == Tilemap.TILED_JSON) {
           this.xhrLoad(this._fileIndex, this.baseURL + file['url'], 'text', jsonLoadComplete, dataLoadError);
-        }
-        else if (file['format'] == Tilemap.CSV) {
+        } else if (file['format'] == Tilemap.CSV) {
           this.xhrLoad(this._fileIndex, this.baseURL + file['url'], 'text', csvLoadComplete, dataLoadError);
-        }
-        else {
+        } else {
           throw new Exception("Phaser.Loader. Invalid Tilemap format: " + file['format']);
         }
         break;
@@ -1373,7 +1347,7 @@ class Loader {
 
   xhrLoad(int index, String url, String type, Function onLoad, Function onError) {
 
-    this._xhr.open("GET", url, async:true);
+    this._xhr.open("GET", url, async: true);
     this._xhr.responseType = type;
 
     var _this = this;
@@ -1474,20 +1448,16 @@ class Loader {
       case 'textureatlas':
 
         if (file['atlasURL'] == null) {
-          this.game.cache.addTextureAtlas(file['key'], file['url'], file['data'],
-          file['atlasData'], file['format']);
-        }
-        else {
+          this.game.cache.addTextureAtlas(file['key'], file['url'], file['data'], file['atlasData'], file['format']);
+        } else {
           //  Load the JSON or XML before carrying on with the next file
           loadNext = false;
 
           if (file['format'] == Loader.TEXTURE_ATLAS_JSON_ARRAY || file['format'] == Loader.TEXTURE_ATLAS_JSON_HASH) {
             this.xhrLoad(this._fileIndex, this.baseURL + file['atlasURL'], 'text', jsonLoadComplete, dataLoadError);
-          }
-          else if (file['format'] == Loader.TEXTURE_ATLAS_XML_STARLING) {
+          } else if (file['format'] == Loader.TEXTURE_ATLAS_XML_STARLING) {
             this.xhrLoad(this._fileIndex, this.baseURL + file['atlasURL'], 'text', xmlLoadComplete, dataLoadError);
-          }
-          else {
+          } else {
             throw new Exception("Phaser.Loader. Invalid Texture Atlas format: " + file['format']);
           }
         }
@@ -1497,8 +1467,7 @@ class Loader {
 
         if (file['xmlURL'] == null) {
           this.game.cache.addBitmapFont(file['key'], file['url'], file['data'], file['xmlData'], file['xSpacing'], file['ySpacing']);
-        }
-        else {
+        } else {
           //  Load the XML before carrying on with the next file
           loadNext = false;
           this.xhrLoad(this._fileIndex, this.baseURL + file['xmlURL'], 'text', xmlLoadComplete, dataLoadError);
@@ -1525,8 +1494,7 @@ class Loader {
               }
             });
           }
-        }
-        else {
+        } else {
           file['data'].removeEventListener('canplaythrough', GAMES[this.game.id].load.fileComplete);
           this.game.cache.addSound(file['key'], file['url'], file['data'], false, true);
         }
@@ -1557,8 +1525,7 @@ class Loader {
       case 'binary':
         if (file['callback'] != null) {
           file['data'] = file['callback'](file['key'], this._xhr.response);
-        }
-        else {
+        } else {
           file['data'] = this._xhr.response;
         }
 
@@ -1594,11 +1561,9 @@ class Loader {
 
     if (file['type'] == 'tilemap') {
       this.game.cache.addTilemap(file['key'], file['url'], data, file['format']);
-    }
-    else if (file['type'] == 'json') {
+    } else if (file['type'] == 'json') {
       this.game.cache.addJSON(file['key'], file['url'], data);
-    }
-    else {
+    } else {
       this.game.cache.addTextureAtlas(file['key'], file['url'], file['data'], data, file['format']);
     }
 
@@ -1672,8 +1637,7 @@ class Loader {
 //      }
       DomParser domparser = new DomParser();
       xml = domparser.parseFromString(data, "text/xml");
-    }
-    catch (e) {
+    } catch (e) {
       xml = null;
     }
 
@@ -1686,8 +1650,7 @@ class Loader {
 
     if (file['type'] == 'bitmapfont') {
       this.game.cache.addBitmapFont(file['key'], file['url'], file['data'], xml, file['xSpacing'], file['ySpacing']);
-    }
-    else if (file['type'] == 'textureatlas') {
+    } else if (file['type'] == 'textureatlas') {
       this.game.cache.addTextureAtlas(file['key'], file['url'], file['data'], xml, file['format']);
     }
 
@@ -1716,8 +1679,7 @@ class Loader {
       if (this.preloadSprite['direction'] == 0) {
         this.preloadSprite['rect'].width = Math.floor((this.preloadSprite['width'] / 100) * this.progress);
         this.preloadSprite['sprite'].crop(this.preloadSprite['rect']);
-      }
-      else {
+      } else {
         this.preloadSprite['rect'].height = Math.floor((this.preloadSprite['height'] / 100) * this.progress);
         this.preloadSprite['sprite'].crop(this.preloadSprite['rect']);
       }
@@ -1728,8 +1690,7 @@ class Loader {
     if (this.totalQueuedFiles() > 0) {
       this._fileIndex++;
       this.loadFile();
-    }
-    else {
+    } else {
       this.hasLoaded = true;
       this.isLoading = false;
 

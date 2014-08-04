@@ -364,17 +364,31 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
     return result;
   }
 
-  bringToTop(GameObject child) {
+//  GameObject bringToTop([GameObject child]) {
+//    
+//    if (child.parent == this && this.getIndex(child) < this.children.length) {
+//      this.remove(child, false, true);
+//      this.add(child, true);
+//    }
+//    return child;
+//  }
 
-    if (child.parent == this && this.getIndex(child) < this.children.length) {
-      this.remove(child, false, true);
-      this.add(child, true);
+  GameObject bringToTop([GameObject child]) {
+    if(child == null){
+      if (this.parent != null) {
+        this.parent.bringToTop(this);
+      }
+      return this; 
     }
-
-    return child;
-
+    else{
+      if (child.parent == this && this.children.indexOf(child) < this.children.length) {
+        this.removeChild(child);
+        this.addChild(child);
+      }
+      return child;
+    }
   }
-
+  
   sendToBack(GameObject child) {
 
     if (child.parent == this && this.getIndex(child) > 0) {
@@ -439,10 +453,8 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
 
   }
 
-  getIndex(GameObject child) {
-
+  int getIndex(GameObject child) {
     return this.children.indexOf(child);
-
   }
 
   replace(GameObject oldChild, GameObject newChild) {

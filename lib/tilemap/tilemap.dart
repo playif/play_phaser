@@ -105,14 +105,10 @@ class Tilemap {
 
   List data;
 
-  /**
-   * @name Phaser.Tilemap#layer
-   * @property {number|string|Phaser.TilemapLayer} layer - The current layer object.
-   */
-  //Object.defineProperty(Phaser.Tilemap.prototype, "layer", {
 
-  TilemapLayerData get layer {
-    return this.layers[this.currentLayer];
+
+  int get layer {
+    return getLayer();
   }
 
   set layer(int value) {
@@ -919,7 +915,7 @@ class Tilemap {
    * @return {number} The TilemapLayer index.
    */
 
-  int getLayer(layer) {
+  int getLayer([layer]) {
 
     if (layer == null) {
       layer = this.currentLayer;
@@ -1210,7 +1206,7 @@ class Tilemap {
         if (this.hasTile(x, y, layer)) {
           this.layers[layer].data[y][x].copy(tile);
         } else {
-          this.layers[layer].data[y][x] = new Tile(layer, index, x, y, tile.width, tile.height);
+          this.layers[layer].data[y][x] = new Tile(this.layers[layer], index, x, y, tile.width, tile.height);
         }
       } else {
         index = tile;

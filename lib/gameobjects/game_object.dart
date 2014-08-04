@@ -24,7 +24,7 @@ abstract class GameObject extends PIXI.DisplayInterface {
 
   num x;
   num y;
-  num z;
+  int z;
   num alpha;
   num rotation;
 
@@ -35,7 +35,7 @@ abstract class GameObject extends PIXI.DisplayInterface {
   update();
   destroy(bool destroyChildren);
   removeChild(GameObject child);
-  bringToTop();
+  GameObject bringToTop([GameObject child]);
   centerOn(num x, num y);
   GameObject parent;
 
@@ -51,3 +51,4 @@ abstract class GameObject extends PIXI.DisplayInterface {
 
   bool get destroyPhase;
 }
+

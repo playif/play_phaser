@@ -304,7 +304,7 @@ class SoundManager {
 
     ByteBuffer soundData = this.game.cache.getSoundData(key);
 
-    if (soundData) {
+    if (soundData != null) {
       if (this.game.cache.isSoundDecoded(key) == false) {
         this.game.cache.updateSound(key, 'isDecoding', true);
 
@@ -330,14 +330,16 @@ class SoundManager {
   update() {
 
     if (this.touchLocked) {
-      if (this.game.device.webAudio && this._unlockSource != null) {
-        if ((this._unlockSource.playbackState == this._unlockSource.PLAYING_STATE || this._unlockSource.playbackState == this._unlockSource.FINISHED_STATE)) {
-          this.touchLocked = false;
-          this._unlockSource = null;
-          //this.game.input.touch.callbackContext = null;
-          this.game.input.touch.touchStartCallback = null;
-        }
-      }
+      //TODO
+//      if (this.game.device.webAudio && this._unlockSource != null) {
+//        if ((this._unlockSource.playbackState == AudioBufferSourceNode.PLAYING_STATE ||
+//            this._unlockSource.playbackState == AudioBufferSourceNode.FINISHED_STATE)) {
+//          this.touchLocked = false;
+//          this._unlockSource = null;
+//          //this.game.input.touch.callbackContext = null;
+//          this.game.input.touch.touchStartCallback = null;
+//        }
+//      }
     }
 
     for (var i = 0; i < this._sounds.length; i++) {

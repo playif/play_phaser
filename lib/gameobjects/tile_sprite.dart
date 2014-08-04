@@ -39,11 +39,20 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
 
   }
 
-  bringToTop() {
-//    if (this.parent != null) {
-//      this.parent.bringToTop();
-//    }
-    return this;
+  GameObject bringToTop([GameObject child]) {
+    if(child == null){
+      if (this.parent != null) {
+        this.parent.bringToTop(this);
+      }
+      return this; 
+    }
+    else{
+      if (child.parent == this && this.children.indexOf(child) < this.children.length) {
+        this.removeChild(child);
+        this.addChild(child);
+      }
+      return this;
+    }
   }
 
   centerOn(num x, num y){

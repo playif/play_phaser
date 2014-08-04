@@ -49,8 +49,20 @@ class BitmapText extends PIXI.BitmapText implements GameObject {
   List<GameObject> children;
   Group parent;
 
-  bringToTop(){
-
+  GameObject bringToTop([GameObject child]) {
+    if(child == null){
+      if (this.parent != null) {
+        this.parent.bringToTop(this);
+      }
+      return this; 
+    }
+    else{
+      if (child.parent == this && this.children.indexOf(child) < this.children.length) {
+        this.removeChild(child);
+        this.addChild(child);
+      }
+      return this;
+    }
   }
 
   Rectangle _currentBounds;

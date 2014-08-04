@@ -537,7 +537,6 @@ class Input {
     var next = 0;
 
     for (var i = 10; i > 0; i--) {
-      //Pointer pointer= reflect(this).getField(new Symbol('pointer$i')).reflectee;
       if (pointers[i] == null) {
         next = i;
       }
