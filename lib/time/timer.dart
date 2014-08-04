@@ -5,7 +5,7 @@ class Timer {
   bool autoDestroy;
   bool running = false;
   bool expired = false;
-  int elapsed = 0;
+  double elapsed = 0.0;
   List<TimerEvent> events = [];
 
   Signal onComplete = new Signal();

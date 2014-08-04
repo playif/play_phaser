@@ -454,7 +454,7 @@ class Mouse {
    * @param {MouseEvent} event - The native event from the browser. This gets stored in Mouse.event.
    */
 
-  onMouseWheel(event) {
+  onMouseWheel(WheelEvent event) {
 
     this.event = event;
 
@@ -462,7 +462,7 @@ class Mouse {
       event.preventDefault();
     }
 
-    num val = event.wheelDelta;
+    num val = event.wheelDeltaY;
     if (val == null || val == 0) {
       val = -event.detail;
     }

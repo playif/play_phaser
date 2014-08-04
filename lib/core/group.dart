@@ -2,7 +2,7 @@ part of Phaser;
 
 class Group extends PIXI.DisplayObjectContainer implements GameObject {
   Game game;
-  Group parent;
+  GameObject parent;
   String name;
   bool addToStage;
   bool enableBody;
@@ -43,7 +43,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
   CanvasPattern __tilePattern;
 
   setTexture(PIXI.Texture texture){
-
+    throw new Exception("Not implement yet!");
   }
 
   centerOn(num x, num y){
@@ -65,7 +65,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
     }
     else {
       if (parent !=null) {
-        parent.addChild(this);
+        (parent as PIXI.DisplayObjectContainer).addChild(this);
       }
     }
 
@@ -801,7 +801,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
 
     var i = this.children.length;
 
-    while (i-- != 0) {
+    while (i-- > 0) {
       this.children[i].preUpdate();
     }
 
@@ -813,7 +813,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
 
     var i = this.children.length;
 
-    while (i-- != 0) {
+    while (i-- > 0) {
       this.children[i].update();
     }
 
@@ -828,9 +828,9 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
       this.y = this.game.camera.view.y + this.cameraOffset.y;
     }
 
-    var i = this.children.length;
+    int i = this.children.length;
 
-    while (i--) {
+    while (i-- > 0) {
       this.children[i].postUpdate();
     }
 

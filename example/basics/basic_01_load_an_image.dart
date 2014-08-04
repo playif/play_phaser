@@ -2,7 +2,7 @@ part of example;
 
 
 class basic_01_load_an_image extends Phaser.State {
-  Phaser.Game game;
+  //Phaser.Game game;
   Phaser.Text text;
   Phaser.Sprite image;
   int counter = 0;
@@ -10,7 +10,7 @@ class basic_01_load_an_image extends Phaser.State {
   double t = 0.5;
 
   basic_01_load_an_image() {
-    game = new Phaser.Game(800, 600, Phaser.WEBGL, 'phaser-example', this);
+    //this.game=game;
   }
 
   preload() {
@@ -30,37 +30,41 @@ class basic_01_load_an_image extends Phaser.State {
 
     //  This creates a simple sprite that is using our loaded image and
     //  displays it on-screen
-    for (int i = 0 ;i < 3000;i++) {
-      image = game.add.sprite(game.world.centerX, game.world.centerY, 'einstein');
+    for (int i = 0; i < 3000; i++) {
+      var image = game.add.sprite(game.world.centerX, game.world.centerY, 'einstein');
 
       //  Moves the image anchor to the middle, so it centers inside the game properly
       image.anchor.set(0.5);
-      image.scale.set(0.5);
-      image.position.set(game.rnd.integerInRange(0,800),game.rnd.integerInRange(0,600));
+      image.scale.set(2);
+      image.position.set(game.rnd.integerInRange(0, 800), game.rnd.integerInRange(0, 600));
+      //  Enables all kind of input actions on this image (click, etc)
+      image.inputEnabled = true;
+
+      image.events.onInputOver.add(() {
+        print("hi");
+        image.kill();
+      });
     }
 //
     //image.position=new Phaser.Point(200,200);
 
-    //  Enables all kind of input actions on this image (click, etc)
-    image.inputEnabled = true;
 
-    text = game.add.text(250, 16, 'Hi', new PIXI.TextStyle()
-      ..fill = '#ffffff'
-    );
 
-    image.events.onInputDown.add(listener);
+    text = game.add.text(250, 16, 'Hi', new Phaser.TextStyle()..fill = '#ffffff');
+
+    //image.events.onInputDown.add(listener);
 
   }
 
   update() {
     game.world.forEach((Phaser.GameObject o) {
-      o.x +=game.rnd.frac();
-      if(o.x>800){
-        o.x=0;
+      o.x += game.rnd.frac();
+      if (o.x > 800) {
+        o.x = 0;
       }
-      o.scale.set(game.rnd.frac()*5);
-      o.alpha=0.5;
-      o.rotation+= game.rnd.frac()*0.1;
+      //o.scale.set(game.rnd.frac() * 5);
+      o.alpha = 0.5;
+      o.rotation += game.rnd.frac() * 0.1;
     });
     //image.anchor.set(t);
     //image.x += 1;

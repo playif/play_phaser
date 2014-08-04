@@ -12,8 +12,8 @@ class Keyboard {
   Function onDownCallback = null;
   Function onPressCallback = null;
   Function onUpCallback = null;
-  List<Key> _keys;
-  Map _capture;
+  Map<int,Key> _keys;
+  Map<int,bool> _capture;
 
   Function _onKeyDown;
   Function _onKeyPress;
@@ -78,7 +78,7 @@ class Keyboard {
      * @property {array<Phaser.Key>} _keys - The array the Phaser.Key objects are stored in.
      * @private
      */
-    this._keys = [];
+    this._keys = {};
 
     /**
      * @property {array} _capture - The array the key capture values are stored in.
@@ -274,7 +274,7 @@ class Keyboard {
 
     this.clearCaptures();
 
-    this._keys.length = 0;
+    this._keys.clear();
     this._i = 0;
 
   }
@@ -418,7 +418,7 @@ class Keyboard {
       return;
     }
 
-    if (this._capture[event.keyCode]) {
+    if (this._capture[event.keyCode] != null) {
       event.preventDefault();
     }
 

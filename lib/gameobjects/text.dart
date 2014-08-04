@@ -1,5 +1,9 @@
 part of Phaser;
 
+class TextStyle extends PIXI.TextStyle {
+
+}
+
 class Text extends PIXI.Text implements GameObject {
   Game game;
 
@@ -30,8 +34,8 @@ class Text extends PIXI.Text implements GameObject {
   Point cameraOffset;
 
   int renderOrderID;
-  bool autoCull;
-  bool destroyPhase;
+  bool autoCull = false;
+  bool destroyPhase = false;
 
   //this.setStyle(style);
 
@@ -43,7 +47,7 @@ class Text extends PIXI.Text implements GameObject {
   List<GameObject> children = [];
 
 
-  Sprite parent;
+  GameObject parent;
 
   Events events;
 
@@ -98,20 +102,18 @@ class Text extends PIXI.Text implements GameObject {
     if (value) {
       this._cache[7] = 1;
       this.cameraOffset.set(this.x, this.y);
-    }
-    else {
+    } else {
       this._cache[7] = 0;
     }
   }
 
   GameObject bringToTop([GameObject child]) {
-    if(child == null){
+    if (child == null) {
       if (this.parent != null) {
         this.parent.bringToTop(this);
       }
-      return this; 
-    }
-    else{
+      return this;
+    } else {
       if (child.parent == this && this.children.indexOf(child) < this.children.length) {
         this.removeChild(child);
         this.addChild(child);
@@ -126,8 +128,8 @@ class Text extends PIXI.Text implements GameObject {
 
   Rectangle _currentBounds;
 
-  Text(this.game, [ num x, num y, String text='', PIXI.TextStyle style])
-  :super(text, style) {
+  Text(this.game, [num x, num y, String text = '', PIXI.TextStyle style])
+      : super(text, style) {
 
     this.x = x;
     this.y = y;
@@ -230,7 +232,7 @@ class Text extends PIXI.Text implements GameObject {
      * @property {Array} _cache
      * @private
      */
-    this._cache = [ 0, 0, 0, 0, 1, 0, 1, 0, 0 ];
+    this._cache = [0, 0, 0, 0, 1, 0, 1, 0, 0];
 
 
   }
@@ -264,7 +266,8 @@ class Text extends PIXI.Text implements GameObject {
     }
 
     //  Update any Children
-    for (var i = 0, len = this.children.length; i < len; i++) {
+    for (var i = 0,
+        len = this.children.length; i < len; i++) {
       this.children[i].preUpdate();
     }
 
@@ -296,7 +299,8 @@ class Text extends PIXI.Text implements GameObject {
     }
 
     //  Update any Children
-    for (var i = 0, len = this.children.length; i < len; i++) {
+    for (var i = 0,
+        len = this.children.length; i < len; i++) {
       this.children[i].postUpdate();
     }
 
@@ -322,8 +326,7 @@ class Text extends PIXI.Text implements GameObject {
     if (this.parent != null) {
       if (this.parent is Group) {
         (this.parent as Group).remove(this);
-      }
-      else {
+      } else {
         this.parent.removeChild(this);
       }
     }
@@ -332,8 +335,7 @@ class Text extends PIXI.Text implements GameObject {
 
     if (this.canvas.parentNode != null) {
       this.canvas.remove();
-    }
-    else {
+    } else {
       this.canvas = null;
       this.context = null;
     }
@@ -341,12 +343,11 @@ class Text extends PIXI.Text implements GameObject {
     var i = this.children.length;
 
     if (destroyChildren) {
-      while (i--) {
+      while (i-- > 0) {
         this.children[i].destroy(destroyChildren);
       }
-    }
-    else {
-      while (i--) {
+    } else {
+      while (i-- > 0) {
         this.removeChild(this.children[i]);
       }
     }
@@ -373,7 +374,7 @@ class Text extends PIXI.Text implements GameObject {
   setShadow([num x = 0, num y = 0, String color = 'rgba(0,0,0,0)', num blur = 0]) {
     this.style.shadowOffsetX = x;
     this.style.shadowOffsetY = y;
-    this.style.shadowColor = color ;
+    this.style.shadowColor = color;
     this.style.shadowBlur = blur;
     this.dirty = true;
   }
@@ -479,8 +480,7 @@ class Text extends PIXI.Text implements GameObject {
 
       if (this.style.align == 'right') {
         linePosition.x += maxLineWidth - lineWidths[i];
-      }
-      else if (this.style.align == 'center') {
+      } else if (this.style.align == 'center') {
         linePosition.x += (maxLineWidth - lineWidths[i]) / 2;
       }
 
@@ -525,8 +525,7 @@ class Text extends PIXI.Text implements GameObject {
           }
           result += words[j] + ' ';
           spaceLeft = this.style.wordWrapWidth - wordWidth;
-        }
-        else {
+        } else {
           spaceLeft -= wordWidthWithSpace;
           result += words[j] + ' ';
         }

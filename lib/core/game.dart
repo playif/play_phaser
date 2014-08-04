@@ -82,7 +82,7 @@ class Game {
     }
   }
 
-  Game([this.width=800, this.height=600, int renderer=AUTO, this.parent='', State state,
+  Game([int width=800, int height=600, int renderer=AUTO, this.parent='', State state,
        this.transparent, this.antialias, this.physicsConfig]) {
 
     GAMES.add(this);
@@ -513,7 +513,7 @@ class Game {
 
     this.isRunning = true;
 
-    if (this.config != null && this.config['forceSetTimeOut']) {
+    if (this.config != null && this.config['forceSetTimeOut'] is Function) {
       this.raf = new RequestAnimationFrame(this, this.config['forceSetTimeOut']);
     }
     else {
@@ -572,7 +572,7 @@ class Game {
         }
       }
 
-      window.console.log(args);
+      //window.console.log(args);
     }
 //    else if (window['console']) {
 //      window.console.log('Phaser v' + v + ' | Pixi.js ' + PIXI.VERSION + ' | ' + r + ' | ' + a + ' | http://phaser.io');

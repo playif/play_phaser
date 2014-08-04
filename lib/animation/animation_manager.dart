@@ -9,7 +9,7 @@ class AnimationManager {
   bool isLoaded = false;
   FrameData frameData;
 
-  Map<String,Animation> _anims;
+  Map<String,Animation> _anims ={};
   List _outputFrames = [];
   int _frameIndex = 0;
 

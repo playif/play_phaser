@@ -31,8 +31,8 @@ class Pointer {
   int movementX;
   int movementY;
 
-  int x;
-  int y;
+  num x;
+  num y;
 
   bool isMouse;
   bool isDown;
@@ -55,10 +55,10 @@ class Pointer {
   //TODO
   double msSinceLastClick = 999999999.0;
 
-  var targetObject;
+  InputHandler targetObject;
 
   int _highestRenderOrderID;
-  var _highestRenderObject;
+  InputHandler _highestRenderObject;
   int _highestInputPriorityID;
 
   bool active;
@@ -322,15 +322,15 @@ class Pointer {
    */
 
   start(event) {
-    if (event is MouseEvent) {
-      MouseEvent me = event as MouseEvent;
-      //me.target
-    }
+//    if (event is MouseEvent) {
+//      MouseEvent me = event as MouseEvent;
+//      //me.target
+//    }
 //    if (event['pointerId']) {
 //      this.pointerId = event.pointerId;
 //    }
 
-    this.identifier = event.identifier;
+    //this.identifier = event.identifier;
     this.target = event.target;
 
     if (event.button != null) {
@@ -481,14 +481,14 @@ class Pointer {
     }
 
 //  DEPRECATED - Soon to be removed
-    if (this.game.input.moveCallback) {
-      this.game.input.moveCallback.call(this.game.input.moveCallbackContext, this, this.x, this.y);
+    if (this.game.input.moveCallback != null) {
+      this.game.input.moveCallback( this, this.x, this.y);
     }
 
-    var i = this.game.input.moveCallbacks.length;
+    int i = this.game.input.moveCallbacks.length;
 
     while (i-- > 0) {
-      this.game.input.moveCallbacks[i].callback.call(this.game.input.moveCallbacks[i].context, this, this.x, this.y);
+      this.game.input.moveCallbacks[i].callback(this, this.x, this.y);
     }
 
 //  Easy out if we're dragging something and it still exists
@@ -526,7 +526,7 @@ class Pointer {
 
     if (this._highestRenderObject == null) {
 //  The pointer isn't currently over anything, check if we've got a lingering previous target
-      if (this.targetObject) {
+      if (this.targetObject != null) {
         this.targetObject._pointerOutHandler(this);
         this.targetObject = null;
       }
@@ -692,7 +692,7 @@ class Pointer {
     this._history.length = 0;
     this._stateReset = true;
 
-    if (this.targetObject) {
+    if (this.targetObject != null) {
       this.targetObject._releasedHandler(this);
     }
 

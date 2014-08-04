@@ -9,6 +9,7 @@ class StateManager {
   bool _created;
   List _args;
 
+  String _pendingStateKey;
   State _pendingState;
   State current;
 
@@ -25,7 +26,7 @@ class StateManager {
   Function onPauseUpdateCallback;
   Function onShutDownCallback;
 
-  Object callbackContext;
+  //Object callbackContext;
 
 
   StateManager(this.game, [State pendingState=null]) {
@@ -207,7 +208,7 @@ class StateManager {
   remove(String key) {
 
     if (this.current == this.states[key]) {
-      this.callbackContext = null;
+      //this.callbackContext = null;
 
       this.onInitCallback = null;
       this.onShutDownCallback = null;
@@ -242,6 +243,7 @@ class StateManager {
 
     if (this.checkState(key)) {
       //  Place the state in the queue. It will be started the next time the game loop starts.
+      this._pendingStateKey=key;
       this._pendingState = this.states[key];
       this._clearWorld = clearWorld;
       this._clearCache = clearCache;
@@ -320,7 +322,7 @@ class StateManager {
         }
       }
 
-      this.setCurrentState('default');
+      this.setCurrentState(this._pendingStateKey);
 
       if (this.onPreloadCallback != null) {
         this.game.load.reset();
@@ -430,7 +432,7 @@ class StateManager {
 
   setCurrentState(String key) {
 
-    this.callbackContext = this.states[key];
+    //this.callbackContext = this.states[key];
 
     this.link(key);
 
@@ -599,7 +601,7 @@ class StateManager {
 
   destroy() {
 
-    this.callbackContext = null;
+    //this.callbackContext = null;
 
     this.onInitCallback = null;
     this.onShutDownCallback = null;

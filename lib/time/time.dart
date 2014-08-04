@@ -43,7 +43,7 @@ class Time {
   /**
    * @property {number} timeToCall - The value that setTimeout needs to work out when to next update
    */
-  double timeToCall = 0.00;
+  double timeToCall = 0.0;
 
   /**
    * @property {number} lastTime - Internal value used by timeToCall as part of the setTimeout loop
@@ -172,7 +172,7 @@ class Time {
 
     this.now = time;
 
-    this.timeToCall = Math.max(0, 16 - (time - this.lastTime));
+    this.timeToCall = Math.max(0, 16 - (time - this.lastTime)).toDouble();
 
     this.elapsed = this.now - this.time;
 
@@ -257,7 +257,7 @@ class Time {
 
     var i = this._timers.length;
 
-    while (i--)
+    while (i-- >0)
     {
       this._timers[i]._pause();
     }

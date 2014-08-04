@@ -7,8 +7,7 @@ class Input {
   CanvasElement hitCanvas;
   CanvasRenderingContext2D hitContext;
   List moveCallbacks;
-  var moveCallback;
-  var moveCallbackContext;
+  Function moveCallback;
   double pollRate;
   bool disabled;
   int multiInputOverride;
@@ -132,7 +131,7 @@ class Input {
     /**
      * @property {object} moveCallbackContext - The context in which the moveCallback will be sent. Defaults to Phaser.Input but can be set to any valid JS object.
      */
-    this.moveCallbackContext = this;
+    //this.moveCallbackContext = this;
 
     /**
      * @property {number} pollRate - How often should the input pointers be checked for updates? A value of 0 means every single frame (60fps); a value of 1 means every other frame (30fps) and so on.
@@ -486,11 +485,9 @@ class Input {
    * @param {object} callbackContext - The context in which the callback will be called.
    */
 
-  setMoveCallback(callback, callbackContext) {
-
+  setMoveCallback(Function callback) {
     this.moveCallback = callback;
-    this.moveCallbackContext = callbackContext;
-
+    //this.moveCallbackContext = callbackContext;
   }
 
   /**
@@ -666,7 +663,7 @@ class Input {
    * @param {number} y - Sets the oldPosition.y value.
    */
 
-  resetSpeed(int x, int y) {
+  resetSpeed(double x, double y) {
 
     this._oldPosition.setTo(x, y);
     this.speed.setTo(0, 0);
@@ -881,7 +878,7 @@ class Input {
    * @param {Phaser.Point} localPoint - The local translated point.
    */
 
-  bool hitTest(displayObject, Pointer pointer, Point localPoint) {
+  bool hitTest(GameObject displayObject, Pointer pointer, Point localPoint) {
 
     if (!displayObject.worldVisible) {
       return false;
@@ -891,7 +888,7 @@ class Input {
 
     localPoint.copyFrom(this._localPoint);
 
-    if (displayObject.hitArea && displayObject.hitArea.contains) {
+    if (displayObject.hitArea!= null) {
       if (displayObject.hitArea.contains(this._localPoint.x, this._localPoint.y)) {
         return true;
       }

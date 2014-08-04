@@ -183,7 +183,7 @@ class ScaleManager {
 
   int _iterations = 0;
 
-  bool isLandscape;
+  bool isLandscape=false;
 
   /**
    * @constant

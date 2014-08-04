@@ -1423,6 +1423,10 @@ class Loader {
    */
 
   fileComplete(int index) {
+    
+//    if(this._fileList.length == 0){
+//      return;
+//    }
 
     if (this._fileList[index] == null) {
       window.console.warn('Phaser.Loader fileComplete invalid index ' + index.toString());

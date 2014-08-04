@@ -392,7 +392,7 @@ class InputHandler {
 
       this.game.input.interactiveItems.remove(this);
 
-      this._pointerData.length = 0;
+      this._pointerData= null;
       this.boundsRect = null;
       this.boundsSprite = null;
       this.sprite = null;

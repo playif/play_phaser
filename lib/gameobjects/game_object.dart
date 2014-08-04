@@ -50,5 +50,11 @@ abstract class GameObject extends PIXI.DisplayInterface {
   List<GameObject> children;
 
   bool get destroyPhase;
+  bool get worldVisible;
+  
+}
+
+abstract class InteractiveObject{
+  bool isDragged;
 }
 

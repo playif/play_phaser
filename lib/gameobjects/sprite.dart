@@ -207,7 +207,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
   }
 
   bool get destroyPhase {
-    return this._cache[8] == null ? false : this._cache[8];
+    return this._cache[8] == 1;
   }
 
   bool _outOfBoundsFired=false;
@@ -332,8 +332,8 @@ class Sprite extends PIXI.Sprite implements GameObject {
 
     if (this._cache[4] == 1 && this.exists) {
       this.world.setTo(this.parent.position.x + this.position.x, this.parent.position.y + this.position.y);
-      this.worldTransform.tx = this.world.x;
-      this.worldTransform.ty = this.world.y;
+      this.worldTransform.tx = this.world.x.toDouble();
+      this.worldTransform.ty = this.world.y.toDouble();
       this._cache[0] = this.world.x;
       this._cache[1] = this.world.y;
       this._cache[2] = this.rotation;
@@ -486,7 +486,6 @@ class Sprite extends PIXI.Sprite implements GameObject {
         return;
       }
       else {
-        print (key);
         if (key == null) {
           this.key = '__default';
           this.setTexture(PIXI.TextureCache[this.key]);
@@ -633,7 +632,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
    * @param {boolean} [destroyChildren=true] - Should every child of this object have its destroy method called?
    */
 
-  destroy(destroyChildren) {
+  destroy([bool destroyChildren=true]) {
 
     if (this.game == null || this._cache[8] == 1) {
       return;
@@ -673,12 +672,12 @@ class Sprite extends PIXI.Sprite implements GameObject {
     var i = this.children.length;
 
     if (destroyChildren) {
-      while (i--) {
+      while (i-- >0) {
         this.children[i].destroy(destroyChildren);
       }
     }
     else {
-      while (i--) {
+      while (i-- >0) {
         this.removeChild(this.children[i]);
       }
     }

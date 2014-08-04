@@ -8,7 +8,7 @@ class Image extends PIXI.Sprite implements GameObject {
   int z;
   Events events;
 
-  String key;
+  dynamic key;
   Point world;
 
   bool autoCull;
@@ -175,7 +175,7 @@ class Image extends PIXI.Sprite implements GameObject {
     return this._cache[8] == 1;
   }
 
-  Image(this.game, [int x = 0, int y = 0, String key, int frame])
+  Image(this.game, [int x = 0, int y = 0, key, frame])
       : super(PIXI.TextureCache['__default']) {
     //x = x || 0;
     //y = y || 0;

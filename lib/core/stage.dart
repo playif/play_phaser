@@ -1,6 +1,6 @@
 part of Phaser;
 
-class Stage extends PIXI.Stage {
+class Stage extends PIXI.Stage implements GameObject {
   Game game;
   Point offset;
   Rectangle bounds;
@@ -21,6 +21,56 @@ class Stage extends PIXI.Stage {
   bool fullScreenScaleMode;
 
   PIXI.scaleModes scaleMode;
+
+  
+  GameObject parent;
+  PIXI.Texture texture;
+  CanvasPattern __tilePattern;
+  int z;
+  bool fixedToCamera;
+  Point anchor;
+  Rectangle _currentBounds;
+  int type;
+  List _cache;
+  Events events;
+  Type classType;
+  int renderOrderID;
+  Point cameraOffset;
+  bool autoCull;
+  bool alive;
+  
+  setTexture(PIXI.Texture texture){
+    throw new Exception("Not implement yet!");
+  }
+  
+  centerOn(num x, num y) {
+    throw new Exception("Not implement yet!");
+  }
+  
+  destroy([bool destroyChildren = true]) {
+    throw new Exception("Not implement yet!");
+  }
+  
+  bool get destroyPhase {
+    return false;
+  }
+  
+  GameObject bringToTop([GameObject child]) {
+    if(child == null){
+      if (this.parent != null) {
+        this.parent.bringToTop(this);
+      }
+      return this; 
+    }
+    else{
+      if (child.parent == this && this.children.indexOf(child) < this.children.length) {
+        this.removeChild(child);
+        this.addChild(child);
+      }
+      return child;
+    }
+  }
+  
 
   /**
    * @name Phaser.Stage#backgroundColor
@@ -62,7 +112,7 @@ class Stage extends PIXI.Stage {
   List<GameObject> children = [];
 
   Stage(this.game, num width, num height)
-  :super() {
+      : super() {
     /**
      * @property {Phaser.Point} offset - Holds the offset coordinates of the Game.canvas from the top-left of the browser window (used by Input and other classes)
      */
@@ -140,17 +190,17 @@ class Stage extends PIXI.Stage {
     this.currentRenderOrderID = 0;
 
     //  This can't loop in reverse, we need the orderID to be in sequence
-    var len = this.children.length;
+    int len = this.children.length;
 
-    for (var i = 0; i < len; i++) {
+    for (int i = 0; i < len; i++) {
       this.children[i].preUpdate();
     }
 
   }
 
   update() {
-    var i = this.children.length;
-    while (i--) {
+    int i = this.children.length;
+    while (i-- > 0 ) {
       this.children[i].update();
     }
   }
@@ -169,13 +219,12 @@ class Stage extends PIXI.Stage {
           this.children[i].postUpdate();
         }
       }
-    }
-    else {
+    } else {
       this.game.world.camera.update();
 
-      var i = this.children.length;
+      int i = this.children.length;
 
-      while (i--) {
+      while (i-- > 0) {
         this.children[i].postUpdate();
       }
     }
@@ -273,8 +322,7 @@ class Stage extends PIXI.Stage {
     if (event.type == 'pagehide' || event.type == 'blur' || event.type == 'pageshow' || event.type == 'focus') {
       if (event.type == 'pagehide' || event.type == 'blur') {
         this.game.focusLoss(event);
-      }
-      else if (event.type == 'pageshow' || event.type == 'focus') {
+      } else if (event.type == 'pageshow' || event.type == 'focus') {
         this.game.focusGain(event);
       }
 
@@ -287,8 +335,7 @@ class Stage extends PIXI.Stage {
 
     if (document.hidden) {
       this.game.gamePaused(event);
-    }
-    else {
+    } else {
       this.game.gameResumed(event);
     }
 
@@ -299,13 +346,12 @@ class Stage extends PIXI.Stage {
     if (backgroundColor is String) {
       rgb = Color.hexToColor(backgroundColor);
       this._backgroundColor = Color.getColor(rgb.r, rgb.g, rgb.b);
-    }
-    else {
+    } else {
       rgb = Color.getRGB(backgroundColor);
       this._backgroundColor = backgroundColor;
     }
 
-    this.backgroundColorSplit = [ rgb.r / 255, rgb.g / 255, rgb.b / 255 ];
+    this.backgroundColorSplit = [rgb.r / 255, rgb.g / 255, rgb.b / 255];
     this.backgroundColorString = Color.RGBtoString(rgb.r, rgb.g, rgb.b, 255, '#');
 
   }
