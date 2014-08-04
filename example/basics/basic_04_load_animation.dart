@@ -1,10 +1,10 @@
 part of example;
 
 
-class basic_04_load_animation extends Phaser.State {
+class basic_04_load_animation extends State {
   //Phaser.Game game;
   //Phaser.Text text;
-  Phaser.Sprite sprite;
+  Sprite sprite;
   int counter = 0;
 
   double t = 0.5;

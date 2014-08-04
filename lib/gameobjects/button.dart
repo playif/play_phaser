@@ -30,7 +30,7 @@ class Button extends Image {
 
   bool freezeFrames;
   bool forceOut;
-  bool inputEnabled;
+  //bool inputEnabled;
 
 
   Button(Game game, [num x=0, num y=0, String key, Function callback,
@@ -332,13 +332,15 @@ class Button extends Image {
    * @param {string} [upMarker] - Up Button Sound Marker.
    */
 
-  setSounds(overSound, overMarker, downSound, downMarker, outSound, outMarker, upSound, upMarker) {
+  setSounds([Sound overSound, String overMarker,
+            Sound downSound, String downMarker,
+            Sound outSound, String outMarker,
+            Sound upSound, String upMarker]) {
 
     this.setOverSound(overSound, overMarker);
     this.setOutSound(outSound, outMarker);
     this.setDownSound(downSound, downMarker);
     this.setUpSound(upSound, upMarker);
-
   }
 
   /**
@@ -349,18 +351,18 @@ class Button extends Image {
    * @param {string} [marker] - A Sound Marker that will be used in the playback.
    */
 
-  setOverSound(sound, marker) {
+  setOverSound([Sound sound, String marker='']) {
 
-    this.onOverSound = null;
-    this.onOverSoundMarker = '';
+    //this.onOverSound = null;
+    //this.onOverSoundMarker = '';
 
-    if (sound is Sound) {
+    //if (sound is Sound) {
       this.onOverSound = sound;
-    }
+    //}
 
-    if (marker is String) {
+    //if (marker is String) {
       this.onOverSoundMarker = marker;
-    }
+    //}
 
   }
 
@@ -372,18 +374,18 @@ class Button extends Image {
    * @param {string} [marker] - A Sound Marker that will be used in the playback.
    */
 
-  setOutSound(sound, marker) {
+  setOutSound([Sound sound, String marker='']) {
 
-    this.onOutSound = null;
-    this.onOutSoundMarker = '';
+//    this.onOutSound = null;
+//    this.onOutSoundMarker = '';
 
-    if (sound is Sound) {
+//    if (sound is Sound) {
       this.onOutSound = sound;
-    }
+//    }
 
-    if (marker is String) {
+//    if (marker is String) {
       this.onOutSoundMarker = marker;
-    }
+//    }
 
   }
 
@@ -395,18 +397,18 @@ class Button extends Image {
    * @param {string} [marker] - A Sound Marker that will be used in the playback.
    */
 
-  setDownSound(sound, marker) {
+  setDownSound([Sound sound, String marker='']) {
 
-    this.onDownSound = null;
-    this.onDownSoundMarker = '';
+//    this.onDownSound = null;
+//    this.onDownSoundMarker = '';
 
-    if (sound is Sound) {
+//    if (sound is Sound) {
       this.onDownSound = sound;
-    }
+//    }
 
-    if (marker is String) {
+//    if (marker is String) {
       this.onDownSoundMarker = marker;
-    }
+//    }
 
   }
 
@@ -418,18 +420,18 @@ class Button extends Image {
    * @param {string} [marker] - A Sound Marker that will be used in the playback.
    */
 
-  setUpSound(sound, marker) {
+  setUpSound([Sound sound, String marker='']) {
 
-    this.onUpSound = null;
-    this.onUpSoundMarker = '';
+//    this.onUpSound = null;
+//    this.onUpSoundMarker = '';
 
-    if (sound is Sound) {
+//    if (sound is Sound) {
       this.onUpSound = sound;
-    }
+//    }
 
-    if (marker is String) {
+//    if (marker is String) {
       this.onUpSoundMarker = marker;
-    }
+//    }
 
   }
 
@@ -442,7 +444,7 @@ class Button extends Image {
    * @param {Phaser.Pointer} pointer - The Pointer that activated the Button.
    */
 
-  onInputOverHandler(sprite, pointer) {
+  onInputOverHandler(Button sprite, Pointer pointer) {
 
     if (this.freezeFrames == false) {
       this.setState(1);
@@ -471,7 +473,7 @@ class Button extends Image {
    * @param {Phaser.Pointer} pointer - The Pointer that activated the Button.
    */
 
-  onInputOutHandler(sprite, pointer) {
+  onInputOutHandler(Button sprite, Pointer pointer) {
 
     if (this.freezeFrames == false) {
       this.setState(2);
@@ -495,7 +497,7 @@ class Button extends Image {
    * @param {Phaser.Pointer} pointer - The Pointer that activated the Button.
    */
 
-  onInputDownHandler(sprite, pointer) {
+  onInputDownHandler(Button sprite, Pointer pointer) {
 
     if (this.freezeFrames == false) {
       this.setState(3);
@@ -519,7 +521,7 @@ class Button extends Image {
    * @param {Phaser.Pointer} pointer - The Pointer that activated the Button.
    */
 
-  onInputUpHandler(sprite, pointer, isOver) {
+  onInputUpHandler(Button sprite, Pointer pointer, bool isOver) {
 
     if (this.onUpSound != null) {
       this.onUpSound.play(this.onUpSoundMarker);
@@ -561,7 +563,7 @@ class Button extends Image {
    * @param {number} newState - The new State of the Button.
    */
 
-  setState(newState) {
+  setState(int newState) {
 
     if (newState == 1) {
       //  Over

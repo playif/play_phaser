@@ -248,7 +248,7 @@ class Debug {
     if (sound.currentMarker != '')
     {
       this.line('Marker: ' + sound.currentMarker + ' Duration: ' + sound.duration.toString() + ' (ms: ' + sound.durationMS.toString() + ')');
-      this.line('Start: ' + sound.markers[sound.currentMarker].start + ' Stop: ' + sound.markers[sound.currentMarker].stop);
+      this.line('Start: ' + sound.markers[sound.currentMarker].start.toString() + ' Stop: ' + sound.markers[sound.currentMarker].stop.toString());
       this.line('Position: ' + sound.position.toString());
     }
 

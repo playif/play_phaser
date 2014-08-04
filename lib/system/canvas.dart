@@ -6,8 +6,8 @@ class Canvas {
     if (id != null) {
       canvas.dataset['id'] = id;
     }
-    canvas.width = width;
-    canvas.height = height;
+    canvas.width = width.toInt();
+    canvas.height = height.toInt();
     canvas.style.display = "block";
     return canvas;
   }
@@ -38,6 +38,10 @@ class Canvas {
 
     point.x = box.left + scrollLeft - clientLeft;
     point.y = box.top + scrollTop - clientTop;
+
+    //point.x =  scrollLeft - clientLeft;
+    //point.y =  scrollTop - clientTop;
+
 
     return point;
 

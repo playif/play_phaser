@@ -1,10 +1,20 @@
 part of Phaser;
 
+class Marker{
+  String name;
+  num start;
+  num stop;
+  num volume;
+  num duration;
+  num durationMS;
+  bool loop;
+}
+
 class Sound {
   Game game;
   String name;
   String key;
-  Map markers;
+  Map<String, Marker> markers;
   AudioContext context;
   bool autoplay;
 
@@ -381,7 +391,7 @@ class Sound {
    * @param {boolean} [loop=false] - Sets if the sound will loop or not.
    */
 
-  addMarker(name, start, duration, volume, loop) {
+  addMarker(String name, num start, num duration, [num volume=1, bool loop=false]) {
 
     if (volume == null) {
       volume = 1;
@@ -390,15 +400,14 @@ class Sound {
       loop = false;
     }
 
-    this.markers[name] = {
-        name: name,
-        start: start,
-        stop: start + duration,
-        volume: volume,
-        duration: duration,
-        durationMS: duration * 1000,
-        loop: loop
-    };
+    this.markers[name] = new Marker()
+        ..name= name
+        ..start= start
+        ..stop= start + duration
+        ..volume= volume
+        ..duration= duration
+        ..durationMS= duration * 1000
+        ..loop= loop;
 
   }
 
@@ -512,7 +521,7 @@ class Sound {
     this.currentMarker = marker;
 
     if (marker != '') {
-      if (this.markers[marker]) {
+      if (this.markers[marker] != null) {
         //  Playing a marker? Then we default to the marker values
         this.position = this.markers[marker].start;
         this.volume = this.markers[marker].volume;
@@ -520,11 +529,11 @@ class Sound {
         this.duration = this.markers[marker].duration;
         this.durationMS = this.markers[marker].durationMS;
 
-        if (volume != 'undefined') {
+        if (volume != null) {
           this.volume = volume;
         }
 
-        if (loop != 'undefined') {
+        if (loop != null) {
           this.loop = loop;
         }
 

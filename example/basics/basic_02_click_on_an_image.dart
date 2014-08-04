@@ -1,10 +1,10 @@
 part of example;
 
 
-class basic_02_click_on_an_image extends Phaser.State {
+class basic_02_click_on_an_image extends State {
   //Phaser.Game game;
-  Phaser.Text text;
-  Phaser.Sprite image;
+  Text text;
+  Sprite image;
   int counter = 0;
 
   double t = 0.5;
@@ -42,7 +42,7 @@ class basic_02_click_on_an_image extends Phaser.State {
 
 
 
-    text = game.add.text(250, 16, 'Hi', new Phaser.TextStyle()..fill = '#ffffff');
+    text = game.add.text(250, 16, 'Hi', new TextStyle()..fill = '#ffffff');
 
     //image.events.onInputDown.add(listener);
 
@@ -58,7 +58,7 @@ class basic_02_click_on_an_image extends Phaser.State {
     //t+=0.01;
   }
 
-  listener(Phaser.Sprite s, Phaser.Pointer p) {
+  listener(Sprite s, Pointer p) {
     //print("here");
     counter++;
     text.setText("You clicked " + counter.toString() + " times!");

@@ -383,7 +383,10 @@ class Game {
     document.addEventListener('DOMContentLoaded', this._onBoot, false);
     window.addEventListener('load', this._onBoot, false);
     //return this;
-
+    window.onLoad.listen((e){
+      print("on load");
+      this._onBoot(0);
+    });
 
   }
 
@@ -452,7 +455,7 @@ class Game {
    */
 
   boot() {
-
+    print("boot");
     if (this.isBooted) {
       return;
     }
@@ -504,7 +507,7 @@ class Game {
     this.sound.boot();
     this.state.boot();
 
-    if (this.config['enableDebug']) {
+    if (this.config['enableDebug'] != null) {
       this.debug = new Debug(this);
       this.debug.boot();
     }

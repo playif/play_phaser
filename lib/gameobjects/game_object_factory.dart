@@ -143,7 +143,7 @@ class GameObjectFactory {
    * @return {Phaser.Sound} The newly created text object.
    */
 
-  audio(String key, [double volume=1.0, bool loop=false, bool connect=true]) {
+  Sound audio(String key, [double volume=1.0, bool loop=false, bool connect=true]) {
     return this.game.sound.add(key, volume, loop, connect);
   }
 
@@ -225,7 +225,7 @@ class GameObjectFactory {
    * @return {Phaser.Button} The newly created button object.
    */
 
-  Button button(x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame, group) {
+  Button button([num x, num y, String key, Function callback, overFrame, outFrame, downFrame, upFrame, Group group]) {
 
     if (group == null) {
       group = this.world;

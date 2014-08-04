@@ -248,6 +248,7 @@ class StateManager {
       this._clearWorld = clearWorld;
       this._clearCache = clearCache;
       this._args = args;
+
 //      if (args != null)
 //      {
 //

@@ -1,13 +1,13 @@
 part of example;
 
 
-class animation_01_events extends Phaser.State {
+class animation_01_events extends State {
 
-  Phaser.Image back;
-  Phaser.Sprite mummy;
-  Phaser.Animation anim;
-  Phaser.Text loopText;
-  Phaser.TextStyle style = new Phaser.TextStyle()..fill = 'white';
+  Image back;
+  Sprite mummy;
+  Animation anim;
+  Text loopText;
+  TextStyle style = new TextStyle()..fill = 'white';
 
   preload() {
     game.load.image('lazur', 'assets/pics/thorn_lazur.png');
@@ -32,11 +32,11 @@ class animation_01_events extends Phaser.State {
     anim.play(10, true);
   }
 
-  animationStarted(Phaser.Sprite sprite, Phaser.Animation animation) {
+  animationStarted(Sprite sprite, Animation animation) {
     game.add.text(32, 32, 'Animation started', style);
   }
 
-  animationLooped(Phaser.Sprite sprite, Phaser.Animation animation) {
+  animationLooped(Sprite sprite, Animation animation) {
     if (animation.loopCount == 1) {
       loopText = game.add.text(32, 64, 'Animation looped', style);
     } else {
@@ -45,7 +45,7 @@ class animation_01_events extends Phaser.State {
     }
   }
 
-  animationStopped(Phaser.Sprite sprite, Phaser.Animation animation) {
+  animationStopped(Sprite sprite, Animation animation) {
     game.add.text(32, 64 + 32, 'Animation stopped', style);
   }
 

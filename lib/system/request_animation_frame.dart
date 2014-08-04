@@ -55,10 +55,10 @@ class RequestAnimationFrame {
    */
 
   start() {
-
+    //print("start");
     this.isRunning = true;
 
-    var _this = this;
+    //var _this = this;
 
 //    if (!window.requestAnimationFrame || this.forceSetTimeOut)
 //    {
@@ -74,9 +74,11 @@ class RequestAnimationFrame {
 //    {
     this._isSetTimeOut = false;
 
-    this._onLoop = (time) {
-      return _this.updateRAF(time);
-    };
+    this._onLoop = this.updateRAF;
+
+//        (double time) {
+//      return _this.updateRAF(time);
+//    };
 
     this._timeOutID = window.requestAnimationFrame(this._onLoop);
 //    }
@@ -88,7 +90,9 @@ class RequestAnimationFrame {
    * @method Phaser.RequestAnimationFrame#updateRAF
    */
 
-  updateRAF(num time) {
+  updateRAF(double time) {
+
+    //print(time);
 
     this.game.update(new DateTime.now().millisecondsSinceEpoch.toDouble());
 

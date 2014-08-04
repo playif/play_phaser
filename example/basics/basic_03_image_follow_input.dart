@@ -1,10 +1,10 @@
 part of example;
 
 
-class basic_03_image_follow_input extends Phaser.State {
+class basic_03_image_follow_input extends State {
   //Phaser.Game game;
   //Phaser.Text text;
-  Phaser.Sprite sprite;
+  Sprite sprite;
   int counter = 0;
 
   double t = 0.5;
@@ -16,7 +16,7 @@ class basic_03_image_follow_input extends Phaser.State {
 
   create() {
     //  To make the sprite move we need to enable Arcade Physics
-    game.physics.startSystem(Phaser.Physics.ARCADE);
+    game.physics.startSystem(Physics.ARCADE);
 
     sprite = game.add.sprite(game.world.centerX, game.world.centerY, 'car');
     sprite.anchor.set(0.5);

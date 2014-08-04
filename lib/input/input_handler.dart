@@ -250,7 +250,7 @@ class InputHandler {
       this.useHandCursor = useHandCursor;
       this.priorityID = priority;
 
-      for (var i = 0; i < 10; i++) {
+      for (int i = 0; i < 10; i++) {
         this._pointerData[i] = new Pointer(sprite.game, i)
           ..x = 0
           ..y = 0
@@ -1067,7 +1067,7 @@ class InputHandler {
    * @return {number} The number of milliseconds the pointer has been pressed down on the Sprite, or -1 if not over.
    */
 
-  double downDuration([int pointer]) {
+  double downDuration([int pointer=0]) {
 
     //pointer = pointer;
 

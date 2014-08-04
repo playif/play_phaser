@@ -3,8 +3,21 @@ part of Phaser;
 class BitmapText extends PIXI.BitmapText implements GameObject {
   Game game;
 
-  num x;
-  num y;
+  num get x {
+    return this.position.x;
+  }
+
+  set x(num value) {
+    this.position.x = value;
+  }
+
+  num get y {
+    return this.position.y;
+  }
+
+  set y(num value) {
+    this.position.y = value;
+  }
 
   bool exists;
   String name;
@@ -30,33 +43,33 @@ class BitmapText extends PIXI.BitmapText implements GameObject {
   bool autoCull;
   bool alive;
 
-  Point scale;
-  bool visible;
+
+
   PIXI.Texture texture;
   CanvasPattern __tilePattern;
 
-  setTexture(PIXI.Texture texture){
+  setTexture(PIXI.Texture texture) {
 
   }
 
-  centerOn(num x, num y){
+  centerOn(num x, num y) {
     throw new Exception("Not implement yet!");
   }
 
   Point anchor;
 
 
-  List<GameObject> children;
+  List<GameObject> children = [];
   Group parent;
 
   GameObject bringToTop([GameObject child]) {
-    if(child == null){
+    if (child == null) {
       if (this.parent != null) {
         this.parent.bringToTop(this);
       }
-      return this; 
+      return this;
     }
-    else{
+    else {
       if (child.parent == this && this.children.indexOf(child) < this.children.length) {
         this.removeChild(child);
         this.addChild(child);
@@ -66,6 +79,7 @@ class BitmapText extends PIXI.BitmapText implements GameObject {
   }
 
   Rectangle _currentBounds;
+
   //bool destroyPhase;
 
 
@@ -168,7 +182,7 @@ class BitmapText extends PIXI.BitmapText implements GameObject {
 
     if (value != this._fontSize) {
       this._fontSize = value;
-      this.style.font = this._fontSize.toString() + "px '" + this._font + "'";
+      this.style.font = this._fontSize.toString() + "px '" + this._font.toString() + "'";
       this.dirty = true;
     }
 
@@ -209,7 +223,7 @@ class BitmapText extends PIXI.BitmapText implements GameObject {
 
   bool get inputEnabled {
 
-    return (this.input !=null && this.input.enabled);
+    return (this.input != null && this.input.enabled);
 
   }
 
@@ -271,8 +285,9 @@ class BitmapText extends PIXI.BitmapText implements GameObject {
   }
 
 
-  BitmapText(game, [this.x, this.y, String font='', String text='', int size=32])
-  : super(text) {
+  BitmapText(game, [num x, num y, String font=null, String text='', int size=32])
+  : super(text, new PIXI.TextStyle()
+    ..font = font) {
 
 //    x = x || 0;
 //    y = y || 0;
@@ -323,13 +338,15 @@ class BitmapText extends PIXI.BitmapText implements GameObject {
      * @property {string} _font - Internal cache var.
      * @private
      */
-    this._font = font;
 
+//    if(font != null) {
+//      this._font = font;
+//    }
     /**
      * @property {number} _fontSize - Internal cache var.
      * @private
      */
-    this._fontSize = size;
+    //this._fontSize = size;
 
     /**
      * @property {string} _align - Internal cache var.
@@ -378,6 +395,7 @@ class BitmapText extends PIXI.BitmapText implements GameObject {
      */
     this._cache = [0, 0, 0, 0, 1, 0, 1, 0, 0];
 
+
   }
 
 
@@ -387,13 +405,12 @@ class BitmapText extends PIXI.BitmapText implements GameObject {
    */
 
   setStyle([PIXI.TextStyle style]) {
-
-    this.style = new PIXI.TextStyle()
+    super.setStyle(style);
+    this.style
       ..align = this._align;
-    this.fontName = this._font;
-    this.fontSize = this._fontSize;
-    this.dirty = true;
-
+    this._font = this.fontName;
+    this._fontSize = this.fontSize;
+    //this.dirty = true;
   }
 
   /**
@@ -482,18 +499,21 @@ class BitmapText extends PIXI.BitmapText implements GameObject {
     int i = this.children.length;
 
     if (destroyChildren) {
-      while (i-- >= 0) {
+      while (i-- > 0) {
 //        if (this.children[i].destroy) {
 //
 //        }
 //        else {
 //          this.removeChild(this.children[i]);
 //        }
-        this.children[i].destroy(destroyChildren);
+        if (this.children[i] is GameObject) {
+          this.children[i].destroy(destroyChildren);
+        }
+
       }
     }
     else {
-      while (i-- >= 0) {
+      while (i-- > 0) {
         this.removeChild(this.children[i]);
       }
     }

@@ -164,8 +164,10 @@ class SoundManager {
 //      }
 //    }
 
-
+    //if(!game.device.cocoonJS){
     this.context = new AudioContext();
+    //}
+
 
 //    if (!!window['AudioContext'])
 //    {
@@ -200,6 +202,8 @@ class SoundManager {
 //        this.masterGain = this.context.createGainNode();
 //      }
 //      else {
+    if (this.context == null) return;
+
     this.masterGain = this.context.createGain();
 //      }
 
@@ -312,7 +316,7 @@ class SoundManager {
 
         this.context.decodeAudioData(soundData).then((buffer) {
           that.game.cache.decodedSound(key, buffer);
-          if (sound!=null) {
+          if (sound != null) {
             that.onSoundDecode.dispatch([key, sound]);
           }
         });
@@ -451,6 +455,8 @@ class SoundManager {
    */
 
   setMute() {
+    //TODO
+    //return;
 
     if (this._muted) {
       return;

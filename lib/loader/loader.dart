@@ -2,7 +2,7 @@ part of Phaser;
 
 class Loader {
   Game game;
-
+ 
   bool isLoading;
   bool hasLoaded;
 
@@ -1384,7 +1384,7 @@ class Loader {
     //extension = urls[i].toLowerCase();
     //extension = extension.substr((Math.max(0, extension.lastIndexOf(".")) || Infinity) + 1);
 
-    if (this.game.device.canPlayAudio(url)) {
+    if (this.game.device.canPlayAudio(url.split('.').last)) {
       //return urls[i];
       return url;
     }

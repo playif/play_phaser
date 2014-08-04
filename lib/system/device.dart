@@ -490,9 +490,9 @@ class Device {
     //TODO
     //this.file = !!window['File'] && !!window['FileReader'] && !!window['FileList'] && !!window['Blob'];
     //this.fileSystem = !!window['requestFileSystem'];
-
-    RenderingContext context3D = canvas.getContext3d();
-    this.webGL = context3D != null;
+    //canvas = new CanvasElement();
+    //var context3D = canvas.getContext3d();
+    this.webGL = true;//(context3D != null);
 //  ( function () { try { var canvas = document.createElement( 'canvas' ); return !! window.WebGLRenderingContext && ( canvas.getContext( 'webgl' ) || canvas.getContext( 'experimental-webgl' ) ); } catch( e ) { return false; } } )();
 //
 //  if (this.webGL === null || this.webGL === false)
@@ -686,23 +686,23 @@ class Device {
 //  this.webAudio = !!(window['webkitAudioContext'] || window['AudioContext']);
     //var audioElement = document.createElement('audio');
     //var result = false;
-
-    if (audio.canPlayType('ogg') != "") {
+    print(audio.canPlayType('audio/mp3'));
+    if (audio.canPlayType('audio/ogg') != "") {
       this.ogg = true;
     }
-    if (audio.canPlayType('opus') != "") {
+    if (audio.canPlayType('audio/opus') != "") {
       this.opus = true;
     }
-    if (audio.canPlayType('mp3') != "") {
+    if (audio.canPlayType('audio/mp3') != "") {
       this.mp3 = true;
     }
-    if (audio.canPlayType('wav') != "") {
+    if (audio.canPlayType('audio/wav') != "") {
       this.wav = true;
     }
-    if (audio.canPlayType('m4a') != "") {
+    if (audio.canPlayType('audio/m4a') != "") {
       this.m4a = true;
     }
-    if (audio.canPlayType('webm') != "") {
+    if (audio.canPlayType('audio/webm') != "") {
       this.webm = true;
     }
 //  try {

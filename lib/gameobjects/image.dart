@@ -91,9 +91,9 @@ class Image extends PIXI.Sprite implements GameObject {
 
   set frame(int value) {
     if (value != this.frame && this.game.cache.isSpriteSheet(this.key)) {
-      var frameData = this.game.cache.getFrameData(this.key);
+      FrameData frameData = this.game.cache.getFrameData(this.key);
 
-      if (frameData && value < frameData.total && frameData.getFrame(value)) {
+      if (frameData!= null && value < frameData.total && frameData.getFrame(value) != null) {
         this.setTexture(PIXI.TextureCache[frameData.getFrame(value).uuid]);
         this._frame = value;
       }
@@ -106,11 +106,11 @@ class Image extends PIXI.Sprite implements GameObject {
 
   set frameName(String value) {
     if (value != this.frameName && this.game.cache.isSpriteSheet(this.key)) {
-      var frameData = this.game.cache.getFrameData(this.key);
+      FrameData frameData = this.game.cache.getFrameData(this.key);
 
-      if (frameData && frameData.getFrameByName(value)) {
+      if (frameData!= null && frameData.getFrameByName(value) != null) {
         this.setTexture(PIXI.TextureCache[frameData.getFrameByName(value).uuid]);
-        this._frameName = value;
+        this._frameName = value; 
       }
     }
   }

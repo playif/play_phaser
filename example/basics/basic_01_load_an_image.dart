@@ -1,17 +1,17 @@
 part of example;
 
 
-class basic_01_load_an_image extends Phaser.State {
+class basic_01_load_an_image extends State {
   //Phaser.Game game;
-  Phaser.Text text;
-  Phaser.Sprite image;
+  Text text;
+  Sprite image;
   int counter = 0;
 
   double t = 0.5;
 
 
   preload() {
-
+    print("preload");
     //Phaser.Easing.Linear.None;
     //  You can fill the preloader with as many assets as your game requires
 
@@ -24,10 +24,10 @@ class basic_01_load_an_image extends Phaser.State {
   }
 
   create() {
-
+    print("create");
     //  This creates a simple sprite that is using our loaded image and
     //  displays it on-screen
-    for (int i = 0; i < 3000; i++) {
+    for (int i = 0; i < 10; i++) {
       var image = game.add.sprite(game.world.centerX, game.world.centerY, 'einstein');
 
       //  Moves the image anchor to the middle, so it centers inside the game properly
@@ -37,7 +37,7 @@ class basic_01_load_an_image extends Phaser.State {
       //  Enables all kind of input actions on this image (click, etc)
       image.inputEnabled = true;
 
-      image.events.onInputOver.add((Phaser.Sprite s, Phaser.Pointer p) {
+      image.events.onInputOver.add((Sprite s, Pointer p) {
         image.kill();
       });
     }
@@ -46,14 +46,16 @@ class basic_01_load_an_image extends Phaser.State {
 
 
 
-    text = game.add.text(250, 16, 'Hi', new Phaser.TextStyle()..fill = '#ffffff');
+    text = game.add.text(250, 16, 'Hi', new TextStyle()..fill = '#ffffff');
 
     //image.events.onInputDown.add(listener);
 
   }
 
   update() {
-    game.world.forEach((Phaser.GameObject o) {
+    //print("update");
+
+    game.world.forEach((GameObject o) {
       o.x += game.rnd.frac();
       if (o.x > 800) {
         o.x = 0;
@@ -70,7 +72,7 @@ class basic_01_load_an_image extends Phaser.State {
     //t+=0.01;
   }
 
-  listener(Phaser.Sprite s, Phaser.Pointer p) {
+  listener(Sprite s, Pointer p) {
     counter++;
     text.text = "You clicked " + counter.toString() + " times!";
   }
