@@ -295,7 +295,7 @@ class InputHandler {
    * @private
    */
 
-  addedToGroup() {
+  addedToGroup(Sprite s, World w) {
 
     if (this._dragPhase) {
       return;
@@ -314,7 +314,7 @@ class InputHandler {
    * @private
    */
 
-  removedFromGroup() {
+  removedFromGroup(Sprite s, World w) {
 
     if (this._dragPhase) {
       return;

@@ -1346,7 +1346,7 @@ class Loader {
    */
 
   xhrLoad(int index, String url, String type, Function onLoad, Function onError) {
-
+    this._xhr = new HttpRequest();
     this._xhr.open("GET", url, async: true);
     this._xhr.responseType = type;
 
@@ -1423,7 +1423,7 @@ class Loader {
    */
 
   fileComplete(int index) {
-    
+
 //    if(this._fileList.length == 0){
 //      return;
 //    }

@@ -37,8 +37,7 @@ class basic_01_load_an_image extends Phaser.State {
       //  Enables all kind of input actions on this image (click, etc)
       image.inputEnabled = true;
 
-      image.events.onInputOver.add(() {
-        print("hi");
+      image.events.onInputOver.add((Phaser.Sprite s, Phaser.Pointer p) {
         image.kill();
       });
     }
