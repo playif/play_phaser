@@ -9,6 +9,8 @@ import "dart:convert";
 //import "dart:web_gl";
 import "dart:math" as DMath;
 
+import "package:tweenengine/tweenengine.dart" as tween;
+
 @MirrorsUsed(targets: const [Sprite], symbols: const ["call"], override: '*')
 import "dart:mirrors";
 
@@ -16,7 +18,7 @@ import "package:play_pixi/pixi.dart" as PIXI;
 import 'package:uuid/uuid_client.dart';
 //import "physics/physics.dart" as Physics;
 
-import "tween/easing.dart" as Easing;
+//import "tween/easing.dart" as Easing;
 
 part "animation/animation.dart";
 part "animation/animation_manager.dart";

@@ -67,8 +67,11 @@ class GameObjectFactory {
    * @return {Phaser.Tween} The newly created Phaser.Tween object.
    */
 
-  Tween tween(obj) {
-    return this.game.tweens.create(obj);
+  Tween tween(Object obj) {
+    Tween tween=new Tween(game,obj);
+    return tween;
+    //tween.to()
+    //return this.game.tweens.add(obj);
   }
 
   /**

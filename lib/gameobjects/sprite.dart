@@ -1,7 +1,29 @@
 part of Phaser;
 
 class Sprite extends PIXI.Sprite implements GameObject {
+
+//  int getTweenableValues(int tweenType, List<num> returnValues) {
+//    switch (tweenType) {
+//      case 0:
+//        returnValues[0]=this.x;
+//        break;
+//    }
+//
+//    return 1;
+//  }
+//
+//  void setTweenableValues(int tweenType, List<num> newValues) {
+//    switch (tweenType) {
+//      case 0:
+//        this.x=newValues[0];
+//        break;
+//    }
+//
+//  }
+
+
   Game game;
+
 //  num x;
 //  num y;
   var key;
@@ -16,12 +38,12 @@ class Sprite extends PIXI.Sprite implements GameObject {
   Point world;
   bool autoCull;
   InputHandler input;
-  Body body=null;
+  Body body = null;
   bool alive;
   num health;
-  bool checkWorldBounds=false;
-  bool outOfBoundsKill=false;
-  bool debug =false;
+  bool checkWorldBounds = false;
+  bool outOfBoundsKill = false;
+  bool debug = false;
   Point cameraOffset;
   Rectangle cropRect;
 
@@ -41,13 +63,14 @@ class Sprite extends PIXI.Sprite implements GameObject {
 
   Group parent;
 
-  List<GameObject> children=[];
+  List<GameObject> children = [];
 
   Rectangle _currentBounds;
-  Point anchor=new Point();
+  Point anchor = new Point();
+  Point position =new Point();
 
 
-  centerOn(num x, num y){
+  centerOn(num x, num y) {
     throw new Exception("Not implement yet!");
   }
 
@@ -72,11 +95,13 @@ class Sprite extends PIXI.Sprite implements GameObject {
   }
 
   bool get inWorld {
-    return this.game.world.bounds.intersects(new Rectangle()..copyFrom(this.getBounds()));
+    return this.game.world.bounds.intersects(new Rectangle()
+      ..copyFrom(this.getBounds()));
   }
 
   bool get inCamera {
-    return this.game.world.camera.screenView.intersects(new Rectangle()..copyFrom(this.getBounds()));
+    return this.game.world.camera.screenView.intersects(new Rectangle()
+      ..copyFrom(this.getBounds()));
   }
 
   int get frame {
@@ -149,7 +174,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
   }
 
   bool get fixedToCamera {
-    return this._cache[7] ==1;
+    return this._cache[7] == 1;
   }
 
   set fixedToCamera(bool value) {
@@ -203,22 +228,22 @@ class Sprite extends PIXI.Sprite implements GameObject {
     }
   }
 
-  Point get center{
-    return new Point(x+width/2,y+height/2);
+  Point get center {
+    return new Point(x + width / 2, y + height / 2);
   }
 
   bool get destroyPhase {
     return this._cache[8] == 1;
   }
 
-  bool _outOfBoundsFired=false;
+  bool _outOfBoundsFired = false;
 
   Sprite(this.game, [int x=0, int y=0, String key, num frame=0])
   :super(PIXI.TextureCache['__default']) {
 
-    this.x=x;
-    this.y=y;
-    this.key=key;
+    this.x = x;
+    this.y = y;
+    this.key = key;
 
     name = '';
     type = SPRITE;
@@ -339,7 +364,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
       this._cache[1] = this.world.y;
       this._cache[2] = this.rotation;
 
-      if (this.body!= null) {
+      if (this.body != null) {
         this.body.preUpdate();
       }
 
@@ -403,7 +428,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
 
     this.animations.update();
 
-    if (this.body!= null) {
+    if (this.body != null) {
       this.body.preUpdate();
     }
 
@@ -423,7 +448,8 @@ class Sprite extends PIXI.Sprite implements GameObject {
    * @method Phaser.Sprite#update
    * @memberof Phaser.Sprite
    */
-  update(){
+
+  update() {
 
   }
 
@@ -616,7 +642,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
     this.exists = false;
     this.visible = false;
 
-    if (this.events !=null) {
+    if (this.events != null) {
       this.events.onKilled.dispatch(this);
     }
 
@@ -673,12 +699,12 @@ class Sprite extends PIXI.Sprite implements GameObject {
     var i = this.children.length;
 
     if (destroyChildren) {
-      while (i-- >0) {
+      while (i-- > 0) {
         this.children[i].destroy(destroyChildren);
       }
     }
     else {
-      while (i-- >0) {
+      while (i-- > 0) {
         this.removeChild(this.children[i]);
       }
     }
@@ -765,13 +791,13 @@ class Sprite extends PIXI.Sprite implements GameObject {
    */
 
   GameObject bringToTop([GameObject child]) {
-    if(child == null){
+    if (child == null) {
       if (this.parent != null) {
         this.parent.bringToTop(this);
       }
-      return this; 
+      return this;
     }
-    else{
+    else {
       if (child.parent == this && this.children.indexOf(child) < this.children.length) {
         this.removeChild(child);
         this.addChild(child);
@@ -779,18 +805,18 @@ class Sprite extends PIXI.Sprite implements GameObject {
       return this;
     }
   }
-  
+
 
   /**
-    Play an animation based on the given [key]. The animation should previously have been added via sprite.animations.add()
-    If the requested animation is already playing this request will be ignored. If you need to reset an already running animation do so directly on the Animation object itself.
+      Play an animation based on the given [key]. The animation should previously have been added via sprite.animations.add()
+      If the requested animation is already playing this request will be ignored. If you need to reset an already running animation do so directly on the Animation object itself.
 
-    [key] - The name of the animation to be played, e.g. "fire", "walk", "jump".
-    @param {number} [frameRate=null] - The framerate to play the animation at. The speed is given in frames per second. If not provided the previously set frameRate of the Animation is used.
-    @param {boolean} [loop=false] - Should the animation be looped after playback. If not provided the previously set loop value of the Animation is used.
-    @param {boolean} [killOnComplete=false] - If set to true when the animation completes (only happens if loop=false) the parent Sprite will be killed.
-    @return {Phaser.Animation} A reference to playing Animation instance.
-  **/
+      [key] - The name of the animation to be played, e.g. "fire", "walk", "jump".
+      @param {number} [frameRate=null] - The framerate to play the animation at. The speed is given in frames per second. If not provided the previously set frameRate of the Animation is used.
+      @param {boolean} [loop=false] - Should the animation be looped after playback. If not provided the previously set loop value of the Animation is used.
+      @param {boolean} [killOnComplete=false] - If set to true when the animation completes (only happens if loop=false) the parent Sprite will be killed.
+      @return {Phaser.Animation} A reference to playing Animation instance.
+   **/
 
   play(String name, [num frameRate, bool loop, bool killOnComplete]) {
 
@@ -816,7 +842,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
     //Rectangle.intersects(this.getBounds(), );
   }
 
-  Rectangle getBounds([PIXI.Matrix matrix]){
+  Rectangle getBounds([PIXI.Matrix matrix]) {
     return new Rectangle().copyFrom(super.getBounds());
   }
 

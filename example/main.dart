@@ -16,17 +16,22 @@ part "animation/animation_01_events.dart";
 part "audio/audio_01_audio_sprite.dart";
 part "audio/audio_02_play_music.dart";
 
+part "tweens/tweens_01_chained_tweens.dart";
+
 Map<String, State> examples = {
-  "basic_01_load_an_image": new basic_01_load_an_image(),
-  "basic_02_click_on_an_image": new basic_02_click_on_an_image(),
-  "basic_03_image_follow_input": new basic_03_image_follow_input(),
-  "basic_04_load_animation": new basic_04_load_animation(),
+    "basic_01_load_an_image": new basic_01_load_an_image(),
+    "basic_02_click_on_an_image": new basic_02_click_on_an_image(),
+    "basic_03_image_follow_input": new basic_03_image_follow_input(),
+    "basic_04_load_animation": new basic_04_load_animation(),
 
 
-  "animation_01_events": new animation_01_events(),
+    "animation_01_events": new animation_01_events(),
 
-  "audio_01_audio_sprite": new audio_01_audio_sprite(),
-  "audio_02_play_music": new audio_02_play_music(),
+    "audio_01_audio_sprite": new audio_01_audio_sprite(),
+    "audio_02_play_music": new audio_02_play_music(),
+
+
+    "tweens_01_chained_tweens": new tweens_01_chained_tweens(),
 };
 
 main() {
@@ -36,13 +41,13 @@ main() {
 //  width = (h > w) ? h : w,
 //  height = (h > w) ? w : h;
 //
-//// Hack to avoid iPad Retina and large Android devices. Tell it to scale up.
+  //// Hack to avoid iPad Retina and large Android devices. Tell it to scale up.
 //  if (dom.window.innerWidth >= 1024 && dom.window.devicePixelRatio >= 2)
 //  {
 //    width = Math.round(width / 2);
 //    height = Math.round(height / 2);
 //  }
-//// reduce screen size by one 3rd on devices like Nexus 5
+  //// reduce screen size by one 3rd on devices like Nexus 5
 //  if (dom.window.devicePixelRatio == 3)
 //  {
 //    width = Math.round(width / 3) * 2;
@@ -66,7 +71,7 @@ main() {
     game.state.start(select.children[select.selectedIndex].text);
   });
 
-  game.state.start("basic_01_load_an_image");
+  game.state.start("tweens_01_chained_tweens");
 
   //game.canvas.style.cursor = "pointer";
   //game.boot();

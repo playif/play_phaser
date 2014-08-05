@@ -35,7 +35,7 @@ class Game {
   Stage stage;
   Time time;
   Physics physics;
-  TweenManager tweens;
+  tween.TweenManager tweens;
   RandomDataGenerator rnd;
   Device device;
   Camera camera;
@@ -460,6 +460,10 @@ class Game {
       return;
     }
 
+    Fields fields=new Fields();
+    //tween.Tween.registerAccessor(GameObject, fields);
+    tween.Tween.registerAccessor(Sprite, fields);
+    tween.Tween.registerAccessor(Point, new PointAccessor());
 //    if (!document.body) {
 //      window.setTimeout(this._onBoot, 20);
 //    }
@@ -492,7 +496,7 @@ class Game {
     this.cache = new Cache(this);
     this.load = new Loader(this);
     this.time = new Time(this);
-    this.tweens = new TweenManager(this);
+    this.tweens = new tween.TweenManager();
     this.input = new Input(this);
     this.sound = new SoundManager(this);
     this.physics = new Physics(this, this.physicsConfig);
@@ -672,7 +676,7 @@ class Game {
 
       this.state.update();
       this.stage.update();
-      this.tweens.update();
+      this.tweens.update(this.time.elapsed * 0.001);
       this.sound.update();
       this.input.update();
       this.physics.update();
