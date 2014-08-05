@@ -56,6 +56,7 @@
       <excludeFolder url="file://$MODULE_DIR$/example/audio/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/basics/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/tweens/packages" />
       <excludeFolder url="file://$MODULE_DIR$/packages/play_phaser" />
       <excludeFolder url="file://$MODULE_DIR$/packages/play_pixi" />
     </content>

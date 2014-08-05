@@ -129,11 +129,11 @@ class Tween {
     this._timeline = tween.Timeline.createSequence();
   }
 
-  Tween to(Map<int, num> properties, [num duration=1000, tween.TweenEquation ease=null, bool autoStart=false, num delay=0.0, int repeat=0, bool yoyo=false]) {
+  Tween to(Map<int, num> properties, [num duration=1000, tween.TweenEquation ease=null, bool autoStart=false, num delay=0, int repeat=0, bool yoyo=false]) {
     return _setTween(properties, tween.Tween.to, duration, ease, autoStart, delay, repeat, yoyo);
   }
 
-  Tween from(Map<int, num> properties, [num duration=1000, tween.TweenEquation ease=null, bool autoStart=false, num delay=0.0, int repeat=0, bool yoyo=false]) {
+  Tween from(Map<int, num> properties, [num duration=1000, tween.TweenEquation ease=null, bool autoStart=false, num delay=0, int repeat=0, bool yoyo=false]) {
     return _setTween(properties, tween.Tween.from, duration, ease, autoStart, delay, repeat, yoyo);
   }
 
@@ -201,7 +201,7 @@ class Tween {
   }
 
   Tween delay(num amount) {
-    this._timeline.pushPause(amount);
+    this._timeline.pushPause(amount * 0.001);
     return this;
   }
 

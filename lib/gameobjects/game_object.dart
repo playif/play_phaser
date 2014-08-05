@@ -63,10 +63,10 @@ abstract class GameObject implements PIXI.DisplayInterface {
 
 }
 
-static const int X = 0;
-static const int Y = 1;
-static const int ALPHA = 2;
-static const int ROTATION = 3;
+const int X = 0;
+const int Y = 1;
+const int ALPHA = 2;
+const int ROTATION = 3;
 
 
 class PointAccessor implements tween.TweenAccessor<Point> {
