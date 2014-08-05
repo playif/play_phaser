@@ -2,15 +2,12 @@ part of example;
 
 class tweens_01_chained_tweens extends State {
   preload() {
-
     game.load.image('diamond', 'assets/sprites/diamond.png');
-
   }
 
+
   create() {
-
     game.stage.backgroundColor = 0x2d2d2d;
-
     var sprite = game.add.sprite(100, 100, 'diamond');
 
     //  Here we'll chain 4 different tweens together and play through them all in a loop
@@ -29,13 +26,11 @@ class tweens_01_chained_tweens extends State {
     }, Tween.COMPLETE)
     .start();
 
-//    Object o = new Point();
-//    //o.runtimeType
-//    game.add.tween(sprite.position)
-//    .to({
-//        PointAccessor.Y:200
-//    }, 1000, null, false, 200,10,true)
-//    .start();
+    game.add.tween(sprite.position)
+    .to({
+        PointAccessor.Y:200
+    }, 1000, null, false, 200,10,true)
+    .start();
 
   }
 
