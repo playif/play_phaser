@@ -63,10 +63,14 @@ abstract class GameObject implements PIXI.DisplayInterface {
 
 }
 
+static const int X = 0;
+static const int Y = 1;
+static const int ALPHA = 2;
+static const int ROTATION = 3;
+
 
 class PointAccessor implements tween.TweenAccessor<Point> {
-  static const int X = 0;
-  static const int Y = 1;
+
 
   int getValues(Point target, int tweenType, List<num> returnValues) {
     switch (tweenType) {
@@ -93,10 +97,9 @@ class PointAccessor implements tween.TweenAccessor<Point> {
 }
 
 class Fields implements tween.TweenAccessor<GameObject> {
-  static const int X = 0;
-  static const int Y = 1;
-  static const int ALPHA = 2;
-  static const int ROTATION = 3;
+//  static const int X = 0;
+//  static const int Y = 1;
+
   //static const int ALPHA = 2;
 
   int getValues(GameObject target, int tweenType, List<num> returnValues) {

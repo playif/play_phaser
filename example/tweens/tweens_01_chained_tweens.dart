@@ -12,12 +12,12 @@ class tweens_01_chained_tweens extends State {
 
     //  Here we'll chain 4 different tweens together and play through them all in a loop
     var tween = game.add.tween(sprite).to({
-        Fields.X: 300,
-        Fields.ALPHA: 0.1,
+        X: 300,
+        ALPHA: 0.1,
     }, 2000, Easing.Quart.INOUT)
     .to({
-        Fields.X: 500,
-        Fields.ALPHA: 1,
+        X: 500,
+        ALPHA: 1,
     }, 2000, null, false, 0, 0)
     .yoyo(true)
     .repeat(1)
@@ -28,7 +28,7 @@ class tweens_01_chained_tweens extends State {
 
     game.add.tween(sprite.position)
     .to({
-        PointAccessor.Y:200
+        Y:200
     }, 1000, null, false, 200,10,true)
     .start();
 
