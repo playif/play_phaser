@@ -159,12 +159,12 @@ class Color {
       out = Color.createColor(r, g, b, 255);
     }
 
-    double dr = r / 255, dg = g / 255, db = b / 255;
+    double dr = r / 255.0, dg = g / 255.0, db = b / 255.0;
     //g /= 255;
     //b /= 255;
 
-    num min = Math.minList([r, g, b]);
-    num max = Math.maxList([r, g, b]);
+    double min = Math.minList([dr, dg, db]);
+    double max = Math.maxList([dr, dg, db]);
 
     // achromatic by default
     out.h = 0.0;
@@ -174,9 +174,9 @@ class Color {
     if (max != min) {
       var d = max - min;
 
-      out.s = out.l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      out.s = (out.l > 0.5) ? (d / (2 - max - min)) : (d / (max + min));
 
-      if (max == r) {
+      if (max == dr) {
         out.h = (dg - db) / d + (dg < db ? 6 : 0);
       }
       else if (max == dg) {

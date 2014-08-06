@@ -28,7 +28,15 @@ part "arcade_physics/arcade_physics_34_quadtree.dart";
 
 part "camera/camera_01_basic_follow.dart";
 
+
+part "display/display_14_bitmapdata_wobble.dart";
+part "display/display_20_bitmapdata_set_hsl.dart";
+
+
+
+
 Map<String, State> examples = {
+
     "basic_01_load_an_image": new basic_01_load_an_image(),
     "basic_02_click_on_an_image": new basic_02_click_on_an_image(),
     "basic_03_image_follow_input": new basic_03_image_follow_input(),
@@ -56,6 +64,10 @@ Map<String, State> examples = {
     "arcade_physics_34_quadtree": new arcade_physics_34_quadtree(),
 
     "camera_01_basic_follow": new camera_01_basic_follow(),
+
+    "display_14_bitmapdata_wobble":new display_14_bitmapdata_wobble(),
+    "display_20_bitmapdata_set_hsl":new display_20_bitmapdata_set_hsl(),
+
 };
 
 main() {
@@ -95,7 +107,7 @@ main() {
     game.state.start(select.children[select.selectedIndex].text);
   });
 
-  game.state.start("particles_01_auto_scale");
+  game.state.start("display_20_bitmapdata_set_hsl");
 
   //game.canvas.style.cursor = "pointer";
   //game.boot();

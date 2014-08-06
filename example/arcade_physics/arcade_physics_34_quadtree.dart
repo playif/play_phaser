@@ -2,14 +2,10 @@ part of example;
 
 
 class arcade_physics_34_quadtree extends State {
-  preload() {
 
+  preload() {
     game.load.image('ship', 'assets/sprites/xenon2_ship.png');
     game.load.image('baddie', 'assets/sprites/space-baddie.png');
-
-//    game.world.width=2500;
-//    game.world.height=2500;
-
   }
 
   Sprite ship;
@@ -67,6 +63,6 @@ class arcade_physics_34_quadtree extends State {
   }
 
   render() {
-    game.debug.quadTree(game.physics.arcade.quadTree); 
+    game.debug.quadTree(game.physics.arcade.quadTree);
   }
 }

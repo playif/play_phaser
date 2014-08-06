@@ -2,6 +2,11 @@ part of Phaser;
 
 typedef double doubleFunc();
 
+class SinCosTable {
+  DoubleLinkedQueue<num> sin, cos;
+  int length;
+}
+
 class Math {
   Math._(){
   }
@@ -245,7 +250,7 @@ class Math {
   }
 
   static num limitValue(num value, num min, num max) {
-    return value < min ? min : value > max ? max : value;
+    return (value < min) ? min : ((value > max) ? max : value);
   }
 
   static int randomSign() {
@@ -428,27 +433,27 @@ class Math {
     num cos = cosAmplitude;
     num frq = frequency * DMath.PI / length;
 
-    List<num> cosTable = new List<num>(length);
-    List<num> sinTable = new List<num>(length);
+    DoubleLinkedQueue <num> cosTable = new DoubleLinkedQueue<num>();
+    DoubleLinkedQueue<num> sinTable = new DoubleLinkedQueue<num>();
 
     for (int c = 0; c < length; c++) {
       cos -= sin * frq;
       sin += cos * frq;
-      cosTable[c] = cos;
-      sinTable[c] = sin;
+      cosTable.add(cos);
+      sinTable.add(sin);
     }
 
-    return {
-        sin: sinTable, cos: cosTable, length: length
-    };
-
+    return new SinCosTable()
+      ..sin = sinTable
+      ..cos = cosTable
+      ..length = length;
   }
 
-  static Object shift(List stack) {
-    Object s = stack.removeAt(0);
+  static Object shift(DoubleLinkedQueue stack) {
+    Object s = stack.removeFirst();
     stack.add(s);
     return s;
-  }
+  } 
 
   static List shuffleArray(List array) {
     return new List.from(array)

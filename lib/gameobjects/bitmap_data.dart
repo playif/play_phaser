@@ -61,7 +61,6 @@ class BitmapData {
     this.pixels = null;
 
 
-
     /**
      * @property {ArrayBuffer} buffer - An ArrayBuffer the same size as the context ImageData.
      */
@@ -82,8 +81,18 @@ class BitmapData {
 //        this.pixels = this.imageData.data;
 //      }
 //    }
+    //this.buffer = new ArrayBuffer(this.imageData.data..length);
+    this.pixels = new Uint32List(this.imageData.data.length ~/ 4);
+    int index = 0;
+    for (int i = 0;i < this.imageData.data.length;i += 4) {
+      this.pixels[index++] =
+      (this.imageData.data[i] << 24) +
+      (this.imageData.data[i + 1] << 16) +
+      (this.imageData.data[i + 2] << 8) +
+      (this.imageData.data[i + 3]);
+    }
 
-    this.pixels = new Uint32List.fromList(this.imageData.data);
+    //this.pixels = new Uint32List.fromList(this.imageData);
 
     /**
      * @property {PIXI.BaseTexture} baseTexture - The PIXI.BaseTexture.
@@ -145,19 +154,17 @@ class BitmapData {
   }
 
 
-
   /**
    * Updates the given objects so that they use this BitmapData as their texture. This will replace any texture they will currently have set.
    *
    * @method Phaser.BitmapData#add
    * @param {Phaser.Sprite|Phaser.Sprite[]|Phaser.Image|Phaser.Image[]} object - Either a single Sprite/Image or an Array of Sprites/Images.
    */
-  add (object) {
 
-    if (object is List)
-    {
-      for (var i = 0; i < object.length; i++)
-      {
+  add(object) {
+
+    if (object is List) {
+      for (var i = 0; i < object.length; i++) {
 //        if (object[i]['loadTexture'])
 //        {
 //
@@ -165,8 +172,7 @@ class BitmapData {
         object[i].loadTexture(this);
       }
     }
-    else
-    {
+    else {
       object.loadTexture(this);
     }
 
@@ -181,10 +187,10 @@ class BitmapData {
    * @method Phaser.BitmapData#load
    * @param {Phaser.Sprite|Phaser.Image|Phaser.BitmapData|string} source - The object that will be used to populate this BitmapData.
    */
-  load (source) {
 
-    if ( source is String)
-    {
+  load(source) {
+
+    if (source is String) {
       source = this.game.cache.getImage(source);
     }
 
@@ -192,12 +198,10 @@ class BitmapData {
 
     this.cls();
 
-    if (source is Image || source is Sprite)
-    {
+    if (source is Image || source is Sprite) {
       this.drawSprite(source, 0, 0);
     }
-    else
-    {
+    else {
       this.draw(source, 0, 0);
     }
 
@@ -216,7 +220,8 @@ class BitmapData {
    *
    * @method Phaser.BitmapData#clear
    */
-  clear () {
+
+  clear() {
 
     this.context.clearRect(0, 0, this.width, this.height);
 
@@ -233,9 +238,12 @@ class BitmapData {
    * @param {number} b - The blue color value, between 0 and 0xFF (255).
    * @param {number} [a=1] - The alpha color value, between 0 and 1.
    */
-  fill (int r, int g, int b, [double a=1.0]) {
 
-    if (a == null) { a = 1.0; }
+  fill(int r, int g, int b, [double a=1.0]) {
+
+    if (a == null) {
+      a = 1.0;
+    }
 
     this.context.fillStyle = 'rgba($r,$g,$b,$a)';
     this.context.fillRect(0, 0, this.width, this.height);
@@ -248,10 +256,10 @@ class BitmapData {
    *
    * @method Phaser.BitmapData#resize
    */
-  resize (int width, int height) {
 
-    if (width != this.width || height != this.height)
-    {
+  resize(int width, int height) {
+
+    if (width != this.width || height != this.height) {
       this.width = width;
       this.height = height;
 
@@ -298,12 +306,21 @@ class BitmapData {
    * @param {number} [width] - The width of the image data area.
    * @param {number} [height] - The height of the image data area.
    */
-  refreshBuffer ([int x=0, int y=0, int width, int height]) {
 
-    if ( x == null) { x = 0; }
-    if ( y == null) { y = 0; }
-    if ( width == null) { width = this.width; }
-    if ( height == null) { height = this.height; }
+  refreshBuffer([int x=0, int y=0, int width, int height]) {
+
+    if (x == null) {
+      x = 0;
+    }
+    if (y == null) {
+      y = 0;
+    }
+    if (width == null) {
+      width = this.width;
+    }
+    if (height == null) {
+      height = this.height;
+    }
 
     this.imageData = this.context.getImageData(x, y, width, height);
     this.data = this.imageData.data;
@@ -325,7 +342,15 @@ class BitmapData {
 //        this.pixels = this.imageData.data;
 //      }
 //    }
-    this.pixels = new Uint32List.fromList(this.imageData.data);
+    this.pixels = new Uint32List(this.data.length ~/ 4);
+    int index = 0;
+    for (int i = 0;i < this.data.length;i += 4) {
+      this.pixels[index++] =
+      (this.data[i] << 24) +
+      (this.data[i + 1] << 16) +
+      (this.data[i + 2] << 8) +
+      (this.data[i + 3]);
+    }
   }
 
   /**
@@ -346,37 +371,44 @@ class BitmapData {
    * @param {number} [width] - The width of the region to process.
    * @param {number} [height] - The height of the region to process.
    */
-  processPixelRGB (Function callback, [int x=0, int y=0, int width, int height]) {
 
-    if ( x == null) { x = 0; }
-    if ( y == null) { y = 0; }
-    if ( width == null) { width = this.width; }
-    if ( height == null) { height = this.height; }
+  processPixelRGB(Function callback, [int x=0, int y=0, int width, int height]) {
+
+    if (x == null) {
+      x = 0;
+    }
+    if (y == null) {
+      y = 0;
+    }
+    if (width == null) {
+      width = this.width;
+    }
+    if (height == null) {
+      height = this.height;
+    }
 
     int w = x + width;
     int h = y + height;
     Color pixel = Color.createColor();
-    Map result = { 'r': 0, 'g': 0, 'b': 0, 'a': 0 };
+    Map result = {
+        'r': 0, 'g': 0, 'b': 0, 'a': 0
+    };
     bool dirty = false;
 
-    for (int ty = y; ty < h; ty++)
-    {
-      for (int tx = x; tx < w; tx++)
-      {
+    for (int ty = y; ty < h; ty++) {
+      for (int tx = x; tx < w; tx++) {
         Color.unpackPixel(this.getPixel32(tx, ty), pixel);
 
         result = callback(pixel, tx, ty);
 
-        if (result != false && result != null)
-        {
+        if (result != false && result != null) {
           this.setPixel32(tx, ty, result['r'], result['g'], result['b'], result['a'], false);
           dirty = true;
         }
       }
     }
 
-    if (dirty)
-    {
+    if (dirty) {
       this.context.putImageData(this.imageData, 0, 0);
       this.dirty = true;
     }
@@ -398,12 +430,21 @@ class BitmapData {
    * @param {number} [width] - The width of the region to process.
    * @param {number} [height] - The height of the region to process.
    */
-  processPixel (callback, callbackContext, x, y, width, height) {
 
-    if (x == null) { x = 0; }
-    if (y == null) { y = 0; }
-    if (width == null) { width = this.width; }
-    if (height == null) { height = this.height; }
+  processPixel(callback, x, y, width, height) {
+
+    if (x == null) {
+      x = 0;
+    }
+    if (y == null) {
+      y = 0;
+    }
+    if (width == null) {
+      width = this.width;
+    }
+    if (height == null) {
+      height = this.height;
+    }
 
     var w = x + width;
     var h = y + height;
@@ -411,23 +452,19 @@ class BitmapData {
     var result = 0;
     var dirty = false;
 
-    for (var ty = y; ty < h; ty++)
-    {
-      for (var tx = x; tx < w; tx++)
-      {
+    for (var ty = y; ty < h; ty++) {
+      for (var tx = x; tx < w; tx++) {
         pixel = this.getPixel32(tx, ty);
-        result = callback.call(callbackContext, pixel, tx, ty);
+        result = callback(pixel, tx, ty);
 
-        if (result != pixel)
-        {
+        if (result != pixel) {
           this.pixels[ty * this.width + tx] = result;
           dirty = true;
         }
       }
     }
 
-    if (dirty)
-    {
+    if (dirty) {
       this.context.putImageData(this.imageData, 0, 0);
       this.dirty = true;
     }
@@ -449,7 +486,8 @@ class BitmapData {
    * @param {number} a2 - The alpha color value that is the replacement color. Between 0 and 255.
    * @param {Phaser.Rectangle} [region] - The area to perform the search over. If not given it will replace over the whole BitmapData.
    */
-  replaceRGB (int r1, int g1, int b1, int a1, int r2, int g2, int b2, int a2, [Rectangle region]) {
+
+  replaceRGB(int r1, int g1, int b1, int a1, int r2, int g2, int b2, int a2, [Rectangle region]) {
 
     int sx = 0;
     int sy = 0;
@@ -457,20 +495,16 @@ class BitmapData {
     int h = this.height;
     int source = Color.packPixel(r1, g1, b1, a1);
 
-    if (region != null && region is Rectangle)
-    {
+    if (region != null && region is Rectangle) {
       sx = region.x;
       sy = region.y;
       w = region.width;
       h = region.height;
     }
 
-    for (int y = 0; y < h; y++)
-    {
-      for (int x = 0; x < w; x++)
-      {
-        if (this.getPixel32(sx + x, sy + y) == source)
-        {
+    for (int y = 0; y < h; y++) {
+      for (int x = 0; x < w; x++) {
+        if (this.getPixel32(sx + x, sy + y) == source) {
           this.setPixel32(sx + x, sy + y, r2, g2, b2, a2, false);
         }
       }
@@ -490,42 +524,36 @@ class BitmapData {
    * @param {number} [l=null] - The lightness, in the range 0 - 1.
    * @param {Phaser.Rectangle} [region] - The area to perform the operation on. If not given it will run over the whole BitmapData.
    */
-  setHSL ([double h, double s, double l, Rectangle region]) {
+
+  setHSL([double h, double s, double l, Rectangle region]) {
 
 //    if (h == null) { h = false; }
 //    if (s ==null) { s = false; }
 //    if (l == null) { l = false; }
 
-    if (h ==null && s==null && l ==null)
-    {
+    if (h == null && s == null && l == null) {
       return;
     }
 
-    if (region == null)
-    {
+    if (region == null) {
       region = new Rectangle(0, 0, this.width, this.height);
     }
 
     Color pixel = Color.createColor();
 
-    for (int y = region.y; y < region.bottom; y++)
-    {
-      for (int x = region.x; x < region.right; x++)
-      {
+    for (int y = region.y; y < region.bottom; y++) {
+      for (int x = region.x; x < region.right; x++) {
         Color.unpackPixel(this.getPixel32(x, y), pixel, true);
 
-        if (h != null)
-        {
+        if (h != null) {
           pixel.h = h;
         }
 
-        if (s != null)
-        {
+        if (s != null) {
           pixel.s = s;
         }
 
-        if (l != null)
-        {
+        if (l != null) {
           pixel.l = l;
         }
 
@@ -550,53 +578,49 @@ class BitmapData {
    * @param {number} [l=null] - The amount to shift the lightness by.
    * @param {Phaser.Rectangle} [region] - The area to perform the operation on. If not given it will run over the whole BitmapData.
    */
-  shiftHSL ([double h, double s, double l, Rectangle region]) {
+
+  shiftHSL([double h, double s, double l, Rectangle region]) {
 
 //    if ( h ==  null) { h = false; }
 //    if ( s ==  null) { s = false; }
 //    if ( l ==  null) { l = false; }
 
-    if (h == null && s == null && l == null)
-    {
+    if (h == null && s == null && l == null) {
       return;
     }
 
-    if (region == null)
-    {
+    if (region == null) {
       region = new Rectangle(0, 0, this.width, this.height);
     }
 
-    var pixel = Color.createColor();
+    Color pixel = Color.createColor();
 
-    for (int y = region.y; y < region.bottom; y++)
-    {
-      for (int x = region.x; x < region.right; x++)
-      {
+    for (int y = region.y; y < region.bottom; y++) {
+      for (int x = region.x; x < region.right; x++) {
         Color.unpackPixel(this.getPixel32(x, y), pixel, true);
 
-        if (h != null)
-        {
-          pixel.h = Math.wrap(pixel.h + h, 0, 1);
+        if (h != null) {
+          pixel.h = Math.wrap(pixel.h + h, 0.0, 1.0);
         }
 
-        if (s != null)
-        {
+        if (s != null) {
           pixel.s = Math.limitValue(pixel.s + s, 0, 1);
         }
 
-        if (l != null)
-        {
+        if (l != null) {
           pixel.l = Math.limitValue(pixel.l + l, 0, 1);
         }
 
         Color.HSLtoRGB(pixel.h, pixel.s, pixel.l, pixel);
         this.setPixel32(x, y, pixel.r, pixel.g, pixel.b, pixel.a, false);
+
       }
     }
 
+
     this.context.putImageData(this.imageData, 0, 0);
     this.dirty = true;
-
+    //this.refreshBuffer();
   }
 
   /**
@@ -611,23 +635,25 @@ class BitmapData {
    * @param {number} alpha - The alpha color value, between 0 and 0xFF (255).
    * @param {boolean} [immediate=true] - If `true` the context.putImageData will be called and the dirty flag set.
    */
-  setPixel32 (int x, int y, int red, int green, int blue, int alpha, [bool immediate =true]) {
+
+  setPixel32(int x, int y, int red, int green, int blue, int alpha, [bool immediate =true]) {
 
     //if ( immediate == null) { immediate = true; }
-
-    if (x >= 0 && x <= this.width && y >= 0 && y <= this.height)
-    {
-      if (Device.LITTLE_ENDIAN)
-      {
-        this.pixels[y * this.width + x] = (alpha << 24) | (blue << 16) | (green << 8) | red;
+    int index = y * this.width + x;
+    if (x >= 0 && x <= this.width && y >= 0 && y <= this.height) {
+      if (Device.LITTLE_ENDIAN) {
+        this.pixels[index] = (alpha << 24) | (blue << 16) | (green << 8) | red;
       }
-      else
-      {
-        this.pixels[y * this.width + x] = (red << 24) | (green << 16) | (blue << 8) | alpha;
+      else {
+        this.pixels[index] = (red << 24) | (green << 16) | (blue << 8) | alpha;
       }
+      int i = index * 4;
+      this.imageData.data[i++] = red;
+      this.imageData.data[i++] = green;
+      this.imageData.data[i++] = blue;
+      this.imageData.data[i] = alpha;
 
-      if (immediate)
-      {
+      if (immediate) {
         this.context.putImageData(this.imageData, 0, 0);
         this.dirty = true;
       }
@@ -647,7 +673,8 @@ class BitmapData {
    * @param {number} alpha - The alpha color value, between 0 and 0xFF (255).
    * @param {boolean} [immediate=true] - If `true` the context.putImageData will be called and the dirty flag set.
    */
-  setPixel (int x, int y, int red, int green, int blue, [bool immediate=true]) {
+
+  setPixel(int x, int y, int red, int green, int blue, [bool immediate=true]) {
     this.setPixel32(x, y, red, green, blue, 255, immediate);
   }
 
@@ -662,10 +689,10 @@ class BitmapData {
    * @param {object} [out] - An object into which 4 properties will be created: r, g, b and a. If not provided a new object will be created.
    * @return {object} An object with the red, green, blue and alpha values set in the r, g, b and a properties.
    */
-  Color getPixel (int x, int y, Color out) {
 
-    if (out == null)
-    {
+  Color getPixel(int x, int y, Color out) {
+
+    if (out == null) {
       out = Color.createColor();
     }
 
@@ -693,12 +720,12 @@ class BitmapData {
    * @param {number} y - The y coordinate of the pixel to be set. Must lay within the dimensions of this BitmapData.
    * @return {number} A native color value integer (format: 0xAARRGGBB)
    */
-  int getPixel32 (int x, int y) {
-    if (x >= 0 && x <= this.width && y >= 0 && y <= this.height)
-    {
+
+  int getPixel32(int x, int y) {
+    if (x >= 0 && x <= this.width && y >= 0 && y <= this.height) {
       return this.pixels[y * this.width + x];
     }
-    
+
     return null;
   }
 
@@ -715,7 +742,8 @@ class BitmapData {
    * @param {boolean} [hsv=false] - Also convert the rgb values into hsv?
    * @return {object} An object with the red, green and blue values set in the r, g and b properties.
    */
-  Color getPixelRGB (int x, int y, [Color out, bool hsl=false, bool hsv=false]) {
+
+  Color getPixelRGB(int x, int y, [Color out, bool hsl=false, bool hsv=false]) {
     return Color.unpackPixel(this.getPixel32(x, y), out, hsl, hsv);
   }
 
@@ -726,7 +754,8 @@ class BitmapData {
    * @param {Phaser.Rectangle} rect - The Rectangle region to get.
    * @return {ImageData} Returns a ImageData object containing a Uint8ClampedArray data property.
    */
-  ImageData getPixels (Rectangle rect) {
+
+  ImageData getPixels(Rectangle rect) {
     return this.context.getImageData(rect.x, rect.y, rect.width, rect.height);
   }
 
@@ -738,7 +767,8 @@ class BitmapData {
    * @param {number} [y=0] - The y coordinate to place the image at.
    * @return {Phaser.Image} The newly added Image object.
    */
-  GameObject addToWorld ([int x=0, int y=0]) {
+
+  GameObject addToWorld([int x=0, int y=0]) {
     return this.game.add.image(x, y, this);
   }
 
@@ -751,10 +781,10 @@ class BitmapData {
    * @param {number} x - The destination x coordinate to copy the image to.
    * @param {number} y - The destination y coordinate to copy the image to.
    */
-  copyPixels (source, Rectangle area, int x, int y) {
 
-    if ( source is String)
-    {
+  copyPixels(source, Rectangle area, int x, int y) {
+
+    if (source is String) {
       source = this.game.cache.getImage(source);
     }
 
@@ -762,17 +792,14 @@ class BitmapData {
     int sx = 0;
     int sy = 0;
 
-    if (source is Image || source is Sprite)
-    {
+    if (source is Image || source is Sprite) {
       src = source.texture.baseTexture.source;
       Frame frame = source.texture.frame;
       sx = frame.x;
       sy = frame.y;
     }
-    else
-    {
-      if (source is BitmapData)
-      {
+    else {
+      if (source is BitmapData) {
         src = source.canvas;
       }
     }
@@ -794,13 +821,17 @@ class BitmapData {
    * @param {number} [width] - The width when drawing the image. You can use this to optionally stretch the drawn image horizontally.
    * @param {number} [height] - The height when drawing the image. You can use this to optionally stretch the drawn image vertically.
    */
-  draw (source, [int x=0, int y=0, int width, height]) {
 
-    if ( x == null) { x = 0; }
-    if ( y == null) { y = 0; }
+  draw(source, [int x=0, int y=0, int width, height]) {
 
-    if ( source is String)
-    {
+    if (x == null) {
+      x = 0;
+    }
+    if (y == null) {
+      y = 0;
+    }
+
+    if (source is String) {
       source = this.game.cache.getImage(source);
     }
 
@@ -810,8 +841,7 @@ class BitmapData {
     var sw = 0;
     var sh = 0;
 
-    if (source is Image || source is Sprite)
-    {
+    if (source is Image || source is Sprite) {
       src = source.texture.baseTexture.source;
       Frame frame = source.texture.frame;
       sx = frame.x;
@@ -820,10 +850,8 @@ class BitmapData {
       sh = frame.height;
       // this.context.drawImage(sprite.texture.baseTexture.source, frame.x, frame.y, frame.width, frame.height, x, y, frame.width, frame.height);
     }
-    else
-    {
-      if (source is BitmapData)
-      {
+    else {
+      if (source is BitmapData) {
         src = source.canvas;
         // this.context.drawImage(source.canvas, 0, 0, source.width, source.height, x, y, source.width, source.height);
       }
@@ -833,8 +861,12 @@ class BitmapData {
       // this.context.drawImage(source, 0, 0, source.width, source.height, x, y, source.width, source.height);
     }
 
-    if ( width == null) { width = sw; }
-    if ( height == null) { height = sh; }
+    if (width == null) {
+      width = sw;
+    }
+    if (height == null) {
+      height = sh;
+    }
 
     this.context.drawImageScaledFromSource(src, sx, sy, sw, sh, x, y, width, height);
 
@@ -853,9 +885,14 @@ class BitmapData {
    * @param {number} [x=0] - The x coordinate to draw the Sprite to.
    * @param {number} [y=0] - The y coordinate to draw the Sprite to.
    */
-  drawSprite (sprite, [int x, int y]) {
-    if ( x == null) { x = 0; }
-    if ( y == null) { y = 0; }
+
+  drawSprite(sprite, [int x, int y]) {
+    if (x == null) {
+      x = 0;
+    }
+    if (y == null) {
+      y = 0;
+    }
     this.draw(sprite, x, y);
   }
 
@@ -868,29 +905,28 @@ class BitmapData {
    * @param {Phaser.Rectangle} [sourceRect] - A Rectangle where x/y define the coordinates to draw the Source image to and width/height define the size.
    * @param {Phaser.Rectangle} [maskRect] - A Rectangle where x/y define the coordinates to draw the Mask image to and width/height define the size.
    */
-  alphaMask (source, mask,Rectangle sourceRect,Rectangle maskRect) {
 
-    if ( mask == null ) { mask = this; }
+  alphaMask(source, mask, Rectangle sourceRect, Rectangle maskRect) {
+
+    if (mask == null) {
+      mask = this;
+    }
 
     var temp = this.context.globalCompositeOperation;
 
-    if ( maskRect == null || maskRect == null)
-    {
+    if (maskRect == null || maskRect == null) {
       this.draw(mask);
     }
-    else
-    {
+    else {
       this.draw(mask, maskRect.x, maskRect.y, maskRect.width, maskRect.height);
     }
 
     this.context.globalCompositeOperation = 'source-atop';
 
-    if ( sourceRect == null || sourceRect == null)
-    {
+    if (sourceRect == null || sourceRect == null) {
       this.draw(source);
     }
-    else
-    {
+    else {
       this.draw(source, sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height);
     }
 
@@ -924,27 +960,35 @@ class BitmapData {
    * @param {number} [b2] - An alternative blue color component to be written to the destination, in the range 0 - 255.
    * @returns {Phaser.BitmapData} The BitmapData that the extract pixels were drawn on.
    */
-  BitmapData extract (BitmapData destination, int r, int g, int b, [int a=255, bool resize, int r2, int g2, int b2]) {
 
-    if ( a == null) { a = 255; }
-    if ( resize == null) { resize = false; }
-    if ( r2 == null) { r2 = r; }
-    if ( g2 == null) { g2 = g; }
-    if ( b2 == null) { b2 = b; }
+  BitmapData extract(BitmapData destination, int r, int g, int b, [int a=255, bool resize, int r2, int g2, int b2]) {
 
-    if (resize)
-    {
+    if (a == null) {
+      a = 255;
+    }
+    if (resize == null) {
+      resize = false;
+    }
+    if (r2 == null) {
+      r2 = r;
+    }
+    if (g2 == null) {
+      g2 = g;
+    }
+    if (b2 == null) {
+      b2 = b;
+    }
+
+    if (resize) {
       destination.resize(this.width, this.height);
     }
 
     this.processPixelRGB(
-        (pixel, x, y)
-        {
-        if (pixel.r == r && pixel.g == g && pixel.b == b)
-        {
-        destination.setPixel32(x, y, r2, g2, b2, a, false);
-        }
-        return false;
+            (pixel, x, y) {
+          if (pixel.r == r && pixel.g == g && pixel.b == b) {
+            destination.setPixel32(x, y, r2, g2, b2, a, false);
+          }
+          return false;
         });
 
     destination.context.putImageData(destination.imageData, 0, 0);
@@ -964,9 +1008,9 @@ class BitmapData {
    * @param {number} height - The height of the Rectangle.
    * @param {string} [fillStyle] - If set the context fillStyle will be set to this value before the rect is drawn.
    */
-  rect (int x, int y, int width, int height, [String fillStyle]) {
-    if ( fillStyle != null)
-    {
+
+  rect(int x, int y, int width, int height, [String fillStyle]) {
+    if (fillStyle != null) {
       this.context.fillStyle = fillStyle;
     }
     this.context.fillRect(x, y, width, height);
@@ -981,10 +1025,10 @@ class BitmapData {
    * @param {number} radius - The radius of the Circle in pixels. The radius is half the diameter.
    * @param {string} [fillStyle] - If set the context fillStyle will be set to this value before the circle is drawn.
    */
-  circle (int x, int y, num radius, [String fillStyle]) {
 
-    if ( fillStyle != null)
-    {
+  circle(int x, int y, num radius, [String fillStyle]) {
+
+    if (fillStyle != null) {
       this.context.fillStyle = fillStyle;
     }
 
@@ -1003,10 +1047,10 @@ class BitmapData {
    *
    * @method Phaser.BitmapData#render
    */
-  render () {
 
-    if (!this.disableTextureUpload && this.game.renderType == WEBGL && this.dirty)
-    {
+  render() {
+
+    if (!this.disableTextureUpload && this.game.renderType == WEBGL && this.dirty) {
       //  Only needed if running in WebGL, otherwise this array will never get cleared down
       //  should use the rendersession
       PIXI.updateWebGLTexture(this.baseTexture, this.game.renderer.gl);
@@ -1015,8 +1059,6 @@ class BitmapData {
     }
 
   }
-
-
 
 
 }
