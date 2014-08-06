@@ -58,8 +58,9 @@ class Particle extends Sprite {
 
       if (this._s >= 0)
       {
+        //this.scale.set(0.5,0.5);
         this.scale.set(this.scaleData[this._s]['x'], this.scaleData[this._s]['y']);
-        print(this.scale.x);
+        //print(this._s);
       }
       else
       {
@@ -98,7 +99,7 @@ class Particle extends Sprite {
    * @method Phaser.Particle#setAlphaData
    * @memberof Phaser.Particle
    */
-  setAlphaData (data) {
+  setAlphaData (List<Map<String,num>> data) {
 
     this.alphaData = data;
     this._a = data.length - 1;
@@ -113,7 +114,7 @@ class Particle extends Sprite {
    * @method Phaser.Particle#setScaleData
    * @memberof Phaser.Particle
    */
-  setScaleData (data) {
+  setScaleData (List<Map<String,num>> data) {
 
     this.scaleData = data;
     this._s = data.length - 1;

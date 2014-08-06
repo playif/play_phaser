@@ -403,6 +403,7 @@ class Emitter extends Group {
    * Called automatically by the game loop, decides when to launch particles and when to "die".
    * @method Phaser.Particles.Arcade.Emitter#update
    */
+
   update() {
 
     if (this.on) {
@@ -454,6 +455,7 @@ class Emitter extends Group {
    * @param {boolean} [collideWorldBounds=false] - A particle can be set to collide against the World bounds automatically and rebound back into the World if this is set to true. Otherwise it will leave the World.
    * @return {Phaser.Particles.Arcade.Emitter} This Emitter instance.
    */
+
   makeParticles(keys, [frames = 0, int quantity, bool collide = false, bool collideWorldBounds = false]) {
 
     if (frames == null) {
@@ -516,6 +518,7 @@ class Emitter extends Group {
    *
    * @method Phaser.Particles.Arcade.Emitter#kill
    */
+
   kill() {
 
     this.on = false;
@@ -529,6 +532,7 @@ class Emitter extends Group {
    *
    * @method Phaser.Particles.Arcade.Emitter#revive
    */
+
   revive() {
 
     this.alive = true;
@@ -543,6 +547,7 @@ class Emitter extends Group {
    * @param {number} [lifespan=0] - How long each particle lives once emitted in ms. 0 = forever.
    * @param {number} [quantity=0] - How many particles to launch.
    */
+
   explode([num lifespan = 0, num quantity = 0]) {
     this.start(true, lifespan, 0, quantity, false);
   }
@@ -555,6 +560,7 @@ class Emitter extends Group {
    * @param {number} [frequency=250] - Frequency is how often to emit a particle, given in ms.
    * @param {number} [quantity=0] - How many particles to launch.
    */
+
   flow([num lifespan = 0, num frequency = 0, num quantity = 0]) {
     this.start(false, lifespan, frequency, quantity, true);
   }
@@ -569,6 +575,7 @@ class Emitter extends Group {
    * @param {number} [quantity=0] - How many particles to launch. 0 = "all of the particles".
    * @param {number} [forceQuantity=false] - If true and creating a particle flow, the quantity emitted will be forced to the be quantity given in this call.
    */
+
   start([bool explode = true, num lifespan = 0, num frequency = 250, int quantity = 0, bool forceQuantity = false]) {
 
     if (explode == null) {
@@ -612,6 +619,7 @@ class Emitter extends Group {
    *
    * @method Phaser.Particles.Arcade.Emitter#emitParticle
    */
+
   emitParticle() {
 
     Particle particle = this.getFirstExists(false);
@@ -683,6 +691,7 @@ class Emitter extends Group {
    * @param {number} width - The desired width of the emitter (particles are spawned randomly within these dimensions).
    * @param {number} height - The desired height of the emitter.
    */
+
   setSize(num width, num height) {
     this.area.width = width;
     this.area.height = height;
@@ -694,6 +703,7 @@ class Emitter extends Group {
    * @param {number} [min=0] - The minimum value for this range.
    * @param {number} [max=0] - The maximum value for this range.
    */
+
   setXSpeed([num min = 0, num max = 0]) {
 //    min = min || 0;
 //    max = max || 0;
@@ -707,6 +717,7 @@ class Emitter extends Group {
    * @param {number} [min=0] - The minimum value for this range.
    * @param {number} [max=0] - The maximum value for this range.
    */
+
   setYSpeed([num min = 0, num max = 0]) {
     this.minParticleSpeed.y = min;
     this.maxParticleSpeed.y = max;
@@ -719,6 +730,7 @@ class Emitter extends Group {
    * @param {number} [min=0] - The minimum value for this range.
    * @param {number} [max=0] - The maximum value for this range.
    */
+
   setRotation([num min = 0, num max = 0]) {
     this.minRotation = min;
     this.maxRotation = max;
@@ -736,6 +748,7 @@ class Emitter extends Group {
    * @param {number} [ease=Phaser.Easing.Linear.None] - If you've set a rate > 0 this is the easing formula applied between the min and max values.
    * @param {boolean} [yoyo=false] - If you've set a rate > 0 you can set if the ease will yoyo or not (i.e. ease back to its original values)
    */
+
   setAlpha([num min = 1, num max = 1, num rate = 0, tween.TweenEquation ease, bool yoyo = false]) {
 
     if (min == null) {
@@ -760,17 +773,17 @@ class Emitter extends Group {
 
     if (rate > 0 && min != max) {
       Map tweenData = {
-        'v': min
+          'v': min
       };
       Tween tween = this.game.make.tween(tweenData).to({
-        'v': max
+          'v': max
       }, rate, ease);
       tween.yoyo(yoyo);
- 
+
       this.alphaData = tween.generateData(60);
 
       //  Inverse it so we don't have to do array length look-ups in Particle update loops
-      this.alphaData;
+      this.alphaData=this.alphaData.reversed.toList();;
       this.autoAlpha = true;
     }
 
@@ -790,6 +803,7 @@ class Emitter extends Group {
    * @param {number} [ease=Phaser.Easing.Linear.None] - If you've set a rate > 0 this is the easing formula applied between the min and max values.
    * @param {boolean} [yoyo=false] - If you've set a rate > 0 you can set if the ease will yoyo or not (i.e. ease back to its original values)
    */
+
   setScale([num minX = 1, num maxX = 1, num minY = 1, num maxY = 1, num rate = 0, tween.TweenEquation ease, bool yoyo = false]) {
 
     if (minX == null) {
@@ -824,20 +838,21 @@ class Emitter extends Group {
     this.autoScale = false;
 
     if (rate > 0 && (minX != maxX) || (minY != maxY)) {
-      Point tweenData = new Point()
-          ..x = minX
-          ..y = minY;
+      Map tweenData = {
+          'x' : minX,
+          'y' : minY
+      };
 
       Tween tween = this.game.make.tween(tweenData).to({
-        'x': maxX,
-        'y': maxY
+          'x': maxX,
+          'y': maxY
       }, rate, ease);
       tween.yoyo(yoyo);
 
       this.scaleData = tween.generateData(60);
 
       //  Inverse it so we don't have to do array length look-ups in Particle update loops
-      this.scaleData;
+      this.scaleData=this.scaleData.reversed.toList();
       this.autoScale = true;
     }
 
@@ -850,6 +865,7 @@ class Emitter extends Group {
    * @method Phaser.Particles.Arcade.Emitter#at
    * @param {object|Phaser.Sprite|Phaser.Image|Phaser.TileSprite|Phaser.Text|PIXI.DisplayObject} object - The object that you wish to match the center with.
    */
+
   at(GameObject object) {
 
     if (object.center != null) {

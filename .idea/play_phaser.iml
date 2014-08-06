@@ -3,6 +3,7 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/example/animation/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/arcade_physics/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/assets/audio/SoundEffects/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/assets/audio/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/assets/audio/protracker/packages" />

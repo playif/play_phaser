@@ -91,7 +91,7 @@ main() {
     game.state.start(select.children[select.selectedIndex].text);
   });
 
-  game.state.start("arcade_physics_34_quadtree");
+  game.state.start("particles_01_auto_scale");
 
   //game.canvas.style.cursor = "pointer";
   //game.boot();
