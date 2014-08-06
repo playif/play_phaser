@@ -19,14 +19,14 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
 
   List<num> _cache;
   Rectangle _currentBounds;
-  
+
   Point center;
 
   int _frame;
   String _frameName;
   Point world;
   Point _scroll;
-  List<GameObject> children;
+  List<GameObject> children = [];
   Rectangle _bounds;
 
   bool checkWorldBounds;
@@ -35,20 +35,20 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
   bool autoCull;
   Point cameraOffset;
 
-  CanvasPattern __tilePattern;
+  //CanvasPattern __tilePattern;
 
-  setTexture(PIXI.Texture texture){
+  setTexture(PIXI.Texture texture) {
 
   }
 
   GameObject bringToTop([GameObject child]) {
-    if(child == null){
+    if (child == null) {
       if (this.parent != null) {
         this.parent.bringToTop(this);
       }
-      return this; 
+      return this;
     }
-    else{
+    else {
       if (child.parent == this && this.children.indexOf(child) < this.children.length) {
         this.removeChild(child);
         this.addChild(child);
@@ -57,7 +57,7 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
     }
   }
 
-  centerOn(num x, num y){
+  centerOn(num x, num y) {
     throw new Exception("Not implement yet!");
   }
 
@@ -306,6 +306,12 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
 
   TileSprite(this.game, [num x=0, num y=0, int width=256, int height=256, key, frame])
   :super(PIXI.TextureCache['__default'], width, height) {
+    this.x=x;
+    this.y=0;
+    this.width=width;
+    this.height=height;
+    this.key=key;
+    this._frame=frame;
     //x = x || 0;
     //y = y || 0;
     //width = width || 256;

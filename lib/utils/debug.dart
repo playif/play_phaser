@@ -109,7 +109,7 @@ class Debug {
       this.context = this.game.context;
     } else {
       RenderTexture texture=new RenderTexture(this.game,this.game.width,this.game.height);
-      //this.canvas = Canvas.create(this.game.width, this.game.height, '', true);
+      this.canvas = Canvas.create(this.game.width, this.game.height, '', true);
       this.context = this.canvas.getContext('2d');
       this.baseTexture = new PIXI.BaseTexture(this.canvas);
       this.texture = new PIXI.Texture(this.baseTexture);

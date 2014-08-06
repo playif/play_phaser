@@ -179,7 +179,7 @@ class GameObjectFactory {
    * @return {Phaser.TileSprite} The newly created tileSprite object.
    */
 
-  TileSprite tileSprite(int x, int y, int width, int height, String key, frame, [Group group]) {
+  TileSprite tileSprite(int x, int y, int width, int height, String key, [frame=0, Group group]) {
 
     if (group == null) {
       group = this.world;

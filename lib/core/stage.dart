@@ -216,7 +216,7 @@ class Stage extends PIXI.Stage implements GameObject {
 
       var i = this.children.length;
 
-      while (i--) {
+      while (i-- > 0) {
         if (this.children[i] != this.game.world.camera.target) {
           this.children[i].postUpdate();
         }

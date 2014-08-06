@@ -26,6 +26,8 @@ part "particles/particles_01_auto_scale.dart";
 
 part "arcade_physics/arcade_physics_34_quadtree.dart";
 
+part "camera/camera_01_basic_follow.dart";
+
 Map<String, State> examples = {
     "basic_01_load_an_image": new basic_01_load_an_image(),
     "basic_02_click_on_an_image": new basic_02_click_on_an_image(),
@@ -52,6 +54,8 @@ Map<String, State> examples = {
     "particles_01_auto_scale": new particles_01_auto_scale(),
 
     "arcade_physics_34_quadtree": new arcade_physics_34_quadtree(),
+
+    "camera_01_basic_follow": new camera_01_basic_follow(),
 };
 
 main() {
@@ -77,7 +81,7 @@ main() {
   //var game = new Game(width, height, CANVAS, '');
 
 
-  Game game = new Game(800, 600, CANVAS, '');
+  Game game = new Game(800, 600, WEBGL, '');
 
   dom.SelectElement select = dom.document.getElementById("examples") as dom.SelectElement;
   for (String key in examples.keys) {
