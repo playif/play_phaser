@@ -614,7 +614,7 @@ class Emitter extends Group {
    */
   emitParticle() {
 
-    var particle = this.getFirstExists(false);
+    Particle particle = this.getFirstExists(false);
 
     if (particle == null) {
       return;

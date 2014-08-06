@@ -24,6 +24,8 @@ part "input/input_01_bring_a_child_to_top.dart";
 
 part "particles/particles_01_auto_scale.dart";
 
+part "arcade_physics/arcade_physics_34_quadtree.dart";
+
 Map<String, State> examples = {
     "basic_01_load_an_image": new basic_01_load_an_image(),
     "basic_02_click_on_an_image": new basic_02_click_on_an_image(),
@@ -48,6 +50,8 @@ Map<String, State> examples = {
 
 
     "particles_01_auto_scale": new particles_01_auto_scale(),
+
+    "arcade_physics_34_quadtree": new arcade_physics_34_quadtree(),
 };
 
 main() {
@@ -87,7 +91,7 @@ main() {
     game.state.start(select.children[select.selectedIndex].text);
   });
 
-  game.state.start("tweens_01_chained_tweens");
+  game.state.start("arcade_physics_34_quadtree");
 
   //game.canvas.style.cursor = "pointer";
   //game.boot();

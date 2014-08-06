@@ -4,7 +4,7 @@ class Particles {
   Map Arcade = {};
   static int ID=0;
   Game game;
-  Map emitters;
+  Map<String,Emitter> emitters;
 //  int ID;
 
   Particles(this.game) {

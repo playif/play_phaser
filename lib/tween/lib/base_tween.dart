@@ -59,12 +59,15 @@ abstract class BaseTween<T> {
 
     _isAutoRemoveEnabled = _isAutoStartEnabled = true;
   }
+  
+
 
   // -------------------------------------------------------------------------
   // API
   // -------------------------------------------------------------------------
   void build(){
   }
+  
 
   /**
    * Starts or restarts the object unmanaged. If no [manager] is passed, you will need to take care of

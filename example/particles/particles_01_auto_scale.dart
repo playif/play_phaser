@@ -1,8 +1,8 @@
 part of example;
 
 class particles_01_auto_scale extends State {
-  var emitter;
-  var x;
+  Emitter emitter;
+  //var x;
 
   preload() {
 
@@ -29,7 +29,7 @@ class particles_01_auto_scale extends State {
 
     emitter.setRotation(0, 0);
     emitter.setAlpha(0.1, 1, 3000);
-    emitter.setScale(0.1, 1, 0.1, 1, 6000, Easing.Quart.OUT);
+    emitter.setScale(0.1, 1, 0.1, 1, 6000, Easing.Quintic.Out);
     emitter.gravity = -200;
 
     emitter.start(false, 5000, 10);

@@ -17,7 +17,7 @@ class QuadTree {
 
   List<dynamic> objects = new List<dynamic>();
 
-  List<QuadTree> nodes = new List<QuadTree>();
+  List<QuadTree> nodes = new List<QuadTree>(4);
 
   List _empty = [];
 
@@ -32,17 +32,20 @@ class QuadTree {
     this.level = level == null ? 0 : level;
 
     this.bounds = new Bounds()
-      ..x = Math.round(x)
-      ..y = Math.round(y)
-      ..width = width
-      ..height = height
-      ..subWidth = Math.floor(width / 2)
-      ..subHeight = Math.floor(height / 2)
-      ..right = Math.round(x) + Math.floor(width / 2)
-      ..bottom = Math.round(y) + Math.floor(height / 2);
+        ..x = Math.round(x)
+        ..y = Math.round(y)
+        ..width = width
+        ..height = height
+        ..subWidth = Math.floor(width / 2)
+        ..subHeight = Math.floor(height / 2)
+        ..right = Math.round(x) + Math.floor(width / 2)
+        ..bottom = Math.round(y) + Math.floor(height / 2);
 
     this.objects.clear();
-    this.nodes.clear();
+//    for(int i=0;i<this.nodes.length;i++){
+//      this.nodes[i]=new
+//    }
+    this.nodes[0] = this.nodes[1] = this.nodes[2] = this.nodes[3] = null;
   }
 
 
@@ -105,8 +108,7 @@ class QuadTree {
         if (index != -1) {
           //  this is expensive - see what we can do about it
           this.nodes[index].insert(this.objects.removeAt(i));
-        }
-        else {
+        } else {
           i++;
         }
       }
@@ -123,19 +125,16 @@ class QuadTree {
       if (rect.y < this.bounds.bottom && rect.bottom < this.bounds.bottom) {
         //  rect fits within the top-left quadrant of this quadtree
         index = 1;
-      }
-      else if (rect.y > this.bounds.bottom) {
+      } else if (rect.y > this.bounds.bottom) {
         //  rect fits within the bottom-left quadrant of this quadtree
         index = 2;
       }
-    }
-    else if (rect.x > this.bounds.right) {
+    } else if (rect.x > this.bounds.right) {
       //  rect can completely fit within the right quadrants
       if (rect.y < this.bounds.bottom && rect.bottom < this.bounds.bottom) {
         //  rect fits within the top-right quadrant of this quadtree
         index = 0;
-      }
-      else if (rect.y > this.bounds.bottom) {
+      } else if (rect.y > this.bounds.bottom) {
         //  rect fits within the bottom-right quadrant of this quadtree
         index = 3;
       }
@@ -146,13 +145,12 @@ class QuadTree {
   }
 
   List retrieve(source) {
-    var index = -1;
+    int index = -1;
     List returnObjects = null;
     if (source is Rectangle) {
       returnObjects = this.objects;
       index = this.getIndex(source);
-    }
-    else {
+    } else {
       if (source.body == null) {
         return this._empty;
       }
@@ -160,12 +158,11 @@ class QuadTree {
       index = this.getIndex(source.body);
     }
 
-    if (this.nodes[0] != null) {
+    if (this.nodes.length > 0 && this.nodes[0] != null) {
       //  If rect fits into a subnode ..
       if (index != -1) {
         returnObjects.addAll(this.nodes[index].retrieve(source));
-      }
-      else {
+      } else {
         //  If rect does not fit into a subnode, check it against all subnodes (unrolled for speed)
         returnObjects.addAll(this.nodes[0].retrieve(source));
         returnObjects.addAll(this.nodes[1].retrieve(source));
@@ -184,12 +181,14 @@ class QuadTree {
 
     var i = this.nodes.length;
 
-    while (i-- != 0) {
-      this.nodes[i].clear();
-      this.nodes.removeAt(i);
+    while (i-- > 0) {
+      if(this.nodes[i] != null){
+        this.nodes[i].clear();
+        this.nodes[i]=null;
+      }
     }
 
-    this.nodes.clear();
+    //this.nodes.clear();
   }
 
 }

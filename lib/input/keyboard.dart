@@ -1,5 +1,10 @@
 part of Phaser;
 
+class CursorKeys {
+  Key up, down, left, right;
+}
+
+
 class Keyboard {
   Game game;
   bool disabled;
@@ -12,8 +17,8 @@ class Keyboard {
   Function onDownCallback = null;
   Function onPressCallback = null;
   Function onUpCallback = null;
-  Map<int,Key> _keys;
-  Map<int,bool> _capture;
+  Map<int, Key> _keys;
+  Map<int, bool> _capture;
 
   Function _onKeyDown;
   Function _onKeyPress;
@@ -78,13 +83,15 @@ class Keyboard {
      * @property {array<Phaser.Key>} _keys - The array the Phaser.Key objects are stored in.
      * @private
      */
-    this._keys = {};
+    this._keys = {
+    };
 
     /**
      * @property {array} _capture - The array the key capture values are stored in.
      * @private
      */
-    this._capture = {};
+    this._capture = {
+    };
 
     /**
      * @property {function} _onKeyDown
@@ -158,16 +165,12 @@ class Keyboard {
    * @return {Phaser.Key} The Key object which you can store locally and reference directly.
    */
 
-  addKey(keycode) {
-
-    if (this._keys[keycode] ==null) {
+  Key addKey(int keycode) {
+    if (this._keys[keycode] == null) {
       this._keys[keycode] = new Key(this.game, keycode);
-
       this.addKeyCapture(keycode);
     }
-
     return this._keys[keycode];
-
   }
 
   /**
@@ -179,7 +182,7 @@ class Keyboard {
 
   removeKey(keycode) {
 
-    if (this._keys[keycode] !=null) {
+    if (this._keys[keycode] != null) {
       this._keys[keycode] = null;
 
       this.removeKeyCapture(keycode);
@@ -194,15 +197,12 @@ class Keyboard {
    * @return {object} An object containing properties: up, down, left and right. Which can be polled like any other Phaser.Key object.
    */
 
-  createCursorKeys() {
-
-    return {
-        'up': this.addKey(Keyboard.UP),
-        'down': this.addKey(Keyboard.DOWN),
-        'left': this.addKey(Keyboard.LEFT),
-        'right': this.addKey(Keyboard.RIGHT)
-    };
-
+  CursorKeys createCursorKeys() {
+    return new CursorKeys()
+      ..up = this.addKey(Keyboard.UP)
+      ..down = this.addKey(Keyboard.DOWN)
+      ..left = this.addKey(Keyboard.LEFT)
+      ..right = this.addKey(Keyboard.RIGHT);
   }
 
   /**
@@ -337,7 +337,7 @@ class Keyboard {
 
     this._i = this._keys.length;
 
-    while (this._i-- >0) {
+    while (this._i-- > 0) {
       if (this._keys[this._i] != null) {
         this._keys[this._i].update();
       }
@@ -362,7 +362,7 @@ class Keyboard {
     }
 
     //   The event is being captured but another hotkey may need it
-    if (this._capture[event.keyCode] !=null) {
+    if (this._capture[event.keyCode] != null) {
       event.preventDefault();
     }
 
@@ -428,7 +428,7 @@ class Keyboard {
 
     this._keys[event.keyCode].processKeyUp(event);
 
-    if (this.onUpCallback !=null) {
+    if (this.onUpCallback != null) {
       this.onUpCallback.call(this.callbackContext, event);
     }
 
@@ -449,7 +449,7 @@ class Keyboard {
 
     var i = this._keys.length;
 
-    while (i-- >0) {
+    while (i-- > 0) {
       if (this._keys[i] != null) {
         this._keys[i].reset(hard);
       }

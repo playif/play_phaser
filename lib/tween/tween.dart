@@ -297,7 +297,7 @@ class Tween {
       data.add(getCurrentState(_initVal.keys));
       this._timeline.update(rate);
     }
-
+    data.add(getCurrentState(_initVal.keys));
     return data;
     //this._timeline.getChildren()[0].
 

@@ -14,8 +14,8 @@ class Arcade {
   bool forceX;
 
   QuadTree quadTree;
-  int _overlap;
-  int _maxOverlap;
+  num _overlap;
+  num _maxOverlap;
   num _velocity1;
   num _velocity2;
   num _newVelocity1;

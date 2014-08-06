@@ -14,7 +14,7 @@ class tweens_01_chained_tweens extends State {
     var tween = game.add.tween(sprite).to({
         'x': 300,
         //ALPHA: 0.1,
-    }, 2000, Easing.Quart.OUT, false, 0, 0, false)
+    }, 2000, Easing.Quintic.Out, false, 0, 0, false)
 //    .delay(40)
 //    .to({
 //        X: 500

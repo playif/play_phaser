@@ -268,7 +268,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
     }
   }
 
-  create(num x, num y, String key, int frame, [bool exists=true]) {
+  create(num x, num y, String key, [int frame=0, bool exists=true]) {
 
 
     //var child = new this.classType(this.game, x, y, key, frame);
@@ -839,9 +839,10 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
 
   forEach(Function callback, [bool checkExists=false]) {
     for (int i = 0, len = this.children.length; i < len; i++) {
-      if (checkExists && this.children[i].exists) {
-
-      } else {
+      if(checkExists == false){
+        callback(this.children[i]);
+      }
+      else if (this.children[i].exists) {
         callback(this.children[i]);
       }
     }
@@ -993,7 +994,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
 
   GameObject getFirstExists([bool state=true]) {
     return this.children.firstWhere((GameObject child) {
-      return child.exists;
+      return child.exists==state;
     }, orElse:() {
       return null;
     });

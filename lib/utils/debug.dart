@@ -103,14 +103,11 @@ class Debug {
    * @method Phaser.Utils.Debug#boot
    * @protected
    */
-  boot () {
+  boot() {
 
-    if (this.game.renderType == CANVAS)
-    {
+    if (this.game.renderType == CANVAS) {
       this.context = this.game.context;
-    }
-    else
-    {
+    } else {
       this.canvas = Canvas.create(this.game.width, this.game.height, '', true);
       this.context = this.canvas.getContext('2d');
       this.baseTexture = new PIXI.BaseTexture(this.canvas);
@@ -127,10 +124,9 @@ class Debug {
    *
    * @method Phaser.Utils.Debug#preUpdate
    */
-  preUpdate () {
+  preUpdate() {
 
-    if (this.dirty && this.sprite != null)
-    {
+    if (this.dirty && this.sprite != null) {
       this.context.clearRect(0, 0, this.game.width, this.game.height);
       this.dirty = false;
     }
@@ -147,7 +143,7 @@ class Debug {
    * @param {string} [color='rgb(255,255,255)'] - The color the debug text will drawn in.
    * @param {number} [columnWidth=0] - The spacing between columns.
    */
-  start ([num x=0, num y=0, String color='rgb(255,255,255)', num columnWidth=0]) {
+  start([num x = 0, num y = 0, String color = 'rgb(255,255,255)', num columnWidth = 0]) {
 
     //if (typeof x != 'number') { x = 0; }
     //if (typeof y != 'number') { y = 0; }
@@ -160,8 +156,7 @@ class Debug {
     this.currentAlpha = this.context.globalAlpha;
     this.columnWidth = columnWidth;
 
-    if (this.sprite != null)
-    {
+    if (this.sprite != null) {
       this.dirty = true;
     }
 
@@ -180,12 +175,11 @@ class Debug {
    * @method Phaser.Utils.Debug#stop
    * @protected
    */
-  stop () {
+  stop() {
     this.context.restore();
     this.context.globalAlpha = this.currentAlpha;
 
-    if (this.sprite != null)
-    {
+    if (this.sprite != null) {
       PIXI.updateWebGLTexture(this.baseTexture, this.game.renderer.gl);
     }
   }
@@ -196,21 +190,18 @@ class Debug {
    * @method Phaser.Utils.Debug#line
    * @protected
    */
-  line (strs) {
+  line(strs) {
     List<String> arguments;
-    if(strs is String){
-      arguments=[strs];
-    }
-    else{
-      arguments=strs;
+    if (strs is String) {
+      arguments = [strs];
+    } else {
+      arguments = strs;
     }
 
     var x = this.currentX;
 
-    for (var i = 0; i < arguments.length; i++)
-    {
-      if (this.renderShadow)
-      {
+    for (var i = 0; i < arguments.length; i++) {
+      if (this.renderShadow) {
         this.context.fillStyle = 'rgb(0,0,0)';
         this.context.fillText(arguments[i], x + 1, this.currentY + 1);
         this.context.fillStyle = this.currentColor;
@@ -234,7 +225,7 @@ class Debug {
    * @param {number} y - Y position of the debug info to be rendered.
    * @param {string} [color='rgb(255,255,255)'] - color of the debug info to be rendered. (format is css color string).
    */
-  soundInfo (Sound sound, num x, num y, [String color='rgb(255,255,255)']) {
+  soundInfo(Sound sound, num x, num y, [String color = 'rgb(255,255,255)']) {
 
     this.start(x, y, color);
     this.line('Sound: ' + sound.key + ' Locked: ' + sound.game.sound.touchLocked.toString());
@@ -245,8 +236,7 @@ class Debug {
     this.line('Volume: ' + sound.volume.toString() + ' Muted: ' + sound.mute.toString());
     this.line('WebAudio: ' + sound.usingWebAudio.toString() + ' Audio: ' + sound.usingAudioTag.toString());
 
-    if (sound.currentMarker != '')
-    {
+    if (sound.currentMarker != '') {
       this.line('Marker: ' + sound.currentMarker + ' Duration: ' + sound.duration.toString() + ' (ms: ' + sound.durationMS.toString() + ')');
       this.line('Start: ' + sound.markers[sound.currentMarker].start.toString() + ' Stop: ' + sound.markers[sound.currentMarker].stop.toString());
       this.line('Position: ' + sound.position.toString());
@@ -265,7 +255,7 @@ class Debug {
    * @param {number} y - Y position of the debug info to be rendered.
    * @param {string} [color='rgb(255,255,255)'] - color of the debug info to be rendered. (format is css color string).
    */
-  cameraInfo (Camera camera, num x, num y, [String color='rgb(255,255,255)']) {
+  cameraInfo(Camera camera, num x, num y, [String color = 'rgb(255,255,255)']) {
 
     this.start(x, y, color);
     this.line('Camera (' + camera.width.toString() + ' x ' + camera.height.toString() + ')');
@@ -285,7 +275,7 @@ class Debug {
    * @param {number} y - Y position of the debug info to be rendered.
    * @param {string} [color='rgb(255,255,255)'] - color of the debug info to be rendered. (format is css color string).
    */
-  timer (Timer timer, num x, num y, [String color='rgb(255,255,255)']) {
+  timer(Timer timer, num x, num y, [String color = 'rgb(255,255,255)']) {
 
     this.start(x, y, color);
     this.line('Timer (running: ' + timer.running.toString() + ' expired: ' + timer.expired.toString() + ')');
@@ -305,15 +295,9 @@ class Debug {
    * @param {string} [upColor='rgba(255,0,0,0.5)'] - The color the circle is rendered in if up (and hideIfUp is false).
    * @param {string} [color='rgb(255,255,255)'] - color of the debug info to be rendered. (format is css color string).
    */
-  pointer (Pointer pointer, [
-  bool hideIfUp=false,
-  String downColor='rgba(0,255,0,0.5)',
-  String upColor='rgba(255,0,0,0.5)',
-  String color='rgb(255,255,255)'
-  ]) {
+  pointer(Pointer pointer, [bool hideIfUp = false, String downColor = 'rgba(0,255,0,0.5)', String upColor = 'rgba(255,0,0,0.5)', String color = 'rgb(255,255,255)']) {
 
-    if (pointer == null)
-    {
+    if (pointer == null) {
       return;
     }
 
@@ -321,8 +305,7 @@ class Debug {
     //downColor = downColor || 'rgba(0,255,0,0.5)';
     //upColor = upColor || 'rgba(255,0,0,0.5)';
 
-    if (hideIfUp == true && pointer.isUp == true)
-    {
+    if (hideIfUp == true && pointer.isUp == true) {
       return;
     }
 
@@ -330,12 +313,9 @@ class Debug {
     this.context.beginPath();
     this.context.arc(pointer.x, pointer.y, pointer.circle.radius, 0, Math.PI * 2);
 
-    if (pointer.active)
-    {
+    if (pointer.active) {
       this.context.fillStyle = downColor;
-    }
-    else
-    {
+    } else {
       this.context.fillStyle = upColor;
     }
 
@@ -369,7 +349,7 @@ class Debug {
    * @param {number} y - Y position of the debug info to be rendered.
    * @param {string} [color='rgb(255,255,255)'] - color of the debug info to be rendered. (format is css color string).
    */
-  spriteInputInfo (sprite, num x, num y, [String color='rgb(255,255,255)']) {
+  spriteInputInfo(sprite, num x, num y, [String color = 'rgb(255,255,255)']) {
 
     this.start(x, y, color);
     this.line(['Sprite Input: (${sprite.width} x ${sprite.height})']);
@@ -390,7 +370,7 @@ class Debug {
    * @param {number} y - Y position of the debug info to be rendered.
    * @param {string} [color='rgb(255,255,255)'] - color of the debug info to be rendered. (format is css color string).
    */
-  key (Key key, num x, num y, [String color='rgb(255,255,255)']) {
+  key(Key key, num x, num y, [String color = 'rgb(255,255,255)']) {
 
     this.start(x, y, color, 150);
 
@@ -410,7 +390,7 @@ class Debug {
    * @param {number} y - Y position of the debug info to be rendered.
    * @param {string} [color='rgb(255,255,255)'] - color of the debug info to be rendered. (format is css color string).
    */
-  inputInfo (num x, num y, [String color='rgb(255,255,255)']) {
+  inputInfo(num x, num y, [String color = 'rgb(255,255,255)']) {
 
     this.start(x, y, color);
     this.line('Input');
@@ -430,7 +410,7 @@ class Debug {
    * @param {string} [color] - Color of the debug info to be rendered (format is css color string).
    * @param {boolean} [filled=true] - Render the rectangle as a fillRect (default, true) or a strokeRect (false)
    */
-  spriteBounds (sprite, [String color='rgb(255,255,255)', bool filled=true]) {
+  spriteBounds(sprite, [String color = 'rgb(255,255,255)', bool filled = true]) {
 
     var bounds = sprite.getBounds();
 
@@ -450,7 +430,7 @@ class Debug {
    * @param {number} y - Y position of the debug info to be rendered.
    * @param {string} [color='rgb(255,255,255)'] - color of the debug info to be rendered. (format is css color string).
    */
-  spriteInfo (Sprite sprite, num x, num y, [String color='rgb(255,255,255)']) {
+  spriteInfo(Sprite sprite, num x, num y, [String color = 'rgb(255,255,255)']) {
 
     this.start(x, y, color);
 
@@ -472,12 +452,11 @@ class Debug {
    * @param {number} y - Y position of the debug info to be rendered.
    * @param {string} [color='rgb(255,255,255)'] - color of the debug info to be rendered. (format is css color string).
    */
-  spriteCoords (sprite, num x, num y, [String color='rgb(255,255,255)']) {
+  spriteCoords(sprite, num x, num y, [String color = 'rgb(255,255,255)']) {
 
     this.start(x, y, color, 100);
 
-    if (sprite.name != null)
-    {
+    if (sprite.name != null) {
       this.line(sprite.name);
     }
 
@@ -498,7 +477,7 @@ class Debug {
    * @param {number} y - Y position of the debug info to be rendered.
    * @param {string} [color='rgb(255,255,255)'] - color of the debug info to be rendered. (format is css color string).
    */
-  lineInfo (Line line, num x, num y, [String color='rgb(255,255,255)']) {
+  lineInfo(Line line, num x, num y, [String color = 'rgb(255,255,255)']) {
 
     this.start(x, y, color, 80);
     this.line(['start.x:', line.start.x.toStringAsFixed(2), 'start.y:', line.start.y.toStringAsFixed(2)]);
@@ -517,7 +496,7 @@ class Debug {
    * @param {string} [color] - Color of the pixel (format is css color string).
    * @param {number} [size=2] - The 'size' to render the pixel at.
    */
-  pixel (num x, num y, [String color='rgba(0,255,0,0.4)', int size =2]) {
+  pixel(num x, num y, [String color = 'rgba(0,255,0,0.4)', int size = 2]) {
 
     //size = size || 2;
 
@@ -537,7 +516,7 @@ class Debug {
    * @param {boolean} [filled=true] - Render the objected as a filled (default, true) or a stroked (false)
    * @param {number} [forceType=0] - Force rendering of a specific type. If 0 no type will be forced, otherwise 1 = Rectangle, 2 = Circle, 3 = Point and 4 = Line.
    */
-  geom (object, [String color='rgba(0,255,0,0.4)', bool filled =true, int forceType=0]) {
+  geom(object, [String color = 'rgba(0,255,0,0.4)', bool filled = true, int forceType = 0]) {
 
     //if (typeof filled === 'undefined') { filled = true; }
     //if (typeof forceType === 'undefined') { forceType = 0; }
@@ -549,45 +528,32 @@ class Debug {
     this.context.fillStyle = color;
     this.context.strokeStyle = color;
 
-    if (object is Rectangle || forceType == 1)
-    {
-      if (filled)
-      {
+    if (object is Rectangle || forceType == 1) {
+      if (filled) {
         this.context.fillRect(object.x - this.game.camera.x, object.y - this.game.camera.y, object.width, object.height);
-      }
-      else
-      {
+      } else {
         this.context.strokeRect(object.x - this.game.camera.x, object.y - this.game.camera.y, object.width, object.height);
       }
-    }
-    else if (object is Circle || forceType == 2)
-    {
+    } else if (object is Circle || forceType == 2) {
       this.context.beginPath();
       this.context.arc(object.x - this.game.camera.x, object.y - this.game.camera.y, object.radius, 0, Math.PI * 2, false);
       this.context.closePath();
 
-      if (filled)
-      {
+      if (filled) {
         this.context.fill();
-      }
-      else
-      {
+      } else {
         this.context.stroke();
       }
+    } else if (object is Point || forceType == 3) {
+      this.context.fillRect(object.x - this.game.camera.x, object.y - this.game.camera.y, 4, 4);
+    } else if (object is Line || forceType == 4) {
+      this.context.lineWidth = 1;
+      this.context.beginPath();
+      this.context.moveTo((object.start.x + 0.5) - this.game.camera.x, (object.start.y + 0.5) - this.game.camera.y);
+      this.context.lineTo((object.end.x + 0.5) - this.game.camera.x, (object.end.y + 0.5) - this.game.camera.y);
+      this.context.closePath();
+      this.context.stroke();
     }
-    else if (object is Point || forceType == 3)
-      {
-        this.context.fillRect(object.x - this.game.camera.x, object.y - this.game.camera.y, 4, 4);
-      }
-      else if (object is Line || forceType == 4)
-        {
-          this.context.lineWidth = 1;
-          this.context.beginPath();
-          this.context.moveTo((object.start.x + 0.5) - this.game.camera.x, (object.start.y + 0.5) - this.game.camera.y);
-          this.context.lineTo((object.end.x + 0.5) - this.game.camera.x, (object.end.y + 0.5) - this.game.camera.y);
-          this.context.closePath();
-          this.context.stroke();
-        }
 
     this.stop();
 
@@ -601,7 +567,7 @@ class Debug {
    * @param {string} [color] - Color of the debug info to be rendered (format is css color string).
    * @param {boolean} [filled=true] - Render the objected as a filled (default, true) or a stroked (false)
    */
-  rectangle (Rectangle object, [String color='rgba(0, 255, 0, 0.4)', bool filled=true]) {
+  rectangle(Rectangle object, [String color = 'rgba(0, 255, 0, 0.4)', bool filled = true]) {
 
     //if (typeof filled == 'undefined') { filled = true; }
 
@@ -609,13 +575,10 @@ class Debug {
 
     this.start();
 
-    if (filled)
-    {
+    if (filled) {
       this.context.fillStyle = color;
       this.context.fillRect(object.x - this.game.camera.x, object.y - this.game.camera.y, object.width, object.height);
-    }
-    else
-    {
+    } else {
       this.context.strokeStyle = color;
       this.context.strokeRect(object.x - this.game.camera.x, object.y - this.game.camera.y, object.width, object.height);
     }
@@ -634,7 +597,7 @@ class Debug {
    * @param {string} [color] - Color of the debug info to be rendered (format is css color string).
    * @param {string} [font] - The font of text to draw.
    */
-  text (String text, num x, num y, [String color = 'rgb(255,255,255)', String font= '16px Courier']) {
+  text(String text, num x, num y, [String color = 'rgb(255,255,255)', String font = '16px Courier']) {
 
     //color = color || 'rgb(255,255,255)';
     //font = font || '16px Courier';
@@ -642,8 +605,7 @@ class Debug {
     this.start();
     this.context.font = font;
 
-    if (this.renderShadow)
-    {
+    if (this.renderShadow) {
       this.context.fillStyle = 'rgb(0,0,0)';
       this.context.fillText(text, x + 1, y + 1);
     }
@@ -662,31 +624,26 @@ class Debug {
    * @param {Phaser.QuadTree} quadtree - The quadtree to render.
    * @param {string} color - The color of the lines in the quadtree.
    */
-  quadTree (QuadTree quadtree, [String color='rgba(255,0,0,0.3)']) {
+  quadTree(QuadTree quadtree, [String color = 'rgba(255,0,0,0.3)']) {
 
     //color = color || ;
 
     this.start();
 
-    var bounds = quadtree.bounds;
+    Bounds bounds = quadtree.bounds;
 
-    if (quadtree.nodes.length == 0)
-    {
+    if (quadtree.nodes[0] == null) {
       this.context.strokeStyle = color;
       this.context.strokeRect(bounds.x, bounds.y, bounds.width, bounds.height);
       this.text('size: ' + quadtree.objects.length.toString(), (bounds.x + 4), (bounds.y + 16), 'rgb(0,200,0)', '12px Courier');
 
       this.context.strokeStyle = 'rgb(0,255,0)';
 
-      for (var i = 0; i < quadtree.objects.length; i++)
-      {
-        this.context.strokeRect(quadtree.objects[i].x.toString(), quadtree.objects[i].y.toString(), quadtree.objects[i].width.toString(), quadtree.objects[i].height.toString());
+      for (var i = 0; i < quadtree.objects.length; i++) {
+        this.context.strokeRect(quadtree.objects[i].x, quadtree.objects[i].y, quadtree.objects[i].width, quadtree.objects[i].height);
       }
-    }
-    else
-    {
-      for (var i = 0; i < quadtree.nodes.length; i++)
-      {
+    } else {
+      for (var i = 0; i < quadtree.nodes.length; i++) {
         this.quadTree(quadtree.nodes[i]);
       }
     }
@@ -705,18 +662,14 @@ class Debug {
    * @param {string} [color='rgba(0,255,0,0.4)'] - color of the debug info to be rendered. (format is css color string).
    * @param {boolean} [filled=true] - Render the objected as a filled (default, true) or a stroked (false)
    */
-  body (Sprite sprite, [String color='rgba(0,255,0,0.4)', bool filled=true]) {
+  body(Sprite sprite, [String color = 'rgba(0,255,0,0.4)', bool filled = true]) {
 
-    if (sprite.body != null)
-    {
-      if (sprite.body.type == Physics.ARCADE)
-      {
+    if (sprite.body != null) {
+      if (sprite.body.type == Physics.ARCADE) {
         this.start();
         Body.render(this.context, sprite.body, color, filled);
         this.stop();
-      }
-      else if (sprite.body.type == Physics.NINJA)
-      {
+      } else if (sprite.body.type == Physics.NINJA) {
         this.start();
         //TODO
         //Physics.Ninja.Body.render(this.context, sprite.body, color, filled);
@@ -735,12 +688,10 @@ class Debug {
    * @param {number} y - Y position of the debug info to be rendered.
    * @param {string} [color='rgb(255,255,255)'] - color of the debug info to be rendered. (format is css color string).
    */
-  bodyInfo (Sprite sprite, num x, num y, String color) {
+  bodyInfo(Sprite sprite, num x, num y, String color) {
 
-    if (sprite.body != null)
-    {
-      if (sprite.body.type == Physics.ARCADE)
-      {
+    if (sprite.body != null) {
+      if (sprite.body.type == Physics.ARCADE) {
         this.start(x, y, color, 210);
         Body.renderBodyInfo(this, sprite.body);
         this.stop();
