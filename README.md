@@ -2,6 +2,8 @@ play_phaser
 =========
 A Dart port of Phaser.js (2.0.7)
 
+You can check the [play_pixi][1] which is almost finished.
+
 
 What are done:
 =========
@@ -22,7 +24,19 @@ What are done:
 * utils (100%)
 
 
-You can check the [play_pixi][1] which is almost finished.
+
+Examples:
+=========
+* animation
+* arcade physics
+* audio
+* basics
+* camera
+* imput
+* loader
+* particles
+* tweens
+
 
 Install:
 =========
