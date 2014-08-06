@@ -911,7 +911,7 @@ class Cache {
    * @return {object} The sound data.
    */
 
-  ByteBuffer getSoundData(String key) {
+  AudioBuffer getSoundData(String key) {
     if (this._sounds[key] != null) {
       return this._sounds[key]['data'];
     } else {

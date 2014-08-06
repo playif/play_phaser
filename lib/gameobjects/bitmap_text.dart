@@ -429,7 +429,7 @@ class BitmapText extends PIXI.BitmapText implements GameObject  {
       return false;
     }
 
-    if (this.autoCull) {
+    if (this.autoCull == true) {
       //  Won't get rendered but will still get its transform updated
       this.renderable = this.game.world.camera.screenView.intersects(this.getBounds());
     }

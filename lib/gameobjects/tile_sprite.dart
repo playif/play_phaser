@@ -34,6 +34,8 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
 
   bool autoCull;
   Point cameraOffset;
+  
+  CanvasPattern __tilePattern;
 
 
   GameObject bringToTop([GameObject child]) {
@@ -451,8 +453,8 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
 
     if (this._cache[4] == 1 && this.exists) {
       this.world.setTo(this.parent.position.x + this.position.x, this.parent.position.y + this.position.y);
-      this.worldTransform.tx = this.world.x;
-      this.worldTransform.ty = this.world.y;
+      this.worldTransform.tx = this.world.x.toDouble();
+      this.worldTransform.ty = this.world.y.toDouble();
       this._cache[0] = this.world.x;
       this._cache[1] = this.world.y;
       this._cache[2] = this.rotation;

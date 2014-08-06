@@ -241,7 +241,7 @@ class InputHandler {
    * @return {Phaser.Sprite} The Sprite object to which the Input Handler is bound.
    */
 
-  Sprite start([int priority = 0, bool useHandCursor =false]) {
+  GameObject start([int priority = 0, bool useHandCursor =false]) {
 
     //  Turning on
     if (this.enabled == false) {
@@ -295,7 +295,7 @@ class InputHandler {
    * @private
    */
 
-  addedToGroup(Sprite s, World w) {
+  addedToGroup(GameObject s, World w) {
 
     if (this._dragPhase) {
       return;
@@ -314,7 +314,7 @@ class InputHandler {
    * @private
    */
 
-  removedFromGroup(Sprite s, World w) {
+  removedFromGroup(GameObject s, World w) {
 
     if (this._dragPhase) {
       return;
@@ -437,7 +437,7 @@ class InputHandler {
    * @return {number} The x coordinate of the Input pointer.
    */
 
-  int pointerX([int pointer=0]) {
+  num pointerX([int pointer=0]) {
 
     //pointer = pointer || 0;
 
@@ -453,7 +453,7 @@ class InputHandler {
    * @return {number} The y coordinate of the Input pointer.
    */
 
-  int pointerY([int pointer=0]) {
+  num pointerY([int pointer=0]) {
 
     //pointer = pointer || 0;
 

@@ -18,11 +18,11 @@ class Sound {
   AudioContext context;
   bool autoplay;
 
-  int totalDuration;
+  double totalDuration;
   double startTime;
   double currentTime;
-  int duration;
-  int durationMS;
+  double duration;
+  double durationMS;
   int position;
   double stopTime;
   bool paused;
@@ -47,7 +47,7 @@ class Sound {
   Signal onStop;
   Signal onMute;
   Signal onMarkerComplete;
-  double _volume;
+  num _volume;
   var _buffer;
   bool _muted;
   String _tempMarker;
@@ -103,11 +103,11 @@ class Sound {
   }
 
 
-  double get volume {
+  num get volume {
     return this._volume;
   }
 
-  set volume(double value) {
+  set volume(num value) {
     if (this.usingWebAudio) {
       this._volume = value;
       this.gainNode.gain.value = value;
@@ -121,7 +121,7 @@ class Sound {
     }
   }
 
-  Sound(this.game, String key, [ double volume=1.0, bool loop=false, bool connect]) {
+  Sound(this.game, String key, [ num volume=1.0, bool loop=false, bool connect]) {
 
     if (connect == null) {
       connect = game.sound.connectToMaster;
@@ -133,7 +133,7 @@ class Sound {
     this.context = null;
     this.autoplay = false;
 
-    this.totalDuration = 0;
+    this.totalDuration = 0.0;
 
     /**
      * @property {number} startTime - The time the Sound starts at (typically 0 unless starting from a marker)
@@ -149,12 +149,12 @@ class Sound {
     /**
      * @property {number} duration - The duration of the current sound marker in seconds.
      */
-    this.duration = 0;
+    this.duration = 0.0;
 
     /**
      * @property {number} durationMS - The duration of the current sound marker in ms.
      */
-    this.durationMS = 0;
+    this.durationMS = 0.0;
 
     /**
      * @property {number} position - The position of the current sound marker.
@@ -255,7 +255,7 @@ class Sound {
     else {
       if (this.game.cache.getSound(key) != null && this.game.cache.isSoundReady(key)) {
         this._sound = this.game.cache.getSoundData(key);
-        this.totalDuration = 0;
+        this.totalDuration = 0.0;
 
         if (this._sound['duration'] != null) {
           this.totalDuration = this._sound['duration'];
@@ -560,8 +560,8 @@ class Sound {
       this.position = position;
       this.volume = volume;
       this.loop = loop;
-      this.duration = 0;
-      this.durationMS = 0;
+      this.duration = 0.0;
+      this.durationMS = 0.0;
 
       this._tempMarker = marker;
       this._tempPosition = position;
@@ -741,7 +741,7 @@ class Sound {
 
   stop() {
 
-    if (this.isPlaying && this._sound) {
+    if (this.isPlaying && this._sound != null) {
       if (this.usingWebAudio) {
         if (this._sound.stop == null) {
           this._sound.noteOff(0);

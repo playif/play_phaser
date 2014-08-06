@@ -3,8 +3,8 @@ part of example;
 class camera_01_basic_follow extends State {
   preload() {
 
-    game.load.image('background','assets/tests/debug-grid-1920x1920.png');
-    game.load.image('player','assets/sprites/phaser-dude.png');
+    game.load.image('background', 'assets/tests/debug-grid-1920x1920.png');
+    game.load.image('player', 'assets/sprites/phaser-dude.png');
 
   }
 
@@ -33,21 +33,15 @@ class camera_01_basic_follow extends State {
 
     //player.body.setZeroVelocity();
 
-    if (cursors.left.isDown)
-    {
+    if (cursors.left.isDown) {
       player.body.velocity.x -= 4;
-    }
-    else if (cursors.right.isDown)
-    {
+    } else if (cursors.right.isDown) {
       player.body.velocity.x += 4;
     }
 
-    if (cursors.up.isDown)
-    {
+    if (cursors.up.isDown) {
       player.body.velocity.y -= 4;
-    }
-    else if (cursors.down.isDown)
-    {
+    } else if (cursors.down.isDown) {
       player.body.velocity.y += 4;
     }
 
@@ -57,6 +51,12 @@ class camera_01_basic_follow extends State {
 
     game.debug.cameraInfo(game.camera, 32, 32);
     game.debug.spriteCoords(player, 32, 500);
+
+  }
+
+  shutdown() {
+
+    game.world.setBounds(0, 0, 800, 600);
 
   }
 }

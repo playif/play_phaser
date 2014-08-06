@@ -306,7 +306,7 @@ class SoundManager {
 
     //sound = sound || null;
 
-    ByteBuffer soundData = this.game.cache.getSoundData(key);
+    var soundData = this.game.cache.getSoundData(key);
 
     if (soundData != null) {
       if (this.game.cache.isSoundDecoded(key) == false) {
@@ -363,7 +363,7 @@ class SoundManager {
    * @return {Phaser.Sound} The new sound instance.
    */
 
-  add(String key, [double volume=1.0, bool loop=false, connect]) {
+  add(String key, [num volume=1.0, bool loop=false, connect]) {
 
     if (connect == null) {
       connect = this.connectToMaster;

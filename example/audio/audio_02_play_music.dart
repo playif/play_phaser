@@ -47,5 +47,9 @@ class audio_02_play_music extends State {
     //game.debug.spriteInputInfo(btn, 50,20);
     //game.debug.inputInfo(50, 100);
   }
-}
 
+  shutdown() {
+
+    music.stop();
+  }
+}

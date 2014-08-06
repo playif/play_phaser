@@ -2,7 +2,7 @@ part of Phaser;
 
 class LoaderParser {
 
-  static bitmapFont(Game game, XmlDocument xml, String cacheKey, int xSpacing, int ySpacing) {
+  static bitmapFont(Game game, Document xml, String cacheKey, int xSpacing, int ySpacing) {
 
     PIXI.ChartData data = new PIXI.ChartData();
     Element info = xml.getElementsByTagName('info')[0];

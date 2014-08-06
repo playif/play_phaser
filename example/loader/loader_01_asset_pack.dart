@@ -39,4 +39,9 @@ class loader_01_asset_pack extends State {
     }
 
   }
+  
+  shutdown() {
+
+    music.stop();
+  }
 }

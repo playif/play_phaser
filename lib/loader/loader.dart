@@ -1482,7 +1482,7 @@ class Loader {
       case 'audio':
 
         if (this.game.sound.usingWebAudio) {
-          file['data'] = (this._xhr.response as Uint8List).buffer;
+          file['data'] = this._xhr.response ;
 
           this.game.cache.addSound(file['key'], file['url'], file['data'], true, false);
 
@@ -1492,7 +1492,7 @@ class Loader {
 
             this.game.cache.updateSound(key, 'isDecoding', true);
             ByteBuffer buffer=file['data'];
-            this.game.sound.context.decodeAudioData(buffer.asByteData()).then((AudioBuffer buffer) {
+            this.game.sound.context.decodeAudioData(buffer).then((AudioBuffer buffer) {
               if (buffer != null) {
                 that.game.cache.decodedSound(key, buffer);
                 that.game.sound.onSoundDecode.dispatch([key, that.game.cache.getSound(key)]);
