@@ -25,7 +25,7 @@ What are done:
 You can check the [play_pixi][1] which is almost finished.
 
 Install:
-
+=========
 dependencies:
 
   play_pixi: any
