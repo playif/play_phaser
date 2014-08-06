@@ -25,7 +25,7 @@ class arcade_physics_34_quadtree extends State {
 
     aliens = game.add.group();
     aliens.enableBody = true;
-
+ 
     for (var i = 0; i < 1000; i++) {
       Sprite s = aliens.create(game.world.randomX, game.world.randomY, 'baddie');
       s.scale.set(1);
