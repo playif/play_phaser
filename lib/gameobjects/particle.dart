@@ -56,9 +56,10 @@ class Particle extends Sprite {
     {
       this._s--;
 
-      if (this._s != 0)
+      if (this._s >= 0)
       {
         this.scale.set(this.scaleData[this._s]['x'], this.scaleData[this._s]['y']);
+        print(this.scale.x);
       }
       else
       {
@@ -70,7 +71,7 @@ class Particle extends Sprite {
     {
       this._a--;
 
-      if (this._a != 0)
+      if (this._a >= 0)
       {
         this.alpha = this.alphaData[this._a]['v'];
       }

@@ -281,7 +281,7 @@ class Tween {
 
 
   List<Map<String, num>> generateData([int frameRate = 60, List<Map<String, num>> data]) {
-    double rate = frameRate * 0.001;
+    double rate = (1.0 / frameRate);
 
     if (this._game == null || this._gameObject == null) {
       return null;
