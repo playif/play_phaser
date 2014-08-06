@@ -12,7 +12,7 @@ class display_20_bitmapdata_set_hsl extends State{
 
   create() {
 
-    game.stage.backgroundColor = 0x2d2d2d;
+    game.stage.backgroundColor = 0x5dadad;
 
     bmd = game.make.bitmapData(game.cache.getImage('pic').width, game.cache.getImage('pic').height);
 

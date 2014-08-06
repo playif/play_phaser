@@ -14,7 +14,7 @@ part of tweenengine;
  *
  * This animation will be repeated 5 times, with a 500ms delay between each
  * iteration:
- * 
+ *
  *     Timeline.createSequence()
  *       ..push(Tween.set(myObject, OPACITY).target(0))
  *       ..push(Tween.set(myObject, SCALE).target(0, 0))
@@ -35,11 +35,11 @@ part of tweenengine;
  *        ..easing = Quad.INOUT)
  *      ..repeat(5, 0.5)
  *      ..start(myManager);
- *    
+ *
  * see [Tween]
  * see [TweenManager]
  * see [TweenCallback]
- * author 
+ * author
  *    Aurelien Ribon | http://www.aurelienribon.com/ (Original java code)
  *    Xavier Guzman (dart port)
  */
@@ -49,20 +49,23 @@ class Timeline extends BaseTween<Timeline> {
   // -------------------------------------------------------------------------
 
   static final PoolCallback<Timeline> _poolCallback = new PoolCallback<Timeline>()
-      ..onPool = (Timeline obj) {
-        obj.reset();
-      }
-      ..onUnPool = (Timeline obj) {
-        obj.reset();
-      };
+    ..onPool = (Timeline obj) {
+    obj.reset();
+  }
+    ..onUnPool = (Timeline obj) {
+    obj.reset();
+  };
 
 
-  static final Pool<Timeline> _pool = new Pool<Timeline>(_poolCallback)..create = () => new Timeline._();
+  static final Pool<Timeline> _pool = new Pool<Timeline>(_poolCallback)
+    ..create = () => new Timeline._();
 
   ///Used for debug purpose. Gets the current number of empty timelines that are waiting in the Timeline pool.
+
   static int get poolSize => _pool.size();
 
   ///Increases the minimum capacity of the pool. Capacity defaults to 10.
+
   static void ensurePoolCapacity(int minCapacity) {
     _pool.ensureCapacity(minCapacity);
   }
@@ -72,6 +75,7 @@ class Timeline extends BaseTween<Timeline> {
   // -------------------------------------------------------------------------
 
   /// Creates a new timeline with a 'sequence' behavior. Its children will be delayed so that they are triggered one after the other.
+
   static Timeline createSequence() {
     Timeline tl = _pool.get();
     tl._setup(TimelineMode.SEQUENCE);
@@ -79,6 +83,7 @@ class Timeline extends BaseTween<Timeline> {
   }
 
   ///Creates a new timeline with a 'parallel' behavior. Its children will be triggered all at once.
+
   static Timeline createParallel() {
     Timeline tl = _pool.get();
     tl._setup(TimelineMode.PARALLEL);
@@ -122,6 +127,7 @@ class Timeline extends BaseTween<Timeline> {
 
 
   ///Adds a Tween or nests a Timeline to the current timeline
+
   void push(tween_OR_timeline) {
     if (tween_OR_timeline is! Tween && tween_OR_timeline is! Timeline) throw new Exception("Only a tween or timeline can be pushed into a timeline");
 
@@ -131,11 +137,13 @@ class Timeline extends BaseTween<Timeline> {
   }
 
   ///Adds a Tween to the current timeline.
+
   void _pushTween(Tween tween) {
     _current._children.add(tween);
   }
 
   /// Nests a Timeline in the current one.
+
   void _pushTimeline(Timeline timeline) {
     if (timeline._current != timeline) throw new Exception("You forgot to call a few 'end()' statements in your pushed timeline");
     timeline._parent = _current;
@@ -147,12 +155,15 @@ class Timeline extends BaseTween<Timeline> {
    *
    * [time] A positive or negative duration.
    */
+
   void pushPause(num time) {
     if (_isBuilt) throw new Exception("You can't push anything to a timeline once it is started");
-    _current._children.add(Tween.mark()..delay = time);
+    _current._children.add(Tween.mark()
+      ..delay = time);
   }
 
   ///Starts a nested timeline with a 'sequence' behavior. Don't forget to call [end] to close this nested timeline.
+
   void beginSequence() {
     if (_isBuilt) throw new Exception("You can't push anything to a timeline once it is started");
     Timeline tl = _pool.get();
@@ -163,6 +174,7 @@ class Timeline extends BaseTween<Timeline> {
   }
 
   ///Starts a nested timeline with a 'parallel' behavior. Don't forget to call {@link end()} to close this nested timeline.
+
   void beginParallel() {
     if (_isBuilt) throw new Exception("You can't push anything to a timeline once it is started");
     Timeline tl = _pool.get();
@@ -173,6 +185,7 @@ class Timeline extends BaseTween<Timeline> {
   }
 
   ///Closes the last nested timeline.
+
   void end() {
     if (_isBuilt) throw new Exception("You can't push anything to a timeline once it is started");
     if (_current == this) throw new Exception("Nothing to end...");
@@ -180,6 +193,7 @@ class Timeline extends BaseTween<Timeline> {
   }
 
   ///Gets a list of the timeline children. If the timeline is started, the list will be immutable.
+
   List<BaseTween> getChildren() {
     if (_isBuilt) return new List<BaseTween>.from(_current._children, growable: false); else return _current._children;
   }
@@ -240,11 +254,8 @@ class Timeline extends BaseTween<Timeline> {
 
     if (!isIterationStep && step < lastStep) {
       assert(delta <= 0);
-      num dt = isReverse(lastStep) ? -delta - 1 : delta + 1;
-      _children.reversed.forEach((BaseTween tween){
-        tween._isIterationStep=false;
-        tween.update(dt);
-      });
+      num dt = isReverse(lastStep) ? delta + 1 : -delta - 1;
+      _children.reversed.forEach((BaseTween tween) => tween.update(dt));
       return;
     }
 
@@ -274,9 +285,11 @@ class Timeline extends BaseTween<Timeline> {
 
     } else {
       num dt = isReverse(step) ? -delta : delta;
-      if (delta >= 0) { //for (int i=0, n=children.size(); i<n; i++) children.get(i).update(dt);
+      if (delta >= 0) {
+        //for (int i=0, n=children.size(); i<n; i++) children.get(i).update(dt);
         _children.forEach((BaseTween tween) => tween.update(dt));
-      } else { //for (int i=children.size()-1; i>=0; i--) children.get(i).update(dt);
+      } else {
+        //for (int i=children.size()-1; i>=0; i--) children.get(i).update(dt);
         _children.reversed.forEach((BaseTween tween) => tween.update(dt));
       }
     }
@@ -301,5 +314,5 @@ class Timeline extends BaseTween<Timeline> {
 
 class TimelineMode {
   static const int SEQUENCE = 1,
-      PARALLEL = 2;
+  PARALLEL = 2;
 }
