@@ -18,7 +18,7 @@ class arcade_physics_34_quadtree extends State {
 
   create() {
 
-    game.world.setBounds(0, 0, 250, 250);
+    //game.world.setBounds(0, 0, 250, 250);
 
     game.physics.startSystem(Physics.ARCADE);
 
@@ -26,7 +26,7 @@ class arcade_physics_34_quadtree extends State {
     aliens = game.add.group();
     aliens.enableBody = true;
 
-    for (var i = 0; i < 1000; i++) {
+    for (var i = 0; i < 200; i++) {
       Sprite s = aliens.create(game.world.randomX, game.world.randomY, 'baddie');
       s.scale.set(1);
       s.body.collideWorldBounds = true;
@@ -43,7 +43,7 @@ class arcade_physics_34_quadtree extends State {
 
     cursors = game.input.keyboard.createCursorKeys();
 
-    game.camera.follow(ship);
+    //game.camera.follow(ship);
   }
 
   update() {
@@ -67,6 +67,6 @@ class arcade_physics_34_quadtree extends State {
   }
 
   render() {
-    //game.debug.quadTree(game.physics.arcade.quadTree);
+    game.debug.quadTree(game.physics.arcade.quadTree);
   }
 }
