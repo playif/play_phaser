@@ -1030,7 +1030,7 @@ class Cache {
         break;
 
       case Cache.IMAGE:
-        return this._images.keys.where((s) => s != '__default' && s != '__missing');
+        return this._images.keys.where((s) => s != '__default' && s != '__missing').toList();
       //break;
 
       case Cache.TEXTURE:
@@ -1082,7 +1082,7 @@ class Cache {
 //      }
 //    }
 
-    return array.keys;
+    return array.keys.toList();
 
   }
 

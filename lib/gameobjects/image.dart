@@ -16,6 +16,7 @@ class Image extends PIXI.Sprite implements GameObject {
 
   Point cameraOffset;
   Point anchor;
+  Point center;
 
   Rectangle cropRect;
 

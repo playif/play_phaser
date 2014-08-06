@@ -28,6 +28,7 @@ class Graphics extends PIXI.Graphics implements GameObject {
 
   PIXI.Texture texture;
   Point anchor;
+  Point center;
 
   CanvasPattern __tilePattern;
 

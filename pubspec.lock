@@ -27,10 +27,6 @@ packages:
       relative: true
     source: path
     version: "0.9.4+1"
-  tweenengine:
-    description: tweenengine
-    source: hosted
-    version: "0.10.0"
   uuid:
     description: uuid
     source: hosted

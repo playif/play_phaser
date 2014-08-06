@@ -460,10 +460,13 @@ class Game {
       return;
     }
 
-    Fields fields=new Fields();
+    //Fields fields=new Fields();
     //tween.Tween.registerAccessor(GameObject, fields);
-    tween.Tween.registerAccessor(Sprite, fields);
-    tween.Tween.registerAccessor(Point, new PointAccessor());
+    //tween.Tween.combinedAttributesLimit=1;
+
+    tween.Tween.registerAccessor(new GameObjectAccessor());
+    //tween.Tween.registerAccessor(Point, new PointAccessor());
+    //tween.Tween.registerAccessor(Emitter, new PointAccessor());
 //    if (!document.body) {
 //      window.setTimeout(this._onBoot, 20);
 //    }

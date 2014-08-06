@@ -1,6 +1,6 @@
 part of Phaser;
 
-class ArcadeParticles {
-  ArcadeParticles() {
-  }
-}
+//class Particles {
+//  Map Arcade = {};
+//  static int ID=0;
+//}

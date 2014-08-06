@@ -50,7 +50,9 @@ class Physics {
 
   Physics(game, [Map config = const {
   }]) {
-
+    if(config == null){
+      config={};
+    }
     /**
      * @property {Phaser.Game} game - Local reference to game.
      */
@@ -85,9 +87,9 @@ class Physics {
      * @property {Phaser.Physics.Chipmunk} chipmunk - The Chipmunk Physics system (to be done).
      */
     //this.chipmunk = null;
-    if(config != null){
+    //if(config != null){
       this.parseConfig();
-    }
+    //}
 
   }
 

@@ -1,8 +1,27 @@
 part of Phaser;
 
-class Point extends PIXI.Point {
+class Point extends PIXI.Point  {
 //  num x;
 //  num y;
+
+//  num getTweenableValue(String tweenType) {
+//      dynamic me=this as dynamic;
+//      switch (tweenType) {
+//        case 'x':
+//          return me.x;
+//
+//      }
+//      return null;
+//    }
+// 
+//    void setTweenableValue(String tweenType, num newValue) {
+//      dynamic me=this as dynamic;
+//      switch (tweenType) {
+//        case 'x':
+//          me.x = newValue;
+//          break;
+//      }
+//    }
 
   Point([num x=0, num y=0])
   :super(x,y){

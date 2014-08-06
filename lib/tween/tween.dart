@@ -1,90 +1,100 @@
 part of Phaser;
 
 class Linears {
-  tween.TweenEquation get INOUT => tween.Linear.INOUT;
+  tween.TweenEquation get None => tween.Linear.INOUT;
 }
 
 class Quads {
-  tween.TweenEquation get IN => tween.Quad.IN;
+  tween.TweenEquation get In => tween.Quad.IN;
 
-  tween.TweenEquation get INOUT => tween.Quad.INOUT;
+  tween.TweenEquation get InOut => tween.Quad.INOUT;
 
-  tween.TweenEquation get OUT => tween.Quad.OUT;
+  tween.TweenEquation get Out => tween.Quad.OUT;
 }
 
 class Cubics {
-  tween.TweenEquation get IN => tween.Quad.IN;
+  tween.TweenEquation get In => tween.Quad.IN;
 
-  tween.TweenEquation get INOUT => tween.Quad.INOUT;
+  tween.TweenEquation get InOut => tween.Quad.INOUT;
 
-  tween.TweenEquation get OUT => tween.Quad.OUT;
+  tween.TweenEquation get Out => tween.Quad.OUT;
 }
 
 class Quarts {
-  tween.TweenEquation get IN => tween.Quart.IN;
+  tween.TweenEquation get In => tween.Quart.IN;
 
-  tween.TweenEquation get INOUT => tween.Quart.INOUT;
+  tween.TweenEquation get InOut => tween.Quart.INOUT;
 
-  tween.TweenEquation get OUT => tween.Quart.OUT;
+  tween.TweenEquation get Out => tween.Quart.OUT;
 }
 
 class Circs {
-  tween.TweenEquation get IN => tween.Circ.IN;
+  tween.TweenEquation get In => tween.Circ.IN;
 
-  tween.TweenEquation get INOUT => tween.Circ.INOUT;
+  tween.TweenEquation get InOut => tween.Circ.INOUT;
 
-  tween.TweenEquation get OUT => tween.Circ.OUT;
+  tween.TweenEquation get Out => tween.Circ.OUT;
 }
 
 class Sines {
-  tween.TweenEquation get IN => tween.Sine.IN;
+  tween.TweenEquation get In => tween.Sine.IN;
 
-  tween.TweenEquation get INOUT => tween.Sine.INOUT;
+  tween.TweenEquation get InOut => tween.Sine.INOUT;
 
-  tween.TweenEquation get OUT => tween.Sine.OUT;
+  tween.TweenEquation get Out => tween.Sine.OUT;
 }
 
 class Expos {
-  tween.TweenEquation get IN => tween.Expo.IN;
+  tween.TweenEquation get In => tween.Expo.IN;
 
-  tween.TweenEquation get INOUT => tween.Expo.INOUT;
+  tween.TweenEquation get InOut => tween.Expo.INOUT;
 
-  tween.TweenEquation get OUT => tween.Expo.OUT;
+  tween.TweenEquation get Out => tween.Expo.OUT;
 }
 
 class Backs {
-  tween.TweenEquation get IN => tween.Back.IN;
+  tween.TweenEquation get In => tween.Back.IN;
 
-  tween.TweenEquation get INOUT => tween.Back.INOUT;
+  tween.TweenEquation get InOut => tween.Back.INOUT;
 
-  tween.TweenEquation get OUT => tween.Back.OUT;
+  tween.TweenEquation get Out => tween.Back.OUT;
 }
 
 class Bounces {
-  tween.TweenEquation get IN => tween.Bounce.IN;
+  tween.TweenEquation get In => tween.Bounce.IN;
 
-  tween.TweenEquation get INOUT => tween.Bounce.INOUT;
+  tween.TweenEquation get InOut => tween.Bounce.INOUT;
 
-  tween.TweenEquation get OUT => tween.Bounce.OUT;
+  tween.TweenEquation get Out => tween.Bounce.OUT;
 }
 
 class Elastics {
-  tween.TweenEquation get IN => tween.Elastic.IN;
+  tween.TweenEquation get In => tween.Elastic.IN;
 
-  tween.TweenEquation get INOUT => tween.Elastic.INOUT;
+  tween.TweenEquation get InOut => tween.Elastic.INOUT;
 
-  tween.TweenEquation get OUT => tween.Elastic.OUT;
+  tween.TweenEquation get Out => tween.Elastic.OUT;
 }
+
+class Quints {
+  tween.TweenEquation get In => tween.Quint.IN;
+
+  tween.TweenEquation get InOut => tween.Quint.INOUT;
+
+  tween.TweenEquation get Out => tween.Quint.OUT;
+}
+
 
 
 class Easing {
   static final Linears Linear = new Linears();
-  static final Quads Quad = new Quads();
+  static final Quads Quadratic = new Quads();
   static final Cubics Cubic = new Cubics();
-  static final Quarts Quart = new Quarts();
+  static final Quarts Quartic = new Quarts();
   static final Circs Circ = new Circs();
-  static final Sines Sine = new Sines();
-  static final Expos Expo = new Expos();
+  static final Quints Quintic = new Quints();
+  static final Sines Sinusoidal = new Sines();
+  static final Expos Exponential = new Expos();
   static final Backs Back = new Backs();
   static final Bounces Bounce = new Bounces();
   static final Elastics Elastic = new Elastics();
@@ -119,24 +129,46 @@ class Tween {
   static const int ANY_BACKWARD = 0xF0;
   static const int ANY = 0xFF;
 
+//  Map<String, int> _StoN = {
+//    'x': 0,
+//    'y':
+//    'v': 0,
+//  };
+
   final Game _game;
-  final Object _gameObject;
+  final dynamic _gameObject;
+
   tween.TweenManager _tweenManager;
   tween.Timeline _timeline;
+  double _startTime = 0.0;
+  double get startTime => _startTime;
+
+  Map<String, num> _initVal;
+  //List<num> _vals = new List<num>(1);
 
   Tween(this._game, this._gameObject) {
     this._tweenManager = _game.tweens;
     this._timeline = tween.Timeline.createSequence();
   }
 
-  Tween to(Map<int, num> properties, [num duration=1000, tween.TweenEquation ease=null, bool autoStart=false, num delay=0, int repeat=0, bool yoyo=false]) {
+  Tween to(Map<String, num> properties, [num duration = 1000, tween.TweenEquation ease = null, bool autoStart = false, num delay = 0, int repeat = 0, bool yoyo = false]) {
+    _initVal = getCurrentState(properties.keys);
     return _setTween(properties, tween.Tween.to, duration, ease, autoStart, delay, repeat, yoyo);
   }
 
-  Tween from(Map<int, num> properties, [num duration=1000, tween.TweenEquation ease=null, bool autoStart=false, num delay=0, int repeat=0, bool yoyo=false]) {
+  Tween from(Map<String, num> properties, [num duration = 1000, tween.TweenEquation ease = null, bool autoStart = false, num delay = 0, int repeat = 0, bool yoyo = false]) {
+    _initVal = properties;
     return _setTween(properties, tween.Tween.from, duration, ease, autoStart, delay, repeat, yoyo);
   }
 
+  Map<String, num> getCurrentState(Iterable<String> props) {
+    Map<String, num> result = new Map<String, num>();
+    for (var key in props) {
+      //this._gameObject.getTweenableValues(key, _vals);
+      result[key] = tween.Tween.getRegisteredAccessor().getValue(this._gameObject,key);
+    }
+    return result;
+  }
 
 //  Tween set(Map<int, num> properties, [num duration=1000, tween.TweenEquation ease=null, bool autoStart=false, double delay=0.0, int repeat=0, bool yoyo=false]) {
 //    return _setTween(properties, tween.Tween.set, duration, ease, autoStart, delay, repeat, yoyo);
@@ -144,15 +176,16 @@ class Tween {
 
 
 
-  Tween _setTween(Map<int, num> properties, Function operation, [num duration=1000, tween.TweenEquation ease=null, bool autoStart=false, double delay=0.0, int repeat=0, bool yoyo=false]) {
+  Tween _setTween(Map<String, num> properties, Function operation, [num duration = 1000, tween.TweenEquation ease = null, bool autoStart = false, num delay = 0.0, int repeat = 0, bool yoyo = false]) {
     tween.Timeline tweens = tween.Timeline.createParallel();
-    for (int prop in properties.keys) {
+
+    for (String prop in properties.keys) {
       tween.Tween t = operation(_gameObject, prop, duration * 0.001);
       if (ease != null) {
         t.easing = ease;
       }
 
-      t.targetValues = [properties[prop]];
+      t.targetValue = properties[prop];
 
       tweens.push(t);
     }
@@ -161,8 +194,7 @@ class Tween {
     if (repeat != Tween.INFINITY) {
       if (yoyo == true) {
         tweens.repeatYoyo(repeat, 0);
-      }
-      else {
+      } else {
         tweens.repeat(repeat, 0);
       }
     }
@@ -176,8 +208,7 @@ class Tween {
     if (repeat == Tween.INFINITY) {
       if (yoyo == true) {
         _timeline.repeatYoyo(repeat, 0);
-      }
-      else {
+      } else {
         _timeline.repeat(repeat, 0);
       }
     }
@@ -187,8 +218,7 @@ class Tween {
   }
 
   Tween setCallback(tween.CallbackHandler func, [int event]) {
-    this._timeline.setCallback(new tween.TweenCallback()
-      ..onEvent = func);
+    this._timeline.setCallback(new tween.TweenCallback()..onEvent = func);
     if (event != null) {
       this._timeline.setCallbackTriggers(event);
     }
@@ -220,32 +250,137 @@ class Tween {
     return this;
   }
 
-  Tween repeat([int count=1, num delayBetweenLoop = 0]) {
+  Tween repeat([int count = 1, num delayBetweenLoop = 0]) {
     if (_yoyo == false) {
       _timeline.repeat(count, delayBetweenLoop * 0.001);
-    }
-    else {
+    } else {
       _timeline.repeatYoyo(count, delayBetweenLoop * 0.001);
     }
     return this;
   }
 
-  Tween yoyo([bool yoyo=true]) {
+  Tween yoyo([bool yoyo = true]) {
     _yoyo = yoyo;
     return this;
   }
 
   Tween start() {
     _timeline.start(this._tweenManager);
+    _startTime = this._game.time.now;
+
     return this;
   }
 
-  Tween loop([num delayBetweenLoop=0, bool yoyo]) {
+  Tween loop([num delayBetweenLoop = 0, bool yoyo]) {
     if (yoyo != null) {
       this._yoyo = yoyo;
     }
     return this.repeat(Tween.INFINITY, delayBetweenLoop);
   }
+
+
+
+  List<Map<String, num>> generateData([int frameRate = 60, List<Map<String, num>> data]) {
+    double rate = frameRate * 0.001;
+
+    if (this._game == null || this._gameObject == null) {
+      return null;
+    }
+
+    if (data == null) {
+      data = new List<Map<String, num>>();
+    }
+    this._timeline.start();
+    //this._timeline.fullDuration
+
+    while (!this._timeline.isFinished) {
+      data.add(getCurrentState(_initVal.keys));
+      this._timeline.update(rate);
+    }
+
+    return data;
+    //this._timeline.getChildren()[0].
+
+    //this._startTime = 0.0;
+
+//    for (String property in this._valuesEnd.keys) {
+//      // Check if an Array was provided as property value
+//      if (this._valuesEnd[property] is List) {
+//        if (this._valuesEnd[property].length == 0) {
+//          continue;
+//        }
+//
+//        // create a local copy of the Array with the start value at the front
+//        [this._object[property]].addAll(this._valuesEnd[property]);
+//      }
+//
+//      this._valuesStart[property] = this._object[property];
+//
+//      if (this._valuesStart[property] is! List) {
+//        this._valuesStart[property] *= 1.0;
+//        // Ensures we're using numbers, not strings
+//      }
+//
+//      this._valuesStartRepeat[property] = this._valuesStart[property];
+//    }
+//
+//    //  Simulate the tween. We will run for frameRate * (this._duration / 1000) (ms)
+//    var time = 0;
+//    var total = Math.floor(frameRate * (this._timeline.duration / 1000));
+//    var tick = this._timeline.duration / total;
+//
+//    List output = [];
+//
+//    while (total-- >= 0) {
+//      String property;
+//
+//      double elapsed = (time - this._startTime) / this._duration;
+//      elapsed = elapsed > 1 ? 1 : elapsed;
+//
+//      var value = this._timeline.isReverse(step)//._easingFunction(elapsed);
+//      var blob = {};
+//
+//      for (property in this._valuesEnd) {
+//        var start = this._valuesStart[property];
+//        var end = this._valuesEnd[property];
+//
+//        if (end is List) {
+//          blob[property] = this._interpolationFunction(end, value);
+//        } else {
+//          // Parses relative end values with start as base (e.g.: +10, -3)
+//          if (end is String) {
+//            end = start + double.parse(end);
+//          }
+//
+//          // protect against non numeric properties.
+//          if (end is num) {
+//            blob[property] = start + (end - start) * value;
+//          }
+//        }
+//      }
+//
+//      output.add(blob);
+//
+//      time += tick;
+//    }
+//
+//    if (this._yoyo) {
+////      List reversed = output.reversed;
+////      reversed.reverse();
+//      output.addAll(output.reversed);
+//    }
+//
+//    if (data != null) {
+//      data.addAll(output);
+//
+//      return data;
+//    } else {
+//      return output;
+//    }
+
+  }
+
+
 
   bool _yoyo = false;
 

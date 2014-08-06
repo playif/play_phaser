@@ -479,7 +479,12 @@ class Tilemap {
         group.add(sprite);
 
         for (String property in this.objects[name][i].properties.keys) {
-          group.set(sprite, property, this.objects[name][i].properties[property], false, false, 0);
+          throw new Exception('Not yet implement');
+          //group.forEach((Sprite sprite){
+            
+            //group.set(sprite, property, this.objects[name][i].properties[property], false, false, 0);
+          //});
+          //group.set(sprite, property, this.objects[name][i].properties[property], false, false, 0);
         }
       }
     }

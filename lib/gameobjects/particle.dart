@@ -2,10 +2,10 @@ part of Phaser;
 
 class Particle extends Sprite {
   bool autoScale;
-  List scaleData;
+  List<Map<String,num>> scaleData;
   int _s;
   bool autoAlpha;
-  List alphaData;
+  List<Map<String,num>> alphaData;
   int _a;
 
 
@@ -58,7 +58,7 @@ class Particle extends Sprite {
 
       if (this._s != 0)
       {
-        this.scale.set(this.scaleData[this._s].x, this.scaleData[this._s].y);
+        this.scale.set(this.scaleData[this._s]['x'], this.scaleData[this._s]['y']);
       }
       else
       {
@@ -72,7 +72,7 @@ class Particle extends Sprite {
 
       if (this._a != 0)
       {
-        this.alpha = this.alphaData[this._a].v;
+        this.alpha = this.alphaData[this._a]['v'];
       }
       else
       {
@@ -101,7 +101,7 @@ class Particle extends Sprite {
 
     this.alphaData = data;
     this._a = data.length - 1;
-    this.alpha = this.alphaData[this._a].v;
+    this.alpha = this.alphaData[this._a]['v'];
     this.autoAlpha = true;
 
   }
@@ -116,7 +116,7 @@ class Particle extends Sprite {
 
     this.scaleData = data;
     this._s = data.length - 1;
-    this.scale.set(this.scaleData[this._s].x, this.scaleData[this._s].y);
+    this.scale.set(this.scaleData[this._s]['x'], this.scaleData[this._s]['y']);
     this.autoScale = true;
 
   }

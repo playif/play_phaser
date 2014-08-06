@@ -56,6 +56,8 @@ class Text extends PIXI.Text implements GameObject {
   CanvasPattern __tilePattern;
 
   String text;
+  
+  Point center;
 
   setTexture(PIXI.Texture texture) {
 

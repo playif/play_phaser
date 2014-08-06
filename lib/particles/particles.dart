@@ -1,9 +1,11 @@
 part of Phaser;
 
 class Particles {
+  Map Arcade = {};
+  static int ID=0;
   Game game;
   Map emitters;
-  int ID;
+//  int ID;
 
   Particles(this.game) {
 
@@ -17,7 +19,7 @@ class Particles {
      * @property {number} ID -
      * @default
      */
-    this.ID = 0;
+    //this.ID = 0;
 
   }
 
@@ -29,7 +31,7 @@ class Particles {
    * @return {Phaser.Emitter} The emitter that was added.
    */
 
-  add(emitter) {
+  Emitter add(Emitter emitter) {
     this.emitters[emitter.name] = emitter;
     return emitter;
   }

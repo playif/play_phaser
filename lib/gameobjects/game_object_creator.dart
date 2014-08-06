@@ -6,7 +6,7 @@ class GameObjectCreator {
   World world;
 
   GameObjectCreator(this.game) {
-    world=game.world;
+    world = game.world;
   }
 
   /**
@@ -20,7 +20,7 @@ class GameObjectCreator {
    * @param {string|number} [frame] - If the sprite uses an image from a texture atlas or sprite sheet you can pass the frame here. Either a number for a frame ID or a string for a frame name.
    * @returns {Phaser.Sprite} the newly created sprite object.
    */
-  Image image (x, y, key, frame) {
+  Image image(x, y, key, frame) {
 
     return new Image(this.game, x, y, key, frame);
 
@@ -36,7 +36,7 @@ class GameObjectCreator {
    * @param {string|number} [frame] - If the sprite uses an image from a texture atlas or sprite sheet you can pass the frame here. Either a number for a frame ID or a string for a frame name.
    * @returns {Phaser.Sprite} the newly created sprite object.
    */
-  Sprite sprite (x, y, key, frame) {
+  Sprite sprite(x, y, key, frame) {
 
     return new Sprite(this.game, x, y, key, frame);
 
@@ -49,9 +49,9 @@ class GameObjectCreator {
    * @param {object} obj - Object the tween will be run on.
    * @return {Phaser.Tween} The Tween object.
    */
-  Tween tween (obj) {
+  Tween tween(obj) {
 
-    return new Tween(obj, this.game);
+    return new Tween(this.game, obj);
 
   }
 
@@ -65,7 +65,7 @@ class GameObjectCreator {
    * @param {number} [physicsBodyType=0] - If enableBody is true this is the type of physics body that is created on new Sprites. Phaser.Physics.ARCADE, Phaser.Physics.P2, Phaser.Physics.NINJA, etc.
    * @return {Phaser.Group} The newly created group.
    */
-  Group group (parent, name, addToStage, enableBody, physicsBodyType) {
+  Group group(parent, name, addToStage, enableBody, physicsBodyType) {
 
     return new Group(this.game, null, name, addToStage, enableBody, physicsBodyType);
 
@@ -80,10 +80,14 @@ class GameObjectCreator {
    * @param {boolean} [addToStage=false] - If set to true this Group will be added directly to the Game.Stage instead of Game.World.
    * @return {Phaser.Group} The newly created group.
    */
-  Group spriteBatch (parent, [String name, bool addToStage]) {
+  Group spriteBatch(parent, [String name, bool addToStage]) {
 
-    if ( name == null) { name = 'group'; }
-    if ( addToStage == null) { addToStage = false; }
+    if (name == null) {
+      name = 'group';
+    }
+    if (addToStage == null) {
+      addToStage = false;
+    }
 
     return new SpriteBatch(this.game, parent, name, addToStage);
 
@@ -99,7 +103,7 @@ class GameObjectCreator {
    * @param {boolean} [connect=true] - Controls if the created Sound object will connect to the master gainNode of the SoundManager when running under WebAudio.
    * @return {Phaser.Sound} The newly created text object.
    */
-  audio (key, volume, loop, connect) {
+  audio(key, volume, loop, connect) {
 
     return this.game.sound.add(key, volume, loop, connect);
 
@@ -115,7 +119,7 @@ class GameObjectCreator {
    * @param {boolean} [connect=true] - Controls if the created Sound object will connect to the master gainNode of the SoundManager when running under WebAudio.
    * @return {Phaser.Sound} The newly created text object.
    */
-  sound (key, volume, loop, connect) {
+  sound(key, volume, loop, connect) {
 
     return this.game.sound.add(key, volume, loop, connect);
 
@@ -133,7 +137,7 @@ class GameObjectCreator {
    * @param {string|number} frame - If this TileSprite is using part of a sprite sheet or texture atlas you can specify the exact frame to use by giving a string or numeric index.
    * @return {Phaser.TileSprite} The newly created tileSprite object.
    */
-  tileSprite (x, y, width, height, key, frame) {
+  tileSprite(x, y, width, height, key, frame) {
 
     return new TileSprite(this.game, x, y, width, height, key, frame);
 
@@ -149,7 +153,7 @@ class GameObjectCreator {
    * @param {object} style - The style object containing style attributes like font, font size , etc.
    * @return {Phaser.Text} The newly created text object.
    */
-  text (x, y, text, style) {
+  text(x, y, text, style) {
 
     return new Text(this.game, x, y, text, style);
 
@@ -170,7 +174,7 @@ class GameObjectCreator {
    * @param {string|number} [upFrame] This is the frame or frameName that will be set when this button is in an up state. Give either a number to use a frame ID or a string for a frame name.
    * @return {Phaser.Button} The newly created button object.
    */
-  button (x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame) {
+  button(x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame) {
 
     return new Button(this.game, x, y, key, callback, overFrame, outFrame, downFrame, upFrame);
 
@@ -184,7 +188,7 @@ class GameObjectCreator {
    * @param {number} y - Y position of the new graphics object.
    * @return {Phaser.Graphics} The newly created graphics object.
    */
-  graphics (x, y) {
+  graphics(x, y) {
 
     return new Graphics(this.game, x, y);
 
@@ -201,7 +205,7 @@ class GameObjectCreator {
    * @param {number} [maxParticles=50] - The total number of particles in this emitter.
    * @return {Phaser.Emitter} The newly created emitter object.
    */
-  emitter (x, y, maxParticles) {
+  emitter(x, y, maxParticles) {
 
     return new Emitter(this.game, x, y, maxParticles);
 
@@ -227,7 +231,7 @@ class GameObjectCreator {
    * @param {number} [yOffset=0] - If the font set doesn't start at the top left of the given image, specify the Y coordinate offset here.
    * @return {Phaser.RetroFont} The newly created RetroFont texture which can be applied to an Image or Sprite.
    */
-  retroFont (font, characterWidth, characterHeight, chars, charsPerRow, xSpacing, ySpacing, xOffset, yOffset) {
+  retroFont(font, characterWidth, characterHeight, chars, charsPerRow, xSpacing, ySpacing, xOffset, yOffset) {
 
     return new RetroFont(this.game, font, characterWidth, characterHeight, chars, charsPerRow, xSpacing, ySpacing, xOffset, yOffset);
 
@@ -244,7 +248,7 @@ class GameObjectCreator {
    * @param {number} [size] - The size the font will be rendered in, in pixels.
    * @return {Phaser.BitmapText} The newly created bitmapText object.
    */
-  bitmapText (x, y, font, text, size) {
+  bitmapText(x, y, font, text, size) {
 
     return new BitmapText(this.game, x, y, font, text, size);
 
@@ -264,7 +268,7 @@ class GameObjectCreator {
    * @param {number} [width=10] - The width of the map in tiles. If this map is created from Tiled or CSV data you don't need to specify this.
    * @param {number} [height=10] - The height of the map in tiles. If this map is created from Tiled or CSV data you don't need to specify this.
    */
-  tilemap (key, tileWidth, tileHeight, width, height) {
+  tilemap(key, tileWidth, tileHeight, width, height) {
 
     return new Tilemap(this.game, key, tileWidth, tileHeight, width, height);
 
@@ -280,14 +284,15 @@ class GameObjectCreator {
    * @param {boolean} [addToCache=false] - Should this RenderTexture be added to the Game.Cache? If so you can retrieve it with Cache.getTexture(key)
    * @return {Phaser.RenderTexture} The newly created RenderTexture object.
    */
-  renderTexture ([int width, int height, String key, bool addToCache=false]) {
+  renderTexture([int width, int height, String key, bool addToCache = false]) {
 
-    if (key == null) { key = this.game.rnd.uuid(); }
+    if (key == null) {
+      key = this.game.rnd.uuid();
+    }
 
     var texture = new RenderTexture(this.game, width, height, key);
 
-    if (addToCache)
-    {
+    if (addToCache) {
       this.game.cache.addRenderTexture(key, texture);
     }
 
@@ -305,15 +310,16 @@ class GameObjectCreator {
    * @param {boolean} [addToCache=false] - Should this BitmapData be added to the Game.Cache? If so you can retrieve it with Cache.getBitmapData(key)
    * @return {Phaser.BitmapData} The newly created BitmapData object.
    */
-  bitmapData ([int width, int height, String key, bool addToCache=false]) {
+  bitmapData([int width, int height, String key, bool addToCache = false]) {
 
 
-    if ( key == null) { key = this.game.rnd.uuid(); }
+    if (key == null) {
+      key = this.game.rnd.uuid();
+    }
 
     var texture = new BitmapData(this.game, key, width, height);
 
-    if (addToCache)
-    {
+    if (addToCache) {
       this.game.cache.addBitmapData(key, texture);
     }
 
@@ -329,7 +335,7 @@ class GameObjectCreator {
    * @param {any} - Whatever parameters are needed to be passed to the filter init function.
    * @return {Phaser.Filter} The newly created Phaser.Filter object.
    */
-  filter (filter) {
+  filter(filter) {
 
     //TODO
     //var args = Array.prototype.splice.call(arguments, 1);

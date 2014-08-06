@@ -1,6 +1,6 @@
 part of Phaser;
 
-class BitmapText extends PIXI.BitmapText implements GameObject {
+class BitmapText extends PIXI.BitmapText implements GameObject  {
   Game game;
 
   num get x {
@@ -10,7 +10,7 @@ class BitmapText extends PIXI.BitmapText implements GameObject {
   set x(num value) {
     this.position.x = value;
   }
-
+ 
   num get y {
     return this.position.y;
   }
@@ -57,7 +57,7 @@ class BitmapText extends PIXI.BitmapText implements GameObject {
   }
 
   Point anchor;
-
+  Point center;
 
   List<GameObject> children = [];
   Group parent;

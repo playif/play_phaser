@@ -385,7 +385,7 @@ class SoundManager {
    * @return {boolean} True if the sound was removed successfully, otherwise false.
    */
 
-  remove(sound) {
+  bool remove(Sound sound) {
 
     var i = this._sounds.length;
 
@@ -410,12 +410,12 @@ class SoundManager {
    * @return {number} The number of matching sound objects that were removed.
    */
 
-  removeByKey(key) {
+  int removeByKey(String key) {
 
-    var i = this._sounds.length;
-    var removed = 0;
+    int i = this._sounds.length;
+    int removed = 0;
 
-    while (i--) {
+    while (i-- >0 ) {
       if (this._sounds[i].key == key) {
         this._sounds[i].destroy(false);
         this._sounds.removeAt(i);
@@ -437,7 +437,7 @@ class SoundManager {
    * @return {Phaser.Sound} The new sound instance.
    */
 
-  play(key, volume, loop) {
+  Sound play(String key, [num volume =1, bool loop=false]) {
 
     var sound = this.add(key, volume, loop);
 

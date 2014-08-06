@@ -9,7 +9,7 @@ import "dart:convert";
 //import "dart:web_gl";
 import "dart:math" as DMath;
 
-import "package:tweenengine/tweenengine.dart" as tween;
+import "tween/tweenengine.dart" as tween;
 
 @MirrorsUsed(targets: const [Sprite], symbols: const ["call"], override: '*')
 import "dart:mirrors";

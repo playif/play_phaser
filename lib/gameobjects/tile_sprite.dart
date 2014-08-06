@@ -19,6 +19,8 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
 
   List<num> _cache;
   Rectangle _currentBounds;
+  
+  Point center;
 
   int _frame;
   String _frameName;
