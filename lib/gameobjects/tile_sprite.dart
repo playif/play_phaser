@@ -35,11 +35,6 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
   bool autoCull;
   Point cameraOffset;
 
-  //CanvasPattern __tilePattern;
-
-  setTexture(PIXI.Texture texture) {
-
-  }
 
   GameObject bringToTop([GameObject child]) {
     if (child == null) {
