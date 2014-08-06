@@ -11,7 +11,7 @@ class arcade_physics_34_quadtree extends State{
 
   var ship;
   Group aliens;
-  var cursors;
+  CursorKeys cursors;
 
   create() {
 
@@ -20,10 +20,10 @@ class arcade_physics_34_quadtree extends State{
     aliens = game.add.group();
     aliens.enableBody = true;
 
-    for (var i = 0; i < 5000; i++)
+    for (var i = 0; i < 3000; i++)
     {
       Sprite s = aliens.create(game.world.randomX, game.world.randomY, 'baddie');
-      s.scale.set(0.1);
+      s.scale.set(0.2);
       s.body.collideWorldBounds = true;
       s.body.bounce.set(1);
       s.body.velocity.setTo(10 + Math.random() * 40, 10 + Math.random() * 40);

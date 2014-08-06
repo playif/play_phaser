@@ -1,6 +1,6 @@
 play_phaser
 =========
-A Dart port of Phaser.js
+A Dart port of Phaser.js (2.0.7)
 
 
 Not ready for using.
