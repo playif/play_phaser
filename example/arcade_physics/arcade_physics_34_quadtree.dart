@@ -67,6 +67,6 @@ class arcade_physics_34_quadtree extends State {
   }
 
   render() {
-    game.debug.quadTree(game.physics.arcade.quadTree);
+    game.debug.quadTree(game.physics.arcade.quadTree); 
   }
 }
