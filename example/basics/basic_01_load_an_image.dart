@@ -2,13 +2,9 @@ part of example;
 
 
 class basic_01_load_an_image extends State {
-  //Phaser.Game game;
+
   Text text;
   Sprite image;
-  int counter = 0;
-
-  double t = 0.5;
-
 
   preload() {
     //Phaser.Easing.Linear.None;
@@ -37,18 +33,13 @@ class basic_01_load_an_image extends State {
       //  Enables all kind of input actions on this image (click, etc)
       image.inputEnabled = true;
 
+      // When moving on the image, kill it.
       image.events.onInputOver.add((Sprite s, Pointer p) {
         image.kill();
       });
     }
-//
-    //image.position=new Phaser.Point(200,200);
-
-
 
     text = game.add.text(250, 16, 'Hi', new TextStyle()..fill = '#ffffff');
-
-    //image.events.onInputDown.add(listener);
 
   }
 
@@ -59,20 +50,9 @@ class basic_01_load_an_image extends State {
       if (o.x > 800) {
         o.x = 0;
       }
-      //o.scale.set(game.rnd.frac() * 5);
       o.alpha = 0.5;
       o.rotation += game.rnd.frac() * 0.1;
     });
-    //image.anchor.set(t);
-    //image.x += 1;
-    //image.rotation += 0.1;
-    //text.x += 1;
-
-    //t+=0.01;
   }
 
-  listener(Sprite s, Pointer p) {
-    counter++;
-    text.text = "You clicked " + counter.toString() + " times!";
-  }
 }
