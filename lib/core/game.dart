@@ -384,7 +384,6 @@ class Game {
     window.addEventListener('load', this._onBoot, false);
     //return this;
     window.onLoad.listen((e){
-      print("on load");
       this._onBoot(0);
     });
 
@@ -455,7 +454,6 @@ class Game {
    */
 
   boot() {
-    print("boot");
     if (this.isBooted) {
       return;
     }

@@ -11,7 +11,6 @@ class basic_01_load_an_image extends State {
 
 
   preload() {
-    print("preload");
     //Phaser.Easing.Linear.None;
     //  You can fill the preloader with as many assets as your game requires
 
@@ -24,7 +23,6 @@ class basic_01_load_an_image extends State {
   }
 
   create() {
-    print("create");
     //  This creates a simple sprite that is using our loaded image and
     //  displays it on-screen
     for (int i = 0; i < 10; i++) {
@@ -32,8 +30,10 @@ class basic_01_load_an_image extends State {
 
       //  Moves the image anchor to the middle, so it centers inside the game properly
       image.anchor.set(0.5);
+
       image.scale.set(2);
       image.position.set(game.rnd.integerInRange(0, 800), game.rnd.integerInRange(0, 600));
+
       //  Enables all kind of input actions on this image (click, etc)
       image.inputEnabled = true;
 
@@ -53,7 +53,6 @@ class basic_01_load_an_image extends State {
   }
 
   update() {
-    //print("update");
 
     game.world.forEach((GameObject o) {
       o.x += game.rnd.frac();

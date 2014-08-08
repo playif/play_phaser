@@ -686,7 +686,7 @@ class Device {
 //  this.webAudio = !!(window['webkitAudioContext'] || window['AudioContext']);
     //var audioElement = document.createElement('audio');
     //var result = false;
-    print(audio.canPlayType('audio/mp3'));
+
     if (audio.canPlayType('audio/ogg') != "") {
       this.ogg = true;
     }
