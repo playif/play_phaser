@@ -35,6 +35,10 @@ What are done:
 
 Examples:
 =========
+
+please check the [online demo][3] or download examples from [github repo][2]
+
+
 ```dart
 
 class basic_01_load_an_image extends State {
@@ -83,7 +87,6 @@ class basic_01_load_an_image extends State {
 
 ```
 
-please check the [online demo][3] or download examples from [github repo][2]
 
 * animation
 * arcade physics
