@@ -83,7 +83,7 @@ class basic_01_load_an_image extends State {
 
 ```
 
-please download examples from [github repo][2]
+please check the [online demo][3] or download examples from [github repo][2]
 
 * animation
 * arcade physics
@@ -99,12 +99,7 @@ please download examples from [github repo][2]
 * tweens
 
 
-Install:
-=========
-
-dependencies:
-  play_phaser: any
-
 
 [1]: https://github.com/playif/play_pixi
 [2]: https://github.com/playif/play_phraser
+[3]: http://playif.github.io/phaser_example/index.html
