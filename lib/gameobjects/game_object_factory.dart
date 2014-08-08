@@ -201,7 +201,7 @@ class GameObjectFactory {
    * @return {Phaser.Text} The newly created text object.
    */
 
-  Text text(int x, int y, String text, PIXI.TextStyle style, [Group group]) {
+  Text text(int x, int y, String text, TextStyle style, [Group group]) {
 
     if (group == null) {
       group = this.world;

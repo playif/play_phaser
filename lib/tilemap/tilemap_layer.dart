@@ -564,10 +564,10 @@ class TilemapLayer extends Image {
     }
 
     //  Convert the pixel values into tile coordinates
-    this._mc.tx = Math.snapToFloor(x, this._mc.cw) / this._mc.cw;
-    this._mc.ty = Math.snapToFloor(y, this._mc.ch) / this._mc.ch;
-    this._mc.tw = (Math.snapToCeil(width, this._mc.cw) + this._mc.cw) / this._mc.cw;
-    this._mc.th = (Math.snapToCeil(height, this._mc.ch) + this._mc.ch) / this._mc.ch;
+    this._mc.tx = Math.snapToFloor(x, this._mc.cw) ~/ this._mc.cw;
+    this._mc.ty = Math.snapToFloor(y, this._mc.ch) ~/ this._mc.ch;
+    this._mc.tw = (Math.snapToCeil(width, this._mc.cw) + this._mc.cw) ~/ this._mc.cw;
+    this._mc.th = (Math.snapToCeil(height, this._mc.ch) + this._mc.ch) ~/ this._mc.ch;
 
     //  This should apply the layer x/y here
     this._results.length = 0;
@@ -724,7 +724,7 @@ class TilemapLayer extends Image {
         this._column = this.layer.data[y + this.map.height];
       } else if (y >= this.map.height && this.wrap) {
         this._column = this.layer.data[y - this.map.height];
-      } else if (this.layer.data[y] != null) {
+      } else if (this.layer.data.length > y) {
         this._column = this.layer.data[y];
       }
 

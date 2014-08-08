@@ -28,6 +28,8 @@ part "arcade_physics/arcade_physics_34_quadtree.dart";
 
 part "camera/camera_01_basic_follow.dart";
 
+part "tilemaps/tilemaps_16_tilemap_ray_cast.dart";
+
 
 part "display/display_14_bitmapdata_wobble.dart";
 part "display/display_20_bitmapdata_set_hsl.dart";
@@ -69,6 +71,8 @@ Map<String, State> examples = {
 
     "camera_01_basic_follow": new camera_01_basic_follow(),
 
+    "tilemaps_16_tilemap_ray_cast": new tilemaps_16_tilemap_ray_cast(),
+
     "display_14_bitmapdata_wobble":new display_14_bitmapdata_wobble(),
     "display_20_bitmapdata_set_hsl":new display_20_bitmapdata_set_hsl(),
 
@@ -101,7 +105,7 @@ main() {
   //var game = new Game(width, height, CANVAS, '');
 
 
-  Game game = new Game(800, 600, CANVAS, '');
+  Game game = new Game(800, 600, WEBGL, '');
 
   dom.SelectElement select = dom.document.getElementById("examples") as dom.SelectElement;
   for (String key in examples.keys) {
@@ -115,7 +119,7 @@ main() {
     game.state.start(select.children[select.selectedIndex].text);
   });
 
-  game.state.start("games_04_matching_pairs");
+  game.state.start("tilemaps_16_tilemap_ray_cast");
 
   //game.canvas.style.cursor = "pointer";
   //game.boot();

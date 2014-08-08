@@ -1015,7 +1015,7 @@ class Arcade {
       //  If it returns true then we can carry on, otherwise we should abort.
       return false;
     }
-    else if (tile.layer.callbacks[tile.index] != null && !tile.layer.callbacks[tile.index](body.sprite, tile)) {
+    else if (tile.index>=0 && tile.layer.callbacks.length >tile.index && !tile.layer.callbacks[tile.index](body.sprite, tile)) {
       //  If it returns true then we can carry on, otherwise we should abort.
       return false;
     }

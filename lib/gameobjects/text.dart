@@ -1,14 +1,28 @@
 part of Phaser;
 
 class TextStyle extends PIXI.TextStyle {
+  TextStyle({String fill : 'black',
+            String font : 'bold 20pt Arial',
+            String align : 'left',
+            String stroke : 'black',
+            num strokeThickness : 0,
+            num tint
+            }):super() {
+    this.fill = fill;
+    this.font = font;
+    this.align = align;
+    this.stroke = stroke;
+    this.strokeThickness = strokeThickness;
+    this.tint = tint;
 
+  }
 }
 
 class Text extends PIXI.Text implements GameObject {
   Game game;
 
   //num x, y;
-//  String _text;
+  String _text;
 
   String name;
 
@@ -59,9 +73,12 @@ class Text extends PIXI.Text implements GameObject {
 //  set text(String value){
 //    setText(value);
 //  }
-  
+
   Point center;
-  Point anchor=new Point();
+
+  setTexture(PIXI.Texture texture) {
+
+  }
 
 
   num get x {
@@ -131,7 +148,7 @@ class Text extends PIXI.Text implements GameObject {
   Rectangle _currentBounds;
 
   Text(this.game, [num x, num y, String text = '', PIXI.TextStyle style])
-      : super(text, style) {
+  : super(text, style) {
 
     this.x = x;
     this.y = y;
@@ -173,7 +190,7 @@ class Text extends PIXI.Text implements GameObject {
      * @property {string} _text - Internal cache var.
      * @private
      */
-//    this._text = text;
+    this._text = text;
 
     /**
      * @property {string} _font - Internal cache var.
@@ -269,7 +286,7 @@ class Text extends PIXI.Text implements GameObject {
 
     //  Update any Children
     for (var i = 0,
-        len = this.children.length; i < len; i++) {
+    len = this.children.length; i < len; i++) {
       this.children[i].preUpdate();
     }
 
@@ -302,7 +319,7 @@ class Text extends PIXI.Text implements GameObject {
 
     //  Update any Children
     for (var i = 0,
-        len = this.children.length; i < len; i++) {
+    len = this.children.length; i < len; i++) {
       this.children[i].postUpdate();
     }
 
