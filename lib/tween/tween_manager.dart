@@ -1,5 +1,11 @@
 part of Phaser;
 
+class TweenManager extends tween.TweenManager{
+  remove(Tween tween){
+    tween._timeline.kill();
+  }
+}
+
 //class PhaserTweenManager {
 //  final Game game;
 //  final List<Tween> _tweens = [];

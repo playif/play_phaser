@@ -160,7 +160,7 @@ class AnimationManager {
 
   }
 
-  play(name, num frameRate, [bool loop=true, bool killOnComplete=false]) {
+  play(name, [num frameRate=60, bool loop=true, bool killOnComplete=false]) {
 
     if (this._anims[name] != null) {
       if (this.currentAnim == this._anims[name]) {
@@ -182,7 +182,7 @@ class AnimationManager {
 
   }
 
-  stop(name, [resetFrame =null]) {
+  stop([name, resetFrame =null]) {
     if (name is String) {
       if (this._anims[name] != null) {
         this.currentAnim = this._anims[name];

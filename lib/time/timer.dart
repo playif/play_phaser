@@ -117,7 +117,7 @@ class Timer {
    * @return {Phaser.TimerEvent} The Phaser.TimerEvent object that was created.
    */
 
-  TimerEvent add(double delay, Function callback, List args) {
+  TimerEvent add(double delay, Function callback, [List args]) {
     return this.create(delay, false, 0, callback, args);
   }
 
@@ -272,6 +272,15 @@ class Timer {
 
   }
 
+  callback(TimerEvent events) {
+    if (events.args == null) {
+      events.callback();
+    }
+    else {
+      events.callback(this.events[this._i].args);
+    }
+  }
+
   /**
    * The main Timer update event, called automatically by Phaser.Time.update.
    *
@@ -313,19 +322,21 @@ class Timer {
             this._newTick = this._now + this.events[this._i].delay;
           }
 
+
           if (this.events[this._i].loop == true) {
             this.events[this._i].tick = this._newTick;
-            this.events[this._i].callback(this.events[this._i].args);
+            callback(events[this._i]);
+
           }
           else if (this.events[this._i].repeatCount > 0) {
             this.events[this._i].repeatCount--;
             this.events[this._i].tick = this._newTick;
-            this.events[this._i].callback(this.events[this._i].args);
+            callback(events[this._i]);
           }
           else {
             this._marked++;
             this.events[this._i].pendingDelete = true;
-            this.events[this._i].callback(this.events[this._i].args);
+            callback(events[this._i]);
           }
 
           this._i++;

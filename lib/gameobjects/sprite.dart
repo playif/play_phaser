@@ -606,7 +606,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
    * @return (Phaser.Sprite) This instance.
    */
 
-  revive(health) {
+  revive([health]) {
 
     if (health == null) {
       health = 1;

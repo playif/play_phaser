@@ -8,7 +8,7 @@ class Text extends PIXI.Text implements GameObject {
   Game game;
 
   //num x, y;
-  String _text;
+//  String _text;
 
   String name;
 
@@ -55,13 +55,13 @@ class Text extends PIXI.Text implements GameObject {
 
   CanvasPattern __tilePattern;
 
-  String text;
+//  String get text=>_text;
+//  set text(String value){
+//    setText(value);
+//  }
   
   Point center;
-
-  setTexture(PIXI.Texture texture) {
-
-  }
+  Point anchor=new Point();
 
 
   num get x {
@@ -173,7 +173,7 @@ class Text extends PIXI.Text implements GameObject {
      * @property {string} _text - Internal cache var.
      * @private
      */
-    this._text = text;
+//    this._text = text;
 
     /**
      * @property {string} _font - Internal cache var.

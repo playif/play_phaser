@@ -144,11 +144,29 @@ class Tween {
   double get startTime => _startTime;
 
   Map<String, num> _initVal;
+  Signal onLoop=new Signal();
+  Signal onStart = new Signal();
+  Signal onComplete = new Signal();
   //List<num> _vals = new List<num>(1);
+
+  _callback(int type, tween.BaseTween source){
+    if(type & START == START){
+      onStart.dispatch(this);
+    }
+    if(type & END == END){
+      onLoop.dispatch(this);
+    }
+    if(type & COMPLETE == COMPLETE){
+      onComplete.dispatch(this);
+    }
+    print(type);
+  }
 
   Tween(this._game, this._gameObject) {
     this._tweenManager = _game.tweens;
     this._timeline = tween.Timeline.createSequence();
+    this._timeline.setCallback(new tween.TweenCallback()..onEvent = _callback);
+    this._timeline.setCallbackTriggers(START|END|COMPLETE|ANY);
   }
 
   Tween to(Map<String, num> properties, [num duration = 1000, tween.TweenEquation ease = null, bool autoStart = false, num delay = 0, int repeat = 0, bool yoyo = false]) {
@@ -173,7 +191,6 @@ class Tween {
 //  Tween set(Map<int, num> properties, [num duration=1000, tween.TweenEquation ease=null, bool autoStart=false, double delay=0.0, int repeat=0, bool yoyo=false]) {
 //    return _setTween(properties, tween.Tween.set, duration, ease, autoStart, delay, repeat, yoyo);
 //  }
-
 
 
   Tween _setTween(Map<String, num> properties, Function operation, [num duration = 1000, tween.TweenEquation ease = null, bool autoStart = false, num delay = 0.0, int repeat = 0, bool yoyo = false]) {

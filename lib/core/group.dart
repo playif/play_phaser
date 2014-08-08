@@ -1,5 +1,9 @@
 part of Phaser;
 
+typedef Sprite Creator();
+
+typedef bool SelectWhere(Sprite);
+
 class Group extends PIXI.DisplayObjectContainer implements GameObject {
   Game game;
   GameObject parent;
@@ -22,7 +26,9 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
 
   List _cache;
 
-  Type classType;
+  //Type classType;
+  Creator creator;
+
 
   int renderOrderID;
 
@@ -101,8 +107,10 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
      * @property {object} classType
      * @default
      */
-    this.classType = Sprite;
-
+    //this.classType = Sprite;
+    this.creator = () {
+      return new Sprite(this.game);
+    };
     /**
      * @property {Phaser.Group|Phaser.Sprite} parent - The parent of this Group.
      */
@@ -268,12 +276,16 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
     }
   }
 
-  create(num x, num y, String key, [int frame=0, bool exists=true]) {
+  Sprite create([num x=0, num y=0, key, frame=0, bool exists=true]) {
 
 
     //var child = new this.classType(this.game, x, y, key, frame);
 
-    GameObject child = reflectClass(classType).newInstance(const Symbol(""), [this.game, x, y, key, frame]).reflectee;
+    //GameObject child = reflectClass(classType).newInstance(const Symbol(""), [this.game, x, y, key, frame]).reflectee;
+    Sprite child = creator()
+      ..x = x
+      ..y = y;
+    child.loadTexture(key, frame);
 
     if (this.enableBody) {
       this.game.physics.enable(child, this.physicsBodyType);
@@ -299,7 +311,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
 
   }
 
-  createMultiple(int quantity, String key, int frame, [bool exists=false]) {
+  createMultiple(int quantity, [key, frame, bool exists=false]) {
     for (var i = 0; i < quantity; i++) {
       this.create(0, 0, key, frame, exists);
     }
@@ -839,7 +851,7 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
 
   forEach(Function callback, [bool checkExists=false]) {
     for (int i = 0, len = this.children.length; i < len; i++) {
-      if(checkExists == false){
+      if (checkExists == false) {
         callback(this.children[i]);
       }
       else if (this.children[i].exists) {
@@ -992,9 +1004,13 @@ class Group extends PIXI.DisplayObjectContainer implements GameObject {
 //
 //  }
 
+  GameObject getFirst([SelectWhere where]) {
+    return this.children.firstWhere(where, orElse:() => null);
+  }
+
   GameObject getFirstExists([bool state=true]) {
     return this.children.firstWhere((GameObject child) {
-      return child.exists==state;
+      return child.exists == state;
     }, orElse:() {
       return null;
     });

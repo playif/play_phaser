@@ -33,7 +33,9 @@ part "display/display_14_bitmapdata_wobble.dart";
 part "display/display_20_bitmapdata_set_hsl.dart";
 
 
-
+part "games/games_01_breakout.dart";
+part "games/games_02_gemmatch.dart";
+part "games/games_03_invaders.dart";
 
 Map<String, State> examples = {
 
@@ -67,6 +69,10 @@ Map<String, State> examples = {
 
     "display_14_bitmapdata_wobble":new display_14_bitmapdata_wobble(),
     "display_20_bitmapdata_set_hsl":new display_20_bitmapdata_set_hsl(),
+
+    "games_01_breakout":new games_01_breakout(),
+    "games_02_gemmatch":new games_02_gemmatch(),
+    "games_03_invaders":new games_03_invaders(),
 
 };
 
@@ -107,7 +113,7 @@ main() {
     game.state.start(select.children[select.selectedIndex].text);
   });
 
-  game.state.start("display_20_bitmapdata_set_hsl");
+  game.state.start("games_03_invaders");
 
   //game.canvas.style.cursor = "pointer";
   //game.boot();

@@ -14,7 +14,7 @@ class tweens_01_chained_tweens extends State {
     var tween = game.add.tween(sprite).to({
         'x': 300,
         //ALPHA: 0.1,
-    }, 4000, Easing.Linear.None, false, 0, 0, false)
+    }, 500, Easing.Linear.None, false, 0, 0, false)
 //    .delay(40)
 //    .to({
 //        X: 500
@@ -22,9 +22,9 @@ class tweens_01_chained_tweens extends State {
 
     .yoyo(true)
     .repeat(1)
-//    .setCallback((type, source) {
-//      print(type);
-//    }, Tween.COMPLETE)
+    .setCallback((type, source) {
+      print(type);
+    }, Tween.COMPLETE)
     .start();
 
 //    game.add.tween(sprite.position)

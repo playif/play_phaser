@@ -7,7 +7,8 @@ homepage: https://github.com/playif/play_phaser
 dependencies:
   browser: ">=0.10.0+2 <0.11.0"
   uuid: 0.3.2
-  play_pixi: any
+  play_pixi:
+    path: ../play_pixi
 
 
 transformers:

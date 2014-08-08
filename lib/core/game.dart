@@ -35,7 +35,7 @@ class Game {
   Stage stage;
   Time time;
   Physics physics;
-  tween.TweenManager tweens;
+  TweenManager tweens;
   RandomDataGenerator rnd;
   Device device;
   Camera camera;
@@ -499,7 +499,7 @@ class Game {
     this.cache = new Cache(this);
     this.load = new Loader(this);
     this.time = new Time(this);
-    this.tweens = new tween.TweenManager();
+    this.tweens = new TweenManager();
     this.input = new Input(this);
     this.sound = new SoundManager(this);
     this.physics = new Physics(this, this.physicsConfig);

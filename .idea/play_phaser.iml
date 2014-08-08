@@ -58,12 +58,14 @@
       <excludeFolder url="file://$MODULE_DIR$/example/basics/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/camera/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/display/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/games/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/input/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/loader/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/particles/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/tweens/packages" />
       <excludeFolder url="file://$MODULE_DIR$/packages/play_phaser" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/play_pixi" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
