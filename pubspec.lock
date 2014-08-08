@@ -22,11 +22,9 @@ packages:
     source: hosted
     version: "0.9.0"
   play_pixi:
-    description:
-      path: "..\\play_pixi"
-      relative: true
-    source: path
-    version: "0.9.4+2"
+    description: play_pixi
+    source: hosted
+    version: "0.9.4+3"
   uuid:
     description: uuid
     source: hosted
