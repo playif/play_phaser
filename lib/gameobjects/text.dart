@@ -75,6 +75,7 @@ class Text extends PIXI.Text implements GameObject {
 //  }
 
   Point center;
+  Point anchor=new Point();
 
   setTexture(PIXI.Texture texture) {
 
@@ -114,7 +115,7 @@ class Text extends PIXI.Text implements GameObject {
   //this._cache = [ 0, 0, 0, 0, 1, 0, 1, 0, 0 ];
 
   bool get fixedToCamera {
-    return this._cache[7] == null ? false : this._cache[7];
+    return this._cache[7] == 1;
   }
 
   set fixedToCamera(bool value) {

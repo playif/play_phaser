@@ -411,7 +411,7 @@ class Debug {
    * @param {string} [color] - Color of the debug info to be rendered (format is css color string).
    * @param {boolean} [filled=true] - Render the rectangle as a fillRect (default, true) or a strokeRect (false)
    */
-  spriteBounds(sprite, [String color = 'rgb(255,255,255)', bool filled = true]) {
+  spriteBounds(sprite, [String color = 'rgba(255,255,255,0.2)', bool filled = true]) {
 
     var bounds = sprite.getBounds();
 

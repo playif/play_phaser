@@ -27,12 +27,15 @@ class tilemaps_16_tilemap_ray_cast extends State {
     map.addTilesetImage('ground_1x1');
 
     layer = map.createLayer('Tile Layer 1');
+    layer.debug=true;
 
     layer.resizeWorld();
 
     map.setCollisionBetween(1, 12);
 
     layer.debug = true;
+    layer.debugAlpha=0.5;
+    layer.debugFill =true;
 
     sprite = game.add.sprite(260, 70, 'phaser');
 
@@ -42,11 +45,11 @@ class tilemaps_16_tilemap_ray_cast extends State {
 
     cursors = game.input.keyboard.createCursorKeys();
 
-    var help = game.add.text(10, 10, 'Arrows to move, click and drag to cast a ray', new TextStyle(font:'16px Arial', fill:'#ffffff'));
+    Text help = game.add.text(10, 10, 'Arrows to move, click and drag to cast a ray', new TextStyle(font:'16px Arial', fill:'#ffffff'));
     help.fixedToCamera = true;
 
-    game.input.onDown.add(startLine, this);
-    game.input.onUp.add(raycast, this);
+    game.input.onDown.add(startLine);
+    game.input.onUp.add(raycast);
 
   }
 

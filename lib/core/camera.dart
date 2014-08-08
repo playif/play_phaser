@@ -225,9 +225,7 @@ class Camera {
    * @param {number} y - Y position.
    */
   focusOnXY(num x, num y) {
-
     this.setPosition(Math.round(x - this.view.halfWidth), Math.round(y - this.view.halfHeight));
-
   }
 
   /**

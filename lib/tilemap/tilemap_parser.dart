@@ -351,7 +351,7 @@ class TilemapParser {
     Map<String, List> objects = {};
     Map<String, List> collision = {};
 
-    Map slice(Map obj, Map fields) {
+    Map slice(Map obj, List fields) {
       Map sliced = {};
       for (var k in fields) {
         var key = k;
@@ -371,7 +371,7 @@ class TilemapParser {
       for (int v = 0,
           len = json['layers'][i]['objects'].length; v < len; v++) {
         //  Object Tiles
-        if (json['layers'][i]['objects'][v]['gid']) {
+        if (json['layers'][i]['objects'][v]['gid'] != null) {
           Map object = {
             ['gid']: json['layers'][i]['objects'][v]['gid'],
             ['name']: json['layers'][i]['objects'][v]['name'],
@@ -382,7 +382,7 @@ class TilemapParser {
           };
           objects[json['layers'][i]['name']].add(object);
           
-        } else if (json['layers'][i]['objects'][v]['polyline']) {
+        } else if (json['layers'][i]['objects'][v]['polyline'] != null) {
           Map object = {
             ['name']: json['layers'][i]['objects'][v]['name'],
             ['x']: json['layers'][i]['objects'][v]['x'],
@@ -401,7 +401,7 @@ class TilemapParser {
 
           collision[json['layers'][i]['name']].add(object);
         } // polygon
-        else if (json['layers'][i]['objects'][v]['polygon']) {
+        else if (json['layers'][i]['objects'][v]['polygon'] != null) {
           Map object = slice(json['layers'][i]['objects'][v], ["name", "x", "y", "visible", "properties"]);
 
           //  Parse the polygon into an array

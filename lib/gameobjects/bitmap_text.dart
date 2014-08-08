@@ -259,7 +259,7 @@ class BitmapText extends PIXI.BitmapText implements GameObject  {
   //Object.defineProperty(Phaser.BitmapText.prototype, "fixedToCamera", {
 
   bool get fixedToCamera {
-    return !!this._cache[7];
+    return this._cache[7] == 1;
   }
 
   set fixedToCamera(bool value) {

@@ -30,12 +30,12 @@ class games_03_invaders extends State {
   Group lives;
 
   var firingTimer = 0;
-  var stateText;
+  Text stateText;
   List<Sprite> livingEnemies = [];
 
   create() {
 
-    game.world.bounds.setTo(0, 0, 1200, 600);
+    game.world.setBounds(0, 0, 800, 600);
 
     game.physics.startSystem(Physics.ARCADE);
 
@@ -67,7 +67,11 @@ class games_03_invaders extends State {
     //  The hero!
     player = game.add.sprite(400, 500, 'ship');
     player.anchor.setTo(0.5, 0.5);
+    player.checkWorldBounds=true;
+
     game.physics.enable(player, Physics.ARCADE);
+    game.camera.x=0;
+    game.camera.reset();
     game.camera.follow(player);
 
     //  The baddies!

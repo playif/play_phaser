@@ -647,12 +647,12 @@ class Arcade {
     }
 
     for (var i = 0; i < this._mapData.length; i++) {
-      if (processCallback) {
+      if (processCallback != null) {
         if (processCallback(sprite, this._mapData[i])) {
           if (this.separateTile(i, sprite.body, this._mapData[i])) {
             this._total++;
 
-            if (collideCallback) {
+            if (collideCallback != null) {
               collideCallback(sprite, this._mapData[i]);
             }
           }
@@ -662,7 +662,7 @@ class Arcade {
         if (this.separateTile(i, sprite.body, this._mapData[i])) {
           this._total++;
 
-          if (collideCallback) {
+          if (collideCallback != null) {
             collideCallback.call(sprite, this._mapData[i]);
           }
         }
@@ -1089,9 +1089,9 @@ class Arcade {
    * @return {number} The amount of separation that occured.
    */
 
-  int tileCheckX(Body body, Tile tile) {
+  num tileCheckX(Body body, Tile tile) {
 
-    int ox = 0;
+    num ox = 0;
 
     if (body.deltaX() < 0 && !body.blocked.left && tile.collideRight && body.checkCollision.left) {
       //  Body is moving LEFT
@@ -1132,9 +1132,9 @@ class Arcade {
    * @return {number} The amount of separation that occured.
    */
 
-  int tileCheckY(Body body, Tile tile) {
+  num tileCheckY(Body body, Tile tile) {
 
-    int oy = 0;
+    num oy = 0;
 
     if (body.deltaY() < 0 && !body.blocked.up && tile.collideDown && body.checkCollision.up) {
       //  Body is moving UP
@@ -1175,7 +1175,7 @@ class Arcade {
    * @return {boolean} Returns true as a pass-thru to the separateTile method.
    */
 
-  bool processTileSeparationX(Body body, int x) {
+  bool processTileSeparationX(Body body, num x) {
 
     if (x < 0) {
       body.blocked.left = true;
@@ -1205,7 +1205,7 @@ class Arcade {
    * @param {number} y - The y separation amount.
    */
 
-  bool processTileSeparationY(Body body, int y) {
+  bool processTileSeparationY(Body body, num y) {
 
     if (y < 0) {
       body.blocked.up = true;

@@ -188,7 +188,7 @@ class GameObjectCreator {
    * @param {number} y - Y position of the new graphics object.
    * @return {Phaser.Graphics} The newly created graphics object.
    */
-  graphics(x, y) {
+  Graphics graphics([num x=0, num y=0]) {
 
     return new Graphics(this.game, x, y);
 
