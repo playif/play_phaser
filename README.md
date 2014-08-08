@@ -4,6 +4,8 @@ A Dart port of Phaser.js (2.0.7)
 
 You can check the [play_pixi][1] which is almost finished.
 
+0.8.5 several examples were added.
+
 
 What are done:
 =========
@@ -14,12 +16,11 @@ What are done:
 * input (80): keyboard, mouse, touch
 * loader (100%)
 * math (100%)
-* net (50%)
 * particles (100%)
 * sound & music (100%)
 * system (100%)
 * time (100%)
-* tilemap (50%)
+* tilemap (80%)
 * tween (90%) (thanks to https://github.com/xaguzman/tween-engine-dart)
 * utils (100%)
 
