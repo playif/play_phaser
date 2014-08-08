@@ -77,7 +77,7 @@ class basic_01_load_an_image extends State {
     });
 
 
-    text = game.add.text(250, 16, 'Hi', new TextStyle()..fill = '#ffffff');
+    text = game.add.text(250, 16, 'Hello world!', new TextStyle(fill:'#ffffff'));
 
   }
 
