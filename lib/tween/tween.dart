@@ -85,7 +85,6 @@ class Quints {
 }
 
 
-
 class Easing {
   static final Linears Linear = new Linears();
   static final Quads Quadratic = new Quads();
@@ -141,32 +140,40 @@ class Tween {
   tween.TweenManager _tweenManager;
   tween.Timeline _timeline;
   double _startTime = 0.0;
+
   double get startTime => _startTime;
 
   Map<String, num> _initVal;
-  Signal onLoop=new Signal();
+  Signal onLoop = new Signal();
   Signal onStart = new Signal();
   Signal onComplete = new Signal();
+
   //List<num> _vals = new List<num>(1);
 
-  _callback(int type, tween.BaseTween source){
-    if(type & START == START){
+  _callback(int type, tween.BaseTween source) {
+    if (type & START == START) {
       onStart.dispatch(this);
     }
-    if(type & END == END){
+    if (type & END == END) {
       onLoop.dispatch(this);
     }
-    if(type & COMPLETE == COMPLETE){
+    if (type & COMPLETE == COMPLETE) {
       onComplete.dispatch(this);
     }
     print(type);
   }
 
+  Tween kill() {
+    this._timeline.kill();
+    return this;
+  }
+
   Tween(this._game, this._gameObject) {
     this._tweenManager = _game.tweens;
     this._timeline = tween.Timeline.createSequence();
-    this._timeline.setCallback(new tween.TweenCallback()..onEvent = _callback);
-    this._timeline.setCallbackTriggers(START|END|COMPLETE|ANY);
+    this._timeline.setCallback(new tween.TweenCallback()
+      ..onEvent = _callback);
+    this._timeline.setCallbackTriggers(START | END | COMPLETE | ANY);
   }
 
   Tween to(Map<String, num> properties, [num duration = 1000, tween.TweenEquation ease = null, bool autoStart = false, num delay = 0, int repeat = 0, bool yoyo = false]) {
@@ -183,7 +190,7 @@ class Tween {
     Map<String, num> result = new Map<String, num>();
     for (var key in props) {
       //this._gameObject.getTweenableValues(key, _vals);
-      result[key] = tween.Tween.getRegisteredAccessor().getValue(this._gameObject,key);
+      result[key] = tween.Tween.getRegisteredAccessor().getValue(this._gameObject, key);
     }
     return result;
   }
@@ -208,34 +215,36 @@ class Tween {
     }
     tweens.delay = delay * 0.001;
 
-    if (repeat != Tween.INFINITY) {
-      if (yoyo == true) {
-        tweens.repeatYoyo(repeat, 0);
-      } else {
-        tweens.repeat(repeat, 0);
-      }
-    }
+//    if (repeat != Tween.INFINITY) {
+//      if (yoyo == true) {
+//        tweens.repeatYoyo(repeat, 0);
+//      } else {
+//        tweens.repeat(repeat, 0);
+//      }
+//    }
 
-    if (autoStart == true) {
-      tweens.start(this._tweenManager);
-    }
 
     _timeline.push(tweens);
 
-    if (repeat == Tween.INFINITY) {
-      if (yoyo == true) {
-        _timeline.repeatYoyo(repeat, 0);
-      } else {
-        _timeline.repeat(repeat, 0);
-      }
-    }
 
+
+    //if (repeat == Tween.INFINITY) {
+    if (yoyo == true) {
+      _timeline.repeatYoyo(repeat, 0);
+    } else {
+      _timeline.repeat(repeat, 0);
+    }
+    //}
+    if (autoStart == true) {
+      _timeline.start(this._tweenManager);
+    }
 
     return this;
   }
 
   Tween setCallback(tween.CallbackHandler func, [int event]) {
-    this._timeline.setCallback(new tween.TweenCallback()..onEvent = func);
+    this._timeline.setCallback(new tween.TweenCallback()
+      ..onEvent = func);
     if (event != null) {
       this._timeline.setCallbackTriggers(event);
     }
@@ -294,7 +303,6 @@ class Tween {
     }
     return this.repeat(Tween.INFINITY, delayBetweenLoop);
   }
-
 
 
   List<Map<String, num>> generateData([int frameRate = 60, List<Map<String, num>> data]) {
@@ -382,8 +390,8 @@ class Tween {
 //    }
 //
 //    if (this._yoyo) {
-////      List reversed = output.reversed;
-////      reversed.reverse();
+    ////      List reversed = output.reversed;
+    ////      reversed.reverse();
 //      output.addAll(output.reversed);
 //    }
 //
@@ -396,7 +404,6 @@ class Tween {
 //    }
 
   }
-
 
 
   bool _yoyo = false;

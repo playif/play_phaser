@@ -20,7 +20,7 @@ class games_03_invaders extends State {
   Group enemyBullets;
 
   var bulletTime = 0;
-  var cursors;
+  CursorKeys cursors;
   var fireButton;
   var explosions;
   var starfield;
@@ -35,6 +35,8 @@ class games_03_invaders extends State {
 
   create() {
 
+    game.world.bounds.setTo(0, 0, 1200, 600);
+
     game.physics.startSystem(Physics.ARCADE);
 
     //  The scrolling starfield background
@@ -44,7 +46,7 @@ class games_03_invaders extends State {
     bullets = game.add.group();
     bullets.enableBody = true;
     bullets.physicsBodyType = Physics.ARCADE;
-    bullets.createMultiple(30, 'bullet');
+    bullets.createMultiple(100, 'bullet');
     bullets.forEach((Sprite s) {
       s.anchor.set(0.5, 1);
       s.outOfBoundsKill = true;
@@ -55,7 +57,7 @@ class games_03_invaders extends State {
     enemyBullets = game.add.group();
     enemyBullets.enableBody = true;
     enemyBullets.physicsBodyType = Physics.ARCADE;
-    enemyBullets.createMultiple(30, 'enemyBullet');
+    enemyBullets.createMultiple(300, 'enemyBullet');
     enemyBullets.forEach((Sprite s) {
       s.anchor.set(0.5, 1);
       s.outOfBoundsKill = true;
@@ -66,6 +68,7 @@ class games_03_invaders extends State {
     player = game.add.sprite(400, 500, 'ship');
     player.anchor.setTo(0.5, 0.5);
     game.physics.enable(player, Physics.ARCADE);
+    game.camera.follow(player);
 
     //  The baddies!
     aliens = game.add.group();
@@ -129,13 +132,10 @@ class games_03_invaders extends State {
 
     //  All this does is basically start the invaders moving. Notice we're moving the Group they belong to, rather than the invaders directly.
     Tween tween = game.add.tween(aliens)
-    .setCallback((type, source) {
-      print(type);
-    }, Tween.ANY).to({
+    .to({
         'x': 200
-    }, 2000, Easing.Linear.None, true, 0, 1000, true)
+    }, 2000, Easing.Linear.None, true, 0, 1000, true);
 
-    .start();
 
     //  When the tween loops it calls descend
     tween.onLoop.add(descend);
@@ -149,10 +149,8 @@ class games_03_invaders extends State {
 
   }
 
-  descend() {
-
+  descend(Tween tween) {
     aliens.y += 10;
-
   }
 
   update() {
@@ -180,17 +178,17 @@ class games_03_invaders extends State {
     }
 
     //  Run collision
-    game.physics.arcade.overlap(bullets, aliens, collisionHandler, null);
-    game.physics.arcade.overlap(enemyBullets, player, enemyHitsPlayer, null);
+    game.physics.arcade.overlap(bullets, aliens, collisionHandler);
+    game.physics.arcade.overlap(enemyBullets, player, enemyHitsPlayer);
 
   }
 
   render() {
-
-    // for (var i = 0; i < aliens.length; i++)
-    // {
-    //     game.debug.body(aliens.children[i]);
-    // }
+    //game.debug.quadTree(game.physics.arcade.quadTree);
+    for (var i = 0; i < aliens.length; i++)
+    {
+         game.debug.body(aliens.children[i]);
+    }
 
   }
 
@@ -276,7 +274,7 @@ class games_03_invaders extends State {
       enemyBullet.reset(shooter.body.x, shooter.body.y);
 
       game.physics.arcade.moveToObject(enemyBullet, player, 120);
-      firingTimer = game.time.now + 2000;
+      firingTimer = game.time.now + 20;
     }
 
   }
@@ -286,13 +284,17 @@ class games_03_invaders extends State {
     //  To avoid them being allowed to fire too fast we set a time limit
     if (game.time.now > bulletTime) {
       //  Grab the first bullet we can from the pool
-      Sprite bullet = bullets.getFirstExists(false);
+      for (int i = -10;i < 11;i++) {
+        Sprite bullet = bullets.getFirstExists(false);
 
-      if (bullet != null) {
-        //  And fire it
-        bullet.reset(player.x, player.y + 8);
-        bullet.body.velocity.y = -400;
-        bulletTime = game.time.now + 200;
+        if (bullet != null) {
+          //  And fire it
+          bullet.reset(player.x, player.y + 8);
+          //bullet.body.velocity.y = -400;
+          bullet.body.velocity.rotate(0, 0, 270 + i * 15, true, 400);
+          bullet.rotation = Math.degToRad(i * 15);
+          bulletTime = game.time.now + 200;
+        }
       }
     }
 
@@ -321,4 +323,5 @@ class games_03_invaders extends State {
     stateText.visible = false;
 
   }
+
 }

@@ -162,7 +162,7 @@ class TilemapParser {
     }
 
     map.orientation = 'orthogonal';
-    map.version = '1';
+    map.version = 1;
     map.properties = {};
     map.widthInPixels = 0;
     map.heightInPixels = 0;
@@ -267,17 +267,17 @@ class TilemapParser {
       //  Need to set which tileset in the cache = which tileset in the JSON, if you do this manually it means you can use the same map data but a new tileset.
 
       for (int t = 0,
-          len = json['layers'][i].data.length; t < len; t++) {
+          len = json['layers'][i]['data'].length; t < len; t++) {
         //  index, x, y, width, height
-        if (json['layers'][i].data[t] > 0) {
-          row.add(new Tile(layer, json['layers'][i].data[t], x, output.length, json['tilewidth'], json['tileheight']));
+        if (json['layers'][i]['data'][t] > 0) {
+          row.add(new Tile(layer, json['layers'][i]['data'][t], x, output.length, json['tilewidth'], json['tileheight']));
         } else {
           row.add(new Tile(layer, -1, x, output.length, json['tilewidth'], json['tileheight']));
         }
 
         x++;
 
-        if (x == json['layers'][i].width) {
+        if (x == json['layers'][i]['width']) {
           output.add(row);
           x = 0;
           row = [];
@@ -296,7 +296,7 @@ class TilemapParser {
     List images = [];
 
     for (var i = 0; i < json['layers'].length; i++) {
-      if (json['layers'][i].type != 'imagelayer') {
+      if (json['layers'][i]['type'] != 'imagelayer') {
         continue;
       }
 
@@ -427,7 +427,7 @@ class TilemapParser {
     map.objects = objects;
     map.collision = collision;
 
-    map.tiles = [];
+    map.tiles = new List<List<int>>();
 
     //  Finally lets build our super tileset index
     for (var i = 0; i < map.tilesets.length; i++) {
@@ -442,7 +442,14 @@ class TilemapParser {
 
       for (var t = set.firstgid; t < set.firstgid + set.total; t++) {
         //  Can add extra properties here as needed
-        map.tiles[t] = [x, y, i];
+        //TODO
+        if(t>=map.tiles.length){
+          map.tiles.add([x, y, i]);
+        }
+        else{
+          map.tiles[t] = [x, y, i];
+        }
+        
 
         x += set.tileWidth + set.tileSpacing;
 

@@ -12,11 +12,11 @@ class Graphics extends PIXI.Graphics implements GameObject {
   Point cameraOffset;
   List _cache;
   GameObject parent;
-  List<GameObject> children;
+  List<GameObject> children=[];
 
   bool exists;
   bool alive;
-  bool autoCull;
+  bool autoCull=false;
 
   Events events;
   int type;
@@ -57,8 +57,8 @@ class Graphics extends PIXI.Graphics implements GameObject {
     }
   }
   
-  num x;
-  num y;
+//  num x;
+//  num y;
   int z;
   /**
    * Indicates the rotation of the Graphics, in degrees, from its original orientation. Values from 0 to 180 represent clockwise rotation; values from 0 to -180 represent counterclockwise rotation.
@@ -122,8 +122,9 @@ class Graphics extends PIXI.Graphics implements GameObject {
   //});
 
 
-  Graphics(this.game, [this.x=0, this.y=0]) {
-
+  Graphics(this.game, [num x=0, num y=0]) {
+    this.x=x;
+    this.y=y;
     /**
      * @property {boolean} exists - If exists = false then the Text isn't updated by the core game loop.
      * @default

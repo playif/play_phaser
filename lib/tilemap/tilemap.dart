@@ -13,14 +13,14 @@ class TilemapData {
 
 
   num format;
-  String version;
+  int version;
   Map properties;
   num widthInPixels;
   num heightInPixels;
 
   List<TilemapLayerData> layers;
   List<Tileset> tilesets;
-  List<List> tiles;
+  List<List<int>> tiles;
 
 
 
@@ -171,7 +171,7 @@ class Tilemap {
     /**
      * @property {number} version - The version of the map data (as specified in Tiled, usually 1).
      */
-    this.version = int.parse(data.version);
+    this.version = data.version;
 
     /**
      * @property {object} properties - Map specific properties as specified in Tiled.
@@ -1000,22 +1000,22 @@ class Tilemap {
             tile.faceRight = true;
           }
 
-          if (above && above.collides) {
+          if (above != null && above.collides ) {
             //  There is a tile above this one that also collides, so the top of this tile is no longer interesting
             tile.faceTop = false;
           }
 
-          if (below && below.collides) {
+          if (below != null && below.collides) {
             //  There is a tile below this one that also collides, so the bottom of this tile is no longer interesting
             tile.faceBottom = false;
           }
 
-          if (left && left.collides) {
+          if (left != null && left.collides) {
             //  There is a tile left this one that also collides, so the left of this tile is no longer interesting
             tile.faceLeft = false;
           }
 
-          if (right && right.collides) {
+          if (right != null && right.collides) {
             //  There is a tile right this one that also collides, so the right of this tile is no longer interesting
             tile.faceRight = false;
           }
@@ -1195,7 +1195,7 @@ class Tilemap {
    * @return {Phaser.Tile} The Tile object that was created or added to this map.
    */
 
-  Tile putTile(tile, num x, num y, layer) {
+  Tile putTile(tile, num x, num y, [layer]) {
     if (tile == null) {
       return this.removeTile(x, y, layer);
     }

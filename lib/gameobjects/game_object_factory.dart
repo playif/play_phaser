@@ -248,7 +248,7 @@ class GameObjectFactory {
    * @return {Phaser.Graphics} The newly created graphics object.
    */
 
-  Graphics graphics(int x, int y, [Group group]) {
+  Graphics graphics([int x=0, int y=0, Group group]) {
     if (group == null) {
       group = this.world;
     }

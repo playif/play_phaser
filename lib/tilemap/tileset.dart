@@ -23,11 +23,10 @@ class Tileset {
 
   num total;
 
-  List drawCoords;
+  List<List> drawCoords;
 
 
-  Tileset(String name, int firstgid,
-          [num width=32, num height=32, num margin=0, num spacing=0, Map properties]) {
+  Tileset(String name, int firstgid, [num width = 32, num height = 32, num margin = 0, num spacing = 0, Map properties]) {
 
     if (width == null || width <= 0) {
       width = 32;
@@ -122,17 +121,7 @@ class Tileset {
       return;
     }
 
-    context.drawImageScaledFromSource(
-        this.image,
-        this.drawCoords[index][0],
-        this.drawCoords[index][1],
-        this.tileWidth,
-        this.tileHeight,
-        x,
-        y,
-        this.tileWidth,
-        this.tileHeight
-    );
+    context.drawImageScaledFromSource(this.image, this.drawCoords[index][0], this.drawCoords[index][1], this.tileWidth, this.tileHeight, x, y, this.tileWidth, this.tileHeight);
 
   }
 
@@ -152,7 +141,7 @@ class Tileset {
     this.total = this.rows * this.columns;
 
     //  Create the index look-up
-    this.drawCoords.length = 0;
+    this.drawCoords = new List<List>(this.rows * this.columns + 1);
 
     var tx = this.tileMargin;
     var ty = this.tileMargin;
@@ -160,7 +149,8 @@ class Tileset {
 
     for (var y = 0; y < this.rows; y++) {
       for (var x = 0; x < this.columns; x++) {
-        this.drawCoords[i] = [ tx, ty ];
+
+        this.drawCoords[i] = [tx, ty];
         tx += this.tileWidth + this.tileSpacing;
         i++;
       }
@@ -179,7 +169,7 @@ class Tileset {
    * @param {number} [tileSpacing] - The spacing between the tiles in the sheet.
    */
 
-  setSpacing([num margin=0, num spacing=0]) {
+  setSpacing([num margin = 0, num spacing = 0]) {
 
     this.tileMargin = margin;
     this.tileSpacing = spacing;

@@ -1,6 +1,6 @@
 part of Phaser;
 
-class Point extends PIXI.Point  {
+class Point extends PIXI.Point {
 //  num x;
 //  num y;
 
@@ -24,7 +24,7 @@ class Point extends PIXI.Point  {
 //    }
 
   Point([num x=0, num y=0])
-  :super(x,y){
+  :super(x, y) {
 
   }
 
@@ -295,7 +295,8 @@ class Point extends PIXI.Point  {
 
     //  Get distance from origin (cx/cy) to this point
     if (distance == null) {
-      distance = Math.sqrt(((x - this.x) * (x - this.x)) + ((y - this.y) * (y - this.y)));
+      distance = Math.distance(x, y, this.x, this.y);
+      //.sqrt(((x - this.x) * (x - this.x)) + ((y - this.y) * (y - this.y)));
     }
 
     return this.setTo(x + distance * Math.cos(angle), y + distance * Math.sin(angle));

@@ -46,7 +46,9 @@ class Tile {
 
   bool collideDown;
 
-  bool collides;
+  bool collides=false;
+  
+  bool debug=false;
 
 
   Function collisionCallback;

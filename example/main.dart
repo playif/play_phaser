@@ -36,6 +36,8 @@ part "display/display_20_bitmapdata_set_hsl.dart";
 part "games/games_01_breakout.dart";
 part "games/games_02_gemmatch.dart";
 part "games/games_03_invaders.dart";
+part "games/games_04_matching_pairs.dart";
+
 
 Map<String, State> examples = {
 
@@ -73,7 +75,7 @@ Map<String, State> examples = {
     "games_01_breakout":new games_01_breakout(),
     "games_02_gemmatch":new games_02_gemmatch(),
     "games_03_invaders":new games_03_invaders(),
-
+    "games_04_matching_pairs":new games_04_matching_pairs(),
 };
 
 main() {
@@ -99,7 +101,7 @@ main() {
   //var game = new Game(width, height, CANVAS, '');
 
 
-  Game game = new Game(800, 600, WEBGL, '');
+  Game game = new Game(800, 600, CANVAS, '');
 
   dom.SelectElement select = dom.document.getElementById("examples") as dom.SelectElement;
   for (String key in examples.keys) {
@@ -113,7 +115,7 @@ main() {
     game.state.start(select.children[select.selectedIndex].text);
   });
 
-  game.state.start("games_03_invaders");
+  game.state.start("games_04_matching_pairs");
 
   //game.canvas.style.cursor = "pointer";
   //game.boot();
