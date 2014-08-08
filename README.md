@@ -8,7 +8,7 @@ Built on top of my Canvas / WebGL drawing library [play_pixi][1].
 
 0.8.5 several examples were added.
 
-
+[online demo][3]
 
 Feel free to let me know if there is any problem.
 
