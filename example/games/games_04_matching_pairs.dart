@@ -56,9 +56,12 @@ class games_04_matching_pairs extends State {
     //layer.resizeWorld();
 
     marker = game.add.graphics();
-    marker.lineStyle(2, 0x00FF00, 1);
-    marker.drawRect(0, 0, 100, 100);
-
+    marker.lineStyle(2, 0x00FF00, 0.5);
+    marker.beginFill(0xFFFF00, 0.2);
+    marker.drawRoundedRect(0, 0, 100, 100,10);
+    marker.endFill();
+    
+    
     randomizeTiles();
 
   }

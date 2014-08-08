@@ -270,12 +270,12 @@ class Graphics extends PIXI.Graphics implements GameObject {
     var i = this.children.length;
 
     if (destroyChildren) {
-      while (i--) {
+      while (i-- > 0) {
         this.children[i].destroy(destroyChildren);
       }
     }
     else {
-      while (i--) {
+      while (i-- > 0) {
         this.removeChild(this.children[i]);
       }
     }
