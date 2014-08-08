@@ -39,20 +39,10 @@ class basic_01_load_an_image extends State {
       });
     }
 
-    text = game.add.text(250, 16, 'Hi', new TextStyle()..fill = '#ffffff');
+    // Add a text
+    text = game.add.text(250, 16, 'Hello World!!', new TextStyle(fill:'#ffffff'));
 
   }
 
-  update() {
-
-    game.world.forEach((GameObject o) {
-      o.x += game.rnd.frac();
-      if (o.x > 800) {
-        o.x = 0;
-      }
-      o.alpha = 0.5;
-      o.rotation += game.rnd.frac() * 0.1;
-    });
-  }
 
 }

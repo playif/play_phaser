@@ -131,7 +131,7 @@ main() {
     game.state.start(select.children[select.selectedIndex].text);
   });
 
-  game.state.start("tilemaps_01_blank_map");
+  game.state.start("basic_01_load_an_image");
 
   //game.canvas.style.cursor = "pointer";
   //game.boot();
