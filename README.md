@@ -6,8 +6,6 @@ Very easy to learn and fun game engine.
 
 Built on top of my Canvas / WebGL drawing library [play_pixi][1].
 
-0.8.5 several examples were added.
-
 Check the [online demo][3]
 
 Feel free to let me know if there is any problem.
