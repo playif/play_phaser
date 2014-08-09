@@ -13,7 +13,7 @@ dependencies:
 transformers:
 - $dart2js:
     checked: false
-    minify: true
+    minify: false
     suppressWarnings: false
     suppressHints: false
     terse: false

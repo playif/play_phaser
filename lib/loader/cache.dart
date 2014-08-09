@@ -423,6 +423,8 @@ class Cache {
       decoded = true;
     }
 
+
+
     this._sounds[key] = {
       'url': url,
       'data': data,
@@ -911,7 +913,7 @@ class Cache {
    * @return {object} The sound data.
    */
 
-  AudioBuffer getSoundData(String key) {
+  getSoundData(String key) {
     if (this._sounds[key] != null) {
       return this._sounds[key]['data'];
     } else {

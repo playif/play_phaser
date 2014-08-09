@@ -95,6 +95,8 @@ Map<String, State> examples = {
 };
 
 main() {
+  dom.window.console.log("preload");
+
 //
 //  var w = dom.window.innerWidth * dom.window.devicePixelRatio,
 //  h = dom.window.innerHeight * dom.window.devicePixelRatio,

@@ -46,7 +46,7 @@ class SoundManager {
   }
 
   double get volume {
-    if (this.usingWebAudio) {
+    if (this.usingWebAudio && this.masterGain != null) {
       return this.masterGain.gain.value;
     }
     else {
@@ -56,7 +56,7 @@ class SoundManager {
 
   set volume(double value) {
     this._volume = value;
-    if (this.usingWebAudio) {
+    if (this.usingWebAudio && this.masterGain != null) {
       this.masterGain.gain.value = value;
     }
     else {
@@ -165,7 +165,20 @@ class SoundManager {
 //    }
 
     //if(!game.device.cocoonJS){
-    this.context = new AudioContext();
+    try {
+      this.context = new AudioContext();
+    } catch (error) {
+      this.context = null;
+      this.usingWebAudio = false;
+      this.noAudio = true;
+    }
+
+    if (game.device.audioData && this.context == null) {
+      this.usingWebAudio = false;
+      this.usingAudioTag = true;
+      this.noAudio = false;
+    }
+
     //}
 
 
@@ -202,13 +215,20 @@ class SoundManager {
 //        this.masterGain = this.context.createGainNode();
 //      }
 //      else {
+//    this.usingAudioTag = true;
+
     if (this.context == null) return;
 
     this.masterGain = this.context.createGain();
 //      }
+    //print("audio!");
+    if (this.context == null) return;
 
-    this.masterGain.gain.value = 1;
-    this.masterGain.connectNode(this.context.destination);
+    if (this.masterGain != null) {
+      this.masterGain.gain.value = 1;
+      this.masterGain.connectNode(this.context.destination);
+    }
+    //print("worked!");
     //}
 
   }
@@ -415,7 +435,7 @@ class SoundManager {
     int i = this._sounds.length;
     int removed = 0;
 
-    while (i-- >0 ) {
+    while (i-- > 0) {
       if (this._sounds[i].key == key) {
         this._sounds[i].destroy(false);
         this._sounds.removeAt(i);
@@ -464,7 +484,7 @@ class SoundManager {
 
     this._muted = true;
 
-    if (this.usingWebAudio) {
+    if (this.usingWebAudio && this.masterGain != null) {
       this._muteVolume = this.masterGain.gain.value;
       this.masterGain.gain.value = 0;
     }
@@ -493,7 +513,7 @@ class SoundManager {
 
     this._muted = false;
 
-    if (this.usingWebAudio) {
+    if (this.usingWebAudio && this.masterGain != null) {
       this.masterGain.gain.value = this._muteVolume;
     }
 

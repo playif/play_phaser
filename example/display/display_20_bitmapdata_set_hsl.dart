@@ -40,7 +40,7 @@ class display_20_bitmapdata_set_hsl extends State{
     // bmd.shiftHSL(null, null, 1.0);
 
     //	desaturation
-    bmd.shiftHSL(0.01, null, null);
+    bmd.shiftHSL(0.1, null, null);
 
   }
 
