@@ -9,6 +9,8 @@ class camera_02_camera_cull extends State {
 
   create() {
 
+    game.world.setBounds(0, 0, 800, 600);
+
     game.stage.backgroundColor = 0x182d3b;
 
     s = game.add.sprite(game.world.centerX, game.world.centerY, 'disk');
@@ -20,21 +22,17 @@ class camera_02_camera_cull extends State {
 
     s.rotation += 0.01;
 
-    if (game.input.keyboard.isDown(Keyboard.LEFT))
-    {
+    if (game.input.keyboard.isDown(Keyboard.LEFT)) {
       s.x -= 4;
     }
-    else if (game.input.keyboard.isDown(Keyboard.RIGHT))
-    {
+    else if (game.input.keyboard.isDown(Keyboard.RIGHT)) {
       s.x += 4;
     }
 
-    if (game.input.keyboard.isDown(Keyboard.UP))
-    {
+    if (game.input.keyboard.isDown(Keyboard.UP)) {
       s.y -= 4;
     }
-    else if (game.input.keyboard.isDown(Keyboard.DOWN))
-    {
+    else if (game.input.keyboard.isDown(Keyboard.DOWN)) {
       s.y += 4;
     }
 

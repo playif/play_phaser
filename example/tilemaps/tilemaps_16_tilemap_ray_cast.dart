@@ -33,9 +33,6 @@ class tilemaps_16_tilemap_ray_cast extends State {
 
     map.setCollisionBetween(1, 12);
 
-    layer.debug = true;
-    layer.debugAlpha=0.5;
-    layer.debugFill =true;
 
     sprite = game.add.sprite(260, 70, 'phaser');
 

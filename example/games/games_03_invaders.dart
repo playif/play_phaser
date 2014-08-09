@@ -173,7 +173,7 @@ class games_03_invaders extends State {
     }
 
     //  Firing?
-    if (fireButton.isDown) {
+    if (fireButton.isDown && player.alive) {
       fireBullet();
     }
 
@@ -189,10 +189,10 @@ class games_03_invaders extends State {
 
   render() {
     //game.debug.quadTree(game.physics.arcade.quadTree);
-    for (var i = 0; i < aliens.length; i++)
-    {
-         game.debug.body(aliens.children[i]);
-    }
+//    for (var i = 0; i < aliens.length; i++)
+//    {
+//         game.debug.body(aliens.children[i]);
+//    }
 
   }
 
@@ -259,10 +259,9 @@ class games_03_invaders extends State {
     //  Grab the first bullet we can from the pool
     Sprite enemyBullet = enemyBullets.getFirstExists(false);
 
-    livingEnemies.length = 0;
+    livingEnemies.clear();
 
     aliens.forEachAlive((alien) {
-
       // put every living enemy in an array
       livingEnemies.add(alien);
     });
@@ -278,7 +277,7 @@ class games_03_invaders extends State {
       enemyBullet.reset(shooter.body.x, shooter.body.y);
 
       game.physics.arcade.moveToObject(enemyBullet, player, 120);
-      firingTimer = game.time.now + 20;
+      firingTimer = game.time.now + 2000;
     }
 
   }
@@ -320,6 +319,7 @@ class games_03_invaders extends State {
     //  And brings the aliens back from the dead :)
     aliens.removeAll();
     createAliens();
+
 
     //revives the player
     player.revive();

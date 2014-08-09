@@ -13,7 +13,7 @@ class tilemaps_01_blank_map extends State{
   TilemapLayer layer3;
 
   Graphics marker;
-  int currentTile = 0;
+  num currentTile = 0;
   TilemapLayer currentLayer;
 
   CursorKeys cursors;
@@ -37,7 +37,7 @@ class tilemaps_01_blank_map extends State{
     layer1 = map.create('level1', 40, 30, 32, 32);
     layer1.scrollFactorX = 0.5;
     layer1.scrollFactorY = 0.5;
-    layer1.fixedToCamera=false;
+
 
     //  Resize the world
     layer1.resizeWorld();
