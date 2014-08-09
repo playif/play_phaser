@@ -234,11 +234,12 @@ class Timeline extends BaseTween<Timeline> {
     if (manager == null) {
       _children.forEach((BaseTween tween) => tween.start());
     }
-  }
+  } 
 
   void free() {
     _children.forEach((BaseTween tween) => tween.free());
     _children.clear();
+    reset();
     _pool.free(this);
   }
 

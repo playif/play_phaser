@@ -95,7 +95,8 @@ abstract class BaseTween<T> {
 
   ///Kills the tween or timeline. If you are using a [TweenManager], this object will be removed automatically.
   void kill() {
-      _isKilled = true;
+    reset();
+    _isKilled = true;
   }
 
   /**
@@ -377,7 +378,7 @@ abstract class BaseTween<T> {
   }
 
   void updateStep() {
-    while (isValid(step)) {
+    while (isValid(_step)) {
       if (!_isIterationStep && currentTime + _deltaTime <= 0) {
         _isIterationStep = true;
         _step -= 1;

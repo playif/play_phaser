@@ -14,15 +14,11 @@ class TextStyle extends PIXI.TextStyle {
     this.stroke = stroke;
     this.strokeThickness = strokeThickness;
     this.tint = tint;
-
   }
 }
 
 class Text extends PIXI.Text implements GameObject {
   Game game;
-
-  //num x, y;
-  String _text;
 
   String name;
 
@@ -77,9 +73,6 @@ class Text extends PIXI.Text implements GameObject {
   Point center;
   Point anchor=new Point();
 
-  setTexture(PIXI.Texture texture) {
-
-  }
 
 
   num get x {
@@ -148,7 +141,7 @@ class Text extends PIXI.Text implements GameObject {
 
   Rectangle _currentBounds;
 
-  Text(this.game, [num x, num y, String text = '', PIXI.TextStyle style])
+  Text(this.game, [num x, num y, String text = '', TextStyle style])
   : super(text, style) {
 
     this.x = x;
@@ -191,7 +184,7 @@ class Text extends PIXI.Text implements GameObject {
      * @property {string} _text - Internal cache var.
      * @private
      */
-    this._text = text;
+    //this._text = text;
 
     /**
      * @property {string} _font - Internal cache var.
@@ -413,7 +406,7 @@ class Text extends PIXI.Text implements GameObject {
    * @param [style.wordWrapWidth=100] {Number} The width at which text will wrap
    */
 
-  setStyle(PIXI.TextStyle style) {
+  setStyle(TextStyle style) {
 
     //style = style || {};
     style.font = style.font;

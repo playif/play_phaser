@@ -505,6 +505,7 @@ class Tween extends BaseTween<Tween> {
   }
 
   void free() {
+    reset();
     _pool.free(this);
   }
 

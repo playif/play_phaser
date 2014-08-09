@@ -96,11 +96,15 @@ class TweenManager {
 
     if (!_isPaused) {
       if (delta >= 0) {
-        _objects.forEach( (BaseTween obj) => obj.update(delta) );
+        _objects.toList().forEach( (BaseTween obj) => obj.update(delta) );
       } else {
-        _objects.reversed.forEach( (BaseTween obj) => obj.update(delta) );
+        _objects.reversed.toList().forEach( (BaseTween obj) => obj.update(delta) );
       }
     }
+  }
+
+  removeTween(BaseTween tween){
+    tween.kill();
   }
 
   /**

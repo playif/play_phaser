@@ -15,21 +15,21 @@ class games_03_invaders extends State {
   }
 
   Sprite player;
-  Group aliens;
-  Group bullets;
-  Group enemyBullets;
+  Group<Sprite> aliens;
+  Group<Sprite> bullets;
+  Group<Sprite> enemyBullets;
 
-  var bulletTime = 0;
+  num bulletTime = 0;
   CursorKeys cursors;
-  var fireButton;
-  var explosions;
-  var starfield;
-  var score = 0;
-  var scoreString = '';
-  var scoreText;
-  Group lives;
+  Key fireButton;
+  Group<Sprite> explosions;
+  TileSprite starfield;
+  num score = 0;
+  String scoreString = '';
+  Text scoreText;
+  Group<Sprite> lives;
 
-  var firingTimer = 0;
+  num firingTimer = 0;
   Text stateText;
   List<Sprite> livingEnemies = [];
 
@@ -121,8 +121,8 @@ class games_03_invaders extends State {
 
   createAliens() {
 
-    for (var y = 0; y < 4; y++) {
-      for (var x = 0; x < 10; x++) {
+    for (int y = 0; y < 4; y++) {
+      for (int x = 0; x < 10; x++) {
         var alien = aliens.create(x * 48, y * 50, 'invader');
         alien.anchor.setTo(0.5, 0.5);
         alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
@@ -146,11 +146,9 @@ class games_03_invaders extends State {
   }
 
   setupInvader(invader) {
-
     invader.anchor.x = 0.5;
     invader.anchor.y = 0.5;
     invader.animations.add('kaboom');
-
   }
 
   descend(Tween tween) {

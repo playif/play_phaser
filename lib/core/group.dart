@@ -1,6 +1,6 @@
 part of Phaser;
 
-typedef Sprite Creator();
+typedef GameObject Creator();
 
 typedef bool SelectWhere(Sprite);
 
@@ -276,13 +276,17 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
     }
   }
 
-  Sprite create([num x=0, num y=0, key, frame=0, bool exists=true]) {
+  T create([num x=0, num y=0, key, frame=0, bool exists=true]) {
     //var child = new this.classType(this.game, x, y, key, frame);
     //GameObject child = reflectClass(classType).newInstance(const Symbol(""), [this.game, x, y, key, frame]).reflectee;
-    Sprite child = creator()
+    T child = creator()
       ..x = x
       ..y = y;
-    child.loadTexture(key, frame);
+
+    if(child is Sprite){
+      (child as Sprite).loadTexture(key, frame);
+    }
+
 
     if (this.enableBody) {
       this.game.physics.enable(child, this.physicsBodyType);
@@ -390,7 +394,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
       if (this.parent != null) {
         this.parent.bringToTop(this);
       }
-      return this;
+      return this as T;
     }
     else {
       if (child.parent == this && this.children.indexOf(child) < this.children.length) {

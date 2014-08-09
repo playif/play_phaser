@@ -15,7 +15,7 @@ class Pool<T> {
   }
 
   T get() {
-    T obj = _objects.isEmpty ? create() : _objects.removeAt(_objects.length - 1);
+    T obj = _objects.isEmpty ? create() : _objects.removeLast();
     if (_callback != null) _callback.onUnPool(obj);
     return obj;
   }
@@ -23,6 +23,7 @@ class Pool<T> {
   void free(T obj) {
     if (!_objects.contains(obj)) {
       if (_callback != null) _callback.onPool(obj);
+      
       _objects.add(obj);
     }
   }
