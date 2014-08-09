@@ -14,7 +14,7 @@ class basic_01_load_an_image extends State {
     //  string by which we'll identify the image later in our code.
 
     //  The second parameter is the URL of the image (relative)
-    game.load.image('einstein', 'assets/sprites/car.png');
+    game.load.image('car', 'assets/sprites/car.png');
 
   }
 
@@ -22,7 +22,7 @@ class basic_01_load_an_image extends State {
     //  This creates a simple sprite that is using our loaded image and
     //  displays it on-screen
     for (int i = 0; i < 10; i++) {
-      var image = game.add.sprite(game.world.centerX, game.world.centerY, 'einstein');
+      var image = game.add.sprite(game.world.centerX, game.world.centerY, 'car');
 
       //  Moves the image anchor to the middle, so it centers inside the game properly
       image.anchor.set(0.5);
