@@ -16,14 +16,19 @@ class Pool<T> {
 
   T get() {
     T obj = _objects.isEmpty ? create() : _objects.removeLast();
-    if (_callback != null) _callback.onUnPool(obj);
+    //T obj = create();
+    if (_callback != null) {
+      _callback.onUnPool(obj);
+    }
+
     return obj;
   }
 
   void free(T obj) {
     if (!_objects.contains(obj)) {
-      if (_callback != null) _callback.onPool(obj);
-      
+      if (_callback != null) {
+        _callback.onPool(obj);
+      }
       _objects.add(obj);
     }
   }
@@ -39,7 +44,7 @@ class Pool<T> {
   void ensureCapacity(int minCapacity) {
     //_objects.ensureCapacity(minCapacity);
   }
-  
+
 }
 
 //Defines the actions to take when an object is pooled / unpooled
@@ -51,6 +56,6 @@ typedef T InstanceCreator<T>();
 class PoolCallback<T> {
   CallbackAction onPool;
   CallbackAction onUnPool;
-  
+
   PoolCallback([this.onPool, this.onUnPool]);
 }

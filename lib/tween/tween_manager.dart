@@ -1,8 +1,9 @@
 part of Phaser;
 
 class TweenManager extends tween.TweenManager {
-  remove(Tween tween){
-    super.removeTween(tween._timeline);
+  Tween remove(Tween tween){
+    return tween.kill();
+    //super.removeTween(tween._timeline);
   }
 }
 

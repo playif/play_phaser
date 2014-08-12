@@ -96,16 +96,18 @@ class TweenManager {
 
     if (!_isPaused) {
       if (delta >= 0) {
-        _objects.toList().forEach( (BaseTween obj) => obj.update(delta) );
+        for ( int i =0; i < _objects.length; i++)
+          _objects[i].update(delta);
       } else {
-        _objects.reversed.toList().forEach( (BaseTween obj) => obj.update(delta) );
+        for ( int i = _objects.length - 1; i >= 0; i--)
+          _objects[i].update(delta);
       }
     }
   }
 
-  removeTween(BaseTween tween){
-    tween.kill();
-  }
+//  removeTween(BaseTween tween){
+//    tween.kill();
+//  }
 
   /**
    * Gets the number of managed objects. An object may be a tween or a timeline. Note that a timeline 

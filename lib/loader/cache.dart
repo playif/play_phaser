@@ -32,7 +32,7 @@ class Cache {
 
 
   Cache(this.game) {
-
+ 
     /**
      * @property {object} game - Canvas key-value container.
      * @private

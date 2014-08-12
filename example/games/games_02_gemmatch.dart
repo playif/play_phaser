@@ -9,7 +9,7 @@ class Gem extends Sprite {
 }
 
 class games_02_gemmatch extends State {
-  static const int GEM_COLORS = 5;
+  static const int GEM_COLORS = 3;
   static const int GEM_SIZE = 64;
   static const int GEM_SPACING = 2;
   static const int GEM_SIZE_SPACED = GEM_SIZE + GEM_SPACING;
@@ -158,8 +158,8 @@ class games_02_gemmatch extends State {
     }
     
 
-    refillBoard();
-    dropGems();
+    //refillBoard();
+    //dropGems();
   }
 
   // fill the screen with as many gems as possible
@@ -183,7 +183,7 @@ class games_02_gemmatch extends State {
 
   // select a gem and remember its starting position
 
-  selectGem(gem, pointer) {
+  selectGem(Gem gem, Pointer pointer) {
     if (allowInput) {
       selectedGem = gem;
       selectedGemStartPos.x = gem.posX;
@@ -337,25 +337,28 @@ class games_02_gemmatch extends State {
       score += combo * count;
       scoreText.text = scoreString + score.toString();
 
-//
-//      scoreText.scale.set(1);
-//      //if (scoreTween.isFinished) {
-//      scoreTween = game.add.tween(scoreText.scale).to({
-//        'x': 2,
-//        'y': 2
-//      }, 200, Easing.Bounce.InOut, true, 1, 1, true);
-//
+
+      scoreText.scale.set(1);
+      if (scoreTween != null) {
+        game.tweens.remove(scoreTween);
+      }
+
+      scoreTween = game.add.tween(scoreText.scale).to({
+        'x': 2,
+        'y': 2
+      }, 200, Easing.Bounce.InOut, true, 1, 1, true);
+
 
 
       removeKilledGems();
-
+      dropGems();
 
 
       // delay board refilling until all existing gems have dropped down
 
       //refillBoard();
     }
-    dropGems();
+
     return count;
   }
 
@@ -381,7 +384,7 @@ class games_02_gemmatch extends State {
     }
     return count;
   }
-
+int cc=0;
   makeAnimation(int x, int y, int total) {
     Sprite explosion = explosions.getFirstExists(false);
     if (explosion != null) {
@@ -398,10 +401,12 @@ class games_02_gemmatch extends State {
       text.position.set(x, y);
       Tween tween = game.add.tween(text).to({
         'y': y - 20
-      }, 500, Easing.Quintic.Out);
+      }, 400, Easing.Quintic.Out);
       tween.onComplete.add((Tween t) {
         text.exists = false;
         text.visible = false;
+        cc++;
+        print(cc);
       });
       tween.start();
     }
@@ -450,7 +455,6 @@ class games_02_gemmatch extends State {
           tween.onComplete.add((tween) {
             movingGemCount--;
             if (movingGemCount == 0) {
-
               refillBoard();
             }
           });

@@ -44,7 +44,7 @@ class Tween {
   }
 
   Tween kill() {
-    _tweenManager.remove(this);
+    this._timeline.kill();
     return this;
   }
 

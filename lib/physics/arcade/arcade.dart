@@ -425,7 +425,7 @@ class Arcade {
    * @param {boolean} overlapOnly - Just run an overlap or a full collision.
    */
 
-  collideHandler(GameObject object1, object2, Function collideCallback, Function processCallback, bool overlapOnly) {
+  collideHandler(GameObject object1, object2, [Function collideCallback, Function processCallback, bool overlapOnly=false]) {
 
     //  Only collide valid objects
     if (object2 == null && (object1.type == GROUP || object1.type == EMITTER)) {
@@ -497,7 +497,7 @@ class Arcade {
    * @return {boolean} True if there was a collision, otherwise false.
    */
 
-  bool collideSpriteVsSprite(Sprite sprite1, Sprite sprite2, Function collideCallback, Function processCallback, bool overlapOnly) {
+  bool collideSpriteVsSprite(Sprite sprite1, Sprite sprite2, [Function collideCallback, Function processCallback, bool overlapOnly=false]) {
 
     if (sprite1.body == null || sprite2.body == null) {
       return false;
@@ -528,7 +528,7 @@ class Arcade {
    * @param {boolean} overlapOnly - Just run an overlap or a full collision.
    */
 
-  collideSpriteVsGroup(Sprite sprite, Group group, Function collideCallback, Function processCallback, bool overlapOnly) {
+  collideSpriteVsGroup(Sprite sprite, Group group, [Function collideCallback, Function processCallback, bool overlapOnly=false]) {
 
     if (group.length == 0 || sprite.body == null) {
       return;
@@ -569,7 +569,7 @@ class Arcade {
    * @return {boolean} True if there was a collision, otherwise false.
    */
 
-  bool collideGroupVsSelf(Group group, Function collideCallback, Function processCallback, bool overlapOnly) {
+  bool collideGroupVsSelf(Group group, [Function collideCallback, Function processCallback, bool overlapOnly=false]) {
 
     if (group.length == 0) {
       return false;
@@ -578,7 +578,7 @@ class Arcade {
     int len = group.children.length;
 
     for (int i = 0; i < len; i++) {
-      for (int j = i + 1; j <= len; j++) {
+      for (int j = i + 1; j < len; j++) {
         if (group.children[i] != null && group.children[j] != null && group.children[i].exists && group.children[j].exists) {
           this.collideSpriteVsSprite(group.children[i], group.children[j], collideCallback, processCallback, overlapOnly);
         }
@@ -601,7 +601,7 @@ class Arcade {
    * @param {boolean} overlapOnly - Just run an overlap or a full collision.
    */
 
-  bool collideGroupVsGroup(Group group1, Group group2, Function collideCallback, Function processCallback, bool overlapOnly) {
+  bool collideGroupVsGroup(Group group1, Group group2, [Function collideCallback, Function processCallback, bool overlapOnly=false]) {
 
     if (group1.length == 0 || group2.length == 0) {
       return false;
@@ -629,7 +629,7 @@ class Arcade {
    * @param {boolean} overlapOnly - Just run an overlap or a full collision.
    */
 
-  bool collideSpriteVsTilemapLayer(Sprite sprite, TilemapLayer tilemapLayer, collideCallback, processCallback) {
+  bool collideSpriteVsTilemapLayer(Sprite sprite, TilemapLayer tilemapLayer, [Function collideCallback, Function processCallback]) {
 
     if (sprite.body == null) {
       return false;
@@ -715,7 +715,7 @@ class Arcade {
    * @return {boolean} Returns true if the bodies collided, otherwise false.
    */
 
-  separate(Body body1, Body body2, Function processCallback, bool overlapOnly) {
+  separate(Body body1, Body body2, [Function processCallback, bool overlapOnly=false]) {
 
     if (!body1.enable || !body2.enable || !this.intersects(body1, body2)) {
       return false;

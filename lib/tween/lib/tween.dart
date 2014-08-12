@@ -52,7 +52,7 @@ part of tweenengine;
  *
  * The engine cannot directly change your objects attributes, since it doesn't
  * know them. Therefore, you need to tell him how to get and set the different
- * attributes of your objects: **you need to implement the [TweenAccessor] 
+ * attributes of your objects: **you need to implement the [TweenAccessor]
  * interface for each object class you will animate**. Once
  * done, don't forget to register these implementations, using the static method
  * [registerAccessor], when you start your application.
@@ -61,7 +61,7 @@ part of tweenengine;
  * see [TweenManager]
  * see [TweenEquation]
  * see [Timeline]
- * author 
+ * author
  *    Aurelien Ribon | http://www.aurelienribon.com/ (Original java code)
  *    Xavier Guzman (dart port)
  */
@@ -87,6 +87,7 @@ class Tween extends BaseTween<Tween> {
 //  }
 
   ///Gets the version number of the library.
+
   static String get version => "0.10.0";
 
   // -------------------------------------------------------------------------
@@ -94,15 +95,20 @@ class Tween extends BaseTween<Tween> {
   // -------------------------------------------------------------------------
 
   static final PoolCallback<Tween> _poolCallback = new PoolCallback<Tween>()
-      ..onPool = (Tween obj) { obj.reset(); }
-      ..onUnPool = (Tween obj) { obj.reset(); };
-      
+    ..onPool = (Tween obj) {
+    obj.reset();
+  }
+    ..onUnPool = (Tween obj) {
+    obj.reset();
+  };
+
 
   static final Pool<Tween> _pool = new Pool<Tween>(_poolCallback)
-      ..create = () => new Tween._();
- 
+    ..create = () => new Tween._();
+
 
   /// Used for debug purpose. Gets the current number of objects that are waiting in the Tween pool.
+
   int getPoolSize() => _pool.size();
 
   //Increases the minimum capacity of the pool. Capacity defaults to 20.
@@ -122,15 +128,17 @@ class Tween extends BaseTween<Tween> {
    * [someType] An object type.
    * [defaultAccessor] Th e accessor that will be used to tween any object of class "someClass".
    */
+
   static void registerAccessor(TweenAccessor defaultAccessor) {
     _registeredAccessors = defaultAccessor;
   }
- 
+
   /**
    * Gets the registered TweenAccessor associated with the given object class.
    *
    * [someType] An object type.
    */
+
   static TweenAccessor getRegisteredAccessor() {
     return _registeredAccessors;
   }
@@ -144,7 +152,7 @@ class Tween extends BaseTween<Tween> {
    * type of interpolation. The starting values are retrieved automatically
    * after the delay (if any).
    *
-   * **You need to set the target values of the interpolation by using 
+   * **You need to set the target values of the interpolation by using
    * of the targetValues setter**. The interpolation will run from the
    * starting values to these target values.
    *
@@ -163,14 +171,15 @@ class Tween extends BaseTween<Tween> {
    * [target] The target object of the interpolation.
    * [tweenType] The desired type of interpolation.
    * [duration] The duration of the interpolation, in milliseconds.
-   * 
+   *
    * Returns The generated Tween.
    */
+
   static Tween to(Object target, String tweenType, num duration) {
     Tween tween = _pool.get()
-        ..easing = Quad.INOUT
-        .._setup(target, tweenType, duration)
-        ..path = TweenPaths.catmullRom;
+      ..easing = Quad.INOUT
+      .._setup(target, tweenType, duration)
+      ..path = TweenPaths.catmullRom;
     return tween;
   }
 
@@ -197,9 +206,10 @@ class Tween extends BaseTween<Tween> {
    * [target] The target object of the interpolation.
    * [tweenType] The desired type of interpolation.
    * [duration] The duration of the interpolation, in milliseconds.
-   * 
+   *
    * Returns The generated Tween.
    */
+
   static Tween from(Object target, String tweenType, num duration) {
     Tween tween = _pool.get()
       .._setup(target, tweenType, duration)
@@ -231,13 +241,14 @@ class Tween extends BaseTween<Tween> {
    *
    * [target] The target object of the interpolation.
    * [tweenType] The desired type of interpolation.
-   * 
+   *
    * Returns The generated Tween.
    */
+
   static Tween set(Object target, String tweenType) {
     Tween tween = _pool.get()
-        .._setup(target, tweenType, 0)
-        ..easing = TweenEquations.easeInQuad;
+      .._setup(target, tweenType, 0)
+      ..easing = TweenEquations.easeInQuad;
     return tween;
   }
 
@@ -255,16 +266,17 @@ class Tween extends BaseTween<Tween> {
    *      ..start(myManager);
    *
    * see [TweenCallback]
-   * 
+   *
    * [callback] The callback that will be triggered on each iteration start.
-   * 
+   *
    * Returns The generated Tween.
    */
+
   static Tween callBack(TweenCallback callback) {
     Tween tween = _pool.get()
-        .._setup(null, '', 0)
-        ..setCallback(callback)
-        ..setCallbackTriggers(TweenCallback.START);
+      .._setup(null, '', 0)
+      ..setCallback(callback)
+      ..setCallbackTriggers(TweenCallback.START);
     return tween;
   }
 
@@ -276,9 +288,10 @@ class Tween extends BaseTween<Tween> {
    *
    * Returns The generated Tween.
    */
+
   static Tween mark() {
     Tween tween = _pool.get()
-        .._setup(null, '', 0);    
+      .._setup(null, '', 0);
     return tween;
   }
 
@@ -288,6 +301,7 @@ class Tween extends BaseTween<Tween> {
 
   // Main
   Object _target;
+
   //Type _targetClass;
   TweenAccessor<Object> _accessor;
   String _type;
@@ -297,16 +311,23 @@ class Tween extends BaseTween<Tween> {
   // General
   bool _isFrom;
   bool _isRelative;
+
   //int _combinedAttrsCnt;
   //int _waypointsCnt;
 
   // Values
-  num _startValue ;//new List<num>(_combinedAttrsLimit);
-  num _targetValue ;//= new List<num>(_combinedAttrsLimit);
+  num _startValue ;
+
+  //new List<num>(_combinedAttrsLimit);
+  num _targetValue ;
+
+  //= new List<num>(_combinedAttrsLimit);
   //final List<num> _waypoints = new List<num>(_waypointsLimit * _combinedAttrsLimit);
 
   // Buffers
-  num _currentValue;//new List<num>(_combinedAttrsLimit);
+  num _currentValue;
+
+  //new List<num>(_combinedAttrsLimit);
 //  List<num> _pathBuffer = new List<num>((2+ _waypointsLimit)*_combinedAttrsLimit);
 
   // -------------------------------------------------------------------------
@@ -318,6 +339,7 @@ class Tween extends BaseTween<Tween> {
   }
 
   //@Override
+
   void reset() {
     super.reset();
 
@@ -329,6 +351,9 @@ class Tween extends BaseTween<Tween> {
     _path = null;
 
     _isFrom = _isRelative = false;
+
+    _startValue = _targetValue = _currentValue = 0;
+
     //_combinedAttrsCnt = _waypointsCnt = 0;
 
 //    if (_accessorBuffer.length != _combinedAttrsLimit) {
@@ -355,11 +380,11 @@ class Tween extends BaseTween<Tween> {
 //    if (_target is Tweenable) return _target.runtimeType;
 //
 //    //TODO: find out about this
-////                Type parentClass = _target.runtimeType.getSuperclass();
-////                while (parentClass != null && !_registeredAccessors.containsKey(parentClass))
-////                        parentClass = parentClass.getSuperclass();
-////
-////                return parentClass;
+  ////                Type parentClass = _target.runtimeType.getSuperclass();
+  ////                while (parentClass != null && !_registeredAccessors.containsKey(parentClass))
+  ////                        parentClass = parentClass.getSuperclass();
+  ////
+  ////                return parentClass;
 //    return null;
 //  }
 
@@ -367,7 +392,7 @@ class Tween extends BaseTween<Tween> {
   // API
   // -------------------------------------------------------------------------
 
-  
+
   /**
    * Forces the tween to use the TweenAccessor registered with the given target class. Useful if you want to use a specific accessor associated
    * to an interface, for instance.
@@ -385,7 +410,7 @@ class Tween extends BaseTween<Tween> {
    * use a smooth catmull-rom spline to navigate between the waypoints, but
    * you can change this behavior by setting the [path].
    *
-   * [num_OR_numList] The targets of this waypoint. Can be either a num, or a List<num> 
+   * [num_OR_numList] The targets of this waypoint. Can be either a num, or a List<num>
    */
 //  void addWaypoint(num_OR_numList) {
 //    if(num_OR_numList is num){
@@ -404,33 +429,38 @@ class Tween extends BaseTween<Tween> {
   // -------------------------------------------------------------------------
 
   ///Gets the target object.
+
   get target => _target;
 
   ///Gets the type of the tween.
+
   String get tweenType => _type;
 
   /**
-   * The easing [equation][TweenEquation] of the tween. Existing equations can be accessed via 
-   * [TweenEquations] static instances, but you can of course implement your owns, see [TweenEquation]. 
+   * The easing [equation][TweenEquation] of the tween. Existing equations can be accessed via
+   * [TweenEquations] static instances, but you can of course implement your owns, see [TweenEquation].
    * Default equation is Quad.INOUT.
    */
+
   TweenEquation get easing => _equation;
+
   void set easing(TweenEquation easeEquation) {
     _equation = easeEquation;
   }
 
   /**
-   * Target value(s) of the interpolation. The interpolation will run from the 
+   * Target value(s) of the interpolation. The interpolation will run from the
    * **value(s) at start time (after the delay, if any)** to these target value(s).
    *
    * To sum-up:
    * * start values: values at start time, after delay
    * * end values: [targetValue]
    */
+
   num get targetValue => _targetValue;
-  
+
   void set targetValue(num value) {
-    _targetValue=value;
+    _targetValue = value;
 //    if(num_OR_numList is num)
 //      _targetValues[0] = num_OR_numList;
 //    else if (num_OR_numList is List<num>){
@@ -438,7 +468,7 @@ class Tween extends BaseTween<Tween> {
 //      _targetValues.setAll(0, num_OR_numList);
 //    }
   }
-  
+
   /**
    * Sets the target values of the interpolation, relatively to the **values
    * at start time (after the delay, if any)**.
@@ -447,12 +477,13 @@ class Tween extends BaseTween<Tween> {
    * - start values: values at start time, after delay<br/>
    * - end values: params + values at start time, after delay
    *
-   * targetValues The relative target values of the interpolation. Can be either a num, or a List<num> if 
+   * targetValues The relative target values of the interpolation. Can be either a num, or a List<num> if
    * multiple target values are needed
    */
+
   void set targetRelative(num value) {
     //if(num_OR_numList is num)
-      _targetValue = isInitialized ? value + _startValue : value;
+    _targetValue = isInitialized ? value + _startValue : value;
 //    else if (num_OR_numList is List<num>){
 //      if (num_OR_numList.length > _combinedAttrsLimit) _throwCombinedAttrsLimitReached();
 //      for (int i=0; i< num_OR_numList.length; i++) {
@@ -461,14 +492,16 @@ class Tween extends BaseTween<Tween> {
 //    }
     _isRelative = true;
   }
-  
-  
+
+
   /**
    * The algorithm that will be used to navigate through the waypoints,
    * from the start values to the end values. Default is a catmull-rom spline,
    * but you can find other paths in the [TweenPaths] class.
    */
+
   TweenPath get path => _path;
+
   void set path(TweenPath path) {
     _path = path;
   }
@@ -477,7 +510,8 @@ class Tween extends BaseTween<Tween> {
   //int get combinedAttributesCount=> _combinedAttrsCnt;
 
   ///the TweenAccessor used with the target.
-  TweenAccessor get accessor=> _accessor;
+
+  TweenAccessor get accessor => _accessor;
 
   ///the class that was used to find the associated TweenAccessor.
   //Type get targetClass => _targetClass;
@@ -492,12 +526,12 @@ class Tween extends BaseTween<Tween> {
     _accessor = _registeredAccessors;
     //if (_accessor == null && _target is TweenAccessor) _accessor = _target;
     //if (_accessor != null) { 
-      _currentValue = _accessor.getValue(_target, _type) ;
-      //if (_combinedAttrsCnt == null) _combinedAttrsCnt = 0;
+    _currentValue = _accessor.getValue(_target, _type) ;
+    //if (_combinedAttrsCnt == null) _combinedAttrsCnt = 0;
     //}
     //else if (_target is Tweenable) {
     //  _accessorBuffer = (_target as Tweenable).getTweenableValue(_type) ;
-      //if (_combinedAttrsCnt == null) _combinedAttrsCnt = 0;
+    //if (_combinedAttrsCnt == null) _combinedAttrsCnt = 0;
     //}
     //else throw new Exception("No TweenAccessor was found for the target, and it is not Tweenable either.");
 
@@ -505,27 +539,26 @@ class Tween extends BaseTween<Tween> {
   }
 
   void free() {
-    reset();
     _pool.free(this);
   }
 
   void initializeOverride() {
     if (_target == null) return;
 
-    _startValue=_getTweenedValue();
+    _startValue = _getTweenedValue();
 
     //for (int i=0; i<_combinedAttrsCnt; i++) {
-      _targetValue += _isRelative ? _startValue : 0;
+    _targetValue += _isRelative ? _startValue : 0;
 
-      //for (int ii=0; ii<_waypointsCnt; ii++) {
-      //  _waypoints[ii*_combinedAttrsCnt+i] += _isRelative ? _startValues[i] : 0;
-      //}
+    //for (int ii=0; ii<_waypointsCnt; ii++) {
+    //  _waypoints[ii*_combinedAttrsCnt+i] += _isRelative ? _startValues[i] : 0;
+    //}
 
-      if (_isFrom) {
-        num tmp = _startValue;
-        _startValue = _targetValue;
-        _targetValue = tmp;
-      }
+    if (_isFrom) {
+      num tmp = _startValue;
+      _startValue = _targetValue;
+      _targetValue = tmp;
+    }
     //}
   }
 
@@ -561,7 +594,7 @@ class Tween extends BaseTween<Tween> {
 
     // Normal behavior
     num time = isReverse(step) ? duration - currentTime : currentTime;
-    num t = _equation.compute(time/duration);
+    num t = _equation.compute(time / duration);
     _currentValue = _startValue + t * (_targetValue - _startValue);
 //    if (_waypointsCnt == 0 || _path == null) {
 //      //for (int i=0; i<_combinedAttrsCnt; i++) {
@@ -572,9 +605,9 @@ class Tween extends BaseTween<Tween> {
 //      //for (int i=0; i<_combinedAttrsCnt; i++) {
 //        _pathBuffer[0] = _startValues;
 //        _pathBuffer[1+_waypointsCnt] = _targetValues;
-////        for (int ii=0; ii<_waypointsCnt; ii++) {
-////          _pathBuffer[ii+1] = _waypoints[ii*_combinedAttrsCnt+i];
-////        }
+    ////        for (int ii=0; ii<_waypointsCnt; ii++) {
+    ////          _pathBuffer[ii+1] = _waypoints[ii*_combinedAttrsCnt+i];
+    ////        }
 //
 //        _accessorBuffer = _path.compute(t, _pathBuffer, _waypointsCnt + 2);
 //      //}
@@ -610,10 +643,11 @@ class Tween extends BaseTween<Tween> {
   num _getTweenedValue() {
     if (_accessor != null) {
       return _accessor.getValue(_target, _type);
-    } else if (_target is Tweenable) { // _target is Tweenable
+    } else if (_target is Tweenable) {
+      // _target is Tweenable
       return (_target as Tweenable).getTweenableValue(_type);
     }
-    
+
     return 0;
   }
 

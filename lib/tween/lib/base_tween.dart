@@ -95,7 +95,6 @@ abstract class BaseTween<T> {
 
   ///Kills the tween or timeline. If you are using a [TweenManager], this object will be removed automatically.
   void kill() {
-    reset();
     _isKilled = true;
   }
 
