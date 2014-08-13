@@ -340,7 +340,7 @@ class games_02_gemmatch extends State {
 
       scoreText.scale.set(1);
       if (scoreTween != null) {
-        game.tweens.remove(scoreTween);
+        //game.tweens.remove(scoreTween);
       }
 
       scoreTween = game.add.tween(scoreText.scale).to({
