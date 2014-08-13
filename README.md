@@ -2,7 +2,7 @@ play_phaser
 =========
 A Dart port of Phaser.js (2.0.7)
 
-Very easy to learn and fun 2D game engine.
+Very easy to learn and fun 2D game engine for dart.
 
 Built on top of my Canvas/WebGL drawing library [play_pixi][1].
 
