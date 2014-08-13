@@ -64,20 +64,6 @@ class basic_01_load_an_image extends State {
     
     //  Moves the image anchor to the middle, so it centers inside the game properly
     image.anchor.set(0.5);
-    
-    image.scale.set(2);
-    image.position.set(game.rnd.integerInRange(0, 800), game.rnd.integerInRange(0, 600));
-    
-    //  Enables all kind of input actions on this image (click, etc)
-    image.inputEnabled = true;
-    
-    // When moving on the image, kill it.
-    image.events.onInputOver.add((Sprite s, Pointer p) {
-    image.kill();
-    });
-
-
-    text = game.add.text(250, 16, 'Hello world!', new TextStyle(fill:'#ffffff'));
 
   }
 
