@@ -1,6 +1,6 @@
 play_phaser
 =========
-A Dart port of Phaser.js (2.0.7)
+A Dart port of Phaser (2.0.7)
 
 Very easy to learn and fun 2D game engine for dart.
 
