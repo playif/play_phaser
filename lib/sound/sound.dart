@@ -1,6 +1,6 @@
 part of Phaser;
 
-class Marker{
+class Marker {
   String name;
   num start;
   num stop;
@@ -256,14 +256,12 @@ class Sound {
       if (this.game.cache.getSound(key) != null && this.game.cache.isSoundReady(key)) {
         this._sound = this.game.cache.getSoundData(key);
         this.totalDuration = 0.0;
-
-        if (this._sound['duration'] != null) {
-          this.totalDuration = this._sound['duration'];
-        }
+        this.totalDuration = (this._sound as AudioElement).duration;
       }
       else {
         this.game.cache.onSoundUnlock.add(this.soundHasUnlocked);
       }
+
     }
 
     /**
@@ -374,7 +372,13 @@ class Sound {
 
     if (key == this.key) {
       this._sound = this.game.cache.getSoundData(this.key);
-      this.totalDuration = this._sound['duration'];
+      if(this._sound is AudioElement){
+        this.totalDuration = (this._sound as AudioElement).duration;
+      }
+      else{
+        this.totalDuration = (this._sound as AudioBuffer).duration;
+      }
+
     }
 
   }
@@ -401,13 +405,13 @@ class Sound {
     }
 
     this.markers[name] = new Marker()
-        ..name= name
-        ..start= start
-        ..stop= start + duration
-        ..volume= volume
-        ..duration= duration
-        ..durationMS= duration * 1000
-        ..loop= loop;
+      ..name = name
+      ..start = start
+      ..stop = start + duration
+      ..volume = volume
+      ..duration = duration
+      ..durationMS = duration * 1000
+      ..loop = loop;
 
   }
 
@@ -580,7 +584,7 @@ class Sound {
         this._sound = this.context.createBufferSource();
         this._sound.buffer = this._buffer;
 
-        if (this.externalNode !=null) {
+        if (this.externalNode != null) {
           this._sound.connectNode(this.externalNode);
         }
         else {
@@ -625,7 +629,7 @@ class Sound {
       }
     }
     else {
-      if (this.game.cache.getSound(this.key) !=null && this.game.cache.getSound(this.key)['locked']) {
+      if (this.game.cache.getSound(this.key) != null && this.game.cache.getSound(this.key)['locked']) {
         this.game.cache.reloadSound(this.key);
         this.pendingPlayback = true;
       }
@@ -676,7 +680,7 @@ class Sound {
    * @param {boolean} [loop=false] - Loop when it finished playing?
    */
 
-  restart([String marker = '', int position =0 , double volume = 1.0, bool loop=false]) {
+  restart([String marker = '', int position =0, double volume = 1.0, bool loop=false]) {
 //    marker = marker;
 //    position = position;
 //    volume = volume;
@@ -707,7 +711,7 @@ class Sound {
         this._sound = this.context.createBufferSource();
         this._sound.buffer = this._buffer;
 
-        if (this.externalNode !=null) {
+        if (this.externalNode != null) {
           this._sound.connectNode(this.externalNode);
         }
         else {

@@ -32,7 +32,7 @@ class Cache {
 
 
   Cache(this.game) {
-
+ 
     /**
      * @property {object} game - Canvas key-value container.
      * @private
@@ -422,6 +422,8 @@ class Cache {
     if (audioTag) {
       decoded = true;
     }
+
+
 
     this._sounds[key] = {
       'url': url,
@@ -911,7 +913,7 @@ class Cache {
    * @return {object} The sound data.
    */
 
-  AudioBuffer getSoundData(String key) {
+  getSoundData(String key) {
     if (this._sounds[key] != null) {
       return this._sounds[key]['data'];
     } else {

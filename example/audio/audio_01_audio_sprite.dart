@@ -12,7 +12,7 @@ class audio_01_audio_sprite extends State {
     game.load.bitmapFont('nokia', 'assets/fonts/bitmapFonts/nokia16black.png', 'assets/fonts/bitmapFonts/nokia16black.xml');
 
     // game.load.audio('sfx', [ 'assets/audio/SoundEffects/fx_mixdown.mp3', 'assets/audio/SoundEffects/fx_mixdown.ogg' ]);
-    game.load.audio('sfx', 'assets/audio/SoundEffects/fx_mixdown.ogg');
+    game.load.audio('sfx', ['assets/audio/SoundEffects/fx_mixdown.ogg','assets/audio/SoundEffects/fx_mixdown.mp3']);
 
   }
 
@@ -21,6 +21,7 @@ class audio_01_audio_sprite extends State {
     game.add.image(0, 0, 'title');
 
     //	Here we set-up our audio sprite
+
     fx = game.add.audio('sfx');
 
     //	And this defines the markers.
@@ -37,7 +38,7 @@ class audio_01_audio_sprite extends State {
     fx.addMarker('death', 12, 4.2);
     fx.addMarker('shot', 17, 1.0);
     fx.addMarker('squit', 19, 0.3);
-
+    print("ok");
     //	Make some buttons to trigger the sounds
     btn= makeButton('alien death', 600, 100);
     makeButton('boss hit', 600, 140);
@@ -73,6 +74,7 @@ class audio_01_audio_sprite extends State {
   }
 
   click(Button button, Pointer pointer, bool isOver) {
+
     fx.play(button.name);
   }
 

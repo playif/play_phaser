@@ -27,6 +27,12 @@ part "particles/particles_01_auto_scale.dart";
 part "arcade_physics/arcade_physics_34_quadtree.dart";
 
 part "camera/camera_01_basic_follow.dart";
+part "camera/camera_02_camera_cull.dart";
+part "camera/camera_03_camera_view.dart";
+
+
+part "tilemaps/tilemaps_01_blank_map.dart";
+part "tilemaps/tilemaps_16_tilemap_ray_cast.dart";
 
 
 part "display/display_14_bitmapdata_wobble.dart";
@@ -65,12 +71,22 @@ Map<String, State> examples = {
 
     "particles_01_auto_scale": new particles_01_auto_scale(),
 
+
     "arcade_physics_34_quadtree": new arcade_physics_34_quadtree(),
 
+
     "camera_01_basic_follow": new camera_01_basic_follow(),
+    "camera_02_camera_cull": new camera_02_camera_cull(),
+    "camera_03_camera_view": new camera_03_camera_view(),
+
+
+    "tilemaps_01_blank_map": new tilemaps_01_blank_map(),
+    "tilemaps_16_tilemap_ray_cast": new tilemaps_16_tilemap_ray_cast(),
+
 
     "display_14_bitmapdata_wobble":new display_14_bitmapdata_wobble(),
     "display_20_bitmapdata_set_hsl":new display_20_bitmapdata_set_hsl(),
+
 
     "games_01_breakout":new games_01_breakout(),
     "games_02_gemmatch":new games_02_gemmatch(),
@@ -79,19 +95,21 @@ Map<String, State> examples = {
 };
 
 main() {
-//
+//  dom.window.console.log("preload");
+
+
 //  var w = dom.window.innerWidth * dom.window.devicePixelRatio,
 //  h = dom.window.innerHeight * dom.window.devicePixelRatio,
 //  width = (h > w) ? h : w,
 //  height = (h > w) ? w : h;
 //
-  //// Hack to avoid iPad Retina and large Android devices. Tell it to scale up.
+//  // Hack to avoid iPad Retina and large Android devices. Tell it to scale up.
 //  if (dom.window.innerWidth >= 1024 && dom.window.devicePixelRatio >= 2)
 //  {
 //    width = Math.round(width / 2);
 //    height = Math.round(height / 2);
 //  }
-  //// reduce screen size by one 3rd on devices like Nexus 5
+//  // reduce screen size by one 3rd on devices like Nexus 5
 //  if (dom.window.devicePixelRatio == 3)
 //  {
 //    width = Math.round(width / 3) * 2;
@@ -115,7 +133,7 @@ main() {
     game.state.start(select.children[select.selectedIndex].text);
   });
 
-  game.state.start("games_04_matching_pairs");
+  game.state.start("basic_01_load_an_image");
 
   //game.canvas.style.cursor = "pointer";
   //game.boot();

@@ -683,10 +683,12 @@ class Device {
     AudioElement audio = new AudioElement();
     this.audioData = audio != null;
     this.webAudio = true;
+    //window.c
+//    this.webAudio = true;
 //  this.webAudio = !!(window['webkitAudioContext'] || window['AudioContext']);
     //var audioElement = document.createElement('audio');
     //var result = false;
-    print(audio.canPlayType('audio/mp3'));
+
     if (audio.canPlayType('audio/ogg') != "") {
       this.ogg = true;
     }

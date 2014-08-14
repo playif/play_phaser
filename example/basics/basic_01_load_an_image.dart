@@ -2,16 +2,11 @@ part of example;
 
 
 class basic_01_load_an_image extends State {
-  //Phaser.Game game;
+
   Text text;
   Sprite image;
-  int counter = 0;
-
-  double t = 0.5;
-
 
   preload() {
-    print("preload");
     //Phaser.Easing.Linear.None;
     //  You can fill the preloader with as many assets as your game requires
 
@@ -19,61 +14,35 @@ class basic_01_load_an_image extends State {
     //  string by which we'll identify the image later in our code.
 
     //  The second parameter is the URL of the image (relative)
-    game.load.image('einstein', 'assets/sprites/car.png');
+    game.load.image('car', 'assets/sprites/car.png');
 
   }
 
   create() {
-    print("create");
     //  This creates a simple sprite that is using our loaded image and
     //  displays it on-screen
     for (int i = 0; i < 10; i++) {
-      var image = game.add.sprite(game.world.centerX, game.world.centerY, 'einstein');
+      var image = game.add.sprite(game.world.centerX, game.world.centerY, 'car');
 
       //  Moves the image anchor to the middle, so it centers inside the game properly
       image.anchor.set(0.5);
+
       image.scale.set(2);
       image.position.set(game.rnd.integerInRange(0, 800), game.rnd.integerInRange(0, 600));
+
       //  Enables all kind of input actions on this image (click, etc)
       image.inputEnabled = true;
 
+      // When moving on the image, kill it.
       image.events.onInputOver.add((Sprite s, Pointer p) {
         image.kill();
       });
     }
-//
-    //image.position=new Phaser.Point(200,200);
 
-
-
-    text = game.add.text(250, 16, 'Hi', new TextStyle()..fill = '#ffffff');
-
-    //image.events.onInputDown.add(listener);
+    // Add a text
+    text = game.add.text(250, 16, 'Hello World!!', new TextStyle(fill:'#ffffff'));
 
   }
 
-  update() {
-    //print("update");
 
-    game.world.forEach((GameObject o) {
-      o.x += game.rnd.frac();
-      if (o.x > 800) {
-        o.x = 0;
-      }
-      //o.scale.set(game.rnd.frac() * 5);
-      o.alpha = 0.5;
-      o.rotation += game.rnd.frac() * 0.1;
-    });
-    //image.anchor.set(t);
-    //image.x += 1;
-    //image.rotation += 0.1;
-    //text.x += 1;
-
-    //t+=0.01;
-  }
-
-  listener(Sprite s, Pointer p) {
-    counter++;
-    text.text = "You clicked " + counter.toString() + " times!";
-  }
 }

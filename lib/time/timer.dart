@@ -2,7 +2,7 @@ part of Phaser;
 
 class Timer {
   Game game;
-  bool autoDestroy;
+  bool autoDestroy=true;
   bool running = false;
   bool expired = false;
   double elapsed = 0.0;
@@ -81,9 +81,9 @@ class Timer {
    * @return {Phaser.TimerEvent} The Phaser.TimerEvent object that was created.
    */
 
-  TimerEvent create(double delay, bool loop, int repeatCount, Function callback, args) {
+  TimerEvent create(num delay, bool loop, int repeatCount, Function callback, args) {
 
-    double tick = delay;
+    num tick = delay;
 
     if (this._now == 0) {
       tick += this.game.time.now;
@@ -117,7 +117,7 @@ class Timer {
    * @return {Phaser.TimerEvent} The Phaser.TimerEvent object that was created.
    */
 
-  TimerEvent add(double delay, Function callback, [List args]) {
+  TimerEvent add(num delay, Function callback, [List args]) {
     return this.create(delay, false, 0, callback, args);
   }
 

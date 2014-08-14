@@ -126,7 +126,7 @@ part "time/timer.dart";
 part "time/timer_event.dart";
 
 
-//part "tween/easing.dart";
+part "tween/easing.dart";
 part "tween/tween.dart";
 part "tween/tween_manager.dart";
 

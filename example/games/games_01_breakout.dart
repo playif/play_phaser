@@ -26,6 +26,8 @@ class games_01_breakout extends State {
 
   create() {
 
+    game.world.setBounds(0, 0, 800, 600);
+
     game.physics.startSystem(Physics.ARCADE);
 
     //  We check bounds collisions against all walls other than the bottom one

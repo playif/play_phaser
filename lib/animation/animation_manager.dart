@@ -182,7 +182,7 @@ class AnimationManager {
 
   }
 
-  stop([name, resetFrame =null]) {
+  stop([name, resetFrame =false]) {
     if (name is String) {
       if (this._anims[name] != null) {
         this.currentAnim = this._anims[name];

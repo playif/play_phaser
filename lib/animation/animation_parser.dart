@@ -153,37 +153,37 @@ class AnimationParser {
 
       newFrame = data.addFrame(new Frame(
           i,
-          frames[i]['frame']['x'],
-          frames[i]['frame']['y'],
-          frames[i]['frame']['w'],
-          frames[i]['frame']['h'],
+          frames[key]['frame']['x'],
+          frames[key]['frame']['y'],
+          frames[key]['frame']['w'],
+          frames[key]['frame']['h'],
           key,
           uuid
       ));
 
       PIXI.TextureCache[uuid] = new PIXI.Texture(PIXI.BaseTextureCache[cacheKey], new PIXI.Rectangle()
-          ..x = frames[i]['frame']['x']
-          ..y = frames[i]['frame']['y']
-          ..width = frames[i]['frame']['w']
-          ..height = frames[i]['frame']['h']
+          ..x = frames[key]['frame']['x']
+          ..y = frames[key]['frame']['y']
+          ..width = frames[key]['frame']['w']
+          ..height = frames[key]['frame']['h']
       );
 
       if (frames[key]['trimmed']) {
         newFrame.setTrim(
-            frames[i]['trimmed'],
-            frames[i]['sourceSize']['w'],
-            frames[i]['sourceSize']['h'],
-            frames[i]['spriteSourceSize']['x'],
-            frames[i]['spriteSourceSize']['y'],
-            frames[i]['spriteSourceSize']['w'],
-            frames[i]['spriteSourceSize']['h']
+            frames[key]['trimmed'],
+            frames[key]['sourceSize']['w'],
+            frames[key]['sourceSize']['h'],
+            frames[key]['spriteSourceSize']['x'],
+            frames[key]['spriteSourceSize']['y'],
+            frames[key]['spriteSourceSize']['w'],
+            frames[key]['spriteSourceSize']['h']
         );
 
         PIXI.TextureCache[uuid].trim = new Rectangle(
-            frames[i]['spriteSourceSize']['x'],
-            frames[i]['spriteSourceSize']['y'],
-            frames[i]['sourceSize']['w'],
-            frames[i]['sourceSize']['h']
+            frames[key]['spriteSourceSize']['x'],
+            frames[key]['spriteSourceSize']['y'],
+            frames[key]['sourceSize']['w'],
+            frames[key]['sourceSize']['h']
             );
       }
 

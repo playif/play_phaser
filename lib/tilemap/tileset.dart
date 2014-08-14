@@ -117,7 +117,7 @@ class Tileset {
 
   draw(CanvasRenderingContext2D context, num x, num y, int index) {
 
-    if (this.image == null || this.drawCoords[index] == null) {
+    if (this.image == null || this.drawCoords[index.toInt()] == null) {
       return;
     }
 

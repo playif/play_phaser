@@ -201,7 +201,7 @@ class Animation {
     this.isFinished = true;
     this.paused = false;
 
-    if (resetFrame) {
+    if (resetFrame != null) {
       this.currentFrame = this._frameData.getFrame(this._frames[0]);
     }
 

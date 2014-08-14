@@ -110,7 +110,12 @@ class Timeline extends BaseTween<Timeline> {
   void reset() {
     super.reset();
 
+    if(_children.length>0){
+      print("here");
+    }
+
     _children.clear();
+
     _current = _parent = null;
 
     _isBuilt = false;
@@ -234,7 +239,7 @@ class Timeline extends BaseTween<Timeline> {
     if (manager == null) {
       _children.forEach((BaseTween tween) => tween.start());
     }
-  }
+  } 
 
   void free() {
     _children.forEach((BaseTween tween) => tween.free());
@@ -313,6 +318,6 @@ class Timeline extends BaseTween<Timeline> {
 }
 
 class TimelineMode {
-  static const int SEQUENCE = 1,
-  PARALLEL = 2;
+  static const int SEQUENCE = 1;
+  static const int PARALLEL = 2;
 }

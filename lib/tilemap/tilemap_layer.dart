@@ -2,25 +2,25 @@ part of Phaser;
 
 class MapCache {
   num cw,
-      ch,
-      ga = 1,
-      dx = 0,
-      dy = 0,
-      dw = 0,
-      dh = 0,
-      tx = 0,
-      ty = 0,
-      tw = 0,
-      th = 0,
-      tl = 0,
-      maxX = 0,
-      maxY = 0,
-      startX = 0,
-      startY = 0,
-      x = 0,
-      y = 0,
-      prevX = 0,
-      prevY = 0;
+  ch,
+  ga = 1,
+  dx = 0,
+  dy = 0,
+  dw = 0,
+  dh = 0,
+  tx = 0,
+  ty = 0,
+  tw = 0,
+  th = 0,
+  tl = 0,
+  maxX = 0,
+  maxY = 0,
+  startX = 0,
+  startY = 0,
+  x = 0,
+  y = 0,
+  prevX = 0,
+  prevY = 0;
 }
 
 class TilemapLayerData {
@@ -39,7 +39,7 @@ class TilemapLayerData {
   List<Body> bodies;
   List<List<Tile>> data;
 
-  bool dirty;
+  bool dirty = false;
 }
 
 class TilemapLayer extends Image {
@@ -58,7 +58,7 @@ class TilemapLayer extends Image {
   Frame textureFrame;
   String name;
   int type;
-  bool fixedToCamera;
+
   Point cameraOffset;
   String tileColor;
   bool debug;
@@ -162,7 +162,7 @@ class TilemapLayer extends Image {
   //});
 
   TilemapLayer(Game game, [Tilemap tilemap, int index, num width, num height])
-      : super(game) {
+  : super(game) {
 
     /**
      * @property {Phaser.Game} game - A reference to the currently running Game.
@@ -314,8 +314,8 @@ class TilemapLayer extends Image {
      * @private
      */
     this._mc = new MapCache()
-        ..cw = tilemap.tileWidth
-        ..ch = tilemap.tileHeight;
+      ..cw = tilemap.tileWidth
+      ..ch = tilemap.tileHeight;
 
 
     /**
@@ -334,6 +334,7 @@ class TilemapLayer extends Image {
    * @method Phaser.TilemapLayer#postUpdate
    * @memberof Phaser.TilemapLayer
    */
+
   postUpdate() {
 
     super.postUpdate();
@@ -364,6 +365,7 @@ class TilemapLayer extends Image {
    * @method Phaser.TilemapLayer#resizeWorld
    * @memberof Phaser.TilemapLayer
    */
+
   resizeWorld() {
     this.game.world.setBounds(0, 0, this.layer.widthInPixels, this.layer.heightInPixels);
   }
@@ -377,6 +379,7 @@ class TilemapLayer extends Image {
    * @param {number} x - x coordinate in camera space
    * @return {number} x coordinate in scrollFactor-adjusted dimensions
    */
+
   num _fixX(num x) {
 
     if (x < 0) {
@@ -400,6 +403,7 @@ class TilemapLayer extends Image {
    * @param {number} x - x coordinate in scrollFactor-adjusted dimensions
    * @return {number} x coordinate in camera space
    */
+
   num _unfixX(num x) {
 
     if (this.scrollFactorX == 1) {
@@ -419,6 +423,7 @@ class TilemapLayer extends Image {
    * @param {number} y - y coordinate in camera space
    * @return {number} y coordinate in scrollFactor-adjusted dimensions
    */
+
   num _fixY(num y) {
 
     if (y < 0) {
@@ -442,6 +447,7 @@ class TilemapLayer extends Image {
    * @param {number} y - y coordinate in scrollFactor-adjusted dimensions
    * @return {number} y coordinate in camera space
    */
+
   num _unfixY(num y) {
 
     if (this.scrollFactorY == 1) {
@@ -459,6 +465,7 @@ class TilemapLayer extends Image {
    * @param {number} x - X position of the point in target tile.
    * @return {Phaser.Tile} The tile with specific properties.
    */
+
   int getTileX(num x) {
     return Math.snapToFloor(this._fixX(x), this.map.tileWidth) ~/ this.map.tileWidth;
   }
@@ -470,6 +477,7 @@ class TilemapLayer extends Image {
    * @param {number} y - Y position of the point in target tile.
    * @return {Phaser.Tile} The tile with specific properties.
    */
+
   int getTileY(num y) {
     return Math.snapToFloor(this._fixY(y), this.map.tileHeight) ~/ this.map.tileHeight;
   }
@@ -483,6 +491,7 @@ class TilemapLayer extends Image {
    * @param {Phaser.Point|object} point - The Point object to set the x and y values on.
    * @return {Phaser.Point|object} A Point object with its x and y properties set.
    */
+
   Point getTileXY(x, y, Point point) {
     point.x = this.getTileX(x);
     point.y = this.getTileY(y);
@@ -500,6 +509,7 @@ class TilemapLayer extends Image {
    * @param {boolean} [interestingFace=false] - If true only return tiles that have interesting faces.
    * @return {array<Phaser.Tile>} An array of Phaser.Tiles.
    */
+
   List<Tile> getRayCastTiles(Line line, [num stepRate, bool collides = false, bool interestingFace = false]) {
 
     if (stepRate == null) {
@@ -545,6 +555,7 @@ class TilemapLayer extends Image {
    * @param {boolean} [interestingFace=false] - If true only return tiles that have interesting faces.
    * @return {array<Phaser.Tile>} An array of Phaser.Tiles.
    */
+
   List<Tile> getTiles(num x, num y, num width, num height, [bool collides = false, bool interestingFace = false]) {
 
     //  Should we only get tiles that have at least one of their collision flags set? (true = yes, false = no just get them all)
@@ -564,17 +575,17 @@ class TilemapLayer extends Image {
     }
 
     //  Convert the pixel values into tile coordinates
-    this._mc.tx = Math.snapToFloor(x, this._mc.cw) / this._mc.cw;
-    this._mc.ty = Math.snapToFloor(y, this._mc.ch) / this._mc.ch;
-    this._mc.tw = (Math.snapToCeil(width, this._mc.cw) + this._mc.cw) / this._mc.cw;
-    this._mc.th = (Math.snapToCeil(height, this._mc.ch) + this._mc.ch) / this._mc.ch;
+    this._mc.tx = Math.snapToFloor(x, this._mc.cw) ~/ this._mc.cw;
+    this._mc.ty = Math.snapToFloor(y, this._mc.ch) ~/ this._mc.ch;
+    this._mc.tw = (Math.snapToCeil(width, this._mc.cw) + this._mc.cw) ~/ this._mc.cw;
+    this._mc.th = (Math.snapToCeil(height, this._mc.ch) + this._mc.ch) ~/ this._mc.ch;
 
     //  This should apply the layer x/y here
-    this._results.length = 0;
+    this._results.clear();
 
-    for (var wy = this._mc.ty; wy < this._mc.ty + this._mc.th; wy++) {
-      for (var wx = this._mc.tx; wx < this._mc.tx + this._mc.tw; wx++) {
-        if (this.layer.data[wy] != null && this.layer.data[wy][wx] != null) {
+    for (int wy = this._mc.ty; wy < this._mc.ty + this._mc.th; wy++) {
+      for (int wx = this._mc.tx; wx < this._mc.tx + this._mc.tw; wx++) {
+        if (this.layer.data.length > wy && this.layer.data[wy].length > wx) {
           if ((!collides && !interestingFace) || this.layer.data[wy][wx].isInteresting(collides, interestingFace)) {
             this._results.add(this.layer.data[wy][wx]);
           }
@@ -591,6 +602,7 @@ class TilemapLayer extends Image {
    * @method Phaser.TilemapLayer#updateMax
    * @memberof Phaser.TilemapLayer
    */
+
   updateMax() {
 
     this._mc.maxX = Math.ceil(this.canvas.width / this.map.tileWidth) + 1;
@@ -605,6 +617,7 @@ class TilemapLayer extends Image {
    * @method Phaser.TilemapLayer#render
    * @memberof Phaser.TilemapLayer
    */
+
   render() {
 
     if (this.layer.dirty) {
@@ -628,15 +641,15 @@ class TilemapLayer extends Image {
 
     this.context.fillStyle = this.tileColor;
 
-    var tile;
-    var set;
+    Tile tile;
+    Tileset set;
 
     if (this.debug) {
       this.context.globalAlpha = this.debugAlpha;
     }
 
-    for (var y = this._mc.startY,
-        lenY = this._mc.startY + this._mc.maxY; y < lenY; y++) {
+    for (int y = this._mc.startY,
+    lenY = this._mc.startY + this._mc.maxY; y < lenY; y++) {
       this._column = null;
 
       if (y < 0 && this.wrap) {
@@ -649,8 +662,8 @@ class TilemapLayer extends Image {
 
       if (this._column != null) {
         for (int x = this._mc.startX,
-            lenX = this._mc.startX + this._mc.maxX; x < lenX; x++) {
-          Tile tile = null;
+        lenX = this._mc.startX + this._mc.maxX; x < lenX; x++) {
+          tile = null;
 
           if (x < 0 && this.wrap) {
             tile = this._column[x + this.map.width];
@@ -661,13 +674,13 @@ class TilemapLayer extends Image {
           }
 
           if (tile != null && tile.index > -1) {
-            set = this.map.tilesets[this.map.tiles[tile.index][2]];
+            set = this.map.tilesets[this.map.tiles[tile.index.toInt()][2]];
 
             if (this.debug == false && tile.alpha != this.context.globalAlpha) {
               this.context.globalAlpha = tile.alpha;
             }
 
-            set.draw(this.context, Math.floor(this._mc.tx), Math.floor(this._mc.ty), tile.index);
+            set.draw(this.context, Math.floor(this._mc.tx), Math.floor(this._mc.ty), tile.index.toInt());
 
             if (tile.debug) {
               this.context.fillStyle = 'rgba(0, 255, 0, 0.4)';
@@ -708,6 +721,7 @@ class TilemapLayer extends Image {
    * @method Phaser.TilemapLayer#renderDebug
    * @memberof Phaser.TilemapLayer
    */
+
   renderDebug() {
 
     this._mc.tx = this._mc.dx;
@@ -716,28 +730,28 @@ class TilemapLayer extends Image {
     this.context.strokeStyle = this.debugColor;
     this.context.fillStyle = this.debugFillColor;
 
-    for (var y = this._mc.startY,
-        lenY = this._mc.startY + this._mc.maxY; y < lenY; y++) {
+    for (int y = this._mc.startY,
+    lenY = this._mc.startY + this._mc.maxY; y < lenY; y++) {
       this._column = null;
 
       if (y < 0 && this.wrap) {
         this._column = this.layer.data[y + this.map.height];
       } else if (y >= this.map.height && this.wrap) {
         this._column = this.layer.data[y - this.map.height];
-      } else if (this.layer.data[y] != null) {
+      } else if (this.layer.data.length > y) {
         this._column = this.layer.data[y];
       }
 
       if (this._column != null) {
         for (int x = this._mc.startX,
-            lenX = this._mc.startX + this._mc.maxX; x < lenX; x++) {
+        lenX = this._mc.startX + this._mc.maxX; x < lenX; x++) {
           Tile tile = null;
 
           if (x < 0 && this.wrap) {
             tile = this._column[x + this.map.width];
           } else if (x >= this.map.width && this.wrap) {
             tile = this._column[x - this.map.width];
-          } else if (this._column[x] != null) {
+          } else if (this._column.length > x) {
             tile = this._column[x];
           }
 

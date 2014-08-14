@@ -82,11 +82,11 @@ class Loader {
   static const int PHYSICS_PHASER_JSON = 4;
 
   static const Map<String, int> Format = const {
-    "TEXTURE_ATLAS_JSON_ARRAY": 0,
-    "TEXTURE_ATLAS_JSON_HASH": 1,
-    "TEXTURE_ATLAS_XML_STARLING": 2,
-    "PHYSICS_LIME_CORONA_JSON": 3,
-    "PHYSICS_PHASER_JSON": 3
+      "TEXTURE_ATLAS_JSON_ARRAY": 0,
+      "TEXTURE_ATLAS_JSON_HASH": 1,
+      "TEXTURE_ATLAS_XML_STARLING": 2,
+      "PHYSICS_LIME_CORONA_JSON": 3,
+      "PHYSICS_PHASER_JSON": 3
   };
 
 
@@ -229,11 +229,11 @@ class Loader {
     //direction = direction || 0;
 
     this.preloadSprite = {
-      'sprite': sprite,
-      'direction': direction,
-      'width': sprite.width,
-      'height': sprite.height,
-      'rect': null
+        'sprite': sprite,
+        'direction': direction,
+        'width': sprite.width,
+        'height': sprite.height,
+        'rect': null
     };
 
     if (direction == 0) {
@@ -305,8 +305,8 @@ class Loader {
       for (var i = 0; i < this._fileList.length; i++) {
         if (this._fileList[i]['type'] == type && this._fileList[i]['key'] == key) {
           return {
-            ['index']: i,
-            ['file']: this._fileList[i]
+              ['index']: i,
+              ['file']: this._fileList[i]
           };
         }
       }
@@ -347,12 +347,12 @@ class Loader {
   addToFileList(String type, String key, url, [Map properties]) {
 
     Map entry = {
-      'type': type,
-      'key': key,
-      'url': url,
-      'data': null,
-      'error': false,
-      'loaded': false
+        'type': type,
+        'key': key,
+        'url': url,
+        'data': null,
+        'error': false,
+        'loaded': false
     };
 
     if (properties != null) {
@@ -381,12 +381,12 @@ class Loader {
   replaceInFileList(String type, String key, String url, [Map properties]) {
 
     Map entry = {
-      'type': type,
-      'key': key,
-      'url': url,
-      'data': null,
-      'error': false,
-      'loaded': false
+        'type': type,
+        'key': key,
+        'url': url,
+        'data': null,
+        'error': false,
+        'loaded': false
     };
 
     if (properties != null) {
@@ -435,12 +435,12 @@ class Loader {
     }
 
     this._packList.add({
-      'key': key,
-      'url': url,
-      'data': data,
-      'loaded': false,
-      'error': false
-    //callbackContext: callbackContext
+        'key': key,
+        'url': url,
+        'data': data,
+        'loaded': false,
+        'error': false
+        //callbackContext: callbackContext
     });
 
     return this;
@@ -542,7 +542,7 @@ class Loader {
     //TODO
     if (callback != null) {
       this.addToFileList('script', key, url, {
-        'callback': callback
+          'callback': callback
       });
       //callback = (){};
     }
@@ -576,7 +576,7 @@ class Loader {
     if (callback != null) {
       //callback = false;
       this.addToFileList('binary', key, url, {
-        'callback': callback
+          'callback': callback
       });
     }
 //    if (callback != false && callbackContext == null) {
@@ -615,11 +615,11 @@ class Loader {
 //    }
 
     this.addToFileList('spritesheet', key, url, {
-      'frameWidth': frameWidth,
-      'frameHeight': frameHeight,
-      'frameMax': frameMax,
-      'margin': margin,
-      'spacing': spacing
+        'frameWidth': frameWidth,
+        'frameHeight': frameHeight,
+        'frameMax': frameMax,
+        'margin': margin,
+        'spacing': spacing
     });
 
     return this;
@@ -643,8 +643,8 @@ class Loader {
 //    }
 
     this.addToFileList('audio', key, url, {
-      'buffer': null,
-      'autoDecode': autoDecode
+        'buffer': null,
+        'autoDecode': autoDecode
     });
 
     return this;
@@ -683,11 +683,11 @@ class Loader {
     //  A map data object has been given
     if (data != null) {
       switch (format) {
-        //  A csv string or object has been given
+      //  A csv string or object has been given
         case Tilemap.CSV:
           break;
 
-        //  An xml string or object has been given
+      //  An xml string or object has been given
         case Tilemap.TILED_JSON:
 
           if (data is String) {
@@ -699,7 +699,7 @@ class Loader {
       this.game.cache.addTilemap(key, null, data, format);
     } else {
       this.addToFileList('tilemap', key, url, {
-        'format': format
+          'format': format
       });
     }
 
@@ -728,7 +728,8 @@ class Loader {
 //      data = null;
 //    }
     if (format == null) {
-      format = 0; //Physics.LIME_CORONA_JSON;
+      format = 0;
+      //Physics.LIME_CORONA_JSON;
     }
 
     if (url == null && data == null) {
@@ -746,7 +747,7 @@ class Loader {
       this.game.cache.addPhysicsData(key, null, data, format);
     } else {
       this.addToFileList('physics', key, url, {
-        'format': format
+          'format': format
       });
     }
 
@@ -785,9 +786,9 @@ class Loader {
     //  A URL to a json/xml file has been given
     if (xmlURL != null) {
       this.addToFileList('bitmapfont', key, textureURL, {
-        'xmlURL': xmlURL,
-        'xSpacing': xSpacing,
-        'ySpacing': ySpacing
+          'xmlURL': xmlURL,
+          'xSpacing': xSpacing,
+          'ySpacing': ySpacing
       });
     } else {
       //  An xml string or object has been given
@@ -813,10 +814,10 @@ class Loader {
           throw new Exception("Phaser.Loader. Invalid Bitmap Font XML given");
         } else {
           this.addToFileList('bitmapfont', key, textureURL, {
-            'xmlURL': null,
-            'xmlData': xml,
-            'xSpacing': xSpacing,
-            'ySpacing': ySpacing
+              'xmlURL': null,
+              'xmlData': xml,
+              'xSpacing': xSpacing,
+              'ySpacing': ySpacing
           });
         }
       }
@@ -900,12 +901,12 @@ class Loader {
     //  A URL to a json/xml file has been given
     if (atlasURL != null) {
       this.addToFileList('textureatlas', key, textureURL, {
-        'atlasURL': atlasURL,
-        'format': format
+          'atlasURL': atlasURL,
+          'format': format
       });
     } else {
       switch (format) {
-        //  A json string or object has been given
+      //  A json string or object has been given
         case Loader.TEXTURE_ATLAS_JSON_ARRAY:
 
           if (atlasData is String) {
@@ -913,7 +914,7 @@ class Loader {
           }
           break;
 
-        //  An xml string or object has been given
+      //  An xml string or object has been given
         case Loader.TEXTURE_ATLAS_XML_STARLING:
 
           if (atlasData is String) {
@@ -944,9 +945,9 @@ class Loader {
       }
 
       this.addToFileList('textureatlas', key, textureURL, {
-        'atlasURL': null,
-        'atlasData': atlasData,
-        'format': format
+          'atlasURL': null,
+          'atlasData': atlasData,
+          'format': format
       });
 
     }
@@ -1009,6 +1010,7 @@ class Loader {
    */
 
   beginLoad() {
+
 
     this.progress = 0;
     this.progressFloat = 0.0;
@@ -1207,6 +1209,7 @@ class Loader {
 
   loadFile() {
 
+
     if (this._fileList[this._fileIndex] == null) {
       window.console.warn('Phaser.Loader loadFile invalid index $this._fileIndex');
       return;
@@ -1224,14 +1227,14 @@ class Loader {
       case 'textureatlas':
       case 'bitmapfont':
         file['data'] = new ImageElement()
-            ..dataset['name'] = file['key']
-            //file['data']['name'] = ;
-            ..onLoad.listen((e) {
-              return _this.fileComplete(_this._fileIndex);
-            })
-            ..onError.listen((e) {
-              return _this.fileError(_this._fileIndex);
-            });
+          ..dataset['name'] = file['key']
+        //file['data']['name'] = ;
+          ..onLoad.listen((e) {
+          return _this.fileComplete(_this._fileIndex);
+        })
+          ..onError.listen((e) {
+          return _this.fileError(_this._fileIndex);
+        });
         //..crossOrigin;
 
         if (this.crossOrigin != null) {
@@ -1243,28 +1246,36 @@ class Loader {
       case 'audio':
         file['url'] = this.getAudioURL(file['url']);
 
+
         if (file['url'] != null) {
+
           //  WebAudio or Audio Tag?
           if (this.game.sound.usingWebAudio) {
+
             this.xhrLoad(this._fileIndex, this.baseURL + file['url'], 'arraybuffer', fileComplete, fileError);
           } else if (this.game.sound.usingAudioTag) {
             if (this.game.sound.touchLocked) {
               //  If audio is locked we can't do this yet, so need to queue this load request. Bum.
               file['data'] = new AudioElement()
-                  ..dataset['name'] = file['key']
-                  ..preload = 'auto'
-                  ..src = this.baseURL + file['url'];
+                ..dataset['name'] = file['key']
+                ..preload = 'auto'
+                ..src = this.baseURL + file['url'];
               this.fileComplete(this._fileIndex);
             } else {
               file['data'] = new AudioElement()
-                  ..dataset['name'] = file['key']
-                  ..onError.listen((e) {
-                    return _this.fileError(_this._fileIndex);
-                  })
-                  ..preload = 'auto'
-                  ..src = this.baseURL + file['url']
-                  ..addEventListener('canplaythrough', GAMES[this.game.id].load.fileComplete(this._fileIndex), false)
-                  ..load();
+                ..dataset['name'] = file['key']
+                ..onError.listen((e) {
+                return _this.fileError(_this._fileIndex);
+              })
+                ..preload = 'auto'
+
+                ..onCanPlayThrough.listen((e) {
+                GAMES[this.game.id].load.fileComplete(this._fileIndex);
+              })
+                ..src = this.baseURL + file['url']
+              //..addEventListener('canplaythrough', , false)
+                ..load();
+
             }
           }
         } else {
@@ -1425,14 +1436,12 @@ class Loader {
 
   fileComplete(int index) {
 
-//    if(this._fileList.length == 0){
-//      return;
-//    }
 
     if (this._fileList[index] == null) {
       window.console.warn('Phaser.Loader fileComplete invalid index ' + index.toString());
       return;
     }
+
 
     Map file = this._fileList[index];
     file['loaded'] = true;
@@ -1491,7 +1500,7 @@ class Loader {
             String key = file['key'];
 
             this.game.cache.updateSound(key, 'isDecoding', true);
-            ByteBuffer buffer=file['data'];
+            ByteBuffer buffer = file['data'];
             this.game.sound.context.decodeAudioData(buffer).then((AudioBuffer buffer) {
               if (buffer != null) {
                 that.game.cache.decodedSound(key, buffer);
@@ -1500,7 +1509,15 @@ class Loader {
             });
           }
         } else {
-          file['data'].removeEventListener('canplaythrough', GAMES[this.game.id].load.fileComplete);
+
+
+          (file['data'] as AudioElement).onCanPlayThrough.listen((e){
+//            window.console.log("p1");
+
+            GAMES[this.game.id].load.fileComplete(index);
+
+          });
+
           this.game.cache.addSound(file['key'], file['url'], file['data'], false, true);
         }
         break;

@@ -2,6 +2,7 @@ part of Phaser;
 
 class Graphics extends PIXI.Graphics implements GameObject {
   Game game;
+  Point position=new Point();
   //num x, y;
 
   //bool exists;
@@ -27,8 +28,8 @@ class Graphics extends PIXI.Graphics implements GameObject {
   int renderOrderID;
 
   PIXI.Texture texture;
-  Point anchor;
-  Point center;
+  Point anchor=new Point();
+  Point center=new Point();
 
   CanvasPattern __tilePattern;
 

@@ -69,8 +69,7 @@ class Game {
         this.time.gamePaused();
         this.onPause.dispatch(this);
       }
-    }
-    else {
+    } else {
       if (this._paused) {
         this._paused = false;
         this._codePaused = false;
@@ -82,8 +81,7 @@ class Game {
     }
   }
 
-  Game([int width=800, int height=600, int renderer=AUTO, this.parent='', State state,
-       this.transparent, this.antialias, this.physicsConfig]) {
+  Game([int width = 800, int height = 600, int renderer = AUTO, this.parent = '', State state, this.transparent, this.antialias, this.physicsConfig]) {
 
     GAMES.add(this);
     /**
@@ -328,13 +326,13 @@ class Game {
     this._codePaused = false;
 
     //  Parse the configuration object (if any)
-//    if (arguments.length == 1 && arguments[0] is Map) {
-//      this.parseConfig(arguments[0]);
-//    }
-//    else
+    //    if (arguments.length == 1 && arguments[0] is Map) {
+    //      this.parseConfig(arguments[0]);
+    //    }
+    //    else
     {
       this.config = {
-          'enableDebug': true
+        'enableDebug': true
       };
 
       if (width != null) {
@@ -373,18 +371,17 @@ class Game {
       return _this.boot();
     };
 
-//    if (document.readyState == 'complete' || document.readyState == 'interactive') {
-//      window.setTimeout(this._onBoot, 0);
-//    }
-//    else {
-//      document.addEventListener('DOMContentLoaded', this._onBoot, false);
-//      window.addEventListener('load', this._onBoot, false);
-//    }
+    //    if (document.readyState == 'complete' || document.readyState == 'interactive') {
+    //      window.setTimeout(this._onBoot, 0);
+    //    }
+    //    else {
+    //      document.addEventListener('DOMContentLoaded', this._onBoot, false);
+    //      window.addEventListener('load', this._onBoot, false);
+    //    }
     document.addEventListener('DOMContentLoaded', this._onBoot, false);
     window.addEventListener('load', this._onBoot, false);
     //return this;
-    window.onLoad.listen((e){
-      print("on load");
+    window.onLoad.listen((e) {
       this._onBoot(0);
     });
 
@@ -455,7 +452,6 @@ class Game {
    */
 
   boot() {
-    print("boot");
     if (this.isBooted) {
       return;
     }
@@ -467,10 +463,10 @@ class Game {
     tween.Tween.registerAccessor(new GameObjectAccessor());
     //tween.Tween.registerAccessor(Point, new PointAccessor());
     //tween.Tween.registerAccessor(Emitter, new PointAccessor());
-//    if (!document.body) {
-//      window.setTimeout(this._onBoot, 20);
-//    }
-//    else {
+    //    if (!document.body) {
+    //      window.setTimeout(this._onBoot, 20);
+    //    }
+    //    else {
     document.removeEventListener('DOMContentLoaded', this._onBoot);
     window.removeEventListener('load', this._onBoot);
 
@@ -525,13 +521,12 @@ class Game {
 
     if (this.config != null && this.config['forceSetTimeOut'] is Function) {
       this.raf = new RequestAnimationFrame(this, this.config['forceSetTimeOut']);
-    }
-    else {
+    } else {
       this.raf = new RequestAnimationFrame(this, false);
     }
 
     this.raf.start();
-//    }
+    //    }
 
   }
 
@@ -552,8 +547,7 @@ class Game {
     if (this.renderType == WEBGL) {
       r = 'WebGL';
       c++;
-    }
-    else if (this.renderType == HEADLESS) {
+    } else if (this.renderType == HEADLESS) {
       r = 'Headless';
     }
 
@@ -563,30 +557,21 @@ class Game {
     }
 
     if (this.device.chrome) {
-      List<String> args = [
-          '%c %c %c Phaser v' + v + ' | Pixi.js ' + PIXI.VERSION + ' | ' + r + ' | ' + a + '  %c %c ' + ' http://phaser.io  %c %c \u2665%c\u2665%c\u2665 ',
-          'background: #0cf300',
-          'background: #00bc17',
-          'color: #ffffff; background: #00711f;',
-          'background: #00bc17',
-          'background: #0cf300',
-          'background: #00bc17'
-      ];
+      List<String> args = ['%c %c %c Phaser v' + v + ' | Pixi.js ' + PIXI.VERSION + ' | ' + r + ' | ' + a + '  %c %c ' + ' http://phaser.io  %c %c \u2665%c\u2665%c\u2665 ', 'background: #0cf300', 'background: #00bc17', 'color: #ffffff; background: #00711f;', 'background: #00bc17', 'background: #0cf300', 'background: #00bc17'];
 
       for (var i = 0; i < 3; i++) {
         if (i < c) {
           args.add('color: #ff2424; background: #fff');
-        }
-        else {
+        } else {
           args.add('color: #959595; background: #fff');
         }
       }
 
       //window.console.log(args);
     }
-//    else if (window['console']) {
-//      window.console.log('Phaser v' + v + ' | Pixi.js ' + PIXI.VERSION + ' | ' + r + ' | ' + a + ' | http://phaser.io');
-//    }
+    //    else if (window['console']) {
+    //      window.console.log('Phaser v' + v + ' | Pixi.js ' + PIXI.VERSION + ' | ' + r + ' | ' + a + ' | http://phaser.io');
+    //    }
 
   }
 
@@ -607,17 +592,16 @@ class Game {
 
     if (this.config['canvasID'] != null) {
       this.canvas = Canvas.create(this.width, this.height, this.config['canvasID']);
-    }
-    else {
+    } else {
       this.canvas = Canvas.create(this.width, this.height);
     }
 
-//    if (this.config['canvasStyle']) {
-//      this.canvas.style = this.config['canvasStyle'];
-//    }
-//    else {
-//      this.canvas.style['-webkit-full-screen'] = 'width: 100%; height: 100%';
-//    }
+    //    if (this.config['canvasStyle']) {
+    //      this.canvas.style = this.config['canvasStyle'];
+    //    }
+    //    else {
+    //      this.canvas.style['-webkit-full-screen'] = 'width: 100%; height: 100%';
+    //    }
 
     if (this.device.cocoonJS) {
       //canvas.requestFullscreen();
@@ -633,12 +617,10 @@ class Game {
 
         this.renderer = new PIXI.CanvasRenderer(this.width, this.height, this.canvas, this.transparent);
         this.context = (this.renderer as PIXI.CanvasRenderer).context;
-      }
-      else {
+      } else {
         throw new Exception('Phaser.Game - cannot create Canvas or WebGL context, aborting.');
       }
-    }
-    else {
+    } else {
       //  They requested WebGL and their browser supports it
       this.renderType = WEBGL;
       this.renderer = new PIXI.WebGLRenderer(this.width, this.height, this.canvas, this.transparent, this.antialias, this.preserveDrawingBuffer);
@@ -679,7 +661,7 @@ class Game {
 
       this.state.update();
       this.stage.update();
-      this.tweens.update(this.time.elapsed * 0.001);
+      this.tweens.update(this.time.physicsElapsed);
       this.sound.update();
       this.input.update();
       this.physics.update();
@@ -688,8 +670,7 @@ class Game {
 
       this.stage.postUpdate();
       this.plugins.postUpdate();
-    }
-    else {
+    } else {
       this.state.pauseUpdate();
       // this.input.update();
       this.debug.preUpdate();
@@ -793,6 +774,7 @@ class Game {
     if (!this._paused) {
       this._paused = true;
       this.time.gamePaused();
+      this.tweens.pause();
       this.sound.setMute();
       this.onPause.dispatch();
     }
@@ -813,6 +795,7 @@ class Game {
     if (this._paused && !this._codePaused) {
       this._paused = false;
       this.time.gameResumed();
+      this.tweens.resume();
       this.input.reset();
       this.sound.unsetMute();
       this.onResume.dispatch();

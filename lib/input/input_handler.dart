@@ -314,7 +314,7 @@ class InputHandler {
    * @private
    */
 
-  removedFromGroup(GameObject s, World w) {
+  removedFromGroup(GameObject s, Group w) {
 
     if (this._dragPhase) {
       return;
