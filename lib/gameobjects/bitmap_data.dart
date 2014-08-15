@@ -906,7 +906,7 @@ class BitmapData {
    * @param {Phaser.Rectangle} [maskRect] - A Rectangle where x/y define the coordinates to draw the Mask image to and width/height define the size.
    */
 
-  alphaMask(source, mask, Rectangle sourceRect, Rectangle maskRect) {
+  alphaMask(source, mask, [Rectangle sourceRect, Rectangle maskRect]) {
 
     if (mask == null) {
       mask = this;

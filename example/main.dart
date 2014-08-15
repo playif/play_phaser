@@ -34,8 +34,10 @@ part "camera/camera_03_camera_view.dart";
 part "tilemaps/tilemaps_01_blank_map.dart";
 part "tilemaps/tilemaps_16_tilemap_ray_cast.dart";
 
-
+part "display/display_01_alpha_mask.dart";
+part "display/display_02_bitmapdata_atlas.dart";
 part "display/display_14_bitmapdata_wobble.dart";
+part "display/display_19_graphics.dart";
 part "display/display_20_bitmapdata_set_hsl.dart";
 
 
@@ -83,8 +85,10 @@ Map<String, State> examples = {
     "tilemaps_01_blank_map": new tilemaps_01_blank_map(),
     "tilemaps_16_tilemap_ray_cast": new tilemaps_16_tilemap_ray_cast(),
 
-
+    "display_01_alpha_mask":new display_01_alpha_mask(),
+    "display_02_bitmapdata_atlas":new display_02_bitmapdata_atlas(),
     "display_14_bitmapdata_wobble":new display_14_bitmapdata_wobble(),
+    "display_19_graphics":new display_19_graphics(),
     "display_20_bitmapdata_set_hsl":new display_20_bitmapdata_set_hsl(),
 
 
@@ -133,7 +137,7 @@ main() {
     game.state.start(select.children[select.selectedIndex].text);
   });
 
-  game.state.start("basic_01_load_an_image");
+  game.state.start("display_19_graphics");
 
   //game.canvas.style.cursor = "pointer";
   //game.boot();
