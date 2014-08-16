@@ -51,8 +51,7 @@ class Tween {
   Tween(this._game, this._gameObject) {
     this._tweenManager = _game.tweens;
     this._timeline = tween.Timeline.createSequence();
-    this._timeline.setCallback(new tween.TweenCallback()
-      ..onEvent = _callback);
+    this._timeline.setCallback(new tween.TweenCallback()..onEvent = _callback);
     this._timeline.setCallbackTriggers(START | END | COMPLETE | ANY);
   }
 
@@ -75,9 +74,9 @@ class Tween {
     return result;
   }
 
-//  Tween set(Map<int, num> properties, [num duration=1000, tween.TweenEquation ease=null, bool autoStart=false, double delay=0.0, int repeat=0, bool yoyo=false]) {
-//    return _setTween(properties, tween.Tween.set, duration, ease, autoStart, delay, repeat, yoyo);
-//  }
+  //  Tween set(Map<int, num> properties, [num duration=1000, tween.TweenEquation ease=null, bool autoStart=false, double delay=0.0, int repeat=0, bool yoyo=false]) {
+  //    return _setTween(properties, tween.Tween.set, duration, ease, autoStart, delay, repeat, yoyo);
+  //  }
 
 
   Tween _setTween(Map<String, num> properties, Function operation, [num duration = 1000, tween.TweenEquation ease = null, bool autoStart = false, num delay = 0.0, int repeat = 0, bool yoyo = false]) {
@@ -95,36 +94,37 @@ class Tween {
     }
     tweens.delay = delay * 0.001;
 
-//    if (repeat != Tween.INFINITY) {
-//      if (yoyo == true) {
-//        tweens.repeatYoyo(repeat, 0);
-//      } else {
-//        tweens.repeat(repeat, 0);
-//      }
-//    }
+    if (repeat != Tween.INFINITY) {
+      if (yoyo == true) {
+        tweens.repeatYoyo(repeat, 0);
+      } else {
+        tweens.repeat(repeat, 0);
+      }
+    }
 
 
     _timeline.push(tweens);
 
 
 
-    //if (repeat == Tween.INFINITY) {
-    if (yoyo == true) {
-      _timeline.repeatYoyo(repeat, 0);
-    } else {
-      _timeline.repeat(repeat, 0);
+    if (repeat == Tween.INFINITY) {
+      if (yoyo == true) {
+        _timeline.repeatYoyo(repeat, 0);
+      } else {
+        _timeline.repeat(repeat, 0);
+      }
     }
-    //}
     if (autoStart == true) {
-      start();
+      new async.Timer(const Duration(),(){
+        start();
+      });
     }
 
     return this;
   }
 
   Tween setCallback(tween.CallbackHandler func, [int event]) {
-    this._timeline.setCallback(new tween.TweenCallback()
-      ..onEvent = func);
+    this._timeline.setCallback(new tween.TweenCallback()..onEvent = func);
     if (event != null) {
       this._timeline.setCallbackTriggers(event);
     }
@@ -151,10 +151,10 @@ class Tween {
     return this;
   }
 
-//  Tween reset() {
-//    this._timeline.reset();
-//    return this;
-//  }
+  //  Tween reset() {
+  //    this._timeline.reset();
+  //    return this;
+  //  }
 
   Tween repeat([int count = 1, num delayBetweenLoop = 0]) {
     if (_yoyo == false) {
@@ -207,80 +207,80 @@ class Tween {
 
     //this._startTime = 0.0;
 
-//    for (String property in this._valuesEnd.keys) {
-//      // Check if an Array was provided as property value
-//      if (this._valuesEnd[property] is List) {
-//        if (this._valuesEnd[property].length == 0) {
-//          continue;
-//        }
-//
-//        // create a local copy of the Array with the start value at the front
-//        [this._object[property]].addAll(this._valuesEnd[property]);
-//      }
-//
-//      this._valuesStart[property] = this._object[property];
-//
-//      if (this._valuesStart[property] is! List) {
-//        this._valuesStart[property] *= 1.0;
-//        // Ensures we're using numbers, not strings
-//      }
-//
-//      this._valuesStartRepeat[property] = this._valuesStart[property];
-//    }
-//
-//    //  Simulate the tween. We will run for frameRate * (this._duration / 1000) (ms)
-//    var time = 0;
-//    var total = Math.floor(frameRate * (this._timeline.duration / 1000));
-//    var tick = this._timeline.duration / total;
-//
-//    List output = [];
-//
-//    while (total-- >= 0) {
-//      String property;
-//
-//      double elapsed = (time - this._startTime) / this._duration;
-//      elapsed = elapsed > 1 ? 1 : elapsed;
-//
-//      var value = this._timeline.isReverse(step)//._easingFunction(elapsed);
-//      var blob = {};
-//
-//      for (property in this._valuesEnd) {
-//        var start = this._valuesStart[property];
-//        var end = this._valuesEnd[property];
-//
-//        if (end is List) {
-//          blob[property] = this._interpolationFunction(end, value);
-//        } else {
-//          // Parses relative end values with start as base (e.g.: +10, -3)
-//          if (end is String) {
-//            end = start + double.parse(end);
-//          }
-//
-//          // protect against non numeric properties.
-//          if (end is num) {
-//            blob[property] = start + (end - start) * value;
-//          }
-//        }
-//      }
-//
-//      output.add(blob);
-//
-//      time += tick;
-//    }
-//
-//    if (this._yoyo) {
+    //    for (String property in this._valuesEnd.keys) {
+    //      // Check if an Array was provided as property value
+    //      if (this._valuesEnd[property] is List) {
+    //        if (this._valuesEnd[property].length == 0) {
+    //          continue;
+    //        }
+    //
+    //        // create a local copy of the Array with the start value at the front
+    //        [this._object[property]].addAll(this._valuesEnd[property]);
+    //      }
+    //
+    //      this._valuesStart[property] = this._object[property];
+    //
+    //      if (this._valuesStart[property] is! List) {
+    //        this._valuesStart[property] *= 1.0;
+    //        // Ensures we're using numbers, not strings
+    //      }
+    //
+    //      this._valuesStartRepeat[property] = this._valuesStart[property];
+    //    }
+    //
+    //    //  Simulate the tween. We will run for frameRate * (this._duration / 1000) (ms)
+    //    var time = 0;
+    //    var total = Math.floor(frameRate * (this._timeline.duration / 1000));
+    //    var tick = this._timeline.duration / total;
+    //
+    //    List output = [];
+    //
+    //    while (total-- >= 0) {
+    //      String property;
+    //
+    //      double elapsed = (time - this._startTime) / this._duration;
+    //      elapsed = elapsed > 1 ? 1 : elapsed;
+    //
+    //      var value = this._timeline.isReverse(step)//._easingFunction(elapsed);
+    //      var blob = {};
+    //
+    //      for (property in this._valuesEnd) {
+    //        var start = this._valuesStart[property];
+    //        var end = this._valuesEnd[property];
+    //
+    //        if (end is List) {
+    //          blob[property] = this._interpolationFunction(end, value);
+    //        } else {
+    //          // Parses relative end values with start as base (e.g.: +10, -3)
+    //          if (end is String) {
+    //            end = start + double.parse(end);
+    //          }
+    //
+    //          // protect against non numeric properties.
+    //          if (end is num) {
+    //            blob[property] = start + (end - start) * value;
+    //          }
+    //        }
+    //      }
+    //
+    //      output.add(blob);
+    //
+    //      time += tick;
+    //    }
+    //
+    //    if (this._yoyo) {
     ////      List reversed = output.reversed;
     ////      reversed.reverse();
-//      output.addAll(output.reversed);
-//    }
-//
-//    if (data != null) {
-//      data.addAll(output);
-//
-//      return data;
-//    } else {
-//      return output;
-//    }
+    //      output.addAll(output.reversed);
+    //    }
+    //
+    //    if (data != null) {
+    //      data.addAll(output);
+    //
+    //      return data;
+    //    } else {
+    //      return output;
+    //    }
 
   }
 

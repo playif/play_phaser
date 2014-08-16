@@ -9,7 +9,7 @@ class AnimationManager {
   bool isLoaded = false;
   FrameData frameData;
 
-  Map<String,Animation> _anims ={};
+  Map<String, Animation> _anims = {};
   List _outputFrames = [];
   int _frameIndex = 0;
 
@@ -52,8 +52,7 @@ class AnimationManager {
   String get frameName {
     if (this.currentFrame != null) {
       return this.currentFrame.name;
-    }
-    else return null;
+    } else return null;
   }
 
   set frameName(String value) {
@@ -68,8 +67,7 @@ class AnimationManager {
           this.tilingTexture = false;
         }
       }
-    }
-    else {
+    } else {
       window.console.warn('Cannot set frameName: ' + value);
     }
   }
@@ -81,7 +79,7 @@ class AnimationManager {
   }
 
 
-  loadFrameData(FrameData frameData,[int frame=0]) {
+  loadFrameData(FrameData frameData, [int frame = 0]) {
 
     this.frameData = frameData;
     this.frame = frame;
@@ -89,11 +87,11 @@ class AnimationManager {
 
   }
 
-  Animation add(String name, [List frames, num frameRate=60, bool loop=true, bool useNumericIndex]) {
+  Animation add(String name, [List frames, num frameRate = 60, bool loop = true, bool useNumericIndex]) {
 
-    if(frames == null){
-      frames=[];
-      useNumericIndex=true;
+    if (frames == null) {
+      frames = [];
+      useNumericIndex = true;
     }
 
     if (this.frameData == null) {
@@ -105,13 +103,12 @@ class AnimationManager {
 
 
 
-    
+
     //  If they didn't set the useNumericIndex then let's at least try and guess it
     if (useNumericIndex == null) {
       if (frames[0] is int) {
         useNumericIndex = true;
-      }
-      else {
+      } else {
         useNumericIndex = false;
       }
     }
@@ -123,7 +120,7 @@ class AnimationManager {
       this.sprite.events.onAnimationLoop = new Signal();
     }
 
-    this._outputFrames.length = 0;
+    this._outputFrames = [];
 
     this.frameData.getFrameIndexes(frames, useNumericIndex, this._outputFrames);
 
@@ -141,15 +138,14 @@ class AnimationManager {
 
   }
 
-  bool validateFrames(List frames, [bool useNumericIndex=true]) {
+  bool validateFrames(List frames, [bool useNumericIndex = true]) {
 
     for (int i = 0; i < frames.length; i++) {
       if (useNumericIndex == true) {
         if (frames[i] > this.frameData.total) {
           return false;
         }
-      }
-      else {
+      } else {
         if (this.frameData.checkFrameName(frames[i]) == false) {
           return false;
         }
@@ -160,7 +156,7 @@ class AnimationManager {
 
   }
 
-  play(name, [num frameRate=60, bool loop=true, bool killOnComplete=false]) {
+  play(name, [num frameRate, bool loop, bool killOnComplete = false]) {
 
     if (this._anims[name] != null) {
       if (this.currentAnim == this._anims[name]) {
@@ -168,8 +164,7 @@ class AnimationManager {
           this.currentAnim.paused = false;
           return this.currentAnim.play(frameRate, loop, killOnComplete);
         }
-      }
-      else {
+      } else {
         if (this.currentAnim != null && this.currentAnim.isPlaying) {
           this.currentAnim.stop();
         }
@@ -182,15 +177,14 @@ class AnimationManager {
 
   }
 
-  stop([name, resetFrame =false]) {
+  stop([name, resetFrame = false]) {
     if (name is String) {
       if (this._anims[name] != null) {
         this.currentAnim = this._anims[name];
         this.currentAnim.stop(resetFrame);
       }
-    }
-    else {
-      if (this.currentAnim !=null) {
+    } else {
+      if (this.currentAnim != null) {
         this.currentAnim.stop(resetFrame);
       }
     }
@@ -222,20 +216,18 @@ class AnimationManager {
 
   refreshFrame() {
     this.sprite.setTexture(PIXI.TextureCache[this.currentFrame.uuid]);
-    if (this.sprite.__tilePattern !=null) {
+    if (this.sprite.__tilePattern != null) {
       this.__tilePattern = false;
       this.tilingTexture = false;
     }
   }
 
+
   destroy() {
-
-
     for (String anim in this._anims.keys) {
       this._anims[anim].destroy();
     }
-    this._anims = {
-    };
+    this._anims = {};
     this.frameData = null;
     this._frameIndex = 0;
     this.currentAnim = null;

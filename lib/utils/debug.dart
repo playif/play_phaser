@@ -167,6 +167,7 @@ class Debug {
     this.context.fillStyle = color;
     this.context.font = this.font;
     this.context.globalAlpha = 1;
+    this.context.lineWidth=1;
 
   }
 

@@ -12,7 +12,6 @@ class Signal {
 
   Signal() {
     self = this;
-
   }
 
 //  dispatch() {

@@ -2,7 +2,7 @@ part of Phaser;
 
 class Graphics extends PIXI.Graphics implements GameObject {
   Game game;
-  Point position=new Point();
+  Point position = new Point();
   //num x, y;
 
   //bool exists;
@@ -13,12 +13,12 @@ class Graphics extends PIXI.Graphics implements GameObject {
   Point cameraOffset;
   List _cache;
   GameObject get parent => super.parent;
-  List<GameObject> children=[];
+  List<GameObject> children = [];
 
   bool exists;
   bool alive;
-  bool autoCull=false;
-  bool _dirty=false;
+  bool autoCull = false;
+  bool _dirty = false;
 
   Events events;
   int type;
@@ -26,21 +26,23 @@ class Graphics extends PIXI.Graphics implements GameObject {
 
   Rectangle _currentBounds;
 
-  int renderOrderID;
+  int get renderOrderID => _cache[3];
+  set renderOrderID(int value) {
+    _cache[3] = value;
+  }
 
-  Point anchor=new Point();
-  Point center=new Point();
+  Point anchor = new Point();
+  Point center = new Point();
 
 
 
   GameObject bringToTop([GameObject child]) {
-    if(child == null){
+    if (child == null) {
       if (this.parent != null) {
         this.parent.bringToTop(this);
       }
-      return this; 
-    }
-    else{
+      return this;
+    } else {
       if (child.parent == this && this.children.indexOf(child) < this.children.length) {
         this.removeChild(child);
         this.addChild(child);
@@ -48,9 +50,9 @@ class Graphics extends PIXI.Graphics implements GameObject {
       return this;
     }
   }
-  
-//  num x;
-//  num y;
+
+  //  num x;
+  //  num y;
   int z;
   /**
    * Indicates the rotation of the Graphics, in degrees, from its original orientation. Values from 0 to 180 represent clockwise rotation; values from 0 to -180 represent counterclockwise rotation.
@@ -91,8 +93,7 @@ class Graphics extends PIXI.Graphics implements GameObject {
     if (value) {
       this._cache[7] = 1;
       this.cameraOffset.set(this.x, this.y);
-    }
-    else {
+    } else {
       this._cache[7] = 0;
     }
   }
@@ -114,9 +115,9 @@ class Graphics extends PIXI.Graphics implements GameObject {
   //});
 
 
-  Graphics(this.game, [num x=0, num y=0]) {
-    this.x=x;
-    this.y=y;
+  Graphics(this.game, [num x = 0, num y = 0]) {
+    this.x = x;
+    this.y = y;
     /**
      * @property {boolean} exists - If exists = false then the Text isn't updated by the core game loop.
      * @default
@@ -168,7 +169,7 @@ class Graphics extends PIXI.Graphics implements GameObject {
      * @property {Array} _cache
      * @private
      */
-    this._cache = [ 0, 0, 0, 0, 1, 0, 1, 0, 0 ];
+    this._cache = [0, 0, 0, 0, 1, 0, 1, 0, 0];
 
   }
 
@@ -236,7 +237,7 @@ class Graphics extends PIXI.Graphics implements GameObject {
    * @param {boolean} [destroyChildren=true] - Should every child of this object have its destroy method called?
    */
 
-  destroy(bool destroyChildren) {
+  destroy([bool destroyChildren=true]) {
 
     if (this.game == null || this.destroyPhase) {
       return;
@@ -253,8 +254,7 @@ class Graphics extends PIXI.Graphics implements GameObject {
     if (this.parent != null) {
       if (this.parent is Group) {
         (this.parent as Group).remove(this);
-      }
-      else {
+      } else {
         this.parent.removeChild(this);
       }
     }
@@ -265,8 +265,7 @@ class Graphics extends PIXI.Graphics implements GameObject {
       while (i-- > 0) {
         this.children[i].destroy(destroyChildren);
       }
-    }
-    else {
+    } else {
       while (i-- > 0) {
         this.removeChild(this.children[i]);
       }
@@ -281,7 +280,7 @@ class Graphics extends PIXI.Graphics implements GameObject {
 
   }
 
-/*
+  /*
 * Draws a {Phaser.Polygon} or a {PIXI.Polygon} filled
 *
 * @method Phaser.Graphics.prototype.drawPolygon
@@ -299,7 +298,7 @@ class Graphics extends PIXI.Graphics implements GameObject {
 
   }
 
-/*
+  /*
 * Draws a single {Phaser.Polygon} triangle from a {Phaser.Point} array
 *
 * @method Phaser.Graphics.prototype.drawTriangle
@@ -307,7 +306,7 @@ class Graphics extends PIXI.Graphics implements GameObject {
 * @param {boolean} [cull=false] - Should we check if the triangle is back-facing
 */
 
-  drawTriangle(List<Point> points, [bool cull=false]) {
+  drawTriangle(List<Point> points, [bool cull = false]) {
 
     if (cull == null) {
       cull = false;
@@ -324,14 +323,13 @@ class Graphics extends PIXI.Graphics implements GameObject {
       if (cameraToFace.dot(faceNormal) > 0) {
         this.drawPolygon(triangle);
       }
-    }
-    else {
+    } else {
       this.drawPolygon(triangle);
     }
 
   }
 
-/*
+  /*
 * Draws {Phaser.Polygon} triangles
 *
 * @method Phaser.Graphics.prototype.drawTriangles
@@ -340,7 +338,7 @@ class Graphics extends PIXI.Graphics implements GameObject {
 * @param {boolean} [cull=false] - Should we check if the triangle is back-facing
 */
 
-  drawTriangles(vertices, [List<int> indices, bool cull=false]) {
+  drawTriangles(vertices, [List<int> indices, bool cull = false]) {
 
     if (cull == null) {
       cull = false;
@@ -352,13 +350,12 @@ class Graphics extends PIXI.Graphics implements GameObject {
     List<Point> points = [];
     var i;
 
-    if (indices ==null) {
+    if (indices == null) {
       if (vertices[0] is Point) {
         for (i = 0; i < vertices.length / 3; i++) {
           this.drawTriangle([vertices[i * 3], vertices[i * 3 + 1], vertices[i * 3 + 2]], cull);
         }
-      }
-      else {
+      } else {
         for (i = 0; i < vertices.length / 6; i++) {
           point1.x = vertices[i * 6 + 0];
           point1.y = vertices[i * 6 + 1];
@@ -369,11 +366,10 @@ class Graphics extends PIXI.Graphics implements GameObject {
           this.drawTriangle([point1, point2, point3], cull);
         }
       }
-    }
-    else {
+    } else {
       if (vertices[0] is Point) {
         for (i = 0; i < indices.length / 3; i++) {
-          points.add(vertices[indices[i * 3 ]]);
+          points.add(vertices[indices[i * 3]]);
           points.add(vertices[indices[i * 3 + 1]]);
           points.add(vertices[indices[i * 3 + 2]]);
 
@@ -382,13 +378,11 @@ class Graphics extends PIXI.Graphics implements GameObject {
             points = [];
           }
         }
-      }
-      else {
+      } else {
         for (i = 0; i < indices.length; i++) {
           point1.x = vertices[indices[i] * 2];
           point1.y = vertices[indices[i] * 2 + 1];
-          points.add(point1.copyTo({
-          }));
+          points.add(point1.copyTo({}));
 
           if (points.length == 3) {
             this.drawTriangle(points, cull);

@@ -8,10 +8,13 @@ part "basics/basic_01_load_an_image.dart";
 part "basics/basic_02_click_on_an_image.dart";
 part "basics/basic_03_image_follow_input.dart";
 part "basics/basic_04_load_animation.dart";
+part "basics/basics_05_render_text.dart";
 
 
 part "animation/animation_01_events.dart";
-
+part "animation/animation_02_change_texture_on_click.dart";
+part "animation/animation_03_group_creation.dart";
+part "animation/animation_08_multiple_anims.dart";
 
 part "audio/audio_01_audio_sprite.dart";
 part "audio/audio_02_play_music.dart";
@@ -45,22 +48,34 @@ part "games/games_01_breakout.dart";
 part "games/games_02_gemmatch.dart";
 part "games/games_03_invaders.dart";
 part "games/games_04_matching_pairs.dart";
+part "games/games_05_simon.dart";
+part "games/games_06_starstruck.dart";
+part "games/games_07_tanks.dart";
 
-Map<String, Map<String, State>> Examples = {
-    "Basic":{
-        "basic_01_load_an_image": new basic_01_load_an_image(),
-        "basic_02_click_on_an_image": new basic_02_click_on_an_image(),
-        "basic_03_image_follow_input": new basic_03_image_follow_input(),
-        "basic_04_load_animation": new basic_04_load_animation(),
-    },
-
-
-};
+//Map<String, Map<String, State>> Examples = {
+//    "Basic":{
+//        "basic_01_load_an_image": new basic_01_load_an_image(),
+//        "basic_02_click_on_an_image": new basic_02_click_on_an_image(),
+//        "basic_03_image_follow_input": new basic_03_image_follow_input(),
+//        "basic_04_load_animation": new basic_04_load_animation(),
+//    },
+//
+//
+//};
 
 Map<String, State> examples = {
 
+    "basic_01_load_an_image": new basic_01_load_an_image(),
+    "basic_02_click_on_an_image": new basic_02_click_on_an_image(),
+    "basic_03_image_follow_input": new basic_03_image_follow_input(),
+    "basic_04_load_animation": new basic_04_load_animation(),
+    "basic_05_render_text": new basics_05_render_text(),
+
 
     "animation_01_events": new animation_01_events(),
+    "animation_02_change_texture_on_click": new animation_02_change_texture_on_click(),
+    "animation_03_group_creation": new animation_03_group_creation(),
+    "animation_08_multiple_anims": new animation_08_multiple_anims(),
 
 
     "audio_01_audio_sprite": new audio_01_audio_sprite(),
@@ -101,6 +116,10 @@ Map<String, State> examples = {
     "games_02_gemmatch":new games_02_gemmatch(),
     "games_03_invaders":new games_03_invaders(),
     "games_04_matching_pairs":new games_04_matching_pairs(),
+    "games_05_simon":new games_05_simon(),
+    "games_06_starstruck":new games_06_starstruck(),
+    "games_07_tanks":new games_07_tanks(),
+
 };
 
 main() {
@@ -142,7 +161,7 @@ main() {
     game.state.start(select.children[select.selectedIndex].text);
   });
 
-  game.state.start("display_19_graphics");
+  game.state.start("basic_01_load_an_image");
 
   //game.canvas.style.cursor = "pointer";
   //game.boot();

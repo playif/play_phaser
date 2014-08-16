@@ -870,7 +870,7 @@ class Loader {
    * @return {Phaser.Loader} This Loader instance.
    */
 
-  Loader atlasXML(String key, String textureURL, String atlasURL, atlasData) {
+  Loader atlasXML(String key, String textureURL, [String atlasURL, atlasData]) {
     return this.atlas(key, textureURL, atlasURL, atlasData, Loader.TEXTURE_ATLAS_XML_STARLING);
   }
 

@@ -1,6 +1,6 @@
 part of Phaser;
 
-class Mouse {
+class Mouse { 
   Game game;
 
   //var callbackContext;

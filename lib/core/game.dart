@@ -67,7 +67,7 @@ class Game {
         this._codePaused = true;
         this.sound.setMute();
         this.time.gamePaused();
-        this.onPause.dispatch(this);
+        this.onPause.dispatch();
       }
     } else {
       if (this._paused) {
@@ -76,7 +76,7 @@ class Game {
         this.input.reset();
         this.sound.unsetMute();
         this.time.gameResumed();
-        this.onResume.dispatch(this);
+        this.onResume.dispatch();
       }
     }
   }

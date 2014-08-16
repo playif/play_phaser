@@ -673,7 +673,7 @@ class TilemapLayer extends Image {
             tile = this._column[x];
           }
 
-          if (tile != null && tile.index > -1) {
+          if (tile != null && tile.index > -1 && tile.index < this.map.tiles.length ) {
             set = this.map.tilesets[this.map.tiles[tile.index.toInt()][2]];
 
             if (this.debug == false && tile.alpha != this.context.globalAlpha) {

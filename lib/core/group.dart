@@ -260,9 +260,9 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
 
   }
 
-  getAt(int index) {
+  T getAt(int index) {
     if (index < 0 || index >= this.children.length) {
-      return -1;
+      return null;
     } else {
       return this.getChildAt(index);
     }

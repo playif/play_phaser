@@ -14,7 +14,7 @@ class arcade_physics_34_quadtree extends State {
 
   create() {
 
-    //game.world.setBounds(0, 0, 250, 250);
+    game.world.setBounds(0, 0, 800, 600);
 
     game.physics.startSystem(Physics.ARCADE);
 

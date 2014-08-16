@@ -117,8 +117,13 @@ class GameObjectAccessor implements tween.TweenAccessor<dynamic> {
         return target.x;
       case 'y':
         return target.y;
+      case 'alpha':
+        return target.alpha;        
+        
     }
-    return null;
+    
+    throw new Exception("No such field!");
+    //return null;
   }
 
   void setValue(dynamic target,String tweenType, num newValue) {
@@ -133,7 +138,13 @@ class GameObjectAccessor implements tween.TweenAccessor<dynamic> {
       case 'y':
         target.y = newValue;
         return;
+      case 'alpha':
+        target.alpha = newValue;
+        return;        
+        
     }
+    
+    throw new Exception("No such field!");
   }
 }
 

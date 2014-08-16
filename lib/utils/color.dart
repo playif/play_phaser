@@ -7,7 +7,7 @@ class Color {
   int red, green, blue, alpha;
   int color;
   String rgba;
-
+ 
   double h, s, l, v;
 
 //  Color._() {

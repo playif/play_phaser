@@ -1286,7 +1286,7 @@ class Arcade {
    * @return {number} The angle (in radians) that the object should be visually set to in order to match its new velocity.
    */
 
-  moveToObject(displayObject, destination, [num speed, int maxTime=0]) {
+  moveToObject(Sprite displayObject, GameObject destination, [num speed, int maxTime=0]) {
 
     if (speed == null) {
       speed = 60;
@@ -1324,7 +1324,7 @@ class Arcade {
    * @return {number} The angle (in radians) that the object should be visually set to in order to match its new velocity.
    */
 
-  num moveToPointer(displayObject, [num speed = 60, Pointer pointer, int maxTime=0]) {
+  num moveToPointer(Sprite displayObject, [num speed = 60, Pointer pointer, int maxTime=0]) {
 
     if (speed == null) {
       speed = 60;
@@ -1365,7 +1365,7 @@ class Arcade {
    * @return {number} The angle (in radians) that the object should be visually set to in order to match its new velocity.
    */
 
-  num moveToXY(displayObject, num x, num y, [num speed=60, int maxTime=0]) {
+  num moveToXY(Sprite displayObject, num x, num y, [num speed=60, int maxTime=0]) {
 
 //  if (typeof speed === 'undefined') { speed = 60; }
 //  if (typeof maxTime === 'undefined') { maxTime = 0; }
@@ -1415,7 +1415,7 @@ class Arcade {
    * @return {Phaser.Point} - A Point where point.x contains the velocity x value and point.y contains the velocity y value.
    */
 
-  Point velocityFromRotation(rotation, [num speed = 60, Point point]) {
+  Point velocityFromRotation(num rotation, [num speed = 60, Point point]) {
 
     //if (typeof speed === 'undefined') { speed = 60; }
     if (point == null) point = new Point();
@@ -1459,7 +1459,7 @@ class Arcade {
    * @return {number} The angle (in radians) that the object should be visually set to in order to match its new trajectory.
    */
 
-  num accelerateToObject(displayObject, destination, [num speed=60, num xSpeedMax=500, num ySpeedMax=500]) {
+  num accelerateToObject(Sprite displayObject, GameObject destination, [num speed=60, num xSpeedMax=500, num ySpeedMax=500]) {
 
 //  if (typeof speed === 'undefined') { speed = 60; }
 //  if (typeof xSpeedMax === 'undefined') { xSpeedMax = 1000; }
@@ -1489,7 +1489,7 @@ class Arcade {
    * @return {number} The angle (in radians) that the object should be visually set to in order to match its new trajectory.
    */
 
-  num accelerateToPointer(displayObject, [Pointer pointer, num speed=60, num xSpeedMax=500, num ySpeedMax=500]) {
+  num accelerateToPointer(Sprite displayObject, [Pointer pointer, num speed=60, num xSpeedMax=500, num ySpeedMax=500]) {
 
     //if (typeof speed === 'undefined') { speed = 60; }
     if (pointer == null) {
@@ -1523,7 +1523,7 @@ class Arcade {
    * @return {number} The angle (in radians) that the object should be visually set to in order to match its new trajectory.
    */
 
-  num accelerateToXY(displayObject, num x, num y, [num speed=60, num xSpeedMax=1000, num ySpeedMax=1000]) {
+  num accelerateToXY(Sprite displayObject, num x, num y, [num speed=60, num xSpeedMax=1000, num ySpeedMax=1000]) {
 
 //  if (typeof speed === 'undefined') { speed = 60; }
 //  if (typeof xSpeedMax === 'undefined') { xSpeedMax = 1000; }
@@ -1547,7 +1547,7 @@ class Arcade {
    * @return {number} The distance between the source and target objects.
    */
 
-  num distanceBetween(source, target) {
+  num distanceBetween(GameObject source, GameObject target) {
     this._dx = source.x - target.x;
     this._dy = source.y - target.y;
     return Math.sqrt(this._dx * this._dx + this._dy * this._dy);
@@ -1565,7 +1565,7 @@ class Arcade {
    * @return {number} The distance between the object and the x/y coordinates.
    */
 
-  num distanceToXY(displayObject, num x, num y) {
+  num distanceToXY(GameObject displayObject, num x, num y) {
     this._dx = displayObject.x - x;
     this._dy = displayObject.y - y;
     return Math.sqrt(this._dx * this._dx + this._dy * this._dy);
@@ -1582,7 +1582,7 @@ class Arcade {
    * @return {number} The distance between the object and the Pointer.
    */
 
-  num distanceToPointer(displayObject, Pointer pointer) {
+  num distanceToPointer(GameObject displayObject, [Pointer pointer]) {
     if (pointer == null) pointer = this.game.input.activePointer;
     this._dx = displayObject.x - pointer.x;
     this._dy = displayObject.y - pointer.y;
@@ -1598,7 +1598,7 @@ class Arcade {
    * @return {number} The angle in radians between the source and target display objects.
    */
 
-  num angleBetween(source, target) {
+  num angleBetween(GameObject source, GameObject target) {
     this._dx = target.x - source.x;
     this._dy = target.y - source.y;
     return Math.atan2(this._dy, this._dx);
@@ -1614,7 +1614,7 @@ class Arcade {
    * @return {number} The angle in radians between displayObject.x/y to Pointer.x/y
    */
 
-  num angleToXY(displayObject, num x, num y) {
+  num angleToXY(GameObject displayObject, num x, num y) {
     this._dx = x - displayObject.x;
     this._dy = y - displayObject.y;
     return Math.atan2(this._dy, this._dx);
@@ -1629,7 +1629,7 @@ class Arcade {
    * @return {number} The angle in radians between displayObject.x/y to Pointer.x/y
    */
 
-  num angleToPointer(displayObject, Pointer pointer) {
+  num angleToPointer(GameObject displayObject, [Pointer pointer]) {
     if (pointer == null) pointer = this.game.input.activePointer;
     this._dx = pointer.worldX - displayObject.x;
     this._dy = pointer.worldY - displayObject.y;

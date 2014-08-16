@@ -11,13 +11,14 @@ class TextStyle extends PIXI.TextStyle {
             String align : 'left',
             String stroke : 'black',
             num strokeThickness : 0,
-            num tint
-            }):super(fill:fill,
-                font:font,
-                align:align,
-                stroke:stroke,
-                strokeThickness:strokeThickness,
-                tint:tint) {
+            num tint : 0xFFFFFF
+            }):super() {
+    this.fill = fill;
+    this.font = font;
+    this.align = align;
+    this.stroke = stroke;
+    this.strokeThickness = strokeThickness;
+    this.tint = tint;
   }
 }
 

@@ -799,12 +799,10 @@ class Sprite extends PIXI.Sprite implements GameObject, AnimationInterface {
       @return {Phaser.Animation} A reference to playing Animation instance.
    **/
 
-  play(String name, [num frameRate, bool loop, bool killOnComplete]) {
-
+  play(String name, [num frameRate=60, bool loop=true, bool killOnComplete=false]) {
     if (this.animations != null) {
       return this.animations.play(name, frameRate, loop, killOnComplete);
     }
-
   }
 
   /**

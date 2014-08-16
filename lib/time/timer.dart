@@ -1,5 +1,5 @@
 part of Phaser;
-
+ 
 class Timer {
   Game game;
   bool autoDestroy=true;

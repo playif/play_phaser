@@ -14,6 +14,8 @@ class audio_02_play_music extends State {
   }
 
   create() {
+    
+    game.world.setBounds(0, 0, 800, 600);
 
     game.stage.backgroundColor = 0x182d3b;
     game.input.touch.preventDefault = false;

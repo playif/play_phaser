@@ -77,7 +77,7 @@ class Animation {
     }
   }
 
-  Animation(this.game, this._parent, this.name, this._frameData, [this._frames, this.delay=0, this.loop=false]) {
+  Animation(this.game, this._parent, this.name, this._frameData, [this._frames, this.delay=16.7, this.loop=false]) {
     currentFrame = _frameData.getFrame(this._frames[this._frameIndex]);
     onStart = new Signal();
     onComplete = new Signal();
@@ -92,7 +92,7 @@ class Animation {
     this.game.onResume.add(this.onResume);
   }
 
-  play(num frameRate, [bool loop=true, bool killOnComplete]) {
+  play([num frameRate, bool loop, bool killOnComplete=false]) {
 
     if (frameRate is num) {
       //  If they set a new frame rate then use it, otherwise use the one set on creation

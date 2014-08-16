@@ -194,7 +194,7 @@ class AnimationParser {
 
   }
 
-  static FrameData XMLData(game, xml, cacheKey) {
+  static FrameData XMLData(Game game, Document xml, String cacheKey) {
 
     //  Malformed?
     if (xml.getElementsByTagName('TextureAtlas') == null) {
@@ -204,12 +204,12 @@ class AnimationParser {
 
     //  Let's create some frames then
     FrameData data = new FrameData();
-    var frames = xml.getElementsByTagName('SubTexture');
+    List frames = xml.getElementsByTagName('SubTexture');
     var newFrame;
 
     var uuid;
     var name;
-    var frame;
+    Map frame;
     var x;
     var y;
     var width;
@@ -224,20 +224,20 @@ class AnimationParser {
 
       frame = frames[i].attributes;
 
-      name = frame.name.nodeValue;
-      x = int.parse(frame.x.nodeValue);
-      y = int.parse(frame.y.nodeValue);
-      width = int.parse(frame.width.nodeValue);
-      height = int.parse(frame.height.nodeValue);
+      name = frame['name'];
+      x = int.parse(frame['x']);
+      y = int.parse(frame['y']);
+      width = int.parse(frame['width']);
+      height = int.parse(frame['height']);
 
       frameX = null;
       frameY = null;
 
-      if (frame.frameX) {
-        frameX = (int.parse(frame.frameX.nodeValue)).abs();
-        frameY = (int.parse(frame.frameY.nodeValue)).abs();
-        frameWidth = int.parse(frame.frameWidth.nodeValue).abs();
-        frameHeight = int.parse(frame.frameHeight.nodeValue).abs();
+      if (frame.containsKey('frameX')) {
+        frameX = (int.parse(frame['frameX'])).abs();
+        frameY = (int.parse(frame['frameY'])).abs();
+        frameWidth = int.parse(frame['frameWidth']).abs();
+        frameHeight = int.parse(frame['frameHeight']).abs();
       }
 
       newFrame = data.addFrame(new Frame(i, x, y, width, height, name, uuid));

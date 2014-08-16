@@ -34,7 +34,7 @@ class RandomDataGenerator {
 
     var seed;
 
-    for (var i = 0; seed = seeds[i++];) {
+    for (var i = 0; seed = seeds[i++]; ) {
       this.s0 -= this.hash(seed);
       //this.s0 += ~(this.s0 < 0);
       this.s1 -= this.hash(seed);
@@ -148,18 +148,18 @@ class RandomDataGenerator {
    * @method Phaser.RandomDataGenerator#uuid
    * @return {string} A valid RFC4122 version4 ID hex string
    */
-
+  static int UUID = 0;
   String uuid() {
 
-//    int a = 0;
-//    String b = '';
-//
-//    for (; a++ < 36; b += ((~a % 5 | a * 3 & 4) == 0) ?
-//    a ^ 15) == 0 ? (8 ^ this.frac() * (a ^ 20 ==0 ? 16 : 4) : 4).toRadixString(16) : '-') {
-//    }
+    //    int a = 0;
+    //    String b = '';
+    //
+    //    for (; a++ < 36; b += ((~a % 5 | a * 3 & 4) == 0) ?
+    //    a ^ 15) == 0 ? (8 ^ this.frac() * (a ^ 20 ==0 ? 16 : 4) : 4).toRadixString(16) : '-') {
+    //    }
 
-    var uuid = new Uuid();
-    return uuid.v4();
+    //var uuid = new Uuid();
+    return "${UUID++}";
 
   }
 
@@ -196,8 +196,8 @@ class RandomDataGenerator {
    * @return {number} A random timestamp between min and max.
    */
 
-  num timestamp([num min=946684800000, num max=1577862000000]) {
-    return this.realInRange(min , max );
+  num timestamp([num min = 946684800000, num max = 1577862000000]) {
+    return this.realInRange(min, max);
   }
 
   /**
