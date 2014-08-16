@@ -6,11 +6,13 @@ Very easy to learn and fun 2D game engine for dart.
 
 Built on top of my Canvas/WebGL drawing library [play_pixi][1].
 
-Please check the [online demo][3]
+Please check the [online demo][3] (includes all game examples)
 
 Feel free to let me know if there is any problem.
 
 pub: [https://pub.dartlang.org/packages/play_phaser]
+
+
 
 What are done:
 =========
