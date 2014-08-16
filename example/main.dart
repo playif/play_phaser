@@ -11,7 +11,7 @@ part "basics/basic_04_load_animation.dart";
 
 
 part "animation/animation_01_events.dart";
- 
+
 
 part "audio/audio_01_audio_sprite.dart";
 part "audio/audio_02_play_music.dart";
@@ -46,13 +46,18 @@ part "games/games_02_gemmatch.dart";
 part "games/games_03_invaders.dart";
 part "games/games_04_matching_pairs.dart";
 
+Map<String, Map<String, State>> Examples = {
+    "Basic":{
+        "basic_01_load_an_image": new basic_01_load_an_image(),
+        "basic_02_click_on_an_image": new basic_02_click_on_an_image(),
+        "basic_03_image_follow_input": new basic_03_image_follow_input(),
+        "basic_04_load_animation": new basic_04_load_animation(),
+    },
+
+
+};
 
 Map<String, State> examples = {
-
-    "basic_01_load_an_image": new basic_01_load_an_image(),
-    "basic_02_click_on_an_image": new basic_02_click_on_an_image(),
-    "basic_03_image_follow_input": new basic_03_image_follow_input(),
-    "basic_04_load_animation": new basic_04_load_animation(),
 
 
     "animation_01_events": new animation_01_events(),

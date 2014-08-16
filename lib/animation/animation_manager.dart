@@ -1,7 +1,7 @@
 part of Phaser;
 
 class AnimationManager {
-  GameObject sprite;
+  AnimationInterface sprite;
   Game game;
   Frame currentFrame;
   Animation currentAnim;

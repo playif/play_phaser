@@ -6,7 +6,9 @@ typedef bool SelectWhere(Sprite);
 
 class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements GameObject {
   Game game;
-  GameObject parent;
+  GameObject get parent => super.parent;
+
+  
   String name;
   bool addToStage;
   bool enableBody;
@@ -17,6 +19,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
 
   bool alive;
   bool exists;
+  bool _dirty;
   var cursor;
 
   Point cameraOffset;
@@ -47,32 +50,23 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
   Point world;
   Rectangle _currentBounds;
 
-  PIXI.Texture texture;
-  CanvasPattern __tilePattern;
 
-  setTexture(PIXI.Texture texture) {
-    throw new Exception("Not implement yet!");
-  }
-
-  centerOn(num x, num y) {
-    throw new Exception("Not implement yet!");
-  }
-
-
-  Group(Game game, [this.parent, this.name='group',
-  this.addToStage=false, this.enableBody=false, this.physicsBodyType=0])
-  :super() {
+  Group(Game game, [Group parent, this.name = 'group', this.addToStage = false, this.enableBody = false, this.physicsBodyType = 0])
+      : super() {
     this.game = game;
+    
 
-//    if (parent == null) {
-//      parent = game.world;
-//    }
+    //    if (parent == null) {
+    //      parent = game.world;
+    //    }
 
     if (addToStage) {
       this.game.stage.addChild(this);
-    }
-    else {
-      if (this.game.world != null) {
+    } else {
+      if (parent != null){
+        parent.add(this);
+      }
+      else if (this.game.world != null) {
         //(parent as PIXI.DisplayObjectContainer).addChild(this);
         this.game.world.addChild(this);
       }
@@ -173,7 +167,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
      * @property {Array} _cache
      * @private
      */
-    this._cache = [ 0, 0, 0, 0, 1, 0, 1, 0, 0, 0 ];
+    this._cache = [0, 0, 0, 0, 1, 0, 1, 0, 0, 0];
 
 
   }
@@ -206,8 +200,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
     if (value) {
       this._cache[7] = 1;
       this.cameraOffset.set(this.x, this.y);
-    }
-    else {
+    } else {
       this._cache[7] = 0;
     }
   }
@@ -218,8 +211,8 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
   static int SORT_ASCENDING = -1;
   static int SORT_DESCENDING = 1;
 
-  T add(T child, [bool silent=false]) {
-
+  T add(T child, [bool silent = false]) {
+    
     if (child.parent != this) {
       if (this.enableBody) {
         this.game.physics.enable(child, this.physicsBodyType);
@@ -243,7 +236,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
   }
 
 
-  T addAt(T child, int index, [bool silent=false]) {
+  T addAt(T child, int index, [bool silent = false]) {
 
     if (child.parent != this) {
       if (this.enableBody) {
@@ -270,20 +263,19 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
   getAt(int index) {
     if (index < 0 || index >= this.children.length) {
       return -1;
-    }
-    else {
+    } else {
       return this.getChildAt(index);
     }
   }
 
-  T create([num x=0, num y=0, key, frame=0, bool exists=true]) {
+  T create([num x = 0, num y = 0, key, frame = 0, bool exists = true]) {
     //var child = new this.classType(this.game, x, y, key, frame);
     //GameObject child = reflectClass(classType).newInstance(const Symbol(""), [this.game, x, y, key, frame]).reflectee;
     T child = creator()
-      ..x = x
-      ..y = y;
+        ..x = x
+        ..y = y;
 
-    if(child is Sprite){
+    if (child is Sprite) {
       (child as Sprite).loadTexture(key, frame);
     }
 
@@ -312,7 +304,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
 
   }
 
-  createMultiple(int quantity, [key, frame, bool exists=false]) {
+  createMultiple(int quantity, [key, frame, bool exists = false]) {
     for (var i = 0; i < quantity; i++) {
       this.create(0, 0, key, frame, exists);
     }
@@ -325,7 +317,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
     }
   }
 
-  resetCursor([int index=0]) {
+  resetCursor([int index = 0]) {
     if (index > this.children.length - 1) {
       index = 0;
     }
@@ -343,8 +335,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
       //  Wrap the cursor?
       if (this._cache[8] >= this.children.length - 1) {
         this._cache[8] = 0;
-      }
-      else {
+      } else {
         this._cache[8]++;
       }
 
@@ -360,8 +351,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
       //  Wrap the cursor?
       if (this._cache[8] == 0) {
         this._cache[8] = this.children.length - 1;
-      }
-      else {
+      } else {
         this._cache[8]--;
       }
 
@@ -380,14 +370,14 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
     return result;
   }
 
-//  GameObject bringToTop([GameObject child]) {
-//    
-//    if (child.parent == this && this.getIndex(child) < this.children.length) {
-//      this.remove(child, false, true);
-//      this.add(child, true);
-//    }
-//    return child;
-//  }
+  //  GameObject bringToTop([GameObject child]) {
+  //
+  //    if (child.parent == this && this.getIndex(child) < this.children.length) {
+  //      this.remove(child, false, true);
+  //      this.add(child, true);
+  //    }
+  //    return child;
+  //  }
 
   T bringToTop([T child]) {
     if (child == null) {
@@ -395,8 +385,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
         this.parent.bringToTop(this);
       }
       return this as T;
-    }
-    else {
+    } else {
       if (child.parent == this && this.children.indexOf(child) < this.children.length) {
         this.removeChild(child);
         this.addChild(child);
@@ -450,8 +439,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
 
     if (index < 0 || index > this.children.length) {
       return -1;
-    }
-    else {
+    } else {
       this.getChildAt(index).x = x;
       this.getChildAt(index).y = y;
     }
@@ -501,314 +489,314 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
   //  set(child, String key, num value, [bool checkAlive=false, bool checkVisible=false, int operation, bool force=false]) {
 
 
-//  set(child, String key, num value, [bool checkAlive=false, bool checkVisible=false, int operation=0]) {
-//    if ((checkAlive == false || (checkAlive && child.alive)) && (checkVisible == false || (checkVisible && child.visible))) {
-//      List<String> keys = key.split('.');
-//      InstanceMirror field = reflect(child).getField(new Symbol(keys[0]));
-//      if (keys.length == 1) {
-//        var oldValue = field.reflectee;
-//        switch (operation) {
-//          case 0:
-//            reflect(child).setField(new Symbol(keys[0]), value);
-//            break;
-//          case 1:
-//            reflect(child).setField(new Symbol(keys[0]), oldValue + value);
-//            break;
-//          case 2:
-//            reflect(child).setField(new Symbol(keys[0]), oldValue - value);
-//            break;
-//          case 3:
-//            reflect(child).setField(new Symbol(keys[0]), oldValue * value);
-//            break;
-//          case 4:
-//            reflect(child).setField(new Symbol(keys[0]), oldValue / value);
-//            break;
-//        }
-//      }
-//      else {
-//        set(field, key.replaceFirst(keys[0] + ".", ""), value, checkAlive, checkVisible, operation);
-//      }
-//      //return this.setProperty(child, key, value, operation, force);
-//    }
-//  }
-//
-//  setAll(String key, num value, [bool checkAlive=false, bool checkVisible =false, int operation = 0]) {
-//    //key = key.split('.');
-//    for (int i = 0, len = this.children.length; i < len; i++) {
-//      set(this.children[i], key, value, checkAlive, checkVisible, operation);
+  //  set(child, String key, num value, [bool checkAlive=false, bool checkVisible=false, int operation=0]) {
+  //    if ((checkAlive == false || (checkAlive && child.alive)) && (checkVisible == false || (checkVisible && child.visible))) {
+  //      List<String> keys = key.split('.');
+  //      InstanceMirror field = reflect(child).getField(new Symbol(keys[0]));
+  //      if (keys.length == 1) {
+  //        var oldValue = field.reflectee;
+  //        switch (operation) {
+  //          case 0:
+  //            reflect(child).setField(new Symbol(keys[0]), value);
+  //            break;
+  //          case 1:
+  //            reflect(child).setField(new Symbol(keys[0]), oldValue + value);
+  //            break;
+  //          case 2:
+  //            reflect(child).setField(new Symbol(keys[0]), oldValue - value);
+  //            break;
+  //          case 3:
+  //            reflect(child).setField(new Symbol(keys[0]), oldValue * value);
+  //            break;
+  //          case 4:
+  //            reflect(child).setField(new Symbol(keys[0]), oldValue / value);
+  //            break;
+  //        }
+  //      }
+  //      else {
+  //        set(field, key.replaceFirst(keys[0] + ".", ""), value, checkAlive, checkVisible, operation);
+  //      }
+  //      //return this.setProperty(child, key, value, operation, force);
+  //    }
+  //  }
+  //
+  //  setAll(String key, num value, [bool checkAlive=false, bool checkVisible =false, int operation = 0]) {
+  //    //key = key.split('.');
+  //    for (int i = 0, len = this.children.length; i < len; i++) {
+  //      set(this.children[i], key, value, checkAlive, checkVisible, operation);
   ////      if ((!checkAlive || (checkAlive && this.children[i].alive)) && (!checkVisible || (checkVisible && this.children[i].visible))) {
   ////        //this.setProperty(this.children[i], key, value, operation, force);
   ////      }
-//    }
-//
-//  }
+  //    }
+  //
+  //  }
 
-//
-//  //needing mirrior
-//  hasProperty(dynamic child, List<String> key) {
-//
-//    var len = key.length;
-//
-//    if (len == 1 && child.containsKey(key[0])) {
-//      return true;
-//    }
-//    else if (len == 2 && child.containsKey(key[0]) && child.containsKey(key[0]).containsKey(key[1])) {
-//      return true;
-//    }
-//    else if (len == 3 && key[0] in child && key[1] in child[key[0]] && key[2] in child[key[0]][key[1]]) {
-//        return true;
-//      }
-//      else if (len == 4 && key[0] in child && key[1] in child[key[0]] && key[2] in child[key[0]][key[1]] && key[3] in child[key[0]][key[1]][key[2]]) {
-//          return true;
-//        }
-//
-//    return false;
-//
-//  }
-//
-//
-//  setProperty(Map child, List<String> key, value, [int operation=0, bool force=false]) {
-//
+  //
+  //  //needing mirrior
+  //  hasProperty(dynamic child, List<String> key) {
+  //
+  //    var len = key.length;
+  //
+  //    if (len == 1 && child.containsKey(key[0])) {
+  //      return true;
+  //    }
+  //    else if (len == 2 && child.containsKey(key[0]) && child.containsKey(key[0]).containsKey(key[1])) {
+  //      return true;
+  //    }
+  //    else if (len == 3 && key[0] in child && key[1] in child[key[0]] && key[2] in child[key[0]][key[1]]) {
+  //        return true;
+  //      }
+  //      else if (len == 4 && key[0] in child && key[1] in child[key[0]] && key[2] in child[key[0]][key[1]] && key[3] in child[key[0]][key[1]][key[2]]) {
+  //          return true;
+  //        }
+  //
+  //    return false;
+  //
+  //  }
+  //
+  //
+  //  setProperty(Map child, List<String> key, value, [int operation=0, bool force=false]) {
+  //
   ////    operation = operation || 0;
-//
-//    //  As ugly as this approach looks, and although it's limited to a depth of only 4, it's much faster than a for loop or object iteration.
-//
-//    //  0 = Equals
-//    //  1 = Add
-//    //  2 = Subtract
-//    //  3 = Multiply
-//    //  4 = Divide
-//
-//    //  We can't force a property in and the child doesn't have it, so abort.
-//    //  Equally we can't add, subtract, multiply or divide a property value if it doesn't exist, so abort in those cases too.
-//    if (!this.hasProperty(child, key) && (!force || operation > 0)) {
-//      return false;
-//    }
-//
-//    int len = key.length;
-//
-//    if (len == 1) {
-//      if (operation == 0) {
-//        child[key[0]] = value;
-//      }
-//      else if (operation == 1) {
-//        child[key[0]] += value;
-//      }
-//      else if (operation == 2) {
-//          child[key[0]] -= value;
-//        }
-//        else if (operation == 3) {
-//            child[key[0]] *= value;
-//          }
-//          else if (operation == 4) {
-//              child[key[0]] /= value;
-//            }
-//    }
-//    else if (len == 2) {
-//      if (operation == 0) {
-//        child[key[0]][key[1]] = value;
-//      }
-//      else if (operation == 1) {
-//        child[key[0]][key[1]] += value;
-//      }
-//      else if (operation == 2) {
-//          child[key[0]][key[1]] -= value;
-//        }
-//        else if (operation == 3) {
-//            child[key[0]][key[1]] *= value;
-//          }
-//          else if (operation == 4) {
-//              child[key[0]][key[1]] /= value;
-//            }
-//    }
-//    else if (len == 3) {
-//        if (operation == 0) {
-//          child[key[0]][key[1]][key[2]] = value;
-//        }
-//        else if (operation == 1) {
-//          child[key[0]][key[1]][key[2]] += value;
-//        }
-//        else if (operation == 2) {
-//            child[key[0]][key[1]][key[2]] -= value;
-//          }
-//          else if (operation == 3) {
-//              child[key[0]][key[1]][key[2]] *= value;
-//            }
-//            else if (operation == 4) {
-//                child[key[0]][key[1]][key[2]] /= value;
-//              }
-//      }
-//      else if (len == 4) {
-//          if (operation == 0) {
-//            child[key[0]][key[1]][key[2]][key[3]] = value;
-//          }
-//          else if (operation == 1) {
-//            child[key[0]][key[1]][key[2]][key[3]] += value;
-//          }
-//          else if (operation == 2) {
-//              child[key[0]][key[1]][key[2]][key[3]] -= value;
-//            }
-//            else if (operation == 3) {
-//                child[key[0]][key[1]][key[2]][key[3]] *= value;
-//              }
-//              else if (operation == 4) {
-//                  child[key[0]][key[1]][key[2]][key[3]] /= value;
-//                }
-//        }
-//
-//    return true;
-//
-//  }
-//
-//
-//  set(child, String key, num value, [bool checkAlive=false, bool checkVisible=false, int operation, bool force=false]) {
-//
-//    key = key.split('.');
-//
-//    if ((checkAlive == false || (checkAlive && child.alive)) && (checkVisible == false || (checkVisible && child.visible))) {
-//      return this.setProperty(child, key, value, operation, force);
-//    }
-//
-//  }
-//
-//  setAll(String key, num value, [bool checkAlive=false, bool checkVisible =false, int operation = 0, bool force=false]) {
-//
-//    key = key.split('.');
-//
-//    for (var i = 0, len = this.children.length; i < len; i++) {
-//      if ((!checkAlive || (checkAlive && this.children[i].alive)) && (!checkVisible || (checkVisible && this.children[i].visible))) {
-//        this.setProperty(this.children[i], key, value, operation, force);
-//      }
-//    }
-//
-//  }
-//
-//
-//  setAllChildren(String key, num value, [bool checkAlive=false, bool checkVisible =false, int operation=0, bool force=false]) {
-//
-//
-//    for (var i = 0, len = this.children.length; i < len; i++) {
-//      if ((!checkAlive || (checkAlive && this.children[i].alive)) && (!checkVisible || (checkVisible && this.children[i].visible))) {
-//        if (this.children[i] is Group) {
-//          this.children[i].setAllChildren(key, value, checkAlive, checkVisible, operation, force);
-//        }
-//        else {
-//          this.setProperty(this.children[i], key.split('.'), value, operation, force);
-//        }
-//      }
-//    }
-//
-//  }
-//
-//  addAll(String property, num amount, bool checkAlive, bool checkVisible) {
-//    this.setAll(property, amount, checkAlive, checkVisible, 1);
-//  }
-//
-//  subAll(String property, num amount, bool checkAlive, bool checkVisible) {
-//    this.setAll(property, amount, checkAlive, checkVisible, 2);
-//  }
-//
-//  multiplyAll(String property, num amount, bool checkAlive, bool checkVisible) {
-//    this.setAll(property, amount, checkAlive, checkVisible, 3);
-//  }
-//
-//  divideAll(String property, num amount, bool checkAlive, bool checkVisible) {
-//    this.setAll(property, amount, checkAlive, checkVisible, 4);
-//  }
-//
-//  callAllExists(callback, existsValue) {
-//
-//    var args = Array.prototype.splice.call(arguments, 2);
-//
-//    for (var i = 0, len = this.children.length; i < len; i++) {
-//      if (this.children[i].exists == existsValue && this.children[i][callback]) {
-//        this.children[i][callback].apply(this.children[i], args);
-//      }
-//    }
-//
-//  }
-//
-//
-//  callbackFromArray(child, callback, length) {
-//
-//    //  Kinda looks like a Christmas tree
-//
-//    if (length == 1) {
-//      if (child[callback[0]]) {
-//        return child[callback[0]];
-//      }
-//    }
-//    else if (length == 2) {
-//      if (child[callback[0]][callback[1]]) {
-//        return child[callback[0]][callback[1]];
-//      }
-//    }
-//    else if (length == 3) {
-//        if (child[callback[0]][callback[1]][callback[2]]) {
-//          return child[callback[0]][callback[1]][callback[2]];
-//        }
-//      }
-//      else if (length == 4) {
-//          if (child[callback[0]][callback[1]][callback[2]][callback[3]]) {
-//            return child[callback[0]][callback[1]][callback[2]][callback[3]];
-//          }
-//        }
-//        else {
-//          if (child[callback]) {
-//            return child[callback];
-//          }
-//        }
-//
-//    return false;
-//
-//  }
-//
-//  callAll(method, context) {
-//
-//    if (method == null) {
-//      return;
-//    }
-//
-//    //  Extract the method into an array
-//    method = method.split('.');
-//
-//    var methodLength = method.length;
-//
-//    if (context == null || context == null || context == '') {
-//      context = null;
-//    }
-//    else {
-//      //  Extract the context into an array
-//      if (context is String) {
-//        context = context.split('.');
-//        var contextLength = context.length;
-//      }
-//    }
-//
-//    var args = Array.prototype.splice.call(arguments, 2);
-//    var callback = null;
-//    var callbackContext = null;
-//
-//    for (var i = 0, len = this.children.length; i < len; i++) {
-//      callback = this.callbackFromArray(this.children[i], method, methodLength);
-//
-//      if (context && callback) {
-//        callbackContext = this.callbackFromArray(this.children[i], context, contextLength);
-//
-//        if (callback) {
-//          callback.apply(callbackContext, args);
-//        }
-//      }
-//      else if (callback) {
-//        callback.apply(this.children[i], args);
-//      }
-//    }
-//
-//  }
+  //
+  //    //  As ugly as this approach looks, and although it's limited to a depth of only 4, it's much faster than a for loop or object iteration.
+  //
+  //    //  0 = Equals
+  //    //  1 = Add
+  //    //  2 = Subtract
+  //    //  3 = Multiply
+  //    //  4 = Divide
+  //
+  //    //  We can't force a property in and the child doesn't have it, so abort.
+  //    //  Equally we can't add, subtract, multiply or divide a property value if it doesn't exist, so abort in those cases too.
+  //    if (!this.hasProperty(child, key) && (!force || operation > 0)) {
+  //      return false;
+  //    }
+  //
+  //    int len = key.length;
+  //
+  //    if (len == 1) {
+  //      if (operation == 0) {
+  //        child[key[0]] = value;
+  //      }
+  //      else if (operation == 1) {
+  //        child[key[0]] += value;
+  //      }
+  //      else if (operation == 2) {
+  //          child[key[0]] -= value;
+  //        }
+  //        else if (operation == 3) {
+  //            child[key[0]] *= value;
+  //          }
+  //          else if (operation == 4) {
+  //              child[key[0]] /= value;
+  //            }
+  //    }
+  //    else if (len == 2) {
+  //      if (operation == 0) {
+  //        child[key[0]][key[1]] = value;
+  //      }
+  //      else if (operation == 1) {
+  //        child[key[0]][key[1]] += value;
+  //      }
+  //      else if (operation == 2) {
+  //          child[key[0]][key[1]] -= value;
+  //        }
+  //        else if (operation == 3) {
+  //            child[key[0]][key[1]] *= value;
+  //          }
+  //          else if (operation == 4) {
+  //              child[key[0]][key[1]] /= value;
+  //            }
+  //    }
+  //    else if (len == 3) {
+  //        if (operation == 0) {
+  //          child[key[0]][key[1]][key[2]] = value;
+  //        }
+  //        else if (operation == 1) {
+  //          child[key[0]][key[1]][key[2]] += value;
+  //        }
+  //        else if (operation == 2) {
+  //            child[key[0]][key[1]][key[2]] -= value;
+  //          }
+  //          else if (operation == 3) {
+  //              child[key[0]][key[1]][key[2]] *= value;
+  //            }
+  //            else if (operation == 4) {
+  //                child[key[0]][key[1]][key[2]] /= value;
+  //              }
+  //      }
+  //      else if (len == 4) {
+  //          if (operation == 0) {
+  //            child[key[0]][key[1]][key[2]][key[3]] = value;
+  //          }
+  //          else if (operation == 1) {
+  //            child[key[0]][key[1]][key[2]][key[3]] += value;
+  //          }
+  //          else if (operation == 2) {
+  //              child[key[0]][key[1]][key[2]][key[3]] -= value;
+  //            }
+  //            else if (operation == 3) {
+  //                child[key[0]][key[1]][key[2]][key[3]] *= value;
+  //              }
+  //              else if (operation == 4) {
+  //                  child[key[0]][key[1]][key[2]][key[3]] /= value;
+  //                }
+  //        }
+  //
+  //    return true;
+  //
+  //  }
+  //
+  //
+  //  set(child, String key, num value, [bool checkAlive=false, bool checkVisible=false, int operation, bool force=false]) {
+  //
+  //    key = key.split('.');
+  //
+  //    if ((checkAlive == false || (checkAlive && child.alive)) && (checkVisible == false || (checkVisible && child.visible))) {
+  //      return this.setProperty(child, key, value, operation, force);
+  //    }
+  //
+  //  }
+  //
+  //  setAll(String key, num value, [bool checkAlive=false, bool checkVisible =false, int operation = 0, bool force=false]) {
+  //
+  //    key = key.split('.');
+  //
+  //    for (var i = 0, len = this.children.length; i < len; i++) {
+  //      if ((!checkAlive || (checkAlive && this.children[i].alive)) && (!checkVisible || (checkVisible && this.children[i].visible))) {
+  //        this.setProperty(this.children[i], key, value, operation, force);
+  //      }
+  //    }
+  //
+  //  }
+  //
+  //
+  //  setAllChildren(String key, num value, [bool checkAlive=false, bool checkVisible =false, int operation=0, bool force=false]) {
+  //
+  //
+  //    for (var i = 0, len = this.children.length; i < len; i++) {
+  //      if ((!checkAlive || (checkAlive && this.children[i].alive)) && (!checkVisible || (checkVisible && this.children[i].visible))) {
+  //        if (this.children[i] is Group) {
+  //          this.children[i].setAllChildren(key, value, checkAlive, checkVisible, operation, force);
+  //        }
+  //        else {
+  //          this.setProperty(this.children[i], key.split('.'), value, operation, force);
+  //        }
+  //      }
+  //    }
+  //
+  //  }
+  //
+  //  addAll(String property, num amount, bool checkAlive, bool checkVisible) {
+  //    this.setAll(property, amount, checkAlive, checkVisible, 1);
+  //  }
+  //
+  //  subAll(String property, num amount, bool checkAlive, bool checkVisible) {
+  //    this.setAll(property, amount, checkAlive, checkVisible, 2);
+  //  }
+  //
+  //  multiplyAll(String property, num amount, bool checkAlive, bool checkVisible) {
+  //    this.setAll(property, amount, checkAlive, checkVisible, 3);
+  //  }
+  //
+  //  divideAll(String property, num amount, bool checkAlive, bool checkVisible) {
+  //    this.setAll(property, amount, checkAlive, checkVisible, 4);
+  //  }
+  //
+  //  callAllExists(callback, existsValue) {
+  //
+  //    var args = Array.prototype.splice.call(arguments, 2);
+  //
+  //    for (var i = 0, len = this.children.length; i < len; i++) {
+  //      if (this.children[i].exists == existsValue && this.children[i][callback]) {
+  //        this.children[i][callback].apply(this.children[i], args);
+  //      }
+  //    }
+  //
+  //  }
+  //
+  //
+  //  callbackFromArray(child, callback, length) {
+  //
+  //    //  Kinda looks like a Christmas tree
+  //
+  //    if (length == 1) {
+  //      if (child[callback[0]]) {
+  //        return child[callback[0]];
+  //      }
+  //    }
+  //    else if (length == 2) {
+  //      if (child[callback[0]][callback[1]]) {
+  //        return child[callback[0]][callback[1]];
+  //      }
+  //    }
+  //    else if (length == 3) {
+  //        if (child[callback[0]][callback[1]][callback[2]]) {
+  //          return child[callback[0]][callback[1]][callback[2]];
+  //        }
+  //      }
+  //      else if (length == 4) {
+  //          if (child[callback[0]][callback[1]][callback[2]][callback[3]]) {
+  //            return child[callback[0]][callback[1]][callback[2]][callback[3]];
+  //          }
+  //        }
+  //        else {
+  //          if (child[callback]) {
+  //            return child[callback];
+  //          }
+  //        }
+  //
+  //    return false;
+  //
+  //  }
+  //
+  //  callAll(method, context) {
+  //
+  //    if (method == null) {
+  //      return;
+  //    }
+  //
+  //    //  Extract the method into an array
+  //    method = method.split('.');
+  //
+  //    var methodLength = method.length;
+  //
+  //    if (context == null || context == null || context == '') {
+  //      context = null;
+  //    }
+  //    else {
+  //      //  Extract the context into an array
+  //      if (context is String) {
+  //        context = context.split('.');
+  //        var contextLength = context.length;
+  //      }
+  //    }
+  //
+  //    var args = Array.prototype.splice.call(arguments, 2);
+  //    var callback = null;
+  //    var callbackContext = null;
+  //
+  //    for (var i = 0, len = this.children.length; i < len; i++) {
+  //      callback = this.callbackFromArray(this.children[i], method, methodLength);
+  //
+  //      if (context && callback) {
+  //        callbackContext = this.callbackFromArray(this.children[i], context, contextLength);
+  //
+  //        if (callback) {
+  //          callback.apply(callbackContext, args);
+  //        }
+  //      }
+  //      else if (callback) {
+  //        callback.apply(this.children[i], args);
+  //      }
+  //    }
+  //
+  //  }
 
   preUpdate() {
 
-    if (!this.exists || !this.parent.exists) {
+    if (!this.exists ||  !this.parent.exists) {
       this.renderOrderID = -1;
       return false;
     }
@@ -850,12 +838,12 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
 
   }
 
-  forEach(Function callback, [bool checkExists=false]) {
-    for (int i = 0, len = this.children.length; i < len; i++) {
+  forEach(Function callback, [bool checkExists = false]) {
+    for (int i = 0,
+        len = this.children.length; i < len; i++) {
       if (checkExists == false) {
         callback(this.children[i]);
-      }
-      else if (this.children[i].exists) {
+      } else if (this.children[i].exists) {
         callback(this.children[i]);
       }
     }
@@ -898,8 +886,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
 
     if (order == Group.SORT_ASCENDING) {
       this.children.sort(this.ascendingSortHandler);
-    }
-    else {
+    } else {
       this.children.sort(this.descendingSortHandler);
     }
 
@@ -924,15 +911,12 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
 
     if (a[this._sortProperty] < b[this._sortProperty]) {
       return -1;
-    }
-    else if (a[this._sortProperty] > b[this._sortProperty]) {
+    } else if (a[this._sortProperty] > b[this._sortProperty]) {
       return 1;
-    }
-    else {
+    } else {
       if (a.z < b.z) {
         return -1;
-      }
-      else {
+      } else {
         return 1;
       }
     }
@@ -944,58 +928,56 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
 
     if (a[this._sortProperty] < b[this._sortProperty]) {
       return 1;
-    }
-    else if (a[this._sortProperty] > b[this._sortProperty]) {
+    } else if (a[this._sortProperty] > b[this._sortProperty]) {
       return -1;
-    }
-    else {
+    } else {
       return 0;
     }
 
   }
 
 
-//  GameObject iterate(key, value, returnType, [bool callback =false, callbackContext, args]) {
-//
-//    if (returnType == Group.RETURN_TOTAL && this.children.length == 0) {
-//      return 0;
-//    }
-//
-//
-//    var total = 0;
-//
-//    for (var i = 0, len = this.children.length; i < len; i++) {
-//      if (this.children[i][key] == value) {
-//        total++;
-//
-//        if (callback) {
-//          args[0] = this.children[i];
-//          callback( args);
-//        }
-//
-//        if (returnType == Group.RETURN_CHILD) {
-//          return this.children[i];
-//        }
-//      }
-//    }
-//
-//    if (returnType == Group.RETURN_TOTAL) {
-//      return total;
-//    }
-//    else if (returnType == Group.RETURN_CHILD) {
-//      return null;
-//    }
-//
-//  }
+  //  GameObject iterate(key, value, returnType, [bool callback =false, callbackContext, args]) {
+  //
+  //    if (returnType == Group.RETURN_TOTAL && this.children.length == 0) {
+  //      return 0;
+  //    }
+  //
+  //
+  //    var total = 0;
+  //
+  //    for (var i = 0, len = this.children.length; i < len; i++) {
+  //      if (this.children[i][key] == value) {
+  //        total++;
+  //
+  //        if (callback) {
+  //          args[0] = this.children[i];
+  //          callback( args);
+  //        }
+  //
+  //        if (returnType == Group.RETURN_CHILD) {
+  //          return this.children[i];
+  //        }
+  //      }
+  //    }
+  //
+  //    if (returnType == Group.RETURN_TOTAL) {
+  //      return total;
+  //    }
+  //    else if (returnType == Group.RETURN_CHILD) {
+  //      return null;
+  //    }
+  //
+  //  }
 
   T getFirst([SelectWhere where]) {
-    return this.children.firstWhere(where, orElse:() => null);
+    return this.children.firstWhere(where, orElse: () => null);
   }
 
-  T getFirstExists([bool state=true]) {
+  T getFirstExists([bool state = true]) {
     return this.children.firstWhere((T child) {
       return child.exists == state;
-    }, orElse:() {
+    }, orElse: () {
       return null;
     });
   }
@@ -1003,7 +985,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
   T getFirstAlive() {
     return this.children.firstWhere((T child) {
       return child.alive;
-    }, orElse:() {
+    }, orElse: () {
       return null;
     });
     //return this.iterate('alive', true, Group.RETURN_CHILD);
@@ -1012,7 +994,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
   T getFirstDead() {
     return this.children.firstWhere((T child) {
       return !child.alive;
-    }, orElse:() {
+    }, orElse: () {
       return null;
     });
     //return this.iterate('alive', false, Group.RETURN_CHILD);
@@ -1046,7 +1028,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
     //return this.iterate('alive', false, Group.RETURN_TOTAL);
   }
 
-  T getRandom([int startIndex =0, int length]) {
+  T getRandom([int startIndex = 0, int length]) {
     if (this.children.length == 0) {
       return null;
     }
@@ -1058,7 +1040,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
   }
 
 
-  bool remove(T child, [ bool destroy=false, bool silent=false]) {
+  bool remove(T child, [bool destroy = false, bool silent = false]) {
 
 
     if (this.children.length == 0 || this.children.indexOf(child) == -1) {
@@ -1094,7 +1076,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
    * @param {boolean} [silent=false] - If the silent parameter is `true` the children will not dispatch their onRemovedFromGroup events.
    */
 
-  removeAll([ bool destroy=false, bool silent=false]) {
+  removeAll([bool destroy = false, bool silent = false]) {
 
     if (this.children.length == 0) {
       return;
@@ -1110,8 +1092,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
       if (destroy && removed != null) {
         removed.destroy(true);
       }
-    }
-    while (this.children.length > 0);
+    } while (this.children.length > 0);
 
     this.cursor = null;
 
@@ -1127,7 +1108,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
    * @param {boolean} [silent=false] - If the silent parameter is `true` the children will not dispatch their onRemovedFromGroup events.
    */
 
-  removeBetween(int startIndex, [int endIndex, bool destroy=false, bool silent=false]) {
+  removeBetween(int startIndex, [int endIndex, bool destroy = false, bool silent = false]) {
 
     if (endIndex == null) {
       endIndex = this.children.length;
@@ -1174,7 +1155,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
    * @param {boolean} [soft=false] - A 'soft destroy' (set to true) doesn't remove this Group from its parent or null the game reference. Set to false and it does.
    */
 
-  destroy([bool destroyChildren=true, bool soft=false]) {
+  destroy([bool destroyChildren = true, bool soft = false]) {
 
     if (this.game == null) {
       return;

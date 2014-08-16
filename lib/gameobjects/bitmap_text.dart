@@ -31,6 +31,7 @@ class BitmapText extends PIXI.BitmapText implements GameObject  {
   int _fontSize;
   String _align;
   int _tint;
+  bool _dirty;
 
   Events events;
 
@@ -45,22 +46,11 @@ class BitmapText extends PIXI.BitmapText implements GameObject  {
 
 
 
-  PIXI.Texture texture;
-  CanvasPattern __tilePattern;
-
-  setTexture(PIXI.Texture texture) {
-
-  }
-
-  centerOn(num x, num y) {
-    throw new Exception("Not implement yet!");
-  }
-
   Point anchor;
   Point center;
 
   List<GameObject> children = [];
-  Group parent;
+  GameObject get parent => super.parent;
 
   GameObject bringToTop([GameObject child]) {
     if (child == null) {
@@ -118,7 +108,7 @@ class BitmapText extends PIXI.BitmapText implements GameObject  {
 
     if (value != this._tint) {
       this._tint = value;
-      this.dirty = true;
+      this._dirty = true;
     }
 
   }
@@ -159,7 +149,7 @@ class BitmapText extends PIXI.BitmapText implements GameObject  {
     if (value != this._font) {
       this._font = value.trim();
       this.style.font = this._fontSize.toString() + "px '" + this._font + "'";
-      this.dirty = true;
+      this._dirty = true;
     }
 
   }
@@ -183,7 +173,7 @@ class BitmapText extends PIXI.BitmapText implements GameObject  {
     if (value != this._fontSize) {
       this._fontSize = value;
       this.style.font = this._fontSize.toString() + "px '" + this._font.toString() + "'";
-      this.dirty = true;
+      this._dirty = true;
     }
 
   }
@@ -205,7 +195,7 @@ class BitmapText extends PIXI.BitmapText implements GameObject  {
 
     if (value != this._text) {
       this._text = value;
-      this.dirty = true;
+      this._dirty = true;
     }
 
   }
@@ -489,7 +479,7 @@ class BitmapText extends PIXI.BitmapText implements GameObject  {
 
     if (this.parent != null) {
       if (this.parent is Group) {
-        this.parent.remove(this);
+        (this.parent as Group).remove(this);
       }
       else {
         this.parent.removeChild(this);

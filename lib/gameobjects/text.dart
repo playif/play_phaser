@@ -1,19 +1,23 @@
 part of Phaser;
 
 class TextStyle extends PIXI.TextStyle {
+  num shadowOffsetX=0;
+  num shadowOffsetY=0;
+  String shadowColor='rgba(0,0,0,0)';
+  num shadowBlur=0;
+  
   TextStyle({String fill : 'black',
             String font : 'bold 20pt Arial',
             String align : 'left',
             String stroke : 'black',
             num strokeThickness : 0,
             num tint
-            }):super() {
-    this.fill = fill;
-    this.font = font;
-    this.align = align;
-    this.stroke = stroke;
-    this.strokeThickness = strokeThickness;
-    this.tint = tint;
+            }):super(fill:fill,
+                font:font,
+                align:align,
+                stroke:stroke,
+                strokeThickness:strokeThickness,
+                tint:tint) {
   }
 }
 
@@ -23,7 +27,7 @@ class Text extends PIXI.Text implements GameObject {
   String name;
 
 
-  PIXI.TextStyle style;
+  TextStyle style;
 
   bool exists;
 
@@ -57,11 +61,12 @@ class Text extends PIXI.Text implements GameObject {
   List<GameObject> children = [];
 
 
-  GameObject parent;
+  GameObject get parent => super.parent;
 
   Events events;
 
   bool alive;
+  bool _dirty=false;
 
   CanvasPattern __tilePattern;
 
@@ -135,9 +140,6 @@ class Text extends PIXI.Text implements GameObject {
     }
   }
 
-  centerOn(num x, num y) {
-    throw new Exception("Not implement yet!");
-  }
 
   Rectangle _currentBounds;
 
@@ -349,8 +351,9 @@ class Text extends PIXI.Text implements GameObject {
     if (this.canvas.parentNode != null) {
       this.canvas.remove();
     } else {
-      this.canvas = null;
-      this.context = null;
+      super.destroy();
+      //this.canvas = null;
+      //this.context = null;
     }
 
     var i = this.children.length;
@@ -389,7 +392,7 @@ class Text extends PIXI.Text implements GameObject {
     this.style.shadowOffsetY = y;
     this.style.shadowColor = color;
     this.style.shadowBlur = blur;
-    this.dirty = true;
+    this._dirty = true;
   }
 
   /**
@@ -422,7 +425,7 @@ class Text extends PIXI.Text implements GameObject {
     style.shadowBlur = style.shadowBlur;
 
     this.style = style;
-    this.dirty = true;
+    this._dirty = true;
 
   }
 

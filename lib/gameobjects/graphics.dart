@@ -12,12 +12,13 @@ class Graphics extends PIXI.Graphics implements GameObject {
   Point world;
   Point cameraOffset;
   List _cache;
-  GameObject parent;
+  GameObject get parent => super.parent;
   List<GameObject> children=[];
 
   bool exists;
   bool alive;
   bool autoCull=false;
+  bool _dirty=false;
 
   Events events;
   int type;
@@ -27,19 +28,9 @@ class Graphics extends PIXI.Graphics implements GameObject {
 
   int renderOrderID;
 
-  PIXI.Texture texture;
   Point anchor=new Point();
   Point center=new Point();
 
-  CanvasPattern __tilePattern;
-
-  setTexture(PIXI.Texture texture){
-
-  }
-
-  centerOn(num x, num y){
-    throw new Exception("Not implement yet!");
-  }
 
 
   GameObject bringToTop([GameObject child]) {

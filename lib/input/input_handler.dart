@@ -683,9 +683,10 @@ class InputHandler {
    */
 
   bool checkPixel(int x, int y, [Pointer pointer]) {
-
+    if(this.sprite is! Sprite) return false;
+    Sprite sprite = this.sprite;
     //  Grab a pixel from our image into the hitCanvas and then test it
-    if (this.sprite.texture.baseTexture.source) {
+    if (sprite.texture.baseTexture.source) {
       this.game.input.hitContext.clearRect(0, 0, 1, 1);
 
       if (x == null && y == null) {
@@ -697,18 +698,18 @@ class InputHandler {
       }
 
       if (this.sprite.anchor.x != 0) {
-        x -= -this.sprite.texture.frame.width * this.sprite.anchor.x;
+        x -= -sprite.texture.frame.width * this.sprite.anchor.x;
       }
 
       if (this.sprite.anchor.y != 0) {
-        y -= -this.sprite.texture.frame.height * this.sprite.anchor.y;
+        y -= -sprite.texture.frame.height * this.sprite.anchor.y;
       }
 
-      x += this.sprite.texture.frame.x;
-      y += this.sprite.texture.frame.y;
+      x += sprite.texture.frame.x;
+      y += sprite.texture.frame.y;
 
       this.game.input.hitContext.drawImageScaledFromSource(
-          this.sprite.texture.baseTexture.source, x, y, 1, 1, 0, 0, 1, 1);
+          sprite.texture.baseTexture.source, x, y, 1, 1, 0, 0, 1, 1);
 
       var rgb = this.game.input.hitContext.getImageData(0, 0, 1, 1);
 
@@ -1164,7 +1165,7 @@ class InputHandler {
 
     if (this.sprite.fixedToCamera) {
       if (this.dragFromCenter) {
-        this.sprite.centerOn(pointer.x, pointer.y);
+        //this.sprite.centerOn(pointer.x, pointer.y);
         this._dragPoint.setTo(this.sprite.cameraOffset.x - pointer.x, this.sprite.cameraOffset.y - pointer.y);
       }
       else {

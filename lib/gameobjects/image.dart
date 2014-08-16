@@ -1,6 +1,6 @@
 part of Phaser;
 
-class Image extends PIXI.Sprite implements GameObject {
+class Image extends PIXI.Sprite implements GameObject, SpriteInterface {
   Game game;
   bool exists;
   String name;
@@ -24,10 +24,11 @@ class Image extends PIXI.Sprite implements GameObject {
   Rectangle _crop;
   int _frame;
   Rectangle _bounds;
+  bool _dirty;
 
   String _frameName;
   bool alive;
-  GameObject parent;
+  GameObject get parent => super.parent;
   List<GameObject> children = [];
 
   GameObject bringToTop([GameObject child]) {
@@ -49,12 +50,8 @@ class Image extends PIXI.Sprite implements GameObject {
   destroy(destroyChildren) {
 
   }
-  centerOn(num x, num y) {
-    throw new Exception("Not implement yet!");
-  }
 
-  PIXI.Texture texture;
-  CanvasPattern __tilePattern;
+
 
 
   //Point anchor;

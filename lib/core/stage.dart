@@ -24,8 +24,7 @@ class Stage extends PIXI.Stage implements GameObject {
 
   
   GameObject parent;
-  PIXI.Texture texture;
-  CanvasPattern __tilePattern;
+
   int z;
   bool fixedToCamera;
   Point anchor;
@@ -40,14 +39,9 @@ class Stage extends PIXI.Stage implements GameObject {
   Point cameraOffset;
   bool autoCull;
   bool alive;
+  bool _dirty=false;
   
-  setTexture(PIXI.Texture texture){
-    throw new Exception("Not implement yet!");
-  }
-  
-  centerOn(num x, num y) {
-    throw new Exception("Not implement yet!");
-  }
+
   
   destroy([bool destroyChildren = true]) {
     throw new Exception("Not implement yet!");

@@ -1,10 +1,26 @@
 part of Phaser;
 
-abstract class GameObject implements PIXI.DisplayInterface {
+abstract class CoreInterfact{
   Game game;
+  Events events;
+  bool visible;
+}
+
+abstract class SpriteInterface implements CoreInterfact{
+  PIXI.Texture texture;
+  //CanvasPattern __tilePattern;
+  setTexture(PIXI.Texture texture);
+}
+
+abstract class AnimationInterface implements SpriteInterface{
+  CanvasPattern __tilePattern;
+}
+
+abstract class GameObject implements PIXI.DisplayInterface, CoreInterfact {
+
   bool exists;
   bool alive;
-  Events events;
+
   int type;
   String name;
 
@@ -12,11 +28,13 @@ abstract class GameObject implements PIXI.DisplayInterface {
 
   Point scale;
   List<num> _cache;
-  bool visible;
-  PIXI.Texture texture;
-  CanvasPattern __tilePattern;
 
-  setTexture(PIXI.Texture texture);
+  
+
+  
+  bool _dirty;
+
+
 
   Point anchor;
   Point get center;
@@ -45,9 +63,7 @@ abstract class GameObject implements PIXI.DisplayInterface {
 
   GameObject bringToTop([GameObject child]);
 
-  centerOn(num x, num y);
-
-  GameObject parent;
+  GameObject get parent;
 
   bool fixedToCamera;
   Point cameraOffset;

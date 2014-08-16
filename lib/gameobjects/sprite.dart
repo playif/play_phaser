@@ -1,31 +1,31 @@
 part of Phaser;
 
-class Sprite extends PIXI.Sprite implements GameObject {
+class Sprite extends PIXI.Sprite implements GameObject, AnimationInterface {
 
-//  int getTweenableValues(int tweenType, List<num> returnValues) {
-//    switch (tweenType) {
-//      case 0:
-//        returnValues[0]=this.x;
-//        break;
-//    }
-//
-//    return 1;
-//  }
-//
-//  void setTweenableValues(int tweenType, List<num> newValues) {
-//    switch (tweenType) {
-//      case 0:
-//        this.x=newValues[0];
-//        break;
-//    }
-//
-//  }
+  //  int getTweenableValues(int tweenType, List<num> returnValues) {
+  //    switch (tweenType) {
+  //      case 0:
+  //        returnValues[0]=this.x;
+  //        break;
+  //    }
+  //
+  //    return 1;
+  //  }
+  //
+  //  void setTweenableValues(int tweenType, List<num> newValues) {
+  //    switch (tweenType) {
+  //      case 0:
+  //        this.x=newValues[0];
+  //        break;
+  //    }
+  //
+  //  }
 
 
   Game game;
 
-//  num x;
-//  num y;
+  //  num x;
+  //  num y;
   var key;
 
   String name;
@@ -55,24 +55,21 @@ class Sprite extends PIXI.Sprite implements GameObject {
 
   num lifespan;
 
+  bool _dirty = false;
 
   CanvasPattern __tilePattern;
   PIXI.Texture tilingTexture;
 
   Point camerOffset;
 
-  Group parent;
+  GameObject get parent => super.parent;
 
   List<GameObject> children = [];
 
   Rectangle _currentBounds;
   Point anchor = new Point();
-  Point position =new Point();
+  Point position = new Point();
 
-
-  centerOn(num x, num y) {
-    throw new Exception("Not implement yet!");
-  }
 
   num get angle {
     return Math.wrapAngle(Math.radToDeg(this.rotation));
@@ -95,13 +92,11 @@ class Sprite extends PIXI.Sprite implements GameObject {
   }
 
   bool get inWorld {
-    return this.game.world.bounds.intersects(new Rectangle()
-      ..copyFrom(this.getBounds()));
+    return this.game.world.bounds.intersects(new Rectangle()..copyFrom(this.getBounds()));
   }
 
   bool get inCamera {
-    return this.game.world.camera.screenView.intersects(new Rectangle()
-      ..copyFrom(this.getBounds()));
+    return this.game.world.camera.screenView.intersects(new Rectangle()..copyFrom(this.getBounds()));
   }
 
   int get frame {
@@ -133,12 +128,10 @@ class Sprite extends PIXI.Sprite implements GameObject {
       if (this.input == null) {
         this.input = new InputHandler(this);
         this.input.start();
-      }
-      else if (this.input != null && !this.input.enabled) {
+      } else if (this.input != null && !this.input.enabled) {
         this.input.start();
       }
-    }
-    else {
+    } else {
       if (this.input != null && this.input.enabled) {
         this.input.stop();
       }
@@ -146,7 +139,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
   }
 
   bool get exists {
-    return this._cache[6] == 1 ;
+    return this._cache[6] == 1;
   }
 
   set exists(bool value) {
@@ -159,8 +152,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
       }
 
       this.visible = true;
-    }
-    else {
+    } else {
       //  exists = false
       this._cache[6] = 0;
 
@@ -181,8 +173,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
     if (value) {
       this._cache[7] = 1;
       this.cameraOffset.set(this.x, this.y);
-    }
-    else {
+    } else {
       this._cache[7] = 0;
     }
   }
@@ -196,8 +187,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
       if (this.texture != null) {
         this.texture.baseTexture.scaleMode = PIXI.scaleModes.DEFAULT;
       }
-    }
-    else {
+    } else {
       if (this.texture != null) {
         this.texture.baseTexture.scaleMode = PIXI.scaleModes.LINEAR;
       }
@@ -238,8 +228,8 @@ class Sprite extends PIXI.Sprite implements GameObject {
 
   bool _outOfBoundsFired = false;
 
-  Sprite(this.game, [int x=0, int y=0, String key, num frame=0])
-  :super(PIXI.TextureCache['__default']) {
+  Sprite(this.game, [int x = 0, int y = 0, String key, num frame = 0])
+      : super(PIXI.TextureCache['__default']) {
 
     this.x = x;
     this.y = y;
@@ -344,7 +334,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
      * @property {Array} _cache
      * @private
      */
-    this._cache = [ 0, 0, 0, 0, 1, 0, 1, 0, 0 ];
+    this._cache = [0, 0, 0, 0, 1, 0, 1, 0, 0];
 
     /**
      * @property {Phaser.Rectangle} _bounds - Internal cache var.
@@ -407,8 +397,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
       if (this._cache[5] == 1 && this.game.world.bounds.intersects(this._bounds)) {
         this._cache[5] = 0;
         this.events.onEnterBounds.dispatch(this);
-      }
-      else if (this._cache[5] == 0 && !this.game.world.bounds.intersects(this._bounds)) {
+      } else if (this._cache[5] == 0 && !this.game.world.bounds.intersects(this._bounds)) {
         //  The Sprite WAS in the screen, but has now left.
         this._cache[5] = 1;
         this.events.onOutOfBounds.dispatch(this);
@@ -432,8 +421,9 @@ class Sprite extends PIXI.Sprite implements GameObject {
       this.body.preUpdate();
     }
 
-//  Update any Children
-    for (var i = 0, len = this.children.length; i < len; i++) {
+    //  Update any Children
+    for (var i = 0,
+        len = this.children.length; i < len; i++) {
       this.children[i].preUpdate();
     }
 
@@ -477,7 +467,8 @@ class Sprite extends PIXI.Sprite implements GameObject {
     }
 
     //  Update any Children
-    for (var i = 0, len = this.children.length; i < len; i++) {
+    for (var i = 0,
+        len = this.children.length; i < len; i++) {
       this.children[i].postUpdate();
     }
 
@@ -493,7 +484,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
    * @param {string|number} frame - If this Sprite is using part of a sprite sheet or texture atlas you can specify the exact frame to use by giving a string or numeric index.
    */
 
-  loadTexture(key, [frame=0]) {
+  loadTexture(key, [frame = 0]) {
 
     //frame = frame || 0;
 
@@ -501,48 +492,42 @@ class Sprite extends PIXI.Sprite implements GameObject {
       this.key = key.key;
       this.setTexture(key);
       return;
-    }
-    else if (key is BitmapData) {
+    } else if (key is BitmapData) {
       this.key = key;
       this.setTexture(key.texture);
       return;
-    }
-    else if (key is PIXI.Texture) {
-        this.key = key;
-        this.setTexture(key);
+    } else if (key is PIXI.Texture) {
+      this.key = key;
+      this.setTexture(key);
+      return;
+    } else {
+      if (key == null) {
+        this.key = '__default';
+        this.setTexture(PIXI.TextureCache[this.key]);
+        return;
+      } else if (key is String && !this.game.cache.checkImageKey(key)) {
+        this.key = '__missing';
+        this.setTexture(PIXI.TextureCache[this.key]);
         return;
       }
-      else {
-        if (key == null) {
-          this.key = '__default';
-          this.setTexture(PIXI.TextureCache[this.key]);
-          return;
-        }
-        else if (key is String && !this.game.cache.checkImageKey(key)) {
-          this.key = '__missing';
-          this.setTexture(PIXI.TextureCache[this.key]);
-          return;
-        }
 
-        if (this.game.cache.isSpriteSheet(key)) {
-          this.key = key;
+      if (this.game.cache.isSpriteSheet(key)) {
+        this.key = key;
 
-// var frameData = this.game.cache.getFrameData(key);
-          this.animations.loadFrameData(this.game.cache.getFrameData(key));
+        // var frameData = this.game.cache.getFrameData(key);
+        this.animations.loadFrameData(this.game.cache.getFrameData(key));
 
-          if (frame is String) {
-            this.frameName = frame;
-          }
-          else {
-            this.frame = frame;
-          }
+        if (frame is String) {
+          this.frameName = frame;
+        } else {
+          this.frame = frame;
         }
-        else {
-          this.key = key;
-          this.setTexture(PIXI.TextureCache[key]);
-          return;
-        }
+      } else {
+        this.key = key;
+        this.setTexture(PIXI.TextureCache[key]);
+        return;
       }
+    }
 
   }
 
@@ -563,13 +548,12 @@ class Sprite extends PIXI.Sprite implements GameObject {
 
     if (rect == null) {
       //  Clear any crop that may be set
-//      if (this.texture.hasOwnProperty('sourceWidth')) {
-//        this.texture.setFrame(new Rectangle(0, 0, this.texture.sourceWidth, this.texture.sourceHeight));
-//      }
+      //      if (this.texture.hasOwnProperty('sourceWidth')) {
+      //        this.texture.setFrame(new Rectangle(0, 0, this.texture.sourceWidth, this.texture.sourceHeight));
+      //      }
       this.texture.setFrame(new Rectangle(0, 0, this.texture.sourceWidth, this.texture.sourceHeight));
 
-    }
-    else {
+    } else {
       //  Do we need to clone the PIXI.Texture object?
       if (this.texture is PIXI.Texture) {
         //  Yup, let's rock it ...
@@ -587,8 +571,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
 
         this.texture.updateFrame = true;
         PIXI.Texture.frameUpdates.add(this.texture);
-      }
-      else {
+      } else {
         this.texture.setFrame(rect);
       }
     }
@@ -659,7 +642,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
    * @param {boolean} [destroyChildren=true] - Should every child of this object have its destroy method called?
    */
 
-  destroy([bool destroyChildren=true]) {
+  destroy([bool destroyChildren = true]) {
 
     if (this.game == null || this._cache[8] == 1) {
       return;
@@ -671,11 +654,11 @@ class Sprite extends PIXI.Sprite implements GameObject {
 
     this._cache[8] = 1;
 
+    
     if (this.parent != null) {
       if (this.parent is Group) {
-        this.parent.remove(this);
-      }
-      else {
+        (this.parent as Group).remove(this);
+      } else {
         this.parent.removeChild(this);
       }
     }
@@ -702,8 +685,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
       while (i-- > 0) {
         this.children[i].destroy(destroyChildren);
       }
-    }
-    else {
+    } else {
       while (i-- > 0) {
         this.removeChild(this.children[i]);
       }
@@ -758,7 +740,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
    * @return (Phaser.Sprite) This instance.
    */
 
-  Sprite reset(num x, num y, [num health=1]) {
+  Sprite reset(num x, num y, [num health = 1]) {
 
     this.world.setTo(x, y);
     this.position.x = x;
@@ -796,8 +778,7 @@ class Sprite extends PIXI.Sprite implements GameObject {
         this.parent.bringToTop(this);
       }
       return this;
-    }
-    else {
+    } else {
       if (child.parent == this && this.children.indexOf(child) < this.children.length) {
         this.removeChild(child);
         this.addChild(child);

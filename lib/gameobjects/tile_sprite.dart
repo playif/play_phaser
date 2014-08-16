@@ -1,6 +1,8 @@
 part of Phaser;
 
-class TileSprite extends PIXI.TilingSprite implements GameObject {
+
+
+class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInterface {
 
   Game game;
   String name;
@@ -8,7 +10,7 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
   Events events;
   bool alive;
 
-  GameObject parent;
+  GameObject get parent => super.parent;
 
   Body body;
   InputHandler input;
@@ -26,6 +28,7 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
   String _frameName;
   Point world;
   Point _scroll;
+  bool _dirty=false;
   List<GameObject> children = [];
   Rectangle _bounds;
 
@@ -54,9 +57,6 @@ class TileSprite extends PIXI.TilingSprite implements GameObject {
     }
   }
 
-  centerOn(num x, num y) {
-    throw new Exception("Not implement yet!");
-  }
 
   num get renderOrderID {
     return this._cache[3];

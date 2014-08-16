@@ -10,6 +10,7 @@ Please check the [online demo][3]
 
 Feel free to let me know if there is any problem.
 
+pub: [https://pub.dartlang.org/packages/play_phaser]
 
 What are done:
 =========

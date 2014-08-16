@@ -822,7 +822,7 @@ class BitmapData {
    * @param {number} [height] - The height when drawing the image. You can use this to optionally stretch the drawn image vertically.
    */
 
-  draw(source, [int x=0, int y=0, int width, height]) {
+  draw(source, [num x=0, num y=0, num width, num height]) {
 
     if (x == null) {
       x = 0;
@@ -843,7 +843,7 @@ class BitmapData {
 
     if (source is Image || source is Sprite) {
       src = source.texture.baseTexture.source;
-      Frame frame = source.texture.frame;
+      PIXI.Rectangle frame = source.texture.frame;
       sx = frame.x;
       sy = frame.y;
       sw = frame.width;

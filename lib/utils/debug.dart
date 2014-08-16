@@ -634,6 +634,7 @@ class Debug {
     Bounds bounds = quadtree.bounds;
 
     if (quadtree.nodes[0] == null) {
+      
       this.context.strokeStyle = color;
       this.context.strokeRect(bounds.x, bounds.y, bounds.width, bounds.height);
       this.text('size: ' + quadtree.objects.length.toString(), (bounds.x + 4), (bounds.y + 16), 'rgb(0,200,0)', '12px Courier');

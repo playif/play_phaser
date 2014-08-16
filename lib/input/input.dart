@@ -908,9 +908,9 @@ class Input {
         }
       }
     }
-    else if (displayObject is PIXI.Sprite) {
-        var width = displayObject.texture.frame.width;
-        var height = displayObject.texture.frame.height;
+    else if (displayObject is SpriteInterface) {
+        var width = (displayObject as SpriteInterface).texture.frame.width;
+        var height = (displayObject as SpriteInterface).texture.frame.height;
         var x1 = -width * displayObject.anchor.x;
 
         if (this._localPoint.x > x1 && this._localPoint.x < x1 + width) {
