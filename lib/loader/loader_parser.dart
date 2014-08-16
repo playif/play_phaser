@@ -14,7 +14,7 @@ class LoaderParser {
     data.chars = {
     };
 
-    List<Element> letters = xml.getElementsByTagName('char');
+    List letters = xml.getElementsByTagName('char');
 
     for (int i = 0; i < letters.length; i++) {
       int charCode = int.parse(letters[i].getAttribute('id'));
@@ -36,7 +36,7 @@ class LoaderParser {
       //};
     }
 
-    List<Element> kernings = xml.getElementsByTagName('kerning');
+    List kernings = xml.getElementsByTagName('kerning');
 
     for (int i = 0; i < kernings.length; i++) {
       int first = int.parse(kernings[i].getAttribute('first'));
