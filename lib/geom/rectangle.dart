@@ -261,10 +261,11 @@ class Rectangle extends PIXI.Rectangle {
    */
 
   bool contains(x, y) {
+    //return super.contains(x, y);
     if (width <= 0 || height <= 0) {
       return false;
     }
-    return (x >= x && x <= right && y >= y && y <= bottom);
+    return (x >= this.x && x <= this.right && y >= this.y && y <= this.bottom);
   }
 
 

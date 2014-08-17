@@ -890,6 +890,8 @@ class Input {
 
     if (displayObject.hitArea!= null) {
       if (displayObject.hitArea.contains(this._localPoint.x, this._localPoint.y)) {
+//        print(this._localPoint.x);
+//        print(this._localPoint.y);
         return true;
       }
 

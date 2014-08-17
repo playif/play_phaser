@@ -8,7 +8,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
   Game game;
   GameObject get parent => super.parent;
 
-  
+
   String name;
   bool addToStage;
   bool enableBody;
@@ -47,14 +47,22 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
 
   Point anchor;
   Point center;
-  Point world;
+
+  Point get world {
+    if (this.parent == null || this.parent == this) {
+      return this.position;
+    } else {
+      return this.position + this.parent.world;
+    }
+  }
+
   Rectangle _currentBounds;
   Point position = new Point();
 
   Group(Game game, [Group parent, this.name = 'group', this.addToStage = false, this.enableBody = false, this.physicsBodyType = 0])
       : super() {
     this.game = game;
-    
+
 
     //    if (parent == null) {
     //      parent = game.world;
@@ -63,10 +71,9 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
     if (addToStage) {
       this.game.stage.addChild(this);
     } else {
-      if (parent != null){
+      if (parent != null) {
         parent.add(this);
-      }
-      else if (this.game.world != null) {
+      } else if (this.game.world != null) {
         //(parent as PIXI.DisplayObjectContainer).addChild(this);
         this.game.world.addChild(this);
       }
@@ -212,7 +219,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
   static int SORT_DESCENDING = 1;
 
   T add(T child, [bool silent = false]) {
-    
+
     if (child.parent != this) {
       if (this.enableBody) {
         this.game.physics.enable(child, this.physicsBodyType);
@@ -796,7 +803,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
 
   preUpdate() {
 
-    if (!this.exists ||  !this.parent.exists) {
+    if (!this.exists || !this.parent.exists) {
       this.renderOrderID = -1;
       return false;
     }
@@ -1180,5 +1187,5 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
   Rectangle getBounds([PIXI.Matrix matrix]) {
     return new Rectangle().copyFrom(super.getBounds());
   }
-  
+
 }
