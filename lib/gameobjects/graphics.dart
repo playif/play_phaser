@@ -392,4 +392,9 @@ class Graphics extends PIXI.Graphics implements GameObject {
       }
     }
   }
+  
+  Rectangle getBounds([PIXI.Matrix matrix]){
+    return new Rectangle().copyFrom(super.getBounds(matrix));
+  }
+  
 }

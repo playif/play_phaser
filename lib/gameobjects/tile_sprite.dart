@@ -15,7 +15,7 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
   Body body;
   InputHandler input;
   AnimationManager animations;
-  String key;
+  var key;
 
   num z;
 
@@ -24,11 +24,11 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
 
   Point center;
 
-  int _frame;
+  var _frame;
   String _frameName;
   Point world;
   Point _scroll;
-  bool _dirty=false;
+  bool _dirty = false;
   List<GameObject> children = [];
   Rectangle _bounds;
 
@@ -37,7 +37,7 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
 
   bool autoCull;
   Point cameraOffset;
-  
+
   CanvasPattern __tilePattern;
 
 
@@ -47,8 +47,7 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
         this.parent.bringToTop(this);
       }
       return this;
-    }
-    else {
+    } else {
       if (child.parent == this && this.children.indexOf(child) < this.children.length) {
         this.removeChild(child);
         this.addChild(child);
@@ -92,11 +91,11 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
    */
   //Object.defineProperty(Phaser.TileSprite.prototype, "frame", {
 
-  num get frame {
+  get frame {
     return this.animations.frame;
   }
 
-  set frame(num value) {
+  set frame(value) {
 
     if (value != this.animations.frame) {
       this.animations.frame = value;
@@ -147,8 +146,7 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
     if (value) {
       this._cache[7] = 1;
       this.cameraOffset.set(this.x, this.y);
-    }
-    else {
+    } else {
       this._cache[7] = 0;
     }
   }
@@ -182,8 +180,7 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
       }
 
       this.visible = true;
-    }
-    else {
+    } else {
       //  exists = false
       this._cache[6] = 0;
 
@@ -219,12 +216,10 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
       if (this.input == null) {
         this.input = new InputHandler(this);
         this.input.start();
-      }
-      else if (this.input != null && !this.input.enabled) {
+      } else if (this.input != null && !this.input.enabled) {
         this.input.start();
       }
-    }
-    else {
+    } else {
       if (this.input != null && this.input.enabled) {
         this.input.stop();
       }
@@ -301,14 +296,14 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
   //});
 
 
-  TileSprite(this.game, [num x=0, num y=0, int width=256, int height=256, key, frame])
-  :super(PIXI.TextureCache['__default'], width, height) {
-    this.x=x;
-    this.y=0;
-    this.width=width;
-    this.height=height;
-    this.key=key;
-    this._frame=frame;
+  TileSprite(this.game, [num x = 0, num y = 0, int width = 256, int height = 256, key, frame])
+      : super(PIXI.TextureCache['__default'], width, height) {
+    this.x = x;
+    this.y = 0;
+    this.width = width;
+    this.height = height;
+//    this.key = key;
+//    this.frame = frame;
     //x = x || 0;
     //y = y || 0;
     //width = width || 256;
@@ -436,7 +431,7 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
      * @property {Array} _cache
      * @private
      */
-    this._cache = [ 0, 0, 0, 0, 1, 0, 1, 0, 0 ];
+    this._cache = [0, 0, 0, 0, 1, 0, 1, 0, 0];
 
     this.loadTexture(key, frame);
   }
@@ -493,8 +488,7 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
       if (this._cache[5] == 1 && this.game.world.bounds.intersects(this._bounds)) {
         this._cache[5] = 0;
         this.events.onEnterBounds.dispatch(this);
-      }
-      else if (this._cache[5] == 0 && !this.game.world.bounds.intersects(this._bounds)) {
+      } else if (this._cache[5] == 0 && !this.game.world.bounds.intersects(this._bounds)) {
         //  The Sprite WAS in the screen, but has now left.
         this._cache[5] = 1;
         this.events.onOutOfBounds.dispatch(this);
@@ -522,7 +516,8 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
     }
 
 //  Update any Children
-    for (var i = 0, len = this.children.length; i < len; i++) {
+    for (var i = 0,
+        len = this.children.length; i < len; i++) {
       this.children[i].preUpdate();
     }
 
@@ -561,7 +556,8 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
     }
 
     //  Update any Children
-    for (int i = 0, len = this.children.length; i < len; i++) {
+    for (int i = 0,
+        len = this.children.length; i < len; i++) {
       this.children[i].postUpdate();
     }
 
@@ -602,7 +598,7 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
    * @param {string|number} frame - If this TileSprite is using part of a sprite sheet or texture atlas you can specify the exact frame to use by giving a string or numeric index.
    */
 
-  loadTexture(key, int frame) {
+  loadTexture(key, frame) {
 
     //frame = frame || 0;
 
@@ -611,28 +607,23 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
     if (key is RenderTexture) {
       this.key = key.key;
       this.setTexture(key);
-    }
-    else if (key is BitmapData) {
+    } else if (key is BitmapData) {
       this.setTexture(key.texture);
+    } else if (key is PIXI.Texture) {
+      this.setTexture(key);
+    } else {
+      if (key == null) {
+        this.key = '__default';
+        this.setTexture(PIXI.TextureCache[this.key]);
+      } else if (key is String && !this.game.cache.checkImageKey(key)) {
+        window.console.warn("Texture with key '" + key + "' not found.");
+        this.key = '__missing';
+        this.setTexture(PIXI.TextureCache[this.key]);
+      } else {
+        this.setTexture(new PIXI.Texture(PIXI.BaseTextureCache[key]));
+        this.animations.loadFrameData(this.game.cache.getFrameData(key), frame);
+      }
     }
-    else if (key is PIXI.Texture) {
-        this.setTexture(key);
-      }
-      else {
-        if (key == null) {
-          this.key = '__default';
-          this.setTexture(PIXI.TextureCache[this.key]);
-        }
-        else if (key is String && !this.game.cache.checkImageKey(key)) {
-          window.console.warn("Texture with key '" + key + "' not found.");
-          this.key = '__missing';
-          this.setTexture(PIXI.TextureCache[this.key]);
-        }
-        else {
-          this.setTexture(new PIXI.Texture(PIXI.BaseTextureCache[key]));
-          this.animations.loadFrameData(this.game.cache.getFrameData(key), frame);
-        }
-      }
 
   }
 
@@ -663,13 +654,12 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
         this.texture.trim.y = frame.spriteSourceSizeY;
         this.texture.trim.width = frame.sourceSizeW;
         this.texture.trim.height = frame.sourceSizeH;
-      }
-      else {
+      } else {
         this.texture.trim = new PIXI.Rectangle()
-          ..x = frame.spriteSourceSizeX
-          .. y = frame.spriteSourceSizeY
-          .. width = frame.sourceSizeW
-          .. height = frame.sourceSizeH;
+            ..x = frame.spriteSourceSizeX
+            ..y = frame.spriteSourceSizeY
+            ..width = frame.sourceSizeW
+            ..height = frame.sourceSizeH;
         //};
       }
 
@@ -694,7 +684,7 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
    * @param {boolean} [destroyChildren=true] - Should every child of this object have its destroy method called?
    */
 
-  destroy(bool destroyChildren) {
+  destroy([bool destroyChildren = true]) {
 
     if (this.game == null || this.destroyPhase) {
       return;
@@ -713,8 +703,7 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
     if (this.parent != null) {
       if (this.parent is Group) {
         (this.parent as Group).remove(this);
-      }
-      else {
+      } else {
         this.parent.removeChild(this);
       }
     }
@@ -729,8 +718,7 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
       while (i-- > 0) {
         this.children[i].destroy(destroyChildren);
       }
-    }
-    else {
+    } else {
       while (i-- > 0) {
         this.removeChild(this.children[i]);
       }
@@ -778,7 +766,7 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
    * @return (Phaser.TileSprite) This instance.
    */
 
-  reset(x, y) {
+  reset(num x, num y) {
 
     this.world.setTo(x, y);
     this.position.x = x;

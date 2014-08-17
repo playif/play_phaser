@@ -49,7 +49,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
   Point center;
   Point world;
   Rectangle _currentBounds;
-
+  Point position = new Point();
 
   Group(Game game, [Group parent, this.name = 'group', this.addToStage = false, this.enableBody = false, this.physicsBodyType = 0])
       : super() {
@@ -268,7 +268,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
     }
   }
 
-  T create([num x = 0, num y = 0, key, frame = 0, bool exists = true]) {
+  T create([num x = 0, num y = 0, Object key, frame = 0, bool exists = true]) {
     //var child = new this.classType(this.game, x, y, key, frame);
     //GameObject child = reflectClass(classType).newInstance(const Symbol(""), [this.game, x, y, key, frame]).reflectee;
     T child = creator()
@@ -1177,4 +1177,8 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
 
   }
 
+  Rectangle getBounds([PIXI.Matrix matrix]) {
+    return new Rectangle().copyFrom(super.getBounds());
+  }
+  
 }

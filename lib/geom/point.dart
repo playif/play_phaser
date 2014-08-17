@@ -452,6 +452,13 @@ class Point extends PIXI.Point {
     return '[{Point (x=${this.x} y=${this.y})}]';
 
   }
+  
+  Point operator + (Point b) {
+    Point out = new Point();
+    out.x = x + b.x;
+    out.y = y + b.y;
+    return out;
+  }
 
   Point operator - (Point b) {
     Point out = new Point();

@@ -7,7 +7,9 @@ class AnimationManager {
   Animation currentAnim;
   bool updateIfVisible = true;
   bool isLoaded = false;
-  FrameData frameData;
+  FrameData _frameData;
+  
+  FrameData get frameData=> _frameData;
 
   Map<String, Animation> _anims = {};
   List _outputFrames = [];
@@ -79,11 +81,47 @@ class AnimationManager {
   }
 
 
-  loadFrameData(FrameData frameData, [int frame = 0]) {
+  loadFrameData(FrameData frameData, [frame = 0]) {
+    if (this.isLoaded)
+            {
+                //   We need to update the frameData that the animations are using
+                for (var anim in this._anims.keys)
+                {
+                    this._anims[anim].updateFrameData(frameData);
+                }
+            }
 
-    this.frameData = frameData;
-    this.frame = frame;
-    this.isLoaded = true;
+            this._frameData = frameData;
+
+            if ( frame == null)
+            {
+                this.frame = 0;
+            }
+            else
+            {
+                if ( frame is String)
+                {
+                    this.frameName = frame;
+                }
+                else
+                {
+                    this.frame = frame;
+                }
+            }
+
+            this.isLoaded = true;
+
+            if (this._frameData != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+//    this.frameData = frameData;
+//    this.frame = frame;
+//    this.isLoaded = true;
 
   }
 
@@ -228,7 +266,7 @@ class AnimationManager {
       this._anims[anim].destroy();
     }
     this._anims = {};
-    this.frameData = null;
+    this._frameData = null;
     this._frameIndex = 0;
     this.currentAnim = null;
     this.currentFrame = null;

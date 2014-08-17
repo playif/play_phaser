@@ -1,18 +1,12 @@
 part of Phaser;
 
 class TextStyle extends PIXI.TextStyle {
-  num shadowOffsetX=0;
-  num shadowOffsetY=0;
-  String shadowColor='rgba(0,0,0,0)';
-  num shadowBlur=0;
-  
-  TextStyle({String fill : 'black',
-            String font : 'bold 20pt Arial',
-            String align : 'left',
-            String stroke : 'black',
-            num strokeThickness : 0,
-            num tint : 0xFFFFFF
-            }):super() {
+  num shadowOffsetX = 0;
+  num shadowOffsetY = 0;
+  String shadowColor = 'rgba(0,0,0,0)';
+  num shadowBlur = 0;
+
+  TextStyle({String fill: 'black', String font: 'bold 20pt Arial', String align: 'left', String stroke: 'black', num strokeThickness: 0, num tint: 0xFFFFFF}) : super() {
     this.fill = fill;
     this.font = font;
     this.align = align;
@@ -67,7 +61,7 @@ class Text extends PIXI.Text implements GameObject {
   Events events;
 
   bool alive;
-  bool _dirty=false;
+  bool _dirty = false;
 
   CanvasPattern __tilePattern;
 
@@ -77,7 +71,7 @@ class Text extends PIXI.Text implements GameObject {
 //  }
 
   Point center;
-  Point anchor=new Point();
+  Point anchor = new Point();
 
 
 
@@ -145,7 +139,7 @@ class Text extends PIXI.Text implements GameObject {
   Rectangle _currentBounds;
 
   Text(this.game, [num x, num y, String text = '', TextStyle style])
-  : super(text, style) {
+      : super(text, style) {
 
     this.x = x;
     this.y = y;
@@ -253,6 +247,29 @@ class Text extends PIXI.Text implements GameObject {
 
   }
 
+  bool get inputEnabled {
+
+    return (this.input != null && this.input.enabled);
+
+  }
+
+  set inputEnabled(bool value) {
+
+    if (value) {
+      if (this.input == null) {
+        this.input = new InputHandler(this);
+        this.input.start();
+      } else if (this.input != null && !this.input.enabled) {
+        this.input.start();
+      }
+    } else {
+      if (this.input != null && this.input.enabled) {
+        this.input.stop();
+      }
+    }
+
+  }
+
 
   /**
    * Automatically called by World.preUpdate.
@@ -283,7 +300,7 @@ class Text extends PIXI.Text implements GameObject {
 
     //  Update any Children
     for (var i = 0,
-    len = this.children.length; i < len; i++) {
+        len = this.children.length; i < len; i++) {
       this.children[i].preUpdate();
     }
 
@@ -316,7 +333,7 @@ class Text extends PIXI.Text implements GameObject {
 
     //  Update any Children
     for (var i = 0,
-    len = this.children.length; i < len; i++) {
+        len = this.children.length; i < len; i++) {
       this.children[i].postUpdate();
     }
 
@@ -413,17 +430,17 @@ class Text extends PIXI.Text implements GameObject {
   setStyle(TextStyle style) {
 
     //style = style || {};
-    style.font = style.font;
-    style.fill = style.fill;
-    style.align = style.align;
-    style.stroke = style.stroke; //provide a default, see: https://github.com/GoodBoyDigital/pixi.js/issues/136
-    style.strokeThickness = style.strokeThickness;
-    style.wordWrap = style.wordWrap;
-    style.wordWrapWidth = style.wordWrapWidth;
-    style.shadowOffsetX = style.shadowOffsetX;
-    style.shadowOffsetY = style.shadowOffsetY;
-    style.shadowColor = style.shadowColor;
-    style.shadowBlur = style.shadowBlur;
+//    style.font = style.font;
+//    style.fill = style.fill;
+//    style.align = style.align;
+//    style.stroke = style.stroke; //provide a default, see: https://github.com/GoodBoyDigital/pixi.js/issues/136
+//    style.strokeThickness = style.strokeThickness;
+//    style.wordWrap = style.wordWrap;
+//    style.wordWrapWidth = style.wordWrapWidth;
+//    style.shadowOffsetX = style.shadowOffsetX;
+//    style.shadowOffsetY = style.shadowOffsetY;
+//    style.shadowColor = style.shadowColor;
+//    style.shadowBlur = style.shadowBlur;
 
     this.style = style;
     this._dirty = true;

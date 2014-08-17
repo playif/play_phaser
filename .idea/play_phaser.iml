@@ -66,6 +66,7 @@
       <excludeFolder url="file://$MODULE_DIR$/example/tilemaps/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/tweens/packages" />
       <excludeFolder url="file://$MODULE_DIR$/packages/play_phaser" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/play_pixi" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

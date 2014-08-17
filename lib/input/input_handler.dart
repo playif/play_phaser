@@ -39,7 +39,7 @@ class InputHandler {
   Point dragOffset;
 
   bool dragFromCenter;
-  bool pixelPerfect;
+//  bool pixelPerfect;
 
   InputHandler(this.sprite) {
 
@@ -295,16 +295,13 @@ class InputHandler {
    * @private
    */
 
-  addedToGroup(GameObject s, World w) {
-
+  addedToGroup(GameObject s, Group w) {
     if (this._dragPhase) {
       return;
     }
-
     if (this._wasEnabled && !this.enabled) {
       this.start();
     }
-
   }
 
   /**
@@ -401,23 +398,23 @@ class InputHandler {
   }
 
   /**
-   * Checks if the object this InputHandler is bound to is valid for consideration in the Pointer move event.
-   * This is called by Phaser.Pointer and shouldn't typically be called directly.
-   *
-   * @method Phaser.InputHandler#validForInput
-   * @protected
-   * @param {number} highestID - The highest ID currently processed by the Pointer.
-   * @param {number} highestRenderID - The highest Render Order ID currently processed by the Pointer.
-   * @return {boolean} True if the object this InputHandler is bound to should be considered as valid for input detection.
-   */
-
-  bool validForInput(int highestID, int highestRenderID) {
+  * Checks if the object this InputHandler is bound to is valid for consideration in the Pointer move event.
+  * This is called by Phaser.Pointer and shouldn't typically be called directly.
+  *
+  * @method Phaser.InputHandler#validForInput
+  * @protected
+  * @param {number} highestID - The highest ID currently processed by the Pointer.
+  * @param {number} highestRenderID - The highest Render Order ID currently processed by the Pointer.
+  * @param {boolean} [includePixelPerfect=true] - If this object has `pixelPerfectClick` or `pixelPerfectOver` set should it be considered as valid?
+  * @return {boolean} True if the object this InputHandler is bound to should be considered as valid for input detection.
+  */
+  bool validForInput(int highestID, int highestRenderID, [bool includePixelPerfect =true]) {
 
     if (this.sprite.scale.x == 0 || this.sprite.scale.y == 0 || this.priorityID < this.game.input.minPriorityID) {
       return false;
     }
 
-    if (this.pixelPerfectClick || this.pixelPerfectOver) {
+    if (!includePixelPerfect && (this.pixelPerfectClick || this.pixelPerfectOver)) {
       return true;
     }
 
@@ -682,19 +679,19 @@ class InputHandler {
    * @return {boolean} true if there is the alpha of the pixel is >= InputHandler.pixelPerfectAlpha
    */
 
-  bool checkPixel(int x, int y, [Pointer pointer]) {
-    if(this.sprite is! Sprite) return false;
-    Sprite sprite = this.sprite;
+  bool checkPixel(num x, num y, [Pointer pointer]) {
+    if(this.sprite is! PIXI.Sprite) return false;
+    PIXI.Sprite sprite = this.sprite as PIXI.Sprite;
     //  Grab a pixel from our image into the hitCanvas and then test it
-    if (sprite.texture.baseTexture.source) {
+    if (sprite.texture.baseTexture.source != null) {
       this.game.input.hitContext.clearRect(0, 0, 1, 1);
 
       if (x == null && y == null) {
         //  Use the pointer parameter
         this.game.input.getLocalPosition(this.sprite, pointer, this._tempPoint);
 
-        var x = this._tempPoint.x;
-        var y = this._tempPoint.y;
+        x = this._tempPoint.x;
+        y = this._tempPoint.y;
       }
 
       if (this.sprite.anchor.x != 0) {
@@ -1119,7 +1116,7 @@ class InputHandler {
     this.dragOffset = new Point();
     this.dragFromCenter = lockCenter;
 
-    this.pixelPerfect = pixelPerfect;
+    this.pixelPerfectClick = pixelPerfect;
     this.pixelPerfectAlpha = alphaThreshold;
 
     if (boundsRect != null) {

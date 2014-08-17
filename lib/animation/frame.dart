@@ -1,6 +1,6 @@
 part of Phaser;
 
-class Frame extends PIXI.Rectangle {
+class Frame extends Rectangle {
   int index;
   num x;
   num y;
@@ -9,9 +9,9 @@ class Frame extends PIXI.Rectangle {
   String name;
   String uuid;
 
-  num centerX ;
+  num centerX;
 
-  num centerY ;
+  num centerY;
 
   num distance;
 
@@ -58,17 +58,29 @@ class Frame extends PIXI.Rectangle {
 
   }
 
-  Rectangle getRect ([Rectangle out]) {
+  Rectangle getRect([Rectangle out]) {
 
-    if (out == null)
-    {
+    if (out == null) {
       out = new Rectangle(this.x, this.y, this.width, this.height);
-    }
-    else
-    {
+    } else {
       out.setTo(this.x, this.y, this.width, this.height);
     }
 
     return out;
+  }
+
+  Frame clone([Frame output]) {
+    if (output != null) {
+      output
+          ..index = this.index
+          ..x = x
+          ..y = y
+          ..width = width
+          ..height = height
+          ..name = name
+          ..uuid = uuid;
+      return output;
+    }
+    return new Frame(this.index, this.x, this.y, this.width, this.height, this.name, this.uuid);
   }
 }

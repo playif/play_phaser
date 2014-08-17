@@ -50,7 +50,7 @@ class Sprite extends PIXI.Sprite implements GameObject, AnimationInterface {
   List<num> _cache;
   Rectangle _crop;
 
-  int _frame;
+  Rectangle _frame;
   Rectangle _bounds;
 
   num lifespan;
@@ -228,7 +228,7 @@ class Sprite extends PIXI.Sprite implements GameObject, AnimationInterface {
 
   bool _outOfBoundsFired = false;
 
-  Sprite(this.game, [int x = 0, int y = 0, String key, num frame = 0])
+  Sprite(this.game, [int x = 0, int y = 0, key, frame = 0])
       : super(PIXI.TextureCache['__default']) {
 
     this.x = x;
@@ -484,52 +484,155 @@ class Sprite extends PIXI.Sprite implements GameObject, AnimationInterface {
    * @param {string|number} frame - If this Sprite is using part of a sprite sheet or texture atlas you can specify the exact frame to use by giving a string or numeric index.
    */
 
-  loadTexture(key, [frame = 0]) {
+  loadTexture(key, [frame = 0, bool stopAnimation = true]) {
 
     //frame = frame || 0;
+
+//    if (key is RenderTexture) {
+//      this.key = key.key;
+//      this.setTexture(key);
+//      return;
+//    } else if (key is BitmapData) {
+//      this.key = key;
+//      this.setTexture(key.texture);
+//      return;
+//    } else if (key is PIXI.Texture) {
+//      this.key = key;
+//      this.setTexture(key);
+//      return;
+//    } else {
+//      if (key == null) {
+//        this.key = '__default';
+//        this.setTexture(PIXI.TextureCache[this.key]);
+//        return;
+//      } else if (key is String && !this.game.cache.checkImageKey(key)) {
+//        this.key = '__missing';
+//        this.setTexture(PIXI.TextureCache[this.key]);
+//        return;
+//      }
+//
+//      if (this.game.cache.isSpriteSheet(key)) {
+//        this.key = key;
+//
+//        // var frameData = this.game.cache.getFrameData(key);
+//        this.animations.loadFrameData(this.game.cache.getFrameData(key));
+//
+//        if (frame is String) {
+//          this.frameName = frame;
+//        } else {
+//          this.frame = frame;
+//        }
+//      } else {
+//        this.key = key;
+//        this.setTexture(PIXI.TextureCache[key]);
+//        return;
+//      }
+//    }
+
+    //frame = frame || 0;
+
+    if (stopAnimation == true) {
+      this.animations.stop();
+    }
+
+    this.key = key;
+
+    var setFrame = true;
+    var smoothed = this.smoothed;
 
     if (key is RenderTexture) {
       this.key = key.key;
       this.setTexture(key);
-      return;
     } else if (key is BitmapData) {
-      this.key = key;
       this.setTexture(key.texture);
-      return;
     } else if (key is PIXI.Texture) {
-      this.key = key;
       this.setTexture(key);
-      return;
     } else {
       if (key == null) {
         this.key = '__default';
         this.setTexture(PIXI.TextureCache[this.key]);
-        return;
       } else if (key is String && !this.game.cache.checkImageKey(key)) {
+        window.console.warn("Texture with key '" + key + "' not found.");
         this.key = '__missing';
         this.setTexture(PIXI.TextureCache[this.key]);
-        return;
+      } else {
+        this.setTexture(new PIXI.Texture(PIXI.BaseTextureCache[key]));
+
+        setFrame = !this.animations.loadFrameData(this.game.cache.getFrameData(key), frame);
+      }
+    }
+
+    if (setFrame) {
+      this._frame = new Rectangle().copyFrom(this.texture.frame);
+    }
+
+    if (!smoothed) {
+      this.smoothed = false;
+    }
+
+  }
+
+  /**
+  * Sets the Texture frame the Sprite uses for rendering.
+  * This is primarily an internal method used by Sprite.loadTexture, although you may call it directly.
+  *
+  * @method Phaser.Sprite#setFrame
+  * @memberof Phaser.Sprite
+  * @param {Phaser.Frame} frame - The Frame to be used by the Sprite texture.
+  */
+  setFrame(Frame frame) {
+
+    this._frame = frame;
+
+    this.texture.frame.x = frame.x;
+    this.texture.frame.y = frame.y;
+    this.texture.frame.width = frame.width;
+    this.texture.frame.height = frame.height;
+
+    this.texture.crop.x = frame.x;
+    this.texture.crop.y = frame.y;
+    this.texture.crop.width = frame.width;
+    this.texture.crop.height = frame.height;
+
+    if (frame.trimmed) {
+      if (this.texture.trim != null) {
+        this.texture.trim.x = frame.spriteSourceSizeX;
+        this.texture.trim.y = frame.spriteSourceSizeY;
+        this.texture.trim.width = frame.sourceSizeW;
+        this.texture.trim.height = frame.sourceSizeH;
+      } else {
+        this.texture.trim = new Rectangle(frame.spriteSourceSizeX, frame.spriteSourceSizeY, frame.sourceSizeW, frame.sourceSizeH);
       }
 
-      if (this.game.cache.isSpriteSheet(key)) {
-        this.key = key;
+      this.texture.width = frame.sourceSizeW;
+      this.texture.height = frame.sourceSizeH;
+      this.texture.frame.width = frame.sourceSizeW;
+      this.texture.frame.height = frame.sourceSizeH;
+    }
 
-        // var frameData = this.game.cache.getFrameData(key);
-        this.animations.loadFrameData(this.game.cache.getFrameData(key));
-
-        if (frame is String) {
-          this.frameName = frame;
-        } else {
-          this.frame = frame;
-        }
-      } else {
-        this.key = key;
-        this.setTexture(PIXI.TextureCache[key]);
-        return;
+    if (this.cropRect != null) {
+      this.updateCrop();
+    } else {
+      if (this.game.renderType == WEBGL) {
+        PIXI.WebGLRenderer.updateTextureFrame(this.texture);
       }
     }
 
   }
+
+  /**
+  * Resets the Texture frame dimensions that the Sprite uses for rendering.
+  *
+  * @method Phaser.Sprite#resetFrame
+  * @memberof Phaser.Sprite
+  */
+  resetFrame() {
+    if (this._frame != null) {
+      this.setFrame(this._frame);
+    }
+  }
+
+
 
   /**
    * Crop allows you to crop the texture used to display this Sprite.
@@ -544,36 +647,65 @@ class Sprite extends PIXI.Sprite implements GameObject, AnimationInterface {
    * @param {Phaser.Rectangle} rect - The Rectangle to crop the Sprite to. Pass null or no parameters to clear a previously set crop rectangle.
    */
 
-  crop([Rectangle rect]) {
+  crop([Rectangle rect, bool copy = false]) {
 
-    if (rect == null) {
-      //  Clear any crop that may be set
-      //      if (this.texture.hasOwnProperty('sourceWidth')) {
-      //        this.texture.setFrame(new Rectangle(0, 0, this.texture.sourceWidth, this.texture.sourceHeight));
-      //      }
-      this.texture.setFrame(new Rectangle(0, 0, this.texture.sourceWidth, this.texture.sourceHeight));
+    //if (typeof copy == 'undefined') { copy = false; }
 
-    } else {
-      //  Do we need to clone the PIXI.Texture object?
-      if (this.texture is PIXI.Texture) {
-        //  Yup, let's rock it ...
-        PIXI.Texture local = new PIXI.Texture(this.texture.baseTexture);
-
-        //Utils.extend(true, local, this.texture);
-
-        local.sourceWidth = local.width;
-        local.sourceHeight = local.height;
-        local.frame = rect;
-        local.width = rect.width;
-        local.height = rect.height;
-
-        this.texture = local;
-
-        this.texture.updateFrame = true;
-        PIXI.Texture.frameUpdates.add(this.texture);
+    if (rect != null) {
+      if (copy && this.cropRect != null) {
+        this.cropRect.setTo(rect.x, rect.y, rect.width, rect.height);
+      } else if (copy && this.cropRect == null) {
+        this.cropRect = new Rectangle(rect.x, rect.y, rect.width, rect.height);
       } else {
-        this.texture.setFrame(rect);
+        this.cropRect = rect;
       }
+
+      this.updateCrop();
+    } else {
+      this._crop = null;
+      this.cropRect = null;
+
+      this.resetFrame();
+    }
+
+  }
+
+  /**
+  * If you have set a crop rectangle on this Sprite via Sprite.crop and since modified the Sprite.cropRect property (or the rectangle it references)
+  * then you need to update the crop frame by calling this method.
+  *
+  * @method Phaser.Sprite#updateCrop
+  * @memberof Phaser.Sprite
+  */
+  updateCrop() {
+
+    if (this.cropRect == null) {
+      return;
+    }
+
+    this.cropRect.clone(this._crop);
+    //this._crop = Rectangle.clone(this.cropRect, this._crop);
+    this._crop.x += this._frame.x;
+    this._crop.y += this._frame.y;
+
+    var cx = Math.max(this._frame.x, this._crop.x);
+    var cy = Math.max(this._frame.y, this._crop.y);
+    var cw = Math.min(this._frame.right, this._crop.right) - cx;
+    var ch = Math.min(this._frame.bottom, this._crop.bottom) - cy;
+
+    this.texture.crop.x = cx;
+    this.texture.crop.y = cy;
+    this.texture.crop.width = cw;
+    this.texture.crop.height = ch;
+
+    this.texture.frame.width = Math.min(cw, this.cropRect.width);
+    this.texture.frame.height = Math.min(ch, this.cropRect.height);
+
+    this.texture.width = this.texture.frame.width;
+    this.texture.height = this.texture.frame.height;
+
+    if (this.game.renderType == WEBGL) {
+      PIXI.WebGLRenderer.updateTextureFrame(this.texture);
     }
 
   }
@@ -654,7 +786,7 @@ class Sprite extends PIXI.Sprite implements GameObject, AnimationInterface {
 
     this._cache[8] = 1;
 
-    
+
     if (this.parent != null) {
       if (this.parent is Group) {
         (this.parent as Group).remove(this);
@@ -799,7 +931,7 @@ class Sprite extends PIXI.Sprite implements GameObject, AnimationInterface {
       @return {Phaser.Animation} A reference to playing Animation instance.
    **/
 
-  play(String name, [num frameRate=60, bool loop=true, bool killOnComplete=false]) {
+  play(String name, [num frameRate = 60, bool loop = true, bool killOnComplete = false]) {
     if (this.animations != null) {
       return this.animations.play(name, frameRate, loop, killOnComplete);
     }

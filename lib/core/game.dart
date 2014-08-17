@@ -143,7 +143,7 @@ class Game {
     /**
      * @property {number} renderType - The Renderer this game will use. Either Phaser.AUTO, Phaser.CANVAS or Phaser.WEBGL.
      */
-    this.renderType = AUTO;
+    this.renderType = renderer;
 
     /**
      * @property {Phaser.StateManager} state - The StateManager.

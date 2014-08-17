@@ -52,7 +52,7 @@ class GameObjectFactory {
    * @returns {Phaser.Sprite} the newly created sprite object.
    */
 
-  Sprite sprite(num x, num y, key, [frame, Group group]) {
+  Sprite sprite(num x, num y, [Object key, Object frame, Group group]) {
     if (group == null) {
       group = this.world;
     }
