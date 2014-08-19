@@ -8,7 +8,7 @@ class GameObjectCreator {
   GameObjectCreator(this.game) {
     world = game.world;
   }
-
+ 
   /**
    * Create a new `Image` object. An Image is a light-weight object you can use to display anything that doesn't need physics or animation.
    * It can still rotate, scale, crop and receive input events. This makes it perfect for logos, backgrounds, simple buttons and other non-Sprite graphics.
@@ -51,7 +51,7 @@ class GameObjectCreator {
    */
 
   Tween tween(obj) {
-    return new Tween(this.game, obj);
+    return new Tween(obj, this.game);
   }
 
   /**

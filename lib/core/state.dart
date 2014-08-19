@@ -13,7 +13,7 @@ class State {
   ScaleManager scale;
   Stage stage;
   Time time;
-  tween.TweenManager tweens;
+  TweenManager tweens;
   World world;
   Particles particles;
   Physics physics;

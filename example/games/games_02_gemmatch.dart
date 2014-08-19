@@ -36,6 +36,7 @@ class games_02_gemmatch extends State {
   Tween scoreTween;
   int combo = 1;
   int movingGemCount = 0;
+  int filledGemCount = 0;
 
   Graphics marker;
 
@@ -45,12 +46,12 @@ class games_02_gemmatch extends State {
   }
 
   create() {
-    tween.Tween.registerAccessor(Gem, new GameObjectAccessor());
-    tween.Tween.registerAccessor(Text, new GameObjectAccessor());
-    tween.Tween.registerAccessor(Point, new GameObjectAccessor());
-    tween.Tween.registerAccessor(PIXI.Point, new GameObjectAccessor());
-    tween.Tween.registerAccessor(GameObject, new GameObjectAccessor());
-    
+//    tween.Tween.registerAccessor(Gem, new GameObjectAccessor());
+//    tween.Tween.registerAccessor(Text, new GameObjectAccessor());
+//    tween.Tween.registerAccessor(Point, new GameObjectAccessor());
+//    tween.Tween.registerAccessor(PIXI.Point, new GameObjectAccessor());
+//    tween.Tween.registerAccessor(GameObject, new GameObjectAccessor());
+
     BOARD_COLS = Math.floor(game.world.width / GEM_SIZE_SPACED);
     BOARD_ROWS = Math.floor(game.world.height / GEM_SIZE_SPACED);
     // fill the screen with as many gems as possible
@@ -60,7 +61,7 @@ class games_02_gemmatch extends State {
     selectedGemStartPos = new Point();
 
     // used to disable input while gems are dropping down and respawning
-    allowInput = false;
+    allowInput = true;
 
     //  An explosion pool
     explosions = game.add.group();
@@ -82,6 +83,7 @@ class games_02_gemmatch extends State {
     marker.lineStyle(3, 0xff0000);
     marker.drawCircle(0, 0, 30);
     marker.visible = false;
+
 
     checkAllGems();
 
@@ -108,17 +110,19 @@ class games_02_gemmatch extends State {
 
       if (selectedGem != null) {
 
-        checkAndKillGemMatches(selectedGem, true);
+        //        checkAndKillGemMatches(selectedGem, true);
+        //
+        //        if (tempShiftedGem != null) {
+        //          checkAndKillGemMatches(tempShiftedGem, true);
+        //        }
+        checkAllGems();
 
-        if (tempShiftedGem != null) {
-          checkAndKillGemMatches(tempShiftedGem, true);
-        }
 
-        removeKilledGems();
+        //removeKilledGems();
 
-        var dropGemDuration = dropGems();
+        //var dropGemDuration = dropGems();
 
-        if (dropGemDuration != 0) allowInput = false;
+        //if (dropGemDuration != 0) allowInput = false;
 
         selectedGem = null;
         tempShiftedGem = null;
@@ -130,7 +134,7 @@ class games_02_gemmatch extends State {
     marker.visible = false;
     if (selectedGem != null) {
       marker.visible = true;
-      marker.position.setTo(selectedGem.x + GEM_SIZE/2, selectedGem.y + GEM_SIZE/2);
+      marker.position.setTo(selectedGem.x + GEM_SIZE / 2, selectedGem.y + GEM_SIZE / 2);
 
       var cursorGemPosX = getGemPos(game.input.mousePointer.x);
       var cursorGemPosY = getGemPos(game.input.mousePointer.y);
@@ -162,10 +166,10 @@ class games_02_gemmatch extends State {
         }
       }
     }
-    
 
-    //refillBoard();
-    //dropGems();
+
+    refillBoard();
+    dropGems();
   }
 
   // fill the screen with as many gems as possible
@@ -334,9 +338,9 @@ class games_02_gemmatch extends State {
       for (int j = 0; j < BOARD_ROWS; j++) {
         Gem gem = getGem(i, j);
         count += checkAndKillGemMatches(gem);
+        
       }
     }
-
 
     if (count > 0) {
 
@@ -359,11 +363,16 @@ class games_02_gemmatch extends State {
       removeKilledGems();
       dropGems();
 
+      //if (dropRowCountMax == 0) {
+      //  combo = 1;
+      //  allowInput = true;
+      //}
 
       // delay board refilling until all existing gems have dropped down
 
       //refillBoard();
     }
+
 
     return count;
   }
@@ -390,7 +399,7 @@ class games_02_gemmatch extends State {
     }
     return count;
   }
-int cc=0;
+  int cc = 0;
   makeAnimation(int x, int y, int total) {
     Sprite explosion = explosions.getFirstExists(false);
     if (explosion != null) {
@@ -407,12 +416,12 @@ int cc=0;
       text.position.set(x, y);
       Tween tween = game.add.tween(text).to({
         'y': y - 20
-      }, 400, Easing.Quintic.Out);
-      tween.onComplete.add((Tween t) {
+      }, 200, Easing.Quintic.Out);
+      tween.onComplete.add((Text t) {
         text.exists = false;
         text.visible = false;
         cc++;
-        print(cc);
+        //print(cc);
       });
       tween.start();
     }
@@ -440,7 +449,7 @@ int cc=0;
     return game.add.tween(gem).to({
       'x': newPosX * GEM_SIZE_SPACED,
       'y': newPosY * GEM_SIZE_SPACED
-    }, 100 * durationMultiplier, Easing.Bounce.Out, true);
+    }, 200 * durationMultiplier, Easing.Bounce.InOut, true);
   }
 
   // look for gems with empty space beneath them and move them down
@@ -454,13 +463,18 @@ int cc=0;
         if (gem == null) {
           dropRowCount++;
         } else if (dropRowCount > 0) {
-          
+
           setGemPos(gem, gem.posX, gem.posY + dropRowCount);
+          //movingGemCount=0;
           movingGemCount++;
+          //print(movingGemCount);
           Tween tween = tweenGemPos(gem, gem.posX, gem.posY, dropRowCount);
           tween.onComplete.add((tween) {
             movingGemCount--;
+            //print(movingGemCount);
             if (movingGemCount == 0) {
+              movingGemCount = 0;
+              
               refillBoard();
             }
           });
@@ -469,10 +483,7 @@ int cc=0;
       dropRowCountMax = Math.max(dropRowCount, dropRowCountMax);
     }
 
-    if (dropRowCountMax == 0) {
-      combo = 1;
-      allowInput = true;
-    }
+    //print("max $dropRowCountMax");
     return dropRowCountMax;
   }
 
@@ -490,11 +501,13 @@ int cc=0;
           gem.reset(i * GEM_SIZE_SPACED, -gemsMissingFromCol * GEM_SIZE_SPACED);
           randomizeGemColor(gem);
           setGemPos(gem, i, j);
-          movingGemCount++;
+          filledGemCount++;
           Tween tween = tweenGemPos(gem, gem.posX, gem.posY, gemsMissingFromCol * 2);
           tween.onComplete.add((tween) {
-            movingGemCount--;
-            if (movingGemCount == 0) {
+            filledGemCount--;
+            print(filledGemCount);
+            if (filledGemCount == 0) {
+              filledGemCount = 0;
               boardRefilled();
             }
           });
@@ -510,8 +523,10 @@ int cc=0;
   boardRefilled() {
     combo += 1;
 
-    checkAllGems();
-    refillBoard();
-    dropGems();
+    int count = checkAllGems();
+    print(count);
+    //checkAllGems();
+    //    refillBoard();
+    //dropGems();
   }
 }

@@ -5,7 +5,7 @@ import "package:play_pixi/pixi.dart" as PIXI;
 import "dart:html" as dom;
 
 //@MirrorsUsed(targets: const [Sprite, Text, Particle, Gem], symbols: const ["call"], override: '*')
-import "dart:mirrors";
+//import "dart:mirrors";
 
 //import "package:play_pixi/pixi.dart" as PIXI;
 

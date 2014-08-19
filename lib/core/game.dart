@@ -496,7 +496,7 @@ class Game {
     this.cache = new Cache(this);
     this.load = new Loader(this);
     this.time = new Time(this);
-    this.tweens = new TweenManager();
+    this.tweens = new TweenManager(this);
     this.input = new Input(this);
     this.sound = new SoundManager(this);
     this.physics = new Physics(this, this.physicsConfig);
@@ -662,7 +662,7 @@ class Game {
 
       this.state.update();
       this.stage.update();
-      this.tweens.update(this.time.physicsElapsed);
+      this.tweens.update();
       this.sound.update();
       this.input.update();
       this.physics.update();
@@ -775,7 +775,7 @@ class Game {
     if (!this._paused) {
       this._paused = true;
       this.time.gamePaused();
-      this.tweens.pause();
+      //this.tweens.pause();
       this.sound.setMute();
       this.onPause.dispatch();
     }
@@ -796,7 +796,7 @@ class Game {
     if (this._paused && !this._codePaused) {
       this._paused = false;
       this.time.gameResumed();
-      this.tweens.resume();
+      //this.tweens.resume();
       this.input.reset();
       this.sound.unsetMute();
       this.onResume.dispatch();

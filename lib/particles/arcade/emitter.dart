@@ -749,7 +749,7 @@ class Emitter extends Group {
    * @param {boolean} [yoyo=false] - If you've set a rate > 0 you can set if the ease will yoyo or not (i.e. ease back to its original values)
    */
 
-  setAlpha([num min = 1, num max = 1, num rate = 0, tween.TweenEquation ease, bool yoyo = false]) {
+  setAlpha([num min = 1, num max = 1, num rate = 0, EasingFunction ease, bool yoyo = false]) {
 
     if (min == null) {
       min = 1;
@@ -804,7 +804,7 @@ class Emitter extends Group {
    * @param {boolean} [yoyo=false] - If you've set a rate > 0 you can set if the ease will yoyo or not (i.e. ease back to its original values)
    */
 
-  setScale([num minX = 1, num maxX = 1, num minY = 1, num maxY = 1, num rate = 0, tween.TweenEquation ease, bool yoyo = false]) {
+  setScale([num minX = 1, num maxX = 1, num minY = 1, num maxY = 1, num rate = 0, EasingFunction ease, bool yoyo = false]) {
 
     if (minX == null) {
       minX = 1;

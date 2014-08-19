@@ -20,11 +20,8 @@ class tweens_01_chained_tweens extends State {
 //        X: 500
 //    }, 2000)
 
-    .yoyo(true)
+    //.yoyo(true)
     .repeat(1)
-    .setCallback((type, source) {
-      print(type);
-    }, Tween.COMPLETE)
     .start();
 
 //    game.add.tween(sprite.position)

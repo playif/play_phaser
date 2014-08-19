@@ -33,7 +33,7 @@ class GameObjectFactory {
    * @returns {Phaser.Sprite} the newly created sprite object.
    */
 
-  GameObject image(num x, num y, key, [ frame, Group group]) {
+  GameObject image(num x, num y, key, [frame, Group group]) {
     if (group == null) {
       group = this.world;
     }
@@ -68,10 +68,10 @@ class GameObjectFactory {
    */
 
   Tween tween(Object obj) {
-    Tween tween=new Tween(game,obj);
-    return tween;
+    //Tween tween = new Tween(obj, game);
+    //    return tween;
     //tween.to()
-    //return this.game.tweens.add(obj);
+    return this.game.tweens.create(obj);
   }
 
   /**
@@ -86,7 +86,7 @@ class GameObjectFactory {
    * @return {Phaser.Group} The newly created group.
    */
 
-  Group group([Group parent, String name, bool addToStage=false, bool enableBody=false, int physicsBodyType=0]) {
+  Group group([Group parent, String name, bool addToStage = false, bool enableBody = false, int physicsBodyType = 0]) {
     return new Group(this.game, parent, name, addToStage, enableBody, physicsBodyType);
   }
 
@@ -103,7 +103,7 @@ class GameObjectFactory {
    * @return {Phaser.Group} The newly created group.
    */
 
-  physicsGroup([int physicsBodyType=Physics.ARCADE, Group parent, String name='group', bool addToStage=false]) {
+  physicsGroup([int physicsBodyType = Physics.ARCADE, Group parent, String name = 'group', bool addToStage = false]) {
     return new Group(this.game, parent, name, addToStage, true, physicsBodyType);
   }
 
@@ -119,7 +119,7 @@ class GameObjectFactory {
    * @return {Phaser.Group} The newly created group.
    */
 
-  Group spriteBatch([Group parent, String name, bool addToStage=false]) {
+  Group spriteBatch([Group parent, String name, bool addToStage = false]) {
 
     if (parent == null) {
       parent = null;
@@ -146,7 +146,7 @@ class GameObjectFactory {
    * @return {Phaser.Sound} The newly created text object.
    */
 
-  Sound audio(String key, [double volume=1.0, bool loop=false, bool connect=true]) {
+  Sound audio(String key, [double volume = 1.0, bool loop = false, bool connect = true]) {
     return this.game.sound.add(key, volume, loop, connect);
   }
 
@@ -161,7 +161,7 @@ class GameObjectFactory {
    * @return {Phaser.Sound} The newly created text object.
    */
 
-  Sound sound(String key, [double volume=1.0, bool loop=false, bool connect=true]) {
+  Sound sound(String key, [double volume = 1.0, bool loop = false, bool connect = true]) {
     return this.game.sound.add(key, volume, loop, connect);
   }
 
@@ -179,7 +179,7 @@ class GameObjectFactory {
    * @return {Phaser.TileSprite} The newly created tileSprite object.
    */
 
-  TileSprite tileSprite(int x, int y, int width, int height, String key, [frame=0, Group group]) {
+  TileSprite tileSprite(int x, int y, int width, int height, String key, [frame = 0, Group group]) {
 
     if (group == null) {
       group = this.world;
@@ -248,7 +248,7 @@ class GameObjectFactory {
    * @return {Phaser.Graphics} The newly created graphics object.
    */
 
-  Graphics graphics([int x=0, int y=0, Group group]) {
+  Graphics graphics([int x = 0, int y = 0, Group group]) {
     if (group == null) {
       group = this.world;
     }
@@ -268,7 +268,7 @@ class GameObjectFactory {
    * @return {Phaser.Emitter} The newly created emitter object.
    */
 
-  Emitter emitter([int x, int y, int maxParticles=50]) {
+  Emitter emitter([int x, int y, int maxParticles = 50]) {
     return this.game.particles.add(new Emitter(this.game, x, y, maxParticles));
   }
 
@@ -293,8 +293,7 @@ class GameObjectFactory {
    * @return {Phaser.RetroFont} The newly created RetroFont texture which can be applied to an Image or Sprite.
    */
 
-  RetroFont retroFont(String font, int characterWidth, int characterHeight, String chars, int charsPerRow,
-                      [int xSpacing=0, int ySpacing=0, int xOffset=0, int yOffset=0]) {
+  RetroFont retroFont(String font, int characterWidth, int characterHeight, String chars, int charsPerRow, [int xSpacing = 0, int ySpacing = 0, int xOffset = 0, int yOffset = 0]) {
     return new RetroFont(this.game, font, characterWidth, characterHeight, chars, charsPerRow, xSpacing, ySpacing, xOffset, yOffset);
   }
 
@@ -337,7 +336,7 @@ class GameObjectFactory {
    * @return {Phaser.Tilemap} The newly created tilemap object.
    */
 
-  Tilemap tilemap([String key, int tileWidth=32, int tileHeight=32, int width=10, int height=10]) {
+  Tilemap tilemap([String key, int tileWidth = 32, int tileHeight = 32, int width = 10, int height = 10]) {
 
     return new Tilemap(this.game, key, tileWidth, tileHeight, width, height);
 
@@ -354,7 +353,7 @@ class GameObjectFactory {
    * @return {Phaser.RenderTexture} The newly created RenderTexture object.
    */
 
-  RenderTexture renderTexture([int width, int height, String key, bool addToCache=false]) {
+  RenderTexture renderTexture([int width, int height, String key, bool addToCache = false]) {
 
     if (key == null) {
       key = this.game.rnd.uuid();
@@ -382,7 +381,7 @@ class GameObjectFactory {
    * @return {Phaser.BitmapData} The newly created BitmapData object.
    */
 
-  BitmapData bitmapData([int width, int height, String key, bool addToCache=false]) {
+  BitmapData bitmapData([int width, int height, String key, bool addToCache = false]) {
 
     //if ( addToCache == 'undefined') { addToCache = false; }
     if (key == null) {

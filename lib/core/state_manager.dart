@@ -304,7 +304,7 @@ class StateManager {
       if (this.current != null) {
         this.onShutDownCallback();
 
-        this.game.tweens.killAll();//.removeAll();
+        this.game.tweens.removeAll();//.killAll();
 
         this.game.camera.reset();
 
