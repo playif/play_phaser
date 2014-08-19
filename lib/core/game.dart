@@ -460,7 +460,7 @@ class Game {
     //tween.Tween.registerAccessor(GameObject, fields);
     //tween.Tween.combinedAttributesLimit=1;
 
-    tween.Tween.registerAccessor(Sprite,new GameObjectAccessor());
+    //tween.Tween.registerAccessor(Sprite,new GameObjectAccessor());
     
     //tween.Tween.registerAccessor(Point, new PointAccessor());
     //tween.Tween.registerAccessor(Emitter, new PointAccessor());
@@ -468,8 +468,11 @@ class Game {
     //      window.setTimeout(this._onBoot, 20);
     //    }
     //    else {
-    document.removeEventListener('DOMContentLoaded', this._onBoot);
-    window.removeEventListener('load', this._onBoot);
+    //document.removeEventListener('DOMContentLoaded', this._onBoot);
+    //window.removeEventListener('load', this._onBoot);
+    window.onLoad.listen((e){
+      this._onBoot();
+    });
 
     this.onPause = new Signal();
     this.onResume = new Signal();

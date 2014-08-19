@@ -105,53 +105,53 @@ abstract class GameObject implements PIXI.DisplayInterface, CoreInterfact {
 //    }
 //  }
 //}
-
-class GameObjectAccessor implements tween.TweenAccessor<dynamic> {
-  num getValues(dynamic target, int tweenType, List<num> vals) {
-    if (target is Map) {
-      return target[tweenType];
-    }
-
-    switch (tweenType) {
-      case 0:
-        vals[0] = target.x;
-        break;
-      case 1:
-        vals[0] = target.y;
-        break;
-      case 2:
-        vals[0] = target.alpha;
-        break;
-
-    }
-
-    return 1;
-
-    //throw new Exception("No such field!");
-    //return null;
-  }
-
-  void setValues(dynamic target, int tweenType, List<num> vals) {
+//
+//class GameObjectAccessor implements tween.TweenAccessor<dynamic> {
+//  num getValues(dynamic target, int tweenType, List<num> vals) {
 //    if (target is Map) {
-//      target[tweenType] = newValue;
-//      return;
+//      return target[tweenType];
 //    }
-    switch (tweenType) {
-      case 0:
-        target.x = vals[0];
-        return;
-      case 1:
-        target.y = vals[0];
-        return;
-      case 2:
-        target.alpha = vals[0];
-        return;
-
-    }
-
-    throw new Exception("No such field!");
-  }
-}
+//
+//    switch (tweenType) {
+//      case 0:
+//        vals[0] = target.x;
+//        break;
+//      case 1:
+//        vals[0] = target.y;
+//        break;
+//      case 2:
+//        vals[0] = target.alpha;
+//        break;
+//
+//    }
+//
+//    return 1;
+//
+//    //throw new Exception("No such field!");
+//    //return null;
+//  }
+//
+//  void setValues(dynamic target, int tweenType, List<num> vals) {
+////    if (target is Map) {
+////      target[tweenType] = newValue;
+////      return;
+////    }
+//    switch (tweenType) {
+//      case 0:
+//        target.x = vals[0];
+//        return;
+//      case 1:
+//        target.y = vals[0];
+//        return;
+//      case 2:
+//        target.alpha = vals[0];
+//        return;
+//
+//    }
+//
+//    throw new Exception("No such field!");
+//  }
+//}
 
 //const int X = 0;
 //const int Y = 1;

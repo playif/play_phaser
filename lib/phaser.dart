@@ -10,9 +10,9 @@ import "dart:collection";
 //import "dart:web_gl";
 import "dart:math" as DMath;
 
-import "package:tweenengine/tweenengine.dart" as tween;
+import "tween/tweenengine.dart" as tween;
 
-@MirrorsUsed(targets: const [GameObject, Group, Sprite, Text, Particle], symbols: const ["call"], override: '*')
+@MirrorsUsed(targets: const [GameObject, Sprite, Text, Particle], symbols: const ["call"], override: '*')
 import "dart:mirrors";
 
 import "package:play_pixi/pixi.dart" as PIXI;

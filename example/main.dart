@@ -1,7 +1,6 @@
 library example;
-import "package:tweenengine/tweenengine.dart" as tween;
+
 import "package:play_phaser/phaser.dart";
-import "package:play_pixi/pixi.dart" as PIXI;
 import "dart:html" as dom;
 
 //@MirrorsUsed(targets: const [Sprite, Text, Particle, Gem], symbols: const ["call"], override: '*')

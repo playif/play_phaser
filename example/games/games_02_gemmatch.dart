@@ -505,7 +505,7 @@ class games_02_gemmatch extends State {
           Tween tween = tweenGemPos(gem, gem.posX, gem.posY, gemsMissingFromCol * 2);
           tween.onComplete.add((tween) {
             filledGemCount--;
-            print(filledGemCount);
+            //print(filledGemCount);
             if (filledGemCount == 0) {
               filledGemCount = 0;
               boardRefilled();
@@ -524,7 +524,7 @@ class games_02_gemmatch extends State {
     combo += 1;
 
     int count = checkAllGems();
-    print(count);
+    //print(count);
     //checkAllGems();
     //    refillBoard();
     //dropGems();
