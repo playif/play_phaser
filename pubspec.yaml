@@ -6,8 +6,7 @@ author: playif <playif@gmail.com>
 homepage: https://github.com/playif/play_phaser
 dependencies:
   browser: ">=0.10.0+2 <0.11.0"
-  play_pixi:
-    path: ../play_pixi
+  play_pixi: any
 
 
 transformers:
