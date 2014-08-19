@@ -1,5 +1,11 @@
 part of Phaser;
 
+Map<String, int> fields={
+  'x':0,
+  'y':1,
+};
+
+
 class Tween {
   static const int INFINITY = tween.Tween.INFINITY;
 
@@ -17,7 +23,7 @@ class Tween {
 
 
   final Game _game;
-  final dynamic _gameObject;
+  final Object _gameObject;
 
   TweenManager _tweenManager;
   tween.Timeline _timeline;
@@ -51,8 +57,8 @@ class Tween {
   Tween(this._game, this._gameObject) {
     this._tweenManager = _game.tweens;
     this._timeline = tween.Timeline.createSequence();
-    this._timeline.setCallback(new tween.TweenCallback()..onEvent = _callback);
-    this._timeline.setCallbackTriggers(START | END | COMPLETE | ANY);
+    this._timeline.callback = _callback;
+    this._timeline.callbackTriggers = (START | END | COMPLETE | ANY);
   }
 
   Tween to(Map<String, num> properties, [num duration = 1000, tween.TweenEquation ease = null, bool autoStart = false, num delay = 0, int repeat = 0, bool yoyo = false]) {
@@ -69,7 +75,9 @@ class Tween {
     Map<String, num> result = new Map<String, num>();
     for (var key in props) {
       //this._gameObject.getTweenableValues(key, _vals);
-      result[key] = tween.Tween.getRegisteredAccessor().getValue(this._gameObject, key);
+      List<num> returnValues=[0];
+      tween.Tween.getRegisteredAccessor(GameObject).getValues(this._gameObject, fields[key],returnValues);
+      result[key] = returnValues[0];
     }
     return result;
   }
@@ -83,23 +91,24 @@ class Tween {
     tween.Timeline tweens = tween.Timeline.createParallel();
 
     for (String prop in properties.keys) {
-      tween.Tween t = operation(_gameObject, prop, duration * 0.001);
+      tween.Tween t = operation(_gameObject, fields[prop], duration * 0.001);
       if (ease != null) {
         t.easing = ease;
       }
 
-      t.targetValue = properties[prop];
+      t.targetValues[0] = properties[prop];
 
       tweens.push(t);
     }
     tweens.delay = delay * 0.001;
 
     if (repeat != Tween.INFINITY) {
-      if (yoyo == true) {
-        tweens.repeatYoyo(repeat, 0);
-      } else {
-        tweens.repeat(repeat, 0);
-      }
+      tweens.repeat(repeat, 0, yoyo);
+      //      if (yoyo == true) {
+      //        tweens.repeatYoyo(repeat, 0);
+      //      } else {
+      //        tweens.repeat(repeat, 0);
+      //      }
     }
 
 
@@ -108,14 +117,10 @@ class Tween {
 
 
     if (repeat == Tween.INFINITY) {
-      if (yoyo == true) {
-        _timeline.repeatYoyo(repeat, 0);
-      } else {
-        _timeline.repeat(repeat, 0);
-      }
+      _timeline.repeat(repeat, 0,yoyo);
     }
     if (autoStart == true) {
-      new async.Timer(const Duration(),(){
+      new async.Timer(const Duration(), () {
         start();
       });
     }
@@ -123,16 +128,16 @@ class Tween {
     return this;
   }
 
-  Tween setCallback(tween.CallbackHandler func, [int event]) {
-    this._timeline.setCallback(new tween.TweenCallback()..onEvent = func);
+  Tween setCallback(tween.TweenCallbackHandler func, [int event]) {
+    this._timeline.callback=func;
     if (event != null) {
-      this._timeline.setCallbackTriggers(event);
+      this._timeline.callbackTriggers= event;
     }
     return this;
   }
 
   Tween setCallbackEvent(int event) {
-    this._timeline.setCallbackTriggers(event);
+    this._timeline.callbackTriggers = event;
     return this;
   }
 
@@ -157,11 +162,12 @@ class Tween {
   //  }
 
   Tween repeat([int count = 1, num delayBetweenLoop = 0]) {
-    if (_yoyo == false) {
-      _timeline.repeat(count, delayBetweenLoop * 0.001);
-    } else {
-      _timeline.repeatYoyo(count, delayBetweenLoop * 0.001);
-    }
+//    if (_yoyo == false) {
+//      _timeline.repeat(count, delayBetweenLoop * 0.001);
+//    } else {
+//      _timeline.repeatYoyo(count, delayBetweenLoop * 0.001);
+//    }
+    _timeline.repeat(count, delayBetweenLoop * 0.001, _yoyo);
     return this;
   }
 

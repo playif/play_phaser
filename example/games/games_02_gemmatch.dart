@@ -45,6 +45,12 @@ class games_02_gemmatch extends State {
   }
 
   create() {
+    tween.Tween.registerAccessor(Gem, new GameObjectAccessor());
+    tween.Tween.registerAccessor(Text, new GameObjectAccessor());
+    tween.Tween.registerAccessor(Point, new GameObjectAccessor());
+    tween.Tween.registerAccessor(PIXI.Point, new GameObjectAccessor());
+    tween.Tween.registerAccessor(GameObject, new GameObjectAccessor());
+    
     BOARD_COLS = Math.floor(game.world.width / GEM_SIZE_SPACED);
     BOARD_ROWS = Math.floor(game.world.height / GEM_SIZE_SPACED);
     // fill the screen with as many gems as possible
@@ -340,7 +346,7 @@ class games_02_gemmatch extends State {
 
       scoreText.scale.set(1);
       if (scoreTween != null) {
-        //game.tweens.remove(scoreTween);
+        game.tweens.remove(scoreTween);
       }
 
       scoreTween = game.add.tween(scoreText.scale).to({

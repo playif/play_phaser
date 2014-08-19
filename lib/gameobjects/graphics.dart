@@ -32,7 +32,9 @@ class Graphics extends PIXI.Graphics implements GameObject {
   }
 
   Point anchor = new Point();
-  Point center = new Point();
+  Point get center {
+    return new Point(x + width / 2, y + height / 2);
+  }
 
 
 

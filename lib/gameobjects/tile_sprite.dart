@@ -22,7 +22,9 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
   List<num> _cache;
   Rectangle _currentBounds;
 
-  Point center;
+  Point get center {
+    return new Point(x + width / 2, y + height / 2);
+  }
 
   var _frame;
   String _frameName;

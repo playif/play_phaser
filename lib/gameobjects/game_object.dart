@@ -1,18 +1,18 @@
 part of Phaser;
 
-abstract class CoreInterfact{
+abstract class CoreInterfact {
   Game game;
   Events events;
   bool visible;
 }
 
-abstract class SpriteInterface implements CoreInterfact{
+abstract class SpriteInterface implements CoreInterfact {
   PIXI.Texture texture;
   //CanvasPattern __tilePattern;
   setTexture(PIXI.Texture texture);
 }
 
-abstract class AnimationInterface implements SpriteInterface{
+abstract class AnimationInterface implements SpriteInterface {
   CanvasPattern __tilePattern;
 }
 
@@ -29,9 +29,9 @@ abstract class GameObject implements PIXI.DisplayInterface, CoreInterfact {
   Point scale;
   List<num> _cache;
 
-  
 
-  
+
+
   bool _dirty;
 
 
@@ -107,43 +107,48 @@ abstract class GameObject implements PIXI.DisplayInterface, CoreInterfact {
 //}
 
 class GameObjectAccessor implements tween.TweenAccessor<dynamic> {
-  num getValue(dynamic target,String tweenType) {
-    if(target is Map){
+  num getValues(dynamic target, int tweenType, List<num> vals) {
+    if (target is Map) {
       return target[tweenType];
     }
 
     switch (tweenType) {
-      case 'x':
-        return target.x;
-      case 'y':
-        return target.y;
-      case 'alpha':
-        return target.alpha;        
-        
+      case 0:
+        vals[0] = target.x;
+        break;
+      case 1:
+        vals[0] = target.y;
+        break;
+      case 2:
+        vals[0] = target.alpha;
+        break;
+
     }
-    
-    throw new Exception("No such field!");
+
+    return 1;
+
+    //throw new Exception("No such field!");
     //return null;
   }
 
-  void setValue(dynamic target,String tweenType, num newValue) {
-    if(target is Map){
-      target[tweenType]=newValue;
-      return;
-    }
+  void setValues(dynamic target, int tweenType, List<num> vals) {
+//    if (target is Map) {
+//      target[tweenType] = newValue;
+//      return;
+//    }
     switch (tweenType) {
-      case 'x':
-        target.x = newValue;
+      case 0:
+        target.x = vals[0];
         return;
-      case 'y':
-        target.y = newValue;
+      case 1:
+        target.y = vals[0];
         return;
-      case 'alpha':
-        target.alpha = newValue;
-        return;        
-        
+      case 2:
+        target.alpha = vals[0];
+        return;
+
     }
-    
+
     throw new Exception("No such field!");
   }
 }
@@ -229,5 +234,4 @@ class GameObjectAccessor implements tween.TweenAccessor<dynamic> {
 //    }
 //  }
 //}
-
 

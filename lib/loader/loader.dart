@@ -602,8 +602,11 @@ class Loader {
    * @return {Phaser.Loader} This Loader instance.
    */
 
-  Loader spritesheet(String key, String url, int frameWidth, int frameHeight, [int frameMax = -1, int margin = 0, int spacing = 0]) {
-
+  Loader spritesheet(String key, String url, int frameWidth, [int frameHeight, int frameMax = -1, int margin = 0, int spacing = 0]) {
+    if (frameHeight == null){
+      frameHeight = frameWidth;
+    }
+    
 //    if (frameMax == null) {
 //      frameMax = -1;
 //    }

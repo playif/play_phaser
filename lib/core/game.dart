@@ -460,7 +460,8 @@ class Game {
     //tween.Tween.registerAccessor(GameObject, fields);
     //tween.Tween.combinedAttributesLimit=1;
 
-    tween.Tween.registerAccessor(new GameObjectAccessor());
+    tween.Tween.registerAccessor(Sprite,new GameObjectAccessor());
+    
     //tween.Tween.registerAccessor(Point, new PointAccessor());
     //tween.Tween.registerAccessor(Emitter, new PointAccessor());
     //    if (!document.body) {

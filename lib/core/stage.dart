@@ -28,7 +28,10 @@ class Stage extends PIXI.Stage implements GameObject {
   int z;
   bool fixedToCamera;
   Point anchor;
-  Point center;
+  Point get center {
+    return new Point(x + width / 2, y + height / 2);
+  }
+
   Point world=new Point();
   Rectangle _currentBounds;
   int type;

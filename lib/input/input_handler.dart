@@ -8,7 +8,7 @@ class InputHandler {
   bool useHandCursor;
   bool _setHandCursor;
   bool isDragged;
-  bool allowHorizontalDrag;
+  bool allowHorizontalDrag; 
   bool allowVerticalDrag;
   bool bringToTop;
   Point snapOffset;

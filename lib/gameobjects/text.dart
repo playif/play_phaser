@@ -70,10 +70,12 @@ class Text extends PIXI.Text implements GameObject {
 //    setText(value);
 //  }
 
-  Point center;
+
   Point anchor = new Point();
 
-
+  Point get center {
+    return new Point(x + width / 2, y + height / 2);
+  }
 
   num get x {
     return this.position.x;

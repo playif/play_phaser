@@ -47,7 +47,10 @@ class BitmapText extends PIXI.BitmapText implements GameObject  {
 
 
   Point anchor;
-  Point center;
+  
+  Point get center {
+    return new Point(x + width / 2, y + height / 2);
+  }
 
   List<GameObject> children = [];
   GameObject get parent => super.parent;

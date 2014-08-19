@@ -45,8 +45,17 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
 
   Events events;
 
-  Point anchor;
-  Point center;
+  Point _anchor = new Point();
+  Point get anchor => _anchor;
+  set anchor(Point value) {
+    //TODO
+  }
+
+
+  Point get center {
+    return new Point(x + width / 2, y + height / 2);
+  }
+
 
   Point get world {
     if (this.parent == null || this.parent == this) {
