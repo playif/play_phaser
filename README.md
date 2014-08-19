@@ -14,7 +14,7 @@ pub: [https://pub.dartlang.org/packages/play_phaser]
 
 
 
-What are done:
+Features:
 =========
 * animation (100%)
 * core (100%): camera, singal, game, group, plugin, stage, state, world, etc.
