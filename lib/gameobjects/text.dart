@@ -77,21 +77,21 @@ class Text extends PIXI.Text implements GameObject {
     return new Point(x + width / 2, y + height / 2);
   }
 
-  num get x {
-    return this.position.x;
-  }
-
-  set x(num value) {
-    this.position.x = value;
-  }
-
-  num get y {
-    return this.position.y;
-  }
-
-  set y(num value) {
-    this.position.y = value;
-  }
+//  num get x {
+//    return this.position.x;
+//  }
+//
+//  set x(num value) {
+//    this.position.x = value;
+//  }
+//
+//  num get y {
+//    return this.position.y;
+//  }
+//
+//  set y(num value) {
+//    this.position.y = value;
+//  }
 
   /**
    * A small internal cache:
@@ -491,6 +491,7 @@ class Text extends PIXI.Text implements GameObject {
     this.canvas.height = lineHeight * lines.length;
 
     if (game.device.cocoonJS) {
+      print("hi");
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
@@ -512,7 +513,7 @@ class Text extends PIXI.Text implements GameObject {
 
     //draw lines line by line
     for (int i = 0; i < lines.length; i++) {
-      var linePosition = new PIXI.Point(this.style.strokeThickness / 2, this.style.strokeThickness / 2 + i * lineHeight);
+      Point linePosition = new Point(this.style.strokeThickness / 2, this.style.strokeThickness / 2 + i * lineHeight);
 
       if (this.style.align == 'right') {
         linePosition.x += maxLineWidth - lineWidths[i];

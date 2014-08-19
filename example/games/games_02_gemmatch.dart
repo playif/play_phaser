@@ -41,11 +41,13 @@ class games_02_gemmatch extends State {
   Graphics marker;
 
   preload() {
+    //print("preload");
     game.load.spritesheet("GEMS", "assets/sprites/diamonds32x5.png", GEM_SIZE, GEM_SIZE);
     game.load.spritesheet('kaboom', 'assets/games/invaders/explode.png', 128, 128);
   }
 
   create() {
+    //print("create");
 //    tween.Tween.registerAccessor(Gem, new GameObjectAccessor());
 //    tween.Tween.registerAccessor(Text, new GameObjectAccessor());
 //    tween.Tween.registerAccessor(Point, new GameObjectAccessor());
@@ -99,7 +101,7 @@ class games_02_gemmatch extends State {
   }
 
   update() {
-
+    //print("update");
     // when the mouse is released with a gem selected
     // 1) check for matches
     // 2) remove matched gems

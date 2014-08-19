@@ -1,7 +1,7 @@
 part of Phaser;
 
 class Canvas {
-  static CanvasElement create([num width=256, num height=256, String id, bool noCocoon=false]) {
+  static CanvasElement create([num width = 256, num height = 256, String id, bool noCocoon = false]) {
     CanvasElement canvas = new CanvasElement();
     if (id != null) {
       canvas.dataset['id'] = id;
@@ -19,7 +19,8 @@ class Canvas {
     //point = point || new Phaser.Point();
 
     var box = element.getBoundingClientRect();
-    int clientTop = element.clientTop;/// || document.body.clientTop || 0;
+    int clientTop = element.clientTop;
+    /// || document.body.clientTop || 0;
     int clientLeft = element.clientLeft;// || document.body.clientLeft || 0;
 
     //  Without this check Chrome is now throwing console warnings about strict vs. quirks :(
@@ -36,11 +37,16 @@ class Canvas {
     scrollLeft = window.pageXOffset;// || document.body.scrollLeft || element.scrollLeft || 0;
     //}
 
-    point.x = box.left + scrollLeft - clientLeft;
-    point.y = box.top + scrollTop - clientTop;
+    try {
+      point.x = box.left + scrollLeft - clientLeft;
+      point.y = box.top + scrollTop - clientTop;
+    } catch (e) {
+      point.x = scrollLeft - clientLeft;
+      point.y = scrollTop - clientTop;
+    }
 
-    //point.x =  scrollLeft - clientLeft;
-    //point.y =  scrollTop - clientTop;
+
+
 
 
     return point;
@@ -51,31 +57,31 @@ class Canvas {
     return canvas.width / canvas.height;
   }
 
-  static CanvasElement setBackgroundColor(CanvasElement canvas, [String color='rgb(0,0,0)']) {
+  static CanvasElement setBackgroundColor(CanvasElement canvas, [String color = 'rgb(0,0,0)']) {
     canvas.style.backgroundColor = color;
     return canvas;
   }
 
-//  CanvasElement setTouchAction (CanvasElement canvas, [String value='none']) {
-//    //value = value || 'none';
-//    //canvas.style.msTouchAction = value;
-//    //canvas.style['ms-touch-action'] = value;
-//    canvas.style['touch-action'] = value;
-//    return canvas;
-//  }
+  //  CanvasElement setTouchAction (CanvasElement canvas, [String value='none']) {
+  //    //value = value || 'none';
+  //    //canvas.style.msTouchAction = value;
+  //    //canvas.style['ms-touch-action'] = value;
+  //    canvas.style['touch-action'] = value;
+  //    return canvas;
+  //  }
 
-  static CanvasElement setUserSelect(CanvasElement canvas, [String value='none']) {
+  static CanvasElement setUserSelect(CanvasElement canvas, [String value = 'none']) {
     canvas.style.userSelect = value;
-//    canvas.style['-webkit-user-select'] = value;
-//    canvas.style['-khtml-user-select'] = value;
-//    canvas.style['-moz-user-select'] = value;
-//    canvas.style['-ms-user-select'] = value;
-//    canvas.style['user-select'] = value;
+    //    canvas.style['-webkit-user-select'] = value;
+    //    canvas.style['-khtml-user-select'] = value;
+    //    canvas.style['-moz-user-select'] = value;
+    //    canvas.style['-ms-user-select'] = value;
+    //    canvas.style['user-select'] = value;
     canvas.style.tapHighlightColor = 'rgba(0, 0, 0, 0)';
     return canvas;
   }
 
-  static CanvasElement addToDOM(CanvasElement canvas, [parent, bool overflowHidden=true]) {
+  static CanvasElement addToDOM(CanvasElement canvas, [parent, bool overflowHidden = true]) {
 
     HtmlElement target;
 
@@ -83,8 +89,7 @@ class Canvas {
       if (parent is String) {
         // hopefully an element ID
         target = document.getElementById(parent);
-      }
-      else if (parent is HtmlElement) {
+      } else if (parent is HtmlElement) {
         // quick test for a HTMLelement
         target = parent;
       }
@@ -110,24 +115,24 @@ class Canvas {
     return context;
   }
 
-  static CanvasRenderingContext2D setSmoothingEnabled(CanvasRenderingContext2D context, [bool value=false]) {
+  static CanvasRenderingContext2D setSmoothingEnabled(CanvasRenderingContext2D context, [bool value = false]) {
     context.imageSmoothingEnabled = value;
-//    context['imageSmoothingEnabled'] = value;
-//    context['mozImageSmoothingEnabled'] = value;
-//    context['oImageSmoothingEnabled'] = value;
-//    context['webkitImageSmoothingEnabled'] = value;
-//    context['msImageSmoothingEnabled'] = value;
+    //    context['imageSmoothingEnabled'] = value;
+    //    context['mozImageSmoothingEnabled'] = value;
+    //    context['oImageSmoothingEnabled'] = value;
+    //    context['webkitImageSmoothingEnabled'] = value;
+    //    context['msImageSmoothingEnabled'] = value;
     return context;
   }
 
   static CanvasElement setImageRenderingCrisp(CanvasElement canvas) {
     canvas.style.imageRendering = 'optimize-contrast';
-//    canvas.style['image-rendering'] = 'optimizeSpeed';
-//    canvas.style['image-rendering'] = 'crisp-edges';
-//    canvas.style['image-rendering'] = '-moz-crisp-edges';
-//    canvas.style['image-rendering'] = '-webkit-optimize-contrast';
-//    canvas.style['image-rendering'] = 'optimize-contrast';
-//    canvas.style.msInterpolationMode = 'nearest-neighbor';
+    //    canvas.style['image-rendering'] = 'optimizeSpeed';
+    //    canvas.style['image-rendering'] = 'crisp-edges';
+    //    canvas.style['image-rendering'] = '-moz-crisp-edges';
+    //    canvas.style['image-rendering'] = '-webkit-optimize-contrast';
+    //    canvas.style['image-rendering'] = 'optimize-contrast';
+    //    canvas.style.msInterpolationMode = 'nearest-neighbor';
     return canvas;
   }
 

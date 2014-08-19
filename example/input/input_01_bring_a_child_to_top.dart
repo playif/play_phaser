@@ -32,7 +32,7 @@ class input_01_bring_a_child_to_top extends State {
   }
 
   render() {
-    game.debug.inputInfo(32, 32);
+    //game.debug.inputInfo(32, 32);
   }
 
 }

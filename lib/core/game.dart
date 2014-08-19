@@ -9,7 +9,7 @@ class Game {
   bool transparent;
   bool antialias;
   Map physicsConfig;
-
+ 
   //TODO
   int id;
 
@@ -81,7 +81,7 @@ class Game {
     }
   }
 
-  Game([int width = 800, int height = 600, int renderer = AUTO, this.parent = '', State state, this.transparent, this.antialias, this.physicsConfig]) {
+  Game([num width = 800, num height = 600, int renderer = AUTO, this.parent = '', State state, this.transparent, this.antialias, this.physicsConfig]) {
 
     GAMES.add(this);
     /**
@@ -109,13 +109,13 @@ class Game {
      * @property {number} width - The Game width (in pixels).
      * @default
      */
-    this.width = 800;
+    this.width = width.toInt();
 
     /**
      * @property {number} height - The Game height (in pixels).
      * @default
      */
-    this.height = 600;
+    this.height = height.toInt();
 
     /**
      * @property {boolean} transparent - Use a transparent canvas background or not.
@@ -378,12 +378,10 @@ class Game {
     //      document.addEventListener('DOMContentLoaded', this._onBoot, false);
     //      window.addEventListener('load', this._onBoot, false);
     //    }
-    document.addEventListener('DOMContentLoaded', this._onBoot, false);
-    window.addEventListener('load', this._onBoot, false);
+    //document.addEventListener('DOMContentLoaded', this._onBoot, false);
+    //window.addEventListener('load', this._onBoot, false);
     //return this;
-    window.onLoad.listen((e) {
-      this._onBoot(0);
-    });
+    window.onLoad.listen(this._onBoot);
 
   }
 
@@ -452,6 +450,7 @@ class Game {
    */
 
   boot() {
+    print("boot start");
     if (this.isBooted) {
       return;
     }
@@ -470,9 +469,9 @@ class Game {
     //    else {
     //document.removeEventListener('DOMContentLoaded', this._onBoot);
     //window.removeEventListener('load', this._onBoot);
-    window.onLoad.listen((e){
-      this._onBoot();
-    });
+//    window.onLoad.listen((e){
+//      this._onBoot();
+//    });
 
     this.onPause = new Signal();
     this.onResume = new Signal();
@@ -531,7 +530,7 @@ class Game {
 
     this.raf.start();
     //    }
-
+    print("boot end");
   }
 
   /**

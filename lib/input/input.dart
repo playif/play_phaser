@@ -558,7 +558,7 @@ class Input {
    */
 
   update() {
-
+    //print("interactive");
     this.keyboard.update();
 
     if (this.pollRate > 0 && this._pollCounter < this.pollRate) {
@@ -678,7 +678,7 @@ class Input {
    */
 
   Pointer startPointer(event) {
-
+    //print("startPointer");
     if (this.maxPointers < 10 && this.totalActivePointers == this.maxPointers) {
       return null;
     }
@@ -710,15 +710,15 @@ class Input {
 
   Pointer updatePointer(event) {
 
-    if (this.pointers[1].active && this.pointers[1].identifier == event.identifier) {
+    if (this.pointers[1].active && this.pointers[1].identifier == event['identifier']) {
       return this.pointers[1].move(event);
     }
-    else if (this.pointers[2].active && this.pointers[2].identifier == event.identifier) {
+    else if (this.pointers[2].active && this.pointers[2].identifier == event['identifier']) {
       return this.pointers[2].move(event);
     }
     else {
       for (var i = 3; i <= 10; i++) {
-        if (this.pointers[i] != null && this.pointers[i].active && this.pointers[i].identifier == event.identifier) {
+        if (this.pointers[i] != null && this.pointers[i].active && this.pointers[i].identifier == event['identifier']) {
           return this.pointers[i].move(event);
         }
       }
@@ -737,15 +737,15 @@ class Input {
 
   Pointer stopPointer(event) {
 
-    if (this.pointers[1].active && this.pointers[1].identifier == event.identifier) {
+    if (this.pointers[1].active && this.pointers[1].identifier == event['identifier']) {
       return this.pointers[1].stop(event);
     }
-    else if (this.pointers[2].active && this.pointers[2].identifier == event.identifier) {
+    else if (this.pointers[2].active && this.pointers[2].identifier == event['identifier']) {
       return this.pointers[2].stop(event);
     }
     else {
       for (var i = 3; i <= 10; i++) {
-        if (this.pointers[i] != null && this.pointers[i].active && this.pointers[i].identifier == event.identifier) {
+        if (this.pointers[i] != null && this.pointers[i].active && this.pointers[i].identifier == event['identifier']) {
           return this.pointers[i].stop(event);
         }
       }

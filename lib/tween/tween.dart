@@ -545,9 +545,13 @@ class Tween {
     Map _cache = {
     };
 
+    InstanceMirror instance=reflect(this._object);
+    
     for (String prop in properties.keys) {
-      _cache[prop] = this._object[prop];
-      this._object[prop] = properties[prop];
+      Symbol field= new Symbol(prop);
+      _cache[prop] = instance.getField(new Symbol(prop)).reflectee; //this._object[prop];
+      //this._object[prop] = properties[prop];
+      instance.setField(field, properties[prop]);
     }
 
     return this.to(_cache, duration, ease, autoStart, delay, repeat, yoyo);
@@ -576,6 +580,8 @@ class Tween {
 
     this._startTime = this.game.time.now + this._delayTime;
 
+    InstanceMirror instance=reflect(this._object);
+    
     for (var property in this._valuesEnd.keys) {
       // check if an Array was provided as property value
       if (this._valuesEnd[property] is List) {
@@ -587,9 +593,9 @@ class Tween {
         [this._object[property]].addAll(this._valuesEnd[property]);
       }
       
-      InstanceMirror instance=reflect(this._object);
+      Symbol field= new Symbol(property);
 
-      this._valuesStart[property] = instance.getField(new Symbol(property)).reflectee; //this._object [property];
+      this._valuesStart[property] = instance.getField(field).reflectee; //this._object [property];
 
       if (this._valuesStart[property] is! List) {
         this._valuesStart[property] *= 1.0;

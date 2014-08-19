@@ -12,7 +12,7 @@ class QuadTree {
   int maxObjects = 10;
   int maxLevels = 4;
   int level = 0;
-
+ 
   Bounds bounds = null;
 
   List<dynamic> objects = new List<dynamic>();
@@ -21,8 +21,8 @@ class QuadTree {
 
   List _empty = [];
 
-  QuadTree(int x, int y, int width, int height, [int maxObjects, int maxLevels, int level]) {
-    reset(x, y, width, height, maxObjects, maxLevels, level);
+  QuadTree(num x, num y, num width, num height, [int maxObjects, int maxLevels, int level]) {
+    reset(x.toInt(), y.toInt(), width.toInt(), height.toInt(), maxObjects, maxLevels, level);
   }
 
   reset(int x, int y, int width, int height, [int maxObjects, int maxLevels, int level]) {

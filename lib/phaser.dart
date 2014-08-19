@@ -9,10 +9,14 @@ import "dart:convert";
 import "dart:collection";
 //import "dart:web_gl";
 import "dart:math" as DMath;
+import "dart:js";
 
 import "tween/tweenengine.dart" as tween;
 
-@MirrorsUsed(targets: const [GameObject, Sprite, Text, Particle], symbols: const ["call"], override: '*')
+//@MirrorsUsed(targets: 'Phaser',  override: '*')
+//@MirrorsUsed(targets: const [GameObject, Sprite, Text, Particle], symbols: const ["*",'x','y'],  override: '*')
+//@MirrorsUsed(symbols: "*", override: '*')
+@MirrorsUsed(targets:const ['PIXI', 'Phaser'], override: '*')
 import "dart:mirrors";
 
 import "package:play_pixi/pixi.dart" as PIXI;

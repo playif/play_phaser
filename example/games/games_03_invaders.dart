@@ -35,12 +35,12 @@ class games_03_invaders extends State {
 
   create() {
 
-    game.world.setBounds(0, 0, 800, 600);
+    game.world.setBounds(0, 0, 800, 480);
 
     game.physics.startSystem(Physics.ARCADE);
 
     //  The scrolling starfield background
-    starfield = game.add.tileSprite(0, 0, 800, 600, 'starfield');
+    starfield = game.add.tileSprite(0, 0, 800, 480, 'starfield');
 
     //  Our bullet group
     bullets = game.add.group();
@@ -65,7 +65,7 @@ class games_03_invaders extends State {
     });
 
     //  The hero!
-    player = game.add.sprite(400, 500, 'ship');
+    player = game.add.sprite(400, 460, 'ship');
     player.anchor.setTo(0.5, 0.5);
     player.checkWorldBounds=true;
 
@@ -151,7 +151,7 @@ class games_03_invaders extends State {
     invader.animations.add('kaboom');
   }
 
-  descend(Tween tween) {
+  descend(Group group) {
     aliens.y += 10;
   }
 
@@ -171,7 +171,7 @@ class games_03_invaders extends State {
     }
 
     //  Firing?
-    if (fireButton.isDown && player.alive) {
+    if (/*fireButton.isDown &&*/ player.alive) {
       fireBullet();
     }
 

@@ -419,28 +419,37 @@ class ScaleManager {
     this._check = null;
 
     var _this = this;
+    
+    //window.on
 
-    window.addEventListener('orientationchange', (event) {
-      return _this.checkOrientation(event);
-    }, false);
+    window.addEventListener('orientationchange', _this.checkOrientation);
 
-    window.addEventListener('resize', (event) {
-      return _this.checkResize(event);
-    }, false);
-
-    if (!this.game.device.cocoonJS) {
-      document.addEventListener('webkitfullscreenchange', (event) {
-        return _this.fullScreenChange(event);
-      }, false);
-
-      document.addEventListener('mozfullscreenchange', (event) {
-        return _this.fullScreenChange(event);
-      }, false);
-
-      document.addEventListener('fullscreenchange', (event) {
-        return _this.fullScreenChange(event);
-      }, false);
+    try{
+      window.onResize.listen(_this.checkResize);
+    }catch (e){
+      
     }
+
+    
+//    window.addEventListener('resize', (event) {
+//      return _this.checkResize(event);
+//    }, false);
+
+//    if (!this.game.device.cocoonJS) {
+//      document.addEventListener('webkitfullscreenchange', (event) {
+//        return _this.fullScreenChange(event);
+//      }, false);
+//
+//      document.addEventListener('mozfullscreenchange', (event) {
+//        return _this.fullScreenChange(event);
+//      }, false);
+//
+//      document.addEventListener('fullscreenchange', (event) {
+//        return _this.fullScreenChange(event);
+//      }, false);
+//    }
+    
+    document.onFullscreenChange.listen(_this.fullScreenChange);
 
 
   }
@@ -658,12 +667,12 @@ class ScaleManager {
 
     this.event = event;
 
-    if (window.outerWidth > window.outerHeight) {
-      this.orientation = 90;
-    }
-    else {
-      this.orientation = 0;
-    }
+//    if (window.outerWidth > window.outerHeight) {
+//      this.orientation = 90;
+//    }
+//    else {
+//      this.orientation = 0;
+//    }
 
     if (this.isLandscape) {
       this.enterLandscape.dispatch([this.orientation, true, false]);

@@ -17,13 +17,24 @@ class Touch {
   bool preventDefault;
 
   TouchEvent event;
-  Function _onTouchStart;
-  Function _onTouchMove;
-  Function _onTouchEnd;
-  Function _onTouchEnter;
-  Function _onTouchLeave;
-  Function _onTouchCancel;
-  Function _documentTouchMove;
+  //  Function _onTouchStart;
+  //  Function _onTouchMove;
+  //  Function _onTouchEnd;
+  //  Function _onTouchEnter;
+  //  Function _onTouchLeave;
+  //  Function _onTouchCancel;
+  //  Function _documentTouchMove;
+
+  async.StreamSubscription onTouchStartListener;
+  async.StreamSubscription onTouchMoveListener;
+  async.StreamSubscription onTouchEndListener;
+  async.StreamSubscription onTouchCancelListener;
+
+
+  async.StreamSubscription onTouchEnterListener;
+  async.StreamSubscription onTouchLeaveListener;
+
+
 
   Touch(this.game) {
 
@@ -84,43 +95,43 @@ class Touch {
      * @property {function} _onTouchStart - Internal event handler reference.
      * @private
      */
-    this._onTouchStart = null;
+    //this._onTouchStart = null;
 
     /**
      * @property {function} _onTouchMove - Internal event handler reference.
      * @private
      */
-    this._onTouchMove = null;
+    //this._onTouchMove = null;
 
     /**
      * @property {function} _onTouchEnd - Internal event handler reference.
      * @private
      */
-    this._onTouchEnd = null;
+    //this._onTouchEnd = null;
 
     /**
      * @property {function} _onTouchEnter - Internal event handler reference.
      * @private
      */
-    this._onTouchEnter = null;
+    //this._onTouchEnter = null;
 
     /**
      * @property {function} _onTouchLeave - Internal event handler reference.
      * @private
      */
-    this._onTouchLeave = null;
+    //this._onTouchLeave = null;
 
     /**
      * @property {function} _onTouchCancel - Internal event handler reference.
      * @private
      */
-    this._onTouchCancel = null;
+    //this._onTouchCancel = null;
 
     /**
      * @property {function} _onTouchMove - Internal event handler reference.
      * @private
      */
-    this._onTouchMove = null;
+    //this._onTouchMove = null;
 
   }
 
@@ -132,47 +143,60 @@ class Touch {
 
   start() {
 
-    if (this._onTouchStart != null) {
-      //  Avoid setting multiple listeners
-      return;
-    }
+    //    if (this._onTouchStart != null) {
+    //      //  Avoid setting multiple listeners
+    //      return;
+    //    }
 
     var _this = this;
 
     if (this.game.device.touch) {
-      this._onTouchStart = (event) {
-        return _this.onTouchStart(event);
-      };
+      print("touch enabled!");
+      //      this._onTouchStart = (event) {
+      //        return _this.onTouchStart(event);
+      //      };
+      //
+      //      this._onTouchMove = (event) {
+      //        return _this.onTouchMove(event);
+      //      };
+      //
+      //      this._onTouchEnd = (event) {
+      //        return _this.onTouchEnd(event);
+      //      };
+      //
+      //      this._onTouchEnter = (event) {
+      //        return _this.onTouchEnter(event);
+      //      };
+      //
+      //      this._onTouchLeave = (event) {
+      //        return _this.onTouchLeave(event);
+      //      };
+      //
+      //      this._onTouchCancel = (event) {
+      //        return _this.onTouchCancel(event);
+      //      };
+      //this.game.canvas.addEventListener('touchstart', this.onTouchStart, true);
+      //document.onTouchStart.listen(this.onTouchStart);
+      //      onTouchStartListener = this.game.canvas.onTouchStart.listen(this.onTouchStart);
+      //      onTouchMoveListener = this.game.canvas.onTouchMove.listen(this.onTouchMove);
+      //      onTouchEndListener = this.game.canvas.onTouchEnd.listen(this.onTouchEnd);
+      //      onTouchCancelListener = this.game.canvas.onTouchCancel.listen(this.onTouchCancel);
+      //
+      //      if (!this.game.device.cocoonJS) {
+      //        onTouchEnterListener = this.game.canvas.onTouchEnter.listen(this.onTouchEnter);
+      //        onTouchLeaveListener = this.game.canvas.onTouchLeave.listen(this.onTouchLeave);
+      //      }
 
-      this._onTouchMove = (event) {
-        return _this.onTouchMove(event);
-      };
-
-      this._onTouchEnd = (event) {
-        return _this.onTouchEnd(event);
-      };
-
-      this._onTouchEnter = (event) {
-        return _this.onTouchEnter(event);
-      };
-
-      this._onTouchLeave = (event) {
-        return _this.onTouchLeave(event);
-      };
-
-      this._onTouchCancel = (event) {
-        return _this.onTouchCancel(event);
-      };
-
-      this.game.canvas.addEventListener('touchstart', this._onTouchStart, false);
-      this.game.canvas.addEventListener('touchmove', this._onTouchMove, false);
-      this.game.canvas.addEventListener('touchend', this._onTouchEnd, false);
-      this.game.canvas.addEventListener('touchcancel', this._onTouchCancel, false);
+      onTouchStartListener = document.onTouchStart.listen(this.onTouchStart);
+      onTouchMoveListener = document.onTouchMove.listen(this.onTouchMove);
+      onTouchEndListener = document.onTouchEnd.listen(this.onTouchEnd);
+      onTouchCancelListener = document.onTouchCancel.listen(this.onTouchCancel);
 
       if (!this.game.device.cocoonJS) {
-        this.game.canvas.addEventListener('touchenter', this._onTouchEnter, false);
-        this.game.canvas.addEventListener('touchleave', this._onTouchLeave, false);
+        onTouchEnterListener = this.game.canvas.onTouchEnter.listen(this.onTouchEnter);
+        onTouchLeaveListener = this.game.canvas.onTouchLeave.listen(this.onTouchLeave);
       }
+
     }
 
   }
@@ -184,11 +208,11 @@ class Touch {
 
   consumeDocumentTouches() {
 
-    this._documentTouchMove = (event) {
-      event.preventDefault();
-    };
+    //    this._documentTouchMove = (event) {
+    //      event.preventDefault();
+    //    };
 
-    document.addEventListener('touchmove', this._documentTouchMove, false);
+    //document.onTouchMove.listen(this._documentTouchMove);
   }
 
   /**
@@ -198,6 +222,8 @@ class Touch {
    */
 
   onTouchStart(TouchEvent event) {
+
+    //print("TouchStart!");
 
     this.event = event;
 
@@ -212,12 +238,16 @@ class Touch {
     if (this.preventDefault) {
       event.preventDefault();
     }
+    JsObject ev = new JsObject.fromBrowserObject(event);
 
+
+    JsArray changedTouches = new JsArray.from(ev["changedTouches"]);
     //  event.targetTouches = list of all touches on the TARGET ELEMENT (i.e. game dom element)
     //  event.touches = list of all touches on the ENTIRE DOCUMENT, not just the target element
     //  event.changedTouches = the touches that CHANGED in this event, not the total number of them
-    for (var i = 0; i < event.changedTouches.length; i++) {
-      this.game.input.startPointer(event.changedTouches[i]);
+    for (var i = 0; i < changedTouches.length; i++) {
+      JsObject touchEvent = new JsObject.fromBrowserObject(changedTouches[i]);
+      this.game.input.startPointer(touchEvent);
     }
 
   }
@@ -245,10 +275,16 @@ class Touch {
       event.preventDefault();
     }
 
+    JsObject ev = new JsObject.fromBrowserObject(event);
+
+
+    JsArray changedTouches = new JsArray.from(ev["changedTouches"]);
+
     //  Touch cancel - touches that were disrupted (perhaps by moving into a plugin or browser chrome)
     //  http://www.w3.org/TR/touch-events/#dfn-touchcancel
-    for (var i = 0; i < event.changedTouches.length; i++) {
-      this.game.input.stopPointer(event.changedTouches[i]);
+    for (var i = 0; i < changedTouches.length; i++) {
+      JsObject touchEvent = new JsObject.fromBrowserObject(changedTouches[i]);
+      this.game.input.stopPointer(touchEvent);
     }
 
   }
@@ -277,6 +313,8 @@ class Touch {
     }
 
   }
+
+
 
   /**
    * For touch enter and leave its a list of the touch points that have entered or left the target.
@@ -317,8 +355,14 @@ class Touch {
       event.preventDefault();
     }
 
-    for (var i = 0; i < event.changedTouches.length; i++) {
-      this.game.input.updatePointer(event.changedTouches[i]);
+    JsObject ev = new JsObject.fromBrowserObject(event);
+
+
+    JsArray changedTouches = new JsArray.from(ev["changedTouches"]);
+
+    for (var i = 0; i < changedTouches.length; i++) {
+      JsObject touchEvent = new JsObject.fromBrowserObject(changedTouches[i]);
+      this.game.input.updatePointer(touchEvent);
     }
 
   }
@@ -341,11 +385,18 @@ class Touch {
       event.preventDefault();
     }
 
+    JsObject ev = new JsObject.fromBrowserObject(event);
+
+
+    JsArray changedTouches = new JsArray.from(ev["changedTouches"]);
+
+
     //  For touch end its a list of the touch points that have been removed from the surface
     //  https://developer.mozilla.org/en-US/docs/DOM/TouchList
     //  event.changedTouches = the touches that CHANGED in this event, not the total number of them
-    for (var i = 0; i < event.changedTouches.length; i++) {
-      this.game.input.stopPointer(event.changedTouches[i]);
+    for (var i = 0; i < changedTouches.length; i++) {
+      JsObject touchEvent = new JsObject.fromBrowserObject(changedTouches[i]);
+      this.game.input.stopPointer(touchEvent);
     }
 
   }
@@ -358,12 +409,32 @@ class Touch {
   stop() {
 
     if (this.game.device.touch) {
-      this.game.canvas.removeEventListener('touchstart', this._onTouchStart);
-      this.game.canvas.removeEventListener('touchmove', this._onTouchMove);
-      this.game.canvas.removeEventListener('touchend', this._onTouchEnd);
-      this.game.canvas.removeEventListener('touchenter', this._onTouchEnter);
-      this.game.canvas.removeEventListener('touchleave', this._onTouchLeave);
-      this.game.canvas.removeEventListener('touchcancel', this._onTouchCancel);
+      print("touch stopped");
+      //      this.game.canvas.onTouchStart(onData)// .listen(this._onTouchStart);
+      //      this.game.canvas.onTouchMove.listen(this._onTouchMove);
+      //      this.game.canvas.onTouchEnd.listen(this._onTouchEnd);
+      //      this.game.canvas.onTouchCancel.listen(this._onTouchCancel);
+      //
+      //      if (!this.game.device.cocoonJS) {
+      //        this.game.canvas.onTouchEnter.listen(this._onTouchEnter);
+      //        this.game.canvas.onTouchLeave.listen(this._onTouchLeave);
+      //      }
+
+      onTouchStartListener.cancel();
+      onTouchMoveListener.cancel();
+      onTouchEndListener.cancel();
+      onTouchCancelListener.cancel();
+
+      if (!this.game.device.cocoonJS) {
+        onTouchEnterListener.cancel();
+        onTouchLeaveListener.cancel();
+      }
+      //      this.game.canvas.removeEventListener('touchstart', this._onTouchStart);
+      //      this.game.canvas.removeEventListener('touchmove', this._onTouchMove);
+      //      this.game.canvas.removeEventListener('touchend', this._onTouchEnd);
+      //      this.game.canvas.removeEventListener('touchenter', this._onTouchEnter);
+      //      this.game.canvas.removeEventListener('touchleave', this._onTouchLeave);
+      //      this.game.canvas.removeEventListener('touchcancel', this._onTouchCancel);
     }
 
   }

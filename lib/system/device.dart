@@ -439,26 +439,21 @@ class Device {
 
     if (ua.contains("Android")) {
       this.android = true;
-    }
-    else if (ua.contains("CrOS")) {
+    } else if (ua.contains("CrOS")) {
       this.chromeOS = true;
-    }
-    else if (ua.contains("iPad") || ua.contains("iPod") || ua.contains("iPhone")) {
-        this.iOS = true;
-      }
-      else if (ua.contains("Linux")) {
-          this.linux = true;
-        }
-        else if (ua.contains("Map OS")) {
-            this.macOS = true;
-          }
-          else if (ua.contains("Windows")) {
-              this.windows = true;
+    } else if (ua.contains("iPad") || ua.contains("iPod") || ua.contains("iPhone")) {
+      this.iOS = true;
+    } else if (ua.contains("Linux")) {
+      this.linux = true;
+    } else if (ua.contains("Map OS")) {
+      this.macOS = true;
+    } else if (ua.contains("Windows")) {
+      this.windows = true;
 
-              if (ua.contains("Windows Phone")) {
-                this.windowsPhone = true;
-              }
-            }
+      if (ua.contains("Windows Phone")) {
+        this.windowsPhone = true;
+      }
+    }
 
     if (this.windows || this.macOS || (this.linux && this.silk == false)) {
       this.desktop = true;
@@ -493,41 +488,45 @@ class Device {
     //canvas = new CanvasElement();
     //var context3D = canvas.getContext3d();
     this.webGL = true;//(context3D != null);
-//  ( function () { try { var canvas = document.createElement( 'canvas' ); return !! window.WebGLRenderingContext && ( canvas.getContext( 'webgl' ) || canvas.getContext( 'experimental-webgl' ) ); } catch( e ) { return false; } } )();
-//
-//  if (this.webGL === null || this.webGL === false)
-//  {
-//    this.webGL = false;
-//  }
-//  else
-//  {
-//    this.webGL = true;
-//  }
+    //  ( function () { try { var canvas = document.createElement( 'canvas' ); return !! window.WebGLRenderingContext && ( canvas.getContext( 'webgl' ) || canvas.getContext( 'experimental-webgl' ) ); } catch( e ) { return false; } } )();
+    //
+    //  if (this.webGL === null || this.webGL === false)
+    //  {
+    //    this.webGL = false;
+    //  }
+    //  else
+    //  {
+    //    this.webGL = true;
+    //  }
 
 
     //TODO
     //this.worker = !!window['Worker'];
-//document.documentElement.onTouchStart.listen()
-    if ((window.navigator.maxTouchPoints != null && window.navigator.maxTouchPoints > 1)) {
+    //document.documentElement.onTouchStart.listen()
+
+    print("check Touch");
+    print(window.navigator.maxTouchPoints);
+    this.touch = true;
+    if ((window.navigator.maxTouchPoints != null && window.navigator.maxTouchPoints >= 1)) {
       this.touch = true;
     }
 
-//TODO
-//
-//if (window.navigator.msPointerEnabled || window.navigator.pointerEnabled)
-//{
-//this.mspointer = true;
-//}
+    //TODO
+    //
+    //if (window.navigator.msPointerEnabled || window.navigator.pointerEnabled)
+    //{
+    //this.mspointer = true;
+    //}
 
     this.pointerLock = true;
-//this.pointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
+    //this.pointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
-//TODO
-//this.quirksMode = (document.compatMode == 'CSS1Compat') ? false : true;
+    //TODO
+    //this.quirksMode = (document.compatMode == 'CSS1Compat') ? false : true;
 
 
     this.getUserMedia = true;
-//!!(window.navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+    //!!(window.navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
 
   }
 
@@ -538,64 +537,64 @@ class Device {
    */
 
   checkFullScreenSupport() {
-//
-//  var fs = [
-//      'requestFullscreen',
-//      'requestFullScreen',
-//      'webkitRequestFullscreen',
-//      'webkitRequestFullScreen',
-//      'msRequestFullscreen',
-//      'msRequestFullScreen',
-//      'mozRequestFullScreen',
-//      'mozRequestFullscreen'
-//  ];
+    //
+    //  var fs = [
+    //      'requestFullscreen',
+    //      'requestFullScreen',
+    //      'webkitRequestFullscreen',
+    //      'webkitRequestFullScreen',
+    //      'msRequestFullscreen',
+    //      'msRequestFullScreen',
+    //      'mozRequestFullScreen',
+    //      'mozRequestFullscreen'
+    //  ];
 
-//  for (var i = 0; i < fs.length; i++)
-//  {
-//    if (this.game.canvas[fs[i]])
-//      // if (document[fs[i]])
-//    {
-//      this.fullscreen = true;
-//      this.requestFullscreen = fs[i];
-//      break;
-//    }
-//  }
+    //  for (var i = 0; i < fs.length; i++)
+    //  {
+    //    if (this.game.canvas[fs[i]])
+    //      // if (document[fs[i]])
+    //    {
+    //      this.fullscreen = true;
+    //      this.requestFullscreen = fs[i];
+    //      break;
+    //    }
+    //  }
 
     this.fullscreen = true;
-//this.requestFullscreen=
+    //this.requestFullscreen=
 
-//  var cfs = [
-//      'cancelFullScreen',
-//      'exitFullscreen',
-//      'webkitCancelFullScreen',
-//      'webkitExitFullscreen',
-//      'msCancelFullScreen',
-//      'msExitFullscreen',
-//      'mozCancelFullScreen',
-//      'mozExitFullscreen'
-//  ];
-//
-//  if (this.fullscreen)
-//  {
-//    for (var i = 0; i < cfs.length; i++)
-//    {
-//      if (document[cfs[i]])
-//      {
-//        this.cancelFullscreen = cfs[i];
-//        break;
-//      }
-//    }
-//  }
+    //  var cfs = [
+    //      'cancelFullScreen',
+    //      'exitFullscreen',
+    //      'webkitCancelFullScreen',
+    //      'webkitExitFullscreen',
+    //      'msCancelFullScreen',
+    //      'msExitFullscreen',
+    //      'mozCancelFullScreen',
+    //      'mozExitFullscreen'
+    //  ];
+    //
+    //  if (this.fullscreen)
+    //  {
+    //    for (var i = 0; i < cfs.length; i++)
+    //    {
+    //      if (document[cfs[i]])
+    //      {
+    //        this.cancelFullscreen = cfs[i];
+    //        break;
+    //      }
+    //    }
+    //  }
 
     this.cancelFullscreen = 'cancelFullScreen';
 
     //TODO
     this.fullscreenKeyboard = true;
     //  Keyboard Input?
-//  if (window['Element'] && Element['ALLOW_KEYBOARD_INPUT'])
-//  {
-//    this.fullscreenKeyboard = true;
-//  }
+    //  if (window['Element'] && Element['ALLOW_KEYBOARD_INPUT'])
+    //  {
+    //    this.fullscreenKeyboard = true;
+    //  }
 
   }
 
@@ -611,61 +610,51 @@ class Device {
 
     if (ua.contains("Arora")) {
       this.arora = true;
-    }
-    else if (ua.contains("Chrome")) {
+    } else if (ua.contains("Chrome")) {
       this.chrome = true;
+    } else if (ua.contains("Epiphany")) {
+      this.epiphany = true;
+    } else if (ua.contains("Firefox")) {
+      this.firefox = true;
+    } else if (ua.contains("AppleWebKit") && this.iOS) {
+      this.mobileSafari = true;
+    } else if (ua.contains("MSIE")) {
+      this.ie = true;
+      this.ieVersion = 10;
+      //this.ieVersion = parseInt(RegExp.$1, 10);
+    } else if (ua.contains("Midori")) {
+      this.midori = true;
+    } else if (ua.contains("Opera")) {
+      this.opera = true;
+    } else if (ua.contains("Safari")) {
+      this.safari = true;
+    } else if (ua.contains("Trident")) {
+      this.ie = true;
+      this.trident = true;
+      this.tridentVersion = 10;
+      this.ieVersion = 10;
     }
-    else if (ua.contains("Epiphany")) {
-        this.epiphany = true;
-      }
-      else if (ua.contains("Firefox")) {
-          this.firefox = true;
-        }
-        else if (ua.contains("AppleWebKit") && this.iOS) {
-            this.mobileSafari = true;
-          }
-          else if (ua.contains("MSIE")) {
-              this.ie = true;
-              this.ieVersion = 10;
-//this.ieVersion = parseInt(RegExp.$1, 10);
-            }
-            else if (ua.contains("Midori")) {
-                this.midori = true;
-              }
-              else if (ua.contains("Opera")) {
-                  this.opera = true;
-                }
-                else if (ua.contains("Safari")) {
-                    this.safari = true;
-                  }
-                  else if (ua.contains("Trident")) {
-                      this.ie = true;
-                      this.trident = true;
-                      this.tridentVersion = 10;
-                      this.ieVersion = 10;
-                    }
 
-//Silk gets its own if clause because its ua also contains 'Safari'
+    //Silk gets its own if clause because its ua also contains 'Safari'
     if (ua.contains("Silk")) {
       this.silk = true;
     }
 
-//TODO
+    //TODO
     //// WebApp mode in iOS
-//if (window.navigator['standalone'])
-//{
-//this.webApp = true;
-//}
-//
-//if (window.navigator['isCocoonJS'])
-//{
-//this.cocoonJS = true;
-//}
+    //if (window.navigator['standalone'])
+    //{
+    //this.webApp = true;
+    //}
+    //
+    if (window.navigator.appVersion.contains("CocoonJS")) {
+      this.cocoonJS = true;
+    }
 
-//if (window.ejecta != null)
-//{
-//this.ejecta = true;
-//}
+    //if (window.ejecta != null)
+    //{
+    //this.ejecta = true;
+    //}
 
     if (ua.contains("Crosswalk")) {
       this.crosswalk = true;
@@ -684,8 +673,8 @@ class Device {
     this.audioData = audio != null;
     this.webAudio = true;
     //window.c
-//    this.webAudio = true;
-//  this.webAudio = !!(window['webkitAudioContext'] || window['AudioContext']);
+    //    this.webAudio = true;
+    //  this.webAudio = !!(window['webkitAudioContext'] || window['AudioContext']);
     //var audioElement = document.createElement('audio');
     //var result = false;
 
@@ -707,38 +696,38 @@ class Device {
     if (audio.canPlayType('audio/webm') != "") {
       this.webm = true;
     }
-//  try {
-//    if (result = !!audioElement.canPlayType) {
-//
-//      if (audioElement.canPlayType('audio/ogg; codecs="vorbis"').replace(/^no$/, '')) {
-//        this.ogg = true;
-//      }
-//
-//      if (audioElement.canPlayType('audio/ogg; codecs="opus"').replace(/^no$/, '')) {
-//        this.opus = true;
-//      }
-//
-//      if (audioElement.canPlayType('audio/mpeg;').replace(/^no$/, '')) {
-//        this.mp3 = true;
-//      }
-//
-//      // Mimetypes accepted:
-//      //   developer.mozilla.org/En/Media_formats_supported_by_the_audio_and_video_elements
-//      //   bit.ly/iphoneoscodecs
-//      if (audioElement.canPlayType('audio/wav; codecs="1"').replace(/^no$/, '')) {
-//        this.wav = true;
-//      }
-//
-//      if (audioElement.canPlayType('audio/x-m4a;') || audioElement.canPlayType('audio/aac;').replace(/^no$/, '')) {
-//        this.m4a = true;
-//      }
-//
-//      if (audioElement.canPlayType('audio/webm; codecs="vorbis"').replace(/^no$/, '')) {
-//        this.webm = true;
-//      }
-//    }
-//  } catch (e) {
-//  }
+    //  try {
+    //    if (result = !!audioElement.canPlayType) {
+    //
+    //      if (audioElement.canPlayType('audio/ogg; codecs="vorbis"').replace(/^no$/, '')) {
+    //        this.ogg = true;
+    //      }
+    //
+    //      if (audioElement.canPlayType('audio/ogg; codecs="opus"').replace(/^no$/, '')) {
+    //        this.opus = true;
+    //      }
+    //
+    //      if (audioElement.canPlayType('audio/mpeg;').replace(/^no$/, '')) {
+    //        this.mp3 = true;
+    //      }
+    //
+    //      // Mimetypes accepted:
+    //      //   developer.mozilla.org/En/Media_formats_supported_by_the_audio_and_video_elements
+    //      //   bit.ly/iphoneoscodecs
+    //      if (audioElement.canPlayType('audio/wav; codecs="1"').replace(/^no$/, '')) {
+    //        this.wav = true;
+    //      }
+    //
+    //      if (audioElement.canPlayType('audio/x-m4a;') || audioElement.canPlayType('audio/aac;').replace(/^no$/, '')) {
+    //        this.m4a = true;
+    //      }
+    //
+    //      if (audioElement.canPlayType('audio/webm; codecs="vorbis"').replace(/^no$/, '')) {
+    //        this.webm = true;
+    //      }
+    //    }
+    //  } catch (e) {
+    //  }
 
   }
 
@@ -751,7 +740,7 @@ class Device {
   _checkDevice() {
 
     this.pixelRatio = window.devicePixelRatio;
-    this.iPhone = window. navigator.userAgent.toLowerCase().indexOf('iphone') != -1;
+    this.iPhone = window.navigator.userAgent.toLowerCase().indexOf('iphone') != -1;
     this.iPhone4 = (this.pixelRatio == 2.0 && this.iPhone);
     this.iPad = window.navigator.userAgent.toLowerCase().indexOf('ipad') != -1;
 
@@ -774,12 +763,12 @@ class Device {
     this.support32bit = true;
     //= (typeof ArrayBuffer !== "undefined" && typeof Uint8ClampedArray !== "undefined" && typeof Int32Array !== "undefined" && this.littleEndian !== null && this._checkIsUint8ClampedImageData());
 
-//window.navigator..vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
+    //window.navigator..vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
 
-//if (navigator.vibrate)
-//{
+    //if (navigator.vibrate)
+    //{
     this.vibration = true;
-//}
+    //}
 
   }
 
@@ -792,26 +781,26 @@ class Device {
 
   _checkIsLittleEndian() {
     return false;
-//    var a = new Uint8List(4);// ArrayBuffer(4);
-//    //var b = new Uint8List.fromList(a);
-//    var b = new Uint32List.fromList(a);
-//
-//    b[0] = 0xa1;
-//    b[1] = 0xb2;
-//    b[2] = 0xc3;
-//    b[3] = 0xd4;
-//
-//    if (b[0] == 0xd4c3b2a1) {
-//      return true;
-//    }
-//
-//    if (b[0] == 0xa1b2c3d4) {
-//      return false;
-//    }
-//    else {
-//      //  Could not determine endianness
-//      return null;
-//    }
+    //    var a = new Uint8List(4);// ArrayBuffer(4);
+    //    //var b = new Uint8List.fromList(a);
+    //    var b = new Uint32List.fromList(a);
+    //
+    //    b[0] = 0xa1;
+    //    b[1] = 0xb2;
+    //    b[2] = 0xc3;
+    //    b[3] = 0xd4;
+    //
+    //    if (b[0] == 0xd4c3b2a1) {
+    //      return true;
+    //    }
+    //
+    //    if (b[0] == 0xa1b2c3d4) {
+    //      return false;
+    //    }
+    //    else {
+    //      //  Could not determine endianness
+    //      return null;
+    //    }
 
   }
 
@@ -824,22 +813,22 @@ class Device {
 
   _checkIsUint8ClampedImageData() {
     return true;
-//  if (typeof Uint8ClampedArray === "undefined")
-//  {
-//    return false;
-//  }
-//
-//  CanvasElement elem = new CanvasElement();
-//  CanvasRenderingContext2D ctx = elem.getContext('2d');
-//
-//  if (!ctx)
-//  {
-//    return false;
-//  }
-//
-//  var image = ctx.createImageData(1, 1);
-//
-//  return image.data instanceof Uint8ClampedArray;
+    //  if (typeof Uint8ClampedArray === "undefined")
+    //  {
+    //    return false;
+    //  }
+    //
+    //  CanvasElement elem = new CanvasElement();
+    //  CanvasRenderingContext2D ctx = elem.getContext('2d');
+    //
+    //  if (!ctx)
+    //  {
+    //    return false;
+    //  }
+    //
+    //  var image = ctx.createImageData(1, 1);
+    //
+    //  return image.data instanceof Uint8ClampedArray;
 
   }
 
@@ -851,31 +840,31 @@ class Device {
 
   _checkCSS3D() {
     return true;
-//
-//  var el = document.createElement('p');
-//  var has3d;
-//  var transforms = {
-//      'webkitTransform': '-webkit-transform',
-//      'OTransform': '-o-transform',
-//      'msTransform': '-ms-transform',
-//      'MozTransform': '-moz-transform',
-//      'transform': 'transform'
-//  };
-//
-//  // Add it to the body to get the computed style.
-//  document.body.insertBefore(el, null);
-//
-//  for (var t in transforms)
-//  {
-//    if (el.style[t] !== undefined)
-//    {
-//      el.style[t] = "translate3d(1px,1px,1px)";
-//      has3d = window.getComputedStyle(el).getPropertyValue(transforms[t]);
-//    }
-//  }
-//
-//  document.body.removeChild(el);
-//  this.css3D = (has3d !== undefined && has3d.length > 0 && has3d !== "none");
+    //
+    //  var el = document.createElement('p');
+    //  var has3d;
+    //  var transforms = {
+    //      'webkitTransform': '-webkit-transform',
+    //      'OTransform': '-o-transform',
+    //      'msTransform': '-ms-transform',
+    //      'MozTransform': '-moz-transform',
+    //      'transform': 'transform'
+    //  };
+    //
+    //  // Add it to the body to get the computed style.
+    //  document.body.insertBefore(el, null);
+    //
+    //  for (var t in transforms)
+    //  {
+    //    if (el.style[t] !== undefined)
+    //    {
+    //      el.style[t] = "translate3d(1px,1px,1px)";
+    //      has3d = window.getComputedStyle(el).getPropertyValue(transforms[t]);
+    //    }
+    //  }
+    //
+    //  document.body.removeChild(el);
+    //  this.css3D = (has3d !== undefined && has3d.length > 0 && has3d !== "none");
 
   }
 
@@ -890,19 +879,15 @@ class Device {
 
     if (type == 'mp3' && this.mp3) {
       return true;
-    }
-    else if (type == 'ogg' && (this.ogg || this.opus)) {
+    } else if (type == 'ogg' && (this.ogg || this.opus)) {
+      return true;
+    } else if (type == 'm4a' && this.m4a) {
+      return true;
+    } else if (type == 'wav' && this.wav) {
+      return true;
+    } else if (type == 'webm' && this.webm) {
       return true;
     }
-    else if (type == 'm4a' && this.m4a) {
-        return true;
-      }
-      else if (type == 'wav' && this.wav) {
-          return true;
-        }
-        else if (type == 'webm' && this.webm) {
-            return true;
-          }
 
     return false;
 
@@ -919,26 +904,26 @@ class Device {
 
   isConsoleOpen() {
 
-//  if (window.console && window.console['firebug'])
-//  {
-//    return true;
-//  }
+    //  if (window.console && window.console['firebug'])
+    //  {
+    //    return true;
+    //  }
 
-//  if (window.console)
-//  {
-//    window.console..profile();
-//    console.profileEnd();
-//
-//    if (console.clear)
-//    {
-//      console.clear();
-//    }
-//
-//    if (console['profiles'])
-//    {
-//      return console['profiles'].length > 0;
-//    }
-//  }
+    //  if (window.console)
+    //  {
+    //    window.console..profile();
+    //    console.profileEnd();
+    //
+    //    if (console.clear)
+    //    {
+    //      console.clear();
+    //    }
+    //
+    //    if (console['profiles'])
+    //    {
+    //      return console['profiles'].length > 0;
+    //    }
+    //  }
 
     return false;
 

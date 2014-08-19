@@ -322,18 +322,26 @@ class Pointer {
    */
 
   start(event) {
-//    if (event is MouseEvent) {
-//      MouseEvent me = event as MouseEvent;
-//      //me.target
-//    }
-//    if (event['pointerId']) {
-//      this.pointerId = event.pointerId;
-//    }
+    //    if (event is MouseEvent) {
+    //      MouseEvent me = event as MouseEvent;
+    //      //me.target
+    //    }
+    //    if (event['pointerId']) {
+    //      this.pointerId = event.pointerId;
+    //    }
+
+    if (event is JsObject) {
+      this.pointerId = event['pointerId'];
+      this.identifier = event['identifier'];
+      this.target = event['target'];
+    } else {
+      this.target = event.target;
+    }
 
     //this.identifier = event.identifier;
-    this.target = event.target;
 
-    if (event.button != null) {
+
+    if (event is MouseEvent && event.button != null) {
       this.button = event.button;
     }
 
@@ -354,10 +362,7 @@ class Pointer {
     // x and y are the old values here?
     this.positionDown.setTo(this.x, this.y);
 
-    if (this.game.input.multiInputOverride == Input.MOUSE_OVERRIDES_TOUCH ||
-    this.game.input.multiInputOverride == Input.MOUSE_TOUCH_COMBINE ||
-    (this.game.input.multiInputOverride == Input.TOUCH_OVERRIDES_MOUSE &&
-    this.game.input.currentPointers == 0)) {
+    if (this.game.input.multiInputOverride == Input.MOUSE_OVERRIDES_TOUCH || this.game.input.multiInputOverride == Input.MOUSE_TOUCH_COMBINE || (this.game.input.multiInputOverride == Input.TOUCH_OVERRIDES_MOUSE && this.game.input.currentPointers == 0)) {
       this.game.input.x = this.x;
       this.game.input.y = this.y;
       this.game.input.position.setTo(this.x, this.y);
@@ -389,10 +394,7 @@ class Pointer {
 
     if (this.active) {
       if (this._holdSent == false && this.duration >= this.game.input.holdRate) {
-        if (this.game.input.multiInputOverride == Input.MOUSE_OVERRIDES_TOUCH ||
-        this.game.input.multiInputOverride == Input.MOUSE_TOUCH_COMBINE ||
-        (this.game.input.multiInputOverride == Input.TOUCH_OVERRIDES_MOUSE &&
-        this.game.input.currentPointers == 0)) {
+        if (this.game.input.multiInputOverride == Input.MOUSE_OVERRIDES_TOUCH || this.game.input.multiInputOverride == Input.MOUSE_TOUCH_COMBINE || (this.game.input.multiInputOverride == Input.TOUCH_OVERRIDES_MOUSE && this.game.input.currentPointers == 0)) {
           this.game.input.onHold.dispatch(this);
         }
 
@@ -404,8 +406,8 @@ class Pointer {
         this._nextDrop = this.game.time.now + this.game.input.recordRate;
 
         this._history.add({
-            x: this.position.x,
-            y: this.position.y
+          x: this.position.x,
+          y: this.position.y
         });
 
         if (this._history.length > this.game.input.recordLimit) {
@@ -423,29 +425,40 @@ class Pointer {
    * @param {boolean} [fromClick=false] - Was this called from the click event?
    */
 
-  Pointer move(MouseEvent event, [bool fromClick=false]) {
+  Pointer move(event, [bool fromClick = false]) {
 
     if (this.game.input.pollLocked) {
       return this;
     }
 
-//    if (fromClick == null) {
-//      fromClick = false;
-//    }
+    //    if (fromClick == null) {
+    //      fromClick = false;
+    //    }
 
-    if (event.button != null) {
+    if (event is MouseEvent && event.button != null) {
       this.button = event.button;
     }
 
-    this.clientX = event.client.x;
-    this.clientY = event.client.y;
+    if (event is JsObject) {
+      this.clientX = event['clientX'];
+      this.clientY = event['clientY'];
 
-    this.pageX = event.page.x;
-    this.pageY = event.page.y;
+      this.pageX = event['pageX'];
+      this.pageY = event['pageY'];
 
-    this.screenX = event.screen.x;
-    this.screenY = event.screen.y;
+      this.screenX = event['screenX'];
+      this.screenY = event['screenY'];
+    } else {
 
+      this.clientX = event.client.x;
+      this.clientY = event.client.y;
+
+      this.pageX = event.page.x;
+      this.pageY = event.page.y;
+
+      this.screenX = event.screen.x;
+      this.screenY = event.screen.y;
+    }
     if (this.isMouse && this.game.input.mouse.locked && !fromClick) {
       this.rawMovementX = event.movement.x;
       this.rawMovementY = event.movement.y;
@@ -461,10 +474,7 @@ class Pointer {
     this.circle.x = this.x;
     this.circle.y = this.y;
 
-    if (this.game.input.multiInputOverride == Input.MOUSE_OVERRIDES_TOUCH ||
-    this.game.input.multiInputOverride == Input.MOUSE_TOUCH_COMBINE ||
-    (this.game.input.multiInputOverride == Input.TOUCH_OVERRIDES_MOUSE &&
-    this.game.input.currentPointers == 0)) {
+    if (this.game.input.multiInputOverride == Input.MOUSE_OVERRIDES_TOUCH || this.game.input.multiInputOverride == Input.MOUSE_TOUCH_COMBINE || (this.game.input.multiInputOverride == Input.TOUCH_OVERRIDES_MOUSE && this.game.input.currentPointers == 0)) {
       this.game.input.activePointer = this;
       this.game.input.x = this.x;
       this.game.input.y = this.y;
@@ -475,14 +485,14 @@ class Pointer {
 
     this.withinGame = this.game.scale.bounds.contains(this.pageX, this.pageY);
 
-//  If the game is paused we don't process any target objects or callbacks
+    //  If the game is paused we don't process any target objects or callbacks
     if (this.game.paused) {
       return this;
     }
 
-//  DEPRECATED - Soon to be removed
+    //  DEPRECATED - Soon to be removed
     if (this.game.input.moveCallback != null) {
-      this.game.input.moveCallback( this, this.x, this.y);
+      this.game.input.moveCallback(this, this.x, this.y);
     }
 
     int i = this.game.input.moveCallbacks.length;
@@ -491,7 +501,7 @@ class Pointer {
       this.game.input.moveCallbacks[i].callback(this, this.x, this.y);
     }
 
-//  Easy out if we're dragging something and it still exists
+    //  Easy out if we're dragging something and it still exists
     if (this.targetObject != null && this.targetObject.isDragged == true) {
       if (this.targetObject.update(this) == false) {
         this.targetObject = null;
@@ -500,20 +510,20 @@ class Pointer {
       return this;
     }
 
-//  Work out which object is on the top
+    //  Work out which object is on the top
     this._highestRenderOrderID = 9999999999;
     this._highestRenderObject = null;
     this._highestInputPriorityID = -1;
 
-//  Run through the list
+    //  Run through the list
     if (this.game.input.interactiveItems.length > 0) {
       for (InputHandler currentNode in this.game.input.interactiveItems) {
         //var currentNode = this.game.input.interactiveItems.first;
 
         //do {
-//  If the object is using pixelPerfect checks, or has a higher InputManager.PriorityID OR if the priority ID is the same as the current highest AND it has a higher renderOrderID, then set it to the top
+        //  If the object is using pixelPerfect checks, or has a higher InputManager.PriorityID OR if the priority ID is the same as the current highest AND it has a higher renderOrderID, then set it to the top
         if (currentNode != null && currentNode.validForInput(this._highestInputPriorityID, this._highestRenderOrderID)) {
-          
+
           if ((!fromClick && currentNode.checkPointerOver(this)) || (fromClick && currentNode.checkPointerDown(this))) {
             this._highestRenderOrderID = currentNode.sprite._cache[3]; // renderOrderID
             this._highestInputPriorityID = currentNode.priorityID;
@@ -526,31 +536,28 @@ class Pointer {
     }
 
     if (this._highestRenderObject == null) {
-//  The pointer isn't currently over anything, check if we've got a lingering previous target
+      //  The pointer isn't currently over anything, check if we've got a lingering previous target
       if (this.targetObject != null) {
         this.targetObject._pointerOutHandler(this);
         this.targetObject = null;
       }
-    }
-    else {
+    } else {
       if (this.targetObject == null) {
-//  And now set the new one
+        //  And now set the new one
         this.targetObject = this._highestRenderObject;
         this._highestRenderObject._pointerOverHandler(this);
-      }
-      else {
-//  We've got a target from the last update
+      } else {
+        //  We've got a target from the last update
         if (this.targetObject == this._highestRenderObject) {
-//  Same target as before, so update it
+          //  Same target as before, so update it
           if (this._highestRenderObject.update(this) == false) {
             this.targetObject = null;
           }
-        }
-        else {
-//  The target has changed, so tell the old one we've left it
+        } else {
+          //  The target has changed, so tell the old one we've left it
           this.targetObject._pointerOutHandler(this);
 
-//  And now set the new one
+          //  And now set the new one
           this.targetObject = this._highestRenderObject;
           this.targetObject._pointerOverHandler(this);
         }
@@ -591,21 +598,17 @@ class Pointer {
 
     this.timeUp = this.game.time.now;
 
-    if (this.game.input.multiInputOverride == Input.MOUSE_OVERRIDES_TOUCH ||
-    this.game.input.multiInputOverride == Input.MOUSE_TOUCH_COMBINE ||
-    (this.game.input.multiInputOverride == Input.TOUCH_OVERRIDES_MOUSE &&
-    this.game.input.currentPointers == 0)) {
+    if (this.game.input.multiInputOverride == Input.MOUSE_OVERRIDES_TOUCH || this.game.input.multiInputOverride == Input.MOUSE_TOUCH_COMBINE || (this.game.input.multiInputOverride == Input.TOUCH_OVERRIDES_MOUSE && this.game.input.currentPointers == 0)) {
       this.game.input.onUp.dispatch([this, event]);
 
-//  Was it a tap?
+      //  Was it a tap?
       if (this.duration >= 0 && this.duration <= this.game.input.tapRate) {
-//  Was it a double-tap?
+        //  Was it a double-tap?
         if (this.timeUp - this.previousTapTime < this.game.input.doubleTapRate) {
-//  Yes, let's dispatch the signal then with the 2nd parameter set to true
+          //  Yes, let's dispatch the signal then with the 2nd parameter set to true
           this.game.input.onTap.dispatch([this, true]);
-        }
-        else {
-//  Wasn't a double-tap, so dispatch a single tap signal
+        } else {
+          //  Wasn't a double-tap, so dispatch a single tap signal
           this.game.input.onTap.dispatch([this, false]);
         }
 
@@ -613,7 +616,7 @@ class Pointer {
       }
     }
 
-//  Mouse is always active
+    //  Mouse is always active
     if (this.id > 0) {
       this.active = false;
     }

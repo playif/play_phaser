@@ -1,12 +1,17 @@
 library example;
-
+import "package:play_pixi/pixi.dart" as PIXI;
 import "package:play_phaser/phaser.dart";
 import "dart:html" as dom;
 
-//@MirrorsUsed(targets: const [Sprite, Text, Particle, Gem], symbols: const ["call"], override: '*')
+//@MirrorsUsed(targets: const [GameObject, Gem, Sprite, Text, Particle],  override: '*')
 //import "dart:mirrors";
-
+//@MirrorsUsed(symbols: const ["x","y"], override: '*')
+//import "dart:mirrors";
 //import "package:play_pixi/pixi.dart" as PIXI;
+
+//@MirrorsUsed(targets:const ['PIXI', 'Phaser', 'example'], override: '*')
+//@MirrorsUsed(symbols: "*", override: '*')
+//import "dart:mirrors";
 
 part "basics/basic_01_load_an_image.dart";
 part "basics/basic_02_click_on_an_image.dart";
@@ -128,7 +133,7 @@ Map<String, State> examples = {
 
 main() {
 //  dom.window.console.log("preload");
-
+  print("start");
 
 //  var w = dom.window.innerWidth * dom.window.devicePixelRatio,
 //  h = dom.window.innerHeight * dom.window.devicePixelRatio,
@@ -136,39 +141,38 @@ main() {
 //  height = (h > w) ? w : h;
 //
 //  // Hack to avoid iPad Retina and large Android devices. Tell it to scale up.
-//  if (dom.window.innerWidth >= 1024 && dom.window.devicePixelRatio >= 2)
-//  {
+//  if (dom.window.innerWidth >= 1024 && dom.window.devicePixelRatio >= 2) {
 //    width = Math.round(width / 2);
 //    height = Math.round(height / 2);
 //  }
 //  // reduce screen size by one 3rd on devices like Nexus 5
-//  if (dom.window.devicePixelRatio == 3)
-//  {
+//  if (dom.window.devicePixelRatio == 3) {
 //    width = Math.round(width / 3) * 2;
 //    height = Math.round(height / 3) * 2;
 //  }
 
-  //var game = new Game(width, height, CANVAS, '');
+  //var game = new Game(width, height, WEBGL, '');
 
 
-  Game game = new Game(800, 600, CANVAS, '');
+  Game game = new Game(800, 480, WEBGL, '');
 
-  dom.SelectElement select = dom.document.getElementById("examples") as dom.SelectElement;
-  for (String key in examples.keys) {
-    game.state.add(key, examples[key]);
-    dom.OptionElement option = new dom.OptionElement();
-    option.text = key;
-    select.children.add(option);
-  }
+  //dom.SelectElement select = dom.document.getElementById("examples") as dom.SelectElement;
+  //for (String key in examples.keys) {
+  //  game.state.add(key, examples[key]);
+  //dom.OptionElement option = new dom.OptionElement();
+  //option.text = key;
+  //select.children.add(option);
+  //}
 //
-  select.onChange.listen((dom.Event e) {
-    game.state.start(select.children[select.selectedIndex].text);
-  });
-
+  //select.onChange.listen((dom.Event e) {
+  //game.state.start(select.children[select.selectedIndex].text);
+  //});
+  print("start 1");
+  game.state.add("games_02_gemmatch", new games_03_invaders());
   game.state.start("games_02_gemmatch");
 
   //game.canvas.style.cursor = "pointer";
-  //game.boot();
-  //print("start");
+  game.boot();
+  print("start");
 
 }

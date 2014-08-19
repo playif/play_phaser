@@ -6,12 +6,13 @@ author: playif <playif@gmail.com>
 homepage: https://github.com/playif/play_phaser
 dependencies:
   browser: ">=0.10.0+2 <0.11.0"
-  play_pixi: any
+  play_pixi:
+    path: ../play_pixi
 
 
 transformers:
 - $dart2js:
-    checked: true
+    checked: false
     minify: false
     suppressWarnings: false
     suppressHints: false
