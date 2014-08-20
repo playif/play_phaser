@@ -91,8 +91,8 @@ The number of examples for each class.
 
 TODO
 =========
-* build more examples to comprehensively test the play_phaser game engine.
-* build in-game UI so that all examples can be tested in one CocoonJS app.
+* Build more examples to comprehensively test the play_phaser game engine.
+* Build in-game UI so that all examples can be tested in one CocoonJS app.
 * Refactor the code, to improve the scalibility and performance.
 * Complete the Document in Dart style.
 
