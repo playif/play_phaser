@@ -89,6 +89,12 @@ The number of examples for each class.
 * tilemaps * 2
 * tweens
 
+TODO
+=========
+* build more examples to comprehensively test the play_phaser game engine.
+* build in-game UI so that all examples can be tested in one CocoonJS app.
+* Refactor the code, to improve the scalibility and performance.
+* Complete the Document in Dart style.
 
 
 [1]: https://github.com/playif/play_pixi
