@@ -8,8 +8,8 @@ class AnimationManager {
   bool updateIfVisible = true;
   bool isLoaded = false;
   FrameData _frameData;
-  
-  FrameData get frameData=> _frameData;
+
+  FrameData get frameData => _frameData;
 
   Map<String, Animation> _anims = {};
   List _outputFrames = [];
@@ -81,44 +81,33 @@ class AnimationManager {
   }
 
 
-  loadFrameData(FrameData frameData, [frame = 0]) {
-    if (this.isLoaded)
-            {
-                //   We need to update the frameData that the animations are using
-                for (var anim in this._anims.keys)
-                {
-                    this._anims[anim].updateFrameData(frameData);
-                }
-            }
+  bool loadFrameData(FrameData frameData, [frame = 0]) {
+    if (this.isLoaded) {
+      //   We need to update the frameData that the animations are using
+      for (var anim in this._anims.keys) {
+        this._anims[anim].updateFrameData(frameData);
+      }
+    }
 
-            this._frameData = frameData;
+    this._frameData = frameData;
 
-            if ( frame == null)
-            {
-                this.frame = 0;
-            }
-            else
-            {
-                if ( frame is String)
-                {
-                    this.frameName = frame;
-                }
-                else
-                {
-                    this.frame = frame;
-                }
-            }
+    if (frame == null) {
+      this.frame = 0;
+    } else {
+      if (frame is String) {
+        this.frameName = frame;
+      } else {
+        this.frame = frame;
+      }
+    }
 
-            this.isLoaded = true;
+    this.isLoaded = true;
 
-            if (this._frameData != null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+    if (this._frameData != null) {
+      return true;
+    } else {
+      return false;
+    }
 //    this.frameData = frameData;
 //    this.frame = frame;
 //    this.isLoaded = true;
@@ -194,7 +183,7 @@ class AnimationManager {
 
   }
 
-  play(name, [num frameRate, bool loop, bool killOnComplete = false]) {
+  play(name, [num frameRate=60, bool loop, bool killOnComplete = false]) {
 
     if (this._anims[name] != null) {
       if (this.currentAnim == this._anims[name]) {

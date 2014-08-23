@@ -486,51 +486,6 @@ class Sprite extends PIXI.Sprite implements GameObject, AnimationInterface {
 
   loadTexture(key, [frame = 0, bool stopAnimation = true]) {
 
-    //frame = frame || 0;
-
-//    if (key is RenderTexture) {
-//      this.key = key.key;
-//      this.setTexture(key);
-//      return;
-//    } else if (key is BitmapData) {
-//      this.key = key;
-//      this.setTexture(key.texture);
-//      return;
-//    } else if (key is PIXI.Texture) {
-//      this.key = key;
-//      this.setTexture(key);
-//      return;
-//    } else {
-//      if (key == null) {
-//        this.key = '__default';
-//        this.setTexture(PIXI.TextureCache[this.key]);
-//        return;
-//      } else if (key is String && !this.game.cache.checkImageKey(key)) {
-//        this.key = '__missing';
-//        this.setTexture(PIXI.TextureCache[this.key]);
-//        return;
-//      }
-//
-//      if (this.game.cache.isSpriteSheet(key)) {
-//        this.key = key;
-//
-//        // var frameData = this.game.cache.getFrameData(key);
-//        this.animations.loadFrameData(this.game.cache.getFrameData(key));
-//
-//        if (frame is String) {
-//          this.frameName = frame;
-//        } else {
-//          this.frame = frame;
-//        }
-//      } else {
-//        this.key = key;
-//        this.setTexture(PIXI.TextureCache[key]);
-//        return;
-//      }
-//    }
-
-    //frame = frame || 0;
-
     if (stopAnimation == true) {
       this.animations.stop();
     }

@@ -77,7 +77,7 @@ class Animation {
     }
   }
 
-  Animation(this.game, this._parent, this.name, this._frameData, [this._frames, this.delay=16.7, this.loop=false]) {
+  Animation(this.game, this._parent, this.name, this._frameData, [this._frames, num frameRate=60, this.loop=false]) {
     currentFrame = _frameData.getFrame(this._frames[this._frameIndex]);
     onStart = new Signal();
     onComplete = new Signal();
@@ -87,17 +87,25 @@ class Animation {
       this._frames=[];
     }
 
+    if(frameRate is num){
+      this.delay=1000/frameRate;
+    }
+
     //  Set-up some event listeners
     this.game.onPause.add(this.onPause);
     this.game.onResume.add(this.onResume);
   }
 
-  play([num frameRate, bool loop, bool killOnComplete=false]) {
+  play([num frameRate=60, bool loop, bool killOnComplete=false]) {
 
-    if (frameRate is num) {
-      //  If they set a new frame rate then use it, otherwise use the one set on creation
+    if(frameRate is num){
       this.delay = 1000 / frameRate;
     }
+
+//    if (frameRate is num) {
+//      //  If they set a new frame rate then use it, otherwise use the one set on creation
+//
+//    }
 
     if (loop is bool) {
       //  If they set a new loop value then use it, otherwise use the one set on creation

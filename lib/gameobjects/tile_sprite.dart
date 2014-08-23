@@ -298,12 +298,12 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
   //});
 
 
-  TileSprite(this.game, [num x = 0, num y = 0, int width = 256, int height = 256, key, frame])
+  TileSprite(this.game, [num x = 0, num y = 0, num width = 256, num height = 256, key, frame])
       : super(PIXI.TextureCache['__default'], width, height) {
-    this.x = x;
-    this.y = 0;
-    this.width = width;
-    this.height = height;
+    this.x = x.toInt();
+    this.y = y.toInt();
+    this.width = width.toInt();
+    this.height = height.toInt();
 //    this.key = key;
 //    this.frame = frame;
     //x = x || 0;
@@ -605,6 +605,8 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
     //frame = frame || 0;
 
     this.key = key;
+    var setFrame = true;
+
 
     if (key is RenderTexture) {
       this.key = key.key;
@@ -623,10 +625,15 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
         this.setTexture(PIXI.TextureCache[this.key]);
       } else {
         this.setTexture(new PIXI.Texture(PIXI.BaseTextureCache[key]));
-        this.animations.loadFrameData(this.game.cache.getFrameData(key), frame);
+        setFrame = !this.animations.loadFrameData(this.game.cache.getFrameData(key), frame);
       }
     }
 
+    if (setFrame) {
+      this._frame = new Rectangle().copyFrom(this.texture.frame);
+    }
+
+    
   }
 
   /**
