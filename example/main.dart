@@ -155,23 +155,23 @@ main() {
 
   Game game = new Game(800, 480, WEBGL, '');
 
-  //dom.SelectElement select = dom.document.getElementById("examples") as dom.SelectElement;
-  //for (String key in examples.keys) {
-  //  game.state.add(key, examples[key]);
-  //dom.OptionElement option = new dom.OptionElement();
-  //option.text = key;
-  //select.children.add(option);
-  //}
+  dom.SelectElement select = dom.document.getElementById("examples") as dom.SelectElement;
+  for (String key in examples.keys) {
+    game.state.add(key, examples[key]);
+    dom.OptionElement option = new dom.OptionElement();
+    option.text = key;
+    select.children.add(option);
+  }
 //
-  //select.onChange.listen((dom.Event e) {
-  //game.state.start(select.children[select.selectedIndex].text);
-  //});
-  print("start 1");
-  game.state.add("games_02_gemmatch", new games_03_invaders());
-  game.state.start("games_02_gemmatch");
+  select.onChange.listen((dom.Event e) {
+    game.state.start(select.children[select.selectedIndex].text);
+  });
+  //print("start 1");
+  //game.state.add("games_02_gemmatch", new games_03_invaders());
+  game.state.start("basic_01_load_an_image");
 
   //game.canvas.style.cursor = "pointer";
-  game.boot();
-  print("start");
+  //game.boot();
+  //print("start");
 
 }
