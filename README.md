@@ -21,7 +21,7 @@ Features:
 * gameobject (100%)
 * physics: arcade physics (missing p2.js)
 * geom (100%): finished
-* input : keyboard, mouse, touch (missing gamepad)
+* input (90%): keyboard, mouse, touch (missing gamepad)
 * loader (100%)
 * math (100%)
 * particles (100%)
@@ -29,7 +29,7 @@ Features:
 * system (100%)
 * time (100%)
 * tilemap (100%)
-* tween (100%) (use Mirrors API) (thanks to https://github.com/xaguzman/tween-engine-dart)
+* tween (100%) (use Mirrors API)
 * utils (100%)
 
 
@@ -43,6 +43,12 @@ please check the [online demo][3] or download examples from [github repo][2]
 
 
 ```dart
+
+import "package:play_phaser/phaser.dart";
+
+main() {
+  Game game = new Game(800, 480, WEBGL, '', new basic_01_load_an_image());
+}
 
 class basic_01_load_an_image extends State {
 
@@ -73,9 +79,7 @@ class basic_01_load_an_image extends State {
 
 }
 
-main() {
-  Game game = new Game(800, 480, WEBGL, '', new basic_01_load_an_image());
-}
+
 
 ```
 
@@ -93,6 +97,13 @@ The number of examples for each class.
 * particles
 * tilemaps * 2
 * tweens
+
+Change log
+==========
+
+0.9.3
+ * Fix bugs.
+
 
 TODO
 =========

@@ -1,5 +1,4 @@
 library example;
-import "package:play_pixi/pixi.dart" as PIXI;
 import "package:play_phaser/phaser.dart";
 import "dart:html" as dom;
 
