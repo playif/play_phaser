@@ -12,10 +12,10 @@ class QuadTree {
   int maxObjects = 10;
   int maxLevels = 4;
   int level = 0;
- 
+
   Bounds bounds = null;
 
-  List<dynamic> objects = new List<dynamic>();
+  List<Body> objects = new List<Body>();
 
   List<QuadTree> nodes = new List<QuadTree>(4);
 
@@ -32,19 +32,19 @@ class QuadTree {
     this.level = level == null ? 0 : level;
 
     this.bounds = new Bounds()
-        ..x = Math.round(x)
-        ..y = Math.round(y)
-        ..width = width
-        ..height = height
-        ..subWidth = Math.floor(width / 2)
-        ..subHeight = Math.floor(height / 2)
-        ..right = Math.round(x) + Math.floor(width / 2)
-        ..bottom = Math.round(y) + Math.floor(height / 2);
+      ..x = Math.round(x)
+      ..y = Math.round(y)
+      ..width = width
+      ..height = height
+      ..subWidth = Math.floor(width / 2)
+      ..subHeight = Math.floor(height / 2)
+      ..right = Math.round(x) + Math.floor(width / 2)
+      ..bottom = Math.round(y) + Math.floor(height / 2);
 
     this.objects.clear();
-//    for(int i=0;i<this.nodes.length;i++){
-//      this.nodes[i]=new
-//    }
+    //    for(int i=0;i<this.nodes.length;i++){
+    //      this.nodes[i]=new
+    //    }
     this.nodes[0] = this.nodes[1] = this.nodes[2] = this.nodes[3] = null;
   }
 
@@ -78,10 +78,10 @@ class QuadTree {
   }
 
 
-  insert(body) {
+  insert(Body body) {
 
-    var i = 0;
-    var index;
+    int i = 0;
+    int index;
 
     //  if we have subnodes ...
     if (this.nodes[0] != null) {
@@ -101,7 +101,22 @@ class QuadTree {
         this.split();
       }
 
-      //  Add objects to subnodes
+//      //  Add objects to subnodes
+//      for (Body obj in this.objects) {
+//        index = this.getIndex(obj);
+//        if (index != -1) {
+//          //  this is expensive - see what we can do about it
+//          this.nodes[index].insert(obj);
+//        } else {
+//          this._removeCache.add(obj);
+//        }
+//      }
+//      this.objects.clear();
+//      this.objects.addAll(this._removeCache);
+//      this._removeCache.clear();
+
+
+      //Add objects to subnodes
       while (i < this.objects.length) {
         index = this.getIndex(this.objects[i]);
 
@@ -116,10 +131,10 @@ class QuadTree {
 
   }
 
-  getIndex(rect) {
+  getIndex(Rectangle rect) {
 
     //  default is that rect doesn't fit, i.e. it straddles the internal quadrants
-    var index = -1;
+    int index = -1;
 
     if (rect.x < this.bounds.right && rect.right < this.bounds.right) {
       if (rect.y < this.bounds.bottom && rect.bottom < this.bounds.bottom) {
@@ -143,6 +158,7 @@ class QuadTree {
     return index;
 
   }
+
 
   List retrieve(source) {
     int index = -1;
@@ -175,6 +191,7 @@ class QuadTree {
 
   }
 
+
   clear() {
 
     this.objects.clear();
@@ -182,9 +199,9 @@ class QuadTree {
     var i = this.nodes.length;
 
     while (i-- > 0) {
-      if(this.nodes[i] != null){
+      if (this.nodes[i] != null) {
         this.nodes[i].clear();
-        this.nodes[i]=null;
+        this.nodes[i] = null;
       }
     }
 
