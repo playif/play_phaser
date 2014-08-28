@@ -19,7 +19,7 @@ Features:
 * animation (100%)
 * core (100%): camera, singal, game, group, plugin, stage, state, world, etc.
 * gameobject (100%)
-* physics: arcade physics (missing p2.js)
+* physics: arcade and ninja physics (missing p2.js)
 * geom (100%): finished
 * input (90%): keyboard, mouse, touch (missing gamepad)
 * loader (100%)
