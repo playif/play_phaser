@@ -17,18 +17,18 @@ pub: [https://pub.dartlang.org/packages/play_phaser]
 Features:
 =========
 * animation (100%)
-* core (100%): camera, singal, game, group, plugin, stage, state, world, etc.
-* gameobject (100%)
-* physics: arcade and ninja physics (missing p2.js)
-* geom (100%): finished
-* input (90%): keyboard, mouse, touch (missing gamepad)
+* core (100%)
+* game objects (100%)
+* physics (70%) (missing p2.js)
+* geom (100%)
+* input (90%) (missing gamepad)
 * loader (100%)
 * math (100%)
 * particles (100%)
 * sound & music (100%)
 * system (100%)
 * time (100%)
-* tilemap (100%)
+* tile map (100%)
 * tween (100%) (use Mirrors API)
 * utils (100%)
 
@@ -92,10 +92,11 @@ The number of examples for each class.
 * camera * 3
 * display * 5
 * games * 7
-* imput
+* input
 * loader
+* ninja physics
 * particles
-* tilemaps * 2
+* tile maps * 2
 * tweens
 
 Change log
@@ -114,7 +115,7 @@ TODO
 =========
 * Build more examples to comprehensively test the play_phaser game engine.
 * Build in-game UI so that all examples can be tested in one CocoonJS app.
-* Refactor the code, to improve the scalibility and performance.
+* Refactor the code, to improve the scalability and performance.
 * Complete the Document in Dart style.
 
 
