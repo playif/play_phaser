@@ -382,7 +382,8 @@ class Game {
     //window.addEventListener('load', this._onBoot, false);
     //return this;
     window.onLoad.listen(this._onBoot);
-
+    window.addEventListener('load', this._onBoot, false);
+    boot();
   }
 
 

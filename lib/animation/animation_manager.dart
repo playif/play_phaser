@@ -183,7 +183,7 @@ class AnimationManager {
 
   }
 
-  play(name, [num frameRate=60, bool loop, bool killOnComplete = false]) {
+  play(name, [num frameRate, bool loop, bool killOnComplete = false]) {
 
     if (this._anims[name] != null) {
       if (this.currentAnim == this._anims[name]) {

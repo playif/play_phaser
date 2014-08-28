@@ -38,11 +38,11 @@ class animation_08_multiple_anims extends State {
     //	Let's make some more sea creatures in the same way as the jellyfish
 
     crab = game.add.sprite(550, 480, 'seacreatures');
-    crab.animations.add('swim', Animation.generateFrameNames('crab1', 0, 25, '', 4), 60, true);
+    crab.animations.add('swim', Animation.generateFrameNames('crab1', 0, 25, '', 4), 30, true);
     crab.animations.play('swim');
 
     greenJellyfish = game.add.sprite(330, 100, 'seacreatures');
-    greenJellyfish.animations.add('swim', Animation.generateFrameNames('greenJellyfish', 0, 39, '', 4), 60, true);
+    greenJellyfish.animations.add('swim', Animation.generateFrameNames('greenJellyfish', 0, 39, '', 4), 30, true);
     greenJellyfish.animations.play('swim');
 
     octopus = game.add.sprite(160, 400, 'seacreatures');
@@ -71,16 +71,16 @@ class animation_08_multiple_anims extends State {
     // to: function ( properties, duration, ease, autoStart, delay, repeat, yoyo ) {
 
     game.add.tween(purpleFish).to({
-      'x': -200
+        'x': -200
     }, 7500, Easing.Quadratic.InOut, true, 0, 1000, false);
     game.add.tween(octopus).to({
-      'y': 530
+        'y': 530
     }, 2000, Easing.Quadratic.InOut, true, 0, 1000, true);
     game.add.tween(greenJellyfish).to({
-      'y': 250
+        'y': 250
     }, 4000, Easing.Quadratic.InOut, true, 0, 1000, true);
     game.add.tween(jellyfish).to({
-      'y': 100
+        'y': 100
     }, 8000, Easing.Quadratic.InOut, true, 0, 1000, true);
 
   }

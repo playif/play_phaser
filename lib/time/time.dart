@@ -2,23 +2,23 @@ part of Phaser;
 
 class Time {
   Game game;
-  double time=0.0;
-  double now=0.0;
-  double elapsed=0.0;
-  double pausedTime=0.0;
+  num time=0.0;
+  num now=0.0;
+  num elapsed=0.0;
+  num pausedTime=0.0;
   bool advancedTiming=false;
 
-  double fps=0.0;
+  num fps=0.0;
 
-  double fpsMin=1000.0;
+  num fpsMin=1000.0;
 
-  double fpsMax=0.0;
+  num fpsMax=0.0;
 
-  double msMin=1000.0;
+  num msMin=1000.0;
 
-  double msMax=0.0;
+  num msMax=0.0;
 
-  double physicsElapsed=0.0;
+  num physicsElapsed=0.0;
 
   /**
    * @property {number} deltaCap - If you need to cap the delta timer, set the value here. For 60fps the delta should be 0.016, so try variances just above this.
