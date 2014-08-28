@@ -93,7 +93,7 @@ The number of examples for each class.
 * games * 7
 * input
 * loader
-* ninja physics
+* ninja physics * 4
 * particles
 * tile maps * 2
 * tweens
