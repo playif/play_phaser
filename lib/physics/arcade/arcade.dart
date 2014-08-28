@@ -6,7 +6,7 @@ class Arcade {
 
   Point gravity;
   Rectangle bounds;
-  Collision checkCollision;
+  CollisionInfo checkCollision;
   int maxObjects;
   int maxLevels;
   int OVERLAP_BIAS;
@@ -52,7 +52,7 @@ class Arcade {
      * For example checkCollision.down = false means Bodies cannot collide with the World.bounds.bottom.
      * @property {object} checkCollision - An object containing allowed collision flags.
      */
-    this.checkCollision = new Collision()
+    this.checkCollision = new CollisionInfo()
       ..up = true
       ..down = true
       .. left = true
@@ -258,7 +258,7 @@ class Arcade {
   enableBody(Sprite object) {
 
     if (object.body == null) {
-      object.body = new Body(object);
+      object.body = new arcade.Body(object);
     }
 
   }
@@ -270,7 +270,7 @@ class Arcade {
    * @param {Phaser.Physics.Arcade.Body} The Body object to be updated.
    */
 
-  updateMotion(Body body) {
+  updateMotion(arcade.Body body) {
 
     this._velocityDelta = this.computeVelocity(0, body, body.angularVelocity, body.angularAcceleration, body.angularDrag, body.maxAngular) - body.angularVelocity;
     body.angularVelocity += this._velocityDelta;
@@ -295,7 +295,7 @@ class Arcade {
    * @return {number} The altered Velocity value.
    */
 
-  num computeVelocity(int axis, Body body, num velocity, num acceleration, num drag, [num max=10000]) {
+  num computeVelocity(int axis, arcade.Body body, num velocity, num acceleration, num drag, [num max=10000]) {
 
     //max = max || 10000;
 
@@ -715,7 +715,7 @@ class Arcade {
    * @return {boolean} Returns true if the bodies collided, otherwise false.
    */
 
-  separate(Body body1, Body body2, [Function processCallback, bool overlapOnly=false]) {
+  separate(arcade.Body body1, arcade.Body body2, [Function processCallback, bool overlapOnly=false]) {
 
     if (!body1.enable || !body2.enable || !this.intersects(body1, body2)) {
       return false;
@@ -753,7 +753,7 @@ class Arcade {
    * @return {boolean} True if they intersect, otherwise false.
    */
 
-  bool intersects(Body body1, Body body2) {
+  bool intersects(arcade.Body body1, arcade.Body body2) {
 
     if (body1.right <= body2.position.x) {
       return false;
@@ -786,7 +786,7 @@ class Arcade {
    * @return {boolean} Returns true if the bodies were separated, otherwise false.
    */
 
-  bool separateX(Body body1, Body body2, bool overlapOnly) {
+  bool separateX(arcade.Body body1, arcade.Body body2, bool overlapOnly) {
 
     //  Can't separate two immovable bodies
     if (body1.immovable && body2.immovable) {
@@ -888,7 +888,7 @@ class Arcade {
    * @return {boolean} Returns true if the bodies were separated, otherwise false.
    */
 
-  bool separateY(Body body1, Body body2, bool overlapOnly) {
+  bool separateY(arcade.Body body1, arcade.Body body2, bool overlapOnly) {
 
     //  Can't separate two immovable or non-existing bodys
     if (body1.immovable && body2.immovable) {
@@ -1000,7 +1000,7 @@ class Arcade {
    * @return {boolean} Returns true if the body was separated, otherwise false.
    */
 
-  bool separateTile(int i, Body body, Tile tile) {
+  bool separateTile(int i, arcade.Body body, Tile tile) {
 
     //  We re-check for collision in case body was separated in a previous step
     if (!body.enable || !tile.intersects(body.position.x, body.position.y, body.right, body.bottom)) {
@@ -1089,7 +1089,7 @@ class Arcade {
    * @return {number} The amount of separation that occured.
    */
 
-  num tileCheckX(Body body, Tile tile) {
+  num tileCheckX(arcade.Body body, Tile tile) {
 
     num ox = 0;
 
@@ -1132,7 +1132,7 @@ class Arcade {
    * @return {number} The amount of separation that occured.
    */
 
-  num tileCheckY(Body body, Tile tile) {
+  num tileCheckY(arcade.Body body, Tile tile) {
 
     num oy = 0;
 
@@ -1175,7 +1175,7 @@ class Arcade {
    * @return {boolean} Returns true as a pass-thru to the separateTile method.
    */
 
-  bool processTileSeparationX(Body body, num x) {
+  bool processTileSeparationX(arcade.Body body, num x) {
 
     if (x < 0) {
       body.blocked.left = true;
@@ -1205,7 +1205,7 @@ class Arcade {
    * @param {number} y - The y separation amount.
    */
 
-  bool processTileSeparationY(Body body, num y) {
+  bool processTileSeparationY(arcade.Body body, num y) {
 
     if (y < 0) {
       body.blocked.up = true;

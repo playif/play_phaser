@@ -11,6 +11,8 @@ class Math {
   Math._(){
   }
 
+  static const double SQRT1_2 = DMath.SQRT1_2;
+  static const double SQRT2 = DMath.SQRT2;
   static const double PI = DMath.PI;
   static const double PI2 = DMath.PI * 2;
   static final doubleFunc random = new DMath.Random().nextDouble;

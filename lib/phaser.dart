@@ -20,10 +20,11 @@ import "tween/tweenengine.dart" as tween;
 import "dart:mirrors";
 
 import "package:play_pixi/pixi.dart" as PIXI;
-//import 'package:uuid/uuid_client.dart';
-//import "physics/physics.dart" as Physics;
 
-//import "tween/easing.dart" as Easing;
+import "physics/arcade/body.dart" as arcade;
+import "physics/ninja/body.dart" as ninja;
+import "physics/p2/body.dart" as p2;
+
 
 part "animation/animation.dart";
 part "animation/animation_manager.dart";
@@ -105,8 +106,10 @@ part "particles/particles.dart";
 
 
 part "physics/physics.dart";
+part "physics/ibody.dart";
 part "physics/arcade/arcade.dart";
-part "physics/arcade/body.dart";
+part "physics/ninja/ninja.dart";
+part "physics/p2/p2.dart";
 
 
 part "sound/sound.dart";

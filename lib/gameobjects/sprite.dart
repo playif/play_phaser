@@ -225,6 +225,8 @@ class Sprite extends PIXI.Sprite implements GameObject, AnimationInterface {
   bool get destroyPhase {
     return this._cache[8] == 1;
   }
+  
+  bool get fresh => _cache[4] == 1;
 
   bool _outOfBoundsFired = false;
 

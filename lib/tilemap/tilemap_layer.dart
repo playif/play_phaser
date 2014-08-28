@@ -76,6 +76,8 @@ class TilemapLayer extends Image {
   List _results;
 
   List<Tile> _column;
+  
+
 
   /**
    * @name Phaser.TilemapLayer#scrollX

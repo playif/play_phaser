@@ -11,9 +11,10 @@ class Physics {
   Game game;
   Map config;
   Arcade arcade;
-
+  Ninja ninja;
+  
   var p2;
-  var ninja;
+
   var box2d;
   var chipmunk;
 
@@ -137,9 +138,9 @@ class Physics {
 //    else if (system == Physics.P2JS) {
 //      this.p2 = new Physics.P2(this.game, this.config);
 //    }
-//    if (system == Physics.NINJA) {
-//      this.ninja = new Physics.Ninja(this.game);
-//    }
+    if (system == Physics.NINJA) {
+      this.ninja = new Ninja(this.game);
+    }
 //    else if (system == Physics.BOX2D && this.box2d == null) {
 //      throw new Exception('The Box2D physics system has not been implemented yet.');
 //    }

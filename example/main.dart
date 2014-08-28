@@ -1,5 +1,7 @@
 library example;
 import "package:play_phaser/phaser.dart";
+//import "package:play_phaser/physics/ninja/body.dart" as Ninja;
+
 import "dart:html" as dom;
 
 //@MirrorsUsed(targets: const [GameObject, Gem, Sprite, Text, Particle],  override: '*')
@@ -30,6 +32,12 @@ part "audio/audio_02_play_music.dart";
 part "tweens/tweens_01_chained_tweens.dart";
 
 part "loader/loader_01_asset_pack.dart";
+
+part "ninja_physics/ninja_aabb_vs_aabb.dart";
+part "ninja_physics/ninja_aabb_vs_tile.dart";
+part "ninja_physics/ninja_impact.dart";
+part "ninja_physics/ninja_tilemap.dart";
+
 
 part "input/input_01_bring_a_child_to_top.dart";
 
@@ -98,6 +106,10 @@ Map<String, State> examples = {
 
     "input_01_bring_a_child_to_top": new input_01_bring_a_child_to_top(),
 
+    "ninja_aabb_vs_aabb": new ninja_aabb_vs_aabb(),
+    "ninja_aabb_vs_tile": new ninja_aabb_vs_tile(),
+    "ninja_impact": new ninja_impact(),
+    "ninja_tilemap": new ninja_tilemap(),
 
     "particles_01_auto_scale": new particles_01_auto_scale(),
 

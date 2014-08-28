@@ -100,6 +100,8 @@ The number of examples for each class.
 
 Change log
 ==========
+0.10.0
+ * Ninja physics with examples.
 
 0.9.4
  * Fix animation bug (thanks to [#3](https://github.com/playif/play_phaser/issues/3)).

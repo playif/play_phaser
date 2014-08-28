@@ -171,7 +171,7 @@ class games_03_invaders extends State {
     }
 
     //  Firing?
-    if (/*fireButton.isDown &&*/ player.alive) {
+    if (fireButton.isDown && player.alive) {
       fireBullet();
     }
 

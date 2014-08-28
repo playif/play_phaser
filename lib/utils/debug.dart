@@ -668,16 +668,17 @@ class Debug {
   body(Sprite sprite, [String color = 'rgba(0,255,0,0.4)', bool filled = true]) {
 
     if (sprite.body != null) {
-      if (sprite.body.type == Physics.ARCADE) {
+      if (sprite.body.type == Physics.ARCADE || sprite.body.type == Physics.NINJA) {
         this.start();
-        Body.render(this.context, sprite.body, color, filled);
+        sprite.body.render(this.context, color, filled);
         this.stop();
-      } else if (sprite.body.type == Physics.NINJA) {
-        this.start();
-        //TODO
-        //Physics.Ninja.Body.render(this.context, sprite.body, color, filled);
-        this.stop();
-      }
+      } 
+//      else if (sprite.body.type == Physics.NINJA) {
+//        this.start();
+//        //TODO
+//        //Physics.Ninja.Body.render(this.context, sprite.body, color, filled);
+//        this.stop();
+//      }
     }
 
   }
@@ -696,7 +697,7 @@ class Debug {
     if (sprite.body != null) {
       if (sprite.body.type == Physics.ARCADE) {
         this.start(x, y, color, 210);
-        Body.renderBodyInfo(this, sprite.body);
+        sprite.body.renderBodyInfo(this);
         this.stop();
       }
     }

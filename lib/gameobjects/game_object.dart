@@ -10,6 +10,8 @@ abstract class SpriteInterface implements CoreInterfact {
   PIXI.Texture texture;
   //CanvasPattern __tilePattern;
   setTexture(PIXI.Texture texture);
+  Body body;
+  Point anchor;
 }
 
 abstract class AnimationInterface implements SpriteInterface {

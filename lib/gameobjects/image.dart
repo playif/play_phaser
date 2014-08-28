@@ -13,6 +13,8 @@ class Image extends PIXI.Sprite implements GameObject, SpriteInterface {
 
   bool autoCull;
   InputHandler input;
+  
+  Body body;
 
   Point cameraOffset;
   Point anchor;
