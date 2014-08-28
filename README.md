@@ -102,7 +102,7 @@ Change log
 ==========
 
 0.9.4
- * Fix animation bug (thanks to #3).
+ * Fix animation bug (thanks to [#3](https://github.com/playif/play_phaser/issues/3)).
 
 0.9.3
  * Fix bugs.
