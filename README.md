@@ -13,7 +13,6 @@ Feel free to let me know if there is any problem.
 pub: [https://pub.dartlang.org/packages/play_phaser]
 
 
-
 Features:
 =========
 * animation (100%)
