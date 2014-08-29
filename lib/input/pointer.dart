@@ -334,7 +334,11 @@ class Pointer {
       this.pointerId = event['pointerId'];
       this.identifier = event['identifier'];
       this.target = event['target'];
+    } else if (event is MouseEvent) {
+      this.target = event.target;
     } else {
+      //this.pointerId = event.pointerId;
+      this.identifier = event.identifier;
       this.target = event.target;
     }
 

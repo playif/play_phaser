@@ -31,7 +31,7 @@ class Text extends PIXI.Text implements GameObject {
   int z;
   Point world;
 
-  //String _text;
+  String _text = '';
   String _font;
   int _fontSize;
   String _fontWeight;
@@ -44,7 +44,6 @@ class Text extends PIXI.Text implements GameObject {
 
   int renderOrderID;
   bool autoCull = false;
-  bool destroyPhase = false;
 
   //this.setStyle(style);
 
@@ -109,18 +108,18 @@ class Text extends PIXI.Text implements GameObject {
    */
   //this._cache = [ 0, 0, 0, 0, 1, 0, 1, 0, 0 ];
 
-  bool get fixedToCamera {
-    return this._cache[7] == 1;
-  }
-
-  set fixedToCamera(bool value) {
-    if (value) {
-      this._cache[7] = 1;
-      this.cameraOffset.set(this.x, this.y);
-    } else {
-      this._cache[7] = 0;
-    }
-  }
+//  bool get fixedToCamera {
+//    return this._cache[7] == 1;
+//  }
+//
+//  set fixedToCamera(bool value) {
+//    if (value) {
+//      this._cache[7] = 1;
+//      this.cameraOffset.set(this.x, this.y);
+//    } else {
+//      this._cache[7] = 0;
+//    }
+//  }
 
   GameObject bringToTop([GameObject child]) {
     if (child == null) {
@@ -150,6 +149,8 @@ class Text extends PIXI.Text implements GameObject {
     if (this.style == null) {
       this.style = new PIXI.TextStyle();
     }
+
+    this._text = text;
 
     /**
      * @property {boolean} exists - If exists = false then the Text isn't updated by the core game loop.
@@ -249,28 +250,28 @@ class Text extends PIXI.Text implements GameObject {
 
   }
 
-  bool get inputEnabled {
-
-    return (this.input != null && this.input.enabled);
-
-  }
-
-  set inputEnabled(bool value) {
-
-    if (value) {
-      if (this.input == null) {
-        this.input = new InputHandler(this);
-        this.input.start();
-      } else if (this.input != null && !this.input.enabled) {
-        this.input.start();
-      }
-    } else {
-      if (this.input != null && this.input.enabled) {
-        this.input.stop();
-      }
-    }
-
-  }
+//  bool get inputEnabled {
+//
+//    return (this.input != null && this.input.enabled);
+//
+//  }
+//
+//  set inputEnabled(bool value) {
+//
+//    if (value) {
+//      if (this.input == null) {
+//        this.input = new InputHandler(this);
+//        this.input.start();
+//      } else if (this.input != null && !this.input.enabled) {
+//        this.input.start();
+//      }
+//    } else {
+//      if (this.input != null && this.input.enabled) {
+//        this.input.stop();
+//      }
+//    }
+//
+//  }
 
 
   /**
@@ -471,7 +472,7 @@ class Text extends PIXI.Text implements GameObject {
     }
 
     //split text into lines
-    var lines = outputText.split(linesReg);
+    List<String> lines = outputText.split(linesReg);
 
     //calculate text width
     List lineWidths = new List(lines.length);
@@ -491,7 +492,7 @@ class Text extends PIXI.Text implements GameObject {
     this.canvas.height = lineHeight * lines.length;
 
     if (game.device.cocoonJS) {
-      print("hi");
+      //print("hi");
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
@@ -577,5 +578,425 @@ class Text extends PIXI.Text implements GameObject {
 
   }
 
+  /**
+  * Indicates the rotation of the Text, in degrees, from its original orientation. Values from 0 to 180 represent clockwise rotation; values from 0 to -180 represent counterclockwise rotation.
+  * Values outside this range are added to or subtracted from 360 to obtain a value within the range. For example, the statement player.angle = 450 is the same as player.angle = 90.
+  * If you wish to work in radians instead of degrees use the property Sprite.rotation instead.
+  * @name Phaser.Text#angle
+  * @property {number} angle - Gets or sets the angle of rotation in degrees.
+  */
+  //Object.defineProperty(Phaser.Text.prototype, 'angle', {
+
+  num get angle {
+    return Math.radToDeg(this.rotation);
+  }
+
+  set angle(num value) {
+    this.rotation = Math.degToRad(value);
+  }
+
+  //});
+
+  /**
+  * The text string to be displayed by this Text object, taking into account the style settings.
+  * @name Phaser.Text#text
+  * @property {string} text - The text string to be displayed by this Text object, taking into account the style settings.
+  */
+  //Object.defineProperty(Phaser.Text.prototype, 'text', {
+
+  String get text {
+    return this._text;
+  }
+
+  set text(String value) {
+
+    if (value != this._text) {
+      this._text = value;
+      this._dirty = true;
+      this.updateTransform();
+    }
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Text#font
+  * @property {string} font - The font the text will be rendered in, i.e. 'Arial'. Must be loaded in the browser before use.
+  */
+  //Object.defineProperty(Phaser.Text.prototype, 'font', {
+
+  String get font {
+    return this._font;
+  }
+
+  set font(String value) {
+
+    if (value != this._font) {
+      this._font = value.trim();
+      this.style.font = this._fontWeight + ' ' + this._fontSize.toString() + "px '" + this._font + "'";
+      this._dirty = true;
+      this.updateTransform();
+    }
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Text#fontSize
+  * @property {number} fontSize - The size of the font in pixels.
+  */
+  //Object.defineProperty(Phaser.Text.prototype, 'fontSize', {
+
+  num get fontSize {
+    return this._fontSize;
+  }
+
+  set fontSize(num value) {
+
+    //value = parseInt(value, 10);
+
+    if (value != this._fontSize) {
+      this._fontSize = value;
+      this.style.font = this._fontWeight + ' ' + this._fontSize.toString() + "px '" + this._font + "'";
+      this._dirty = true;
+      this.updateTransform();
+    }
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Text#fontWeight
+  * @property {number} fontWeight - The weight of the font: 'normal', 'bold', 'italic'. You can combine settings too, such as 'bold italic'.
+  */
+  //Object.defineProperty(Phaser.Text.prototype, 'fontWeight', {
+
+  String get fontWeight {
+    return this._fontWeight;
+  }
+
+  set fontWeight(String value) {
+
+    if (value != this._fontWeight) {
+      this._fontWeight = value;
+      this.style.font = this._fontWeight + ' ' + this._fontSize.toString() + "px '" + this._font + "'";
+      this._dirty = true;
+      this.updateTransform();
+    }
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Text#fill
+  * @property {object} fill - A canvas fillstyle that will be used on the text eg 'red', '#00FF00'.
+  */
+  //Object.defineProperty(Phaser.Text.prototype, 'fill', {
+
+  String get fill {
+    return this.style.fill;
+  }
+
+  set fill(String value) {
+
+    if (value != this.style.fill) {
+      this.style.fill = value;
+      this._dirty = true;
+    }
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Text#align
+  * @property {string} align - Alignment for multiline text ('left', 'center' or 'right'), does not affect single line text.
+  */
+  //Object.defineProperty(Phaser.Text.prototype, 'align', {
+
+  String get align {
+    return this.style.align;
+  }
+
+  set align(String value) {
+
+    if (value != this.style.align) {
+      this.style.align = value;
+      this._dirty = true;
+    }
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Text#stroke
+  * @property {string} stroke - A canvas fillstyle that will be used on the text stroke eg 'blue', '#FCFF00'.
+  */
+  //Object.defineProperty(Phaser.Text.prototype, 'stroke', {
+
+  String get stroke {
+    return this.style.stroke;
+  }
+
+  set stroke(String value) {
+
+    if (value != this.style.stroke) {
+      this.style.stroke = value;
+      this._dirty = true;
+    }
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Text#strokeThickness
+  * @property {number} strokeThickness - A number that represents the thickness of the stroke. Default is 0 (no stroke)
+  */
+  //Object.defineProperty(Phaser.Text.prototype, 'strokeThickness', {
+
+  num get strokeThickness {
+    return this.style.strokeThickness;
+  }
+
+  set strokeThickness(num value) {
+
+    if (value != this.style.strokeThickness) {
+      this.style.strokeThickness = value;
+      this._dirty = true;
+    }
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Text#wordWrap
+  * @property {boolean} wordWrap - Indicates if word wrap should be used.
+  */
+  //Object.defineProperty(Phaser.Text.prototype, 'wordWrap', {
+
+  bool get isWordWrap {
+    return this.style.wordWrap;
+  }
+
+  set isWordWrap(bool value) {
+
+    if (value != this.style.wordWrap) {
+      this.style.wordWrap = value;
+      this._dirty = true;
+    }
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Text#wordWrapWidth
+  * @property {number} wordWrapWidth - The width at which text will wrap.
+  */
+  //Object.defineProperty(Phaser.Text.prototype, 'wordWrapWidth', {
+
+  num get wordWrapWidth {
+    return this.style.wordWrapWidth;
+  }
+
+  set wordWrapWidth(num value) {
+
+    if (value != this.style.wordWrapWidth) {
+      this.style.wordWrapWidth = value;
+      this._dirty = true;
+    }
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Text#lineSpacing
+  * @property {number} lineSpacing - Additional spacing (in pixels) between each line of text if multi-line.
+  */
+  //Object.defineProperty(Phaser.Text.prototype, 'lineSpacing', {
+
+  num get lineSpacing {
+    return this._lineSpacing;
+  }
+
+  set lineSpacing(num value) {
+
+    if (value != this._lineSpacing) {
+      this._lineSpacing = value;
+      this._dirty = true;
+      this.updateTransform();
+    }
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Text#shadowOffsetX
+  * @property {number} shadowOffsetX - The shadowOffsetX value in pixels. This is how far offset horizontally the shadow effect will be.
+  */
+  //Object.defineProperty(Phaser.Text.prototype, 'shadowOffsetX', {
+
+  num get shadowOffsetX {
+    return this.style.shadowOffsetX;
+  }
+
+  set shadowOffsetX(num value) {
+
+    if (value != this.style.shadowOffsetX) {
+      this.style.shadowOffsetX = value;
+      this._dirty = true;
+    }
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Text#shadowOffsetY
+  * @property {number} shadowOffsetY - The shadowOffsetY value in pixels. This is how far offset vertically the shadow effect will be.
+  */
+  //Object.defineProperty(Phaser.Text.prototype, 'shadowOffsetY', {
+
+  get shadowOffsetY {
+    return this.style.shadowOffsetY;
+  }
+
+  set shadowOffsetY(num value) {
+
+    if (value != this.style.shadowOffsetY) {
+      this.style.shadowOffsetY = value;
+      this._dirty = true;
+    }
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Text#shadowColor
+  * @property {string} shadowColor - The color of the shadow, as given in CSS rgba format. Set the alpha component to 0 to disable the shadow.
+  */
+  //Object.defineProperty(Phaser.Text.prototype, 'shadowColor', {
+
+  String get shadowColor {
+    return this.style.shadowColor;
+  }
+
+  set shadowColor(String value) {
+
+    if (value != this.style.shadowColor) {
+      this.style.shadowColor = value;
+      this._dirty = true;
+    }
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Text#shadowBlur
+  * @property {number} shadowBlur - The shadowBlur value. Make the shadow softer by applying a Gaussian blur to it. A number from 0 (no blur) up to approx. 10 (depending on scene).
+  */
+  //Object.defineProperty(Phaser.Text.prototype, 'shadowBlur', {
+
+  num get shadowBlur {
+    return this.style.shadowBlur;
+  }
+
+  set shadowBlur(num value) {
+
+    if (value != this.style.shadowBlur) {
+      this.style.shadowBlur = value;
+      this._dirty = true;
+    }
+
+  }
+
+  //});
+
+  /**
+  * By default a Text object won't process any input events at all. By setting inputEnabled to true the Phaser.InputHandler is
+  * activated for this object and it will then start to process click/touch events and more.
+  *
+  * @name Phaser.Text#inputEnabled
+  * @property {boolean} inputEnabled - Set to true to allow this object to receive input events.
+  */
+  //Object.defineProperty(Phaser.Text.prototype, "inputEnabled", {
+
+  bool get inputEnabled {
+
+    return (this.input != null && this.input.enabled);
+
+  }
+
+  set inputEnabled(bool value) {
+
+    if (value) {
+      if (this.input == null) {
+        this.input = new InputHandler(this);
+        this.input.start();
+      } else if (this.input != null && !this.input.enabled) {
+        this.input.start();
+      }
+    } else {
+      if (this.input != null && this.input.enabled) {
+        this.input.stop();
+      }
+    }
+
+  }
+
+  //});
+
+  /**
+  * An Text that is fixed to the camera uses its x/y coordinates as offsets from the top left of the camera. These are stored in Text.cameraOffset.
+  * Note that the cameraOffset values are in addition to any parent in the display list.
+  * So if this Text was in a Group that has x: 200, then this will be added to the cameraOffset.x
+  *
+  * @name Phaser.Text#fixedToCamera
+  * @property {boolean} fixedToCamera - Set to true to fix this Text to the Camera at its current world coordinates.
+  */
+  //Object.defineProperty(Phaser.Text.prototype, "fixedToCamera", {
+
+  bool get fixedToCamera {
+
+    return this._cache[7] == 1;
+
+  }
+
+  set fixedToCamera(bool value) {
+
+    if (value) {
+      this._cache[7] = 1;
+      this.cameraOffset.set(this.x, this.y);
+    } else {
+      this._cache[7] = 0;
+    }
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Text#destroyPhase
+  * @property {boolean} destroyPhase - True if this object is currently being destroyed.
+  */
+  //Object.defineProperty(Phaser.Text.prototype, "destroyPhase", {
+
+  bool get destroyPhase {
+
+    return this._cache[8] == 1;
+
+  }
+
+  //});
 
 }

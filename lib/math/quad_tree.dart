@@ -15,11 +15,11 @@ class QuadTree {
 
   Bounds bounds = null;
 
-  List<Body> objects = new List<Body>();
+  final List<Body> objects = new List<Body>();
 
-  List<QuadTree> nodes = new List<QuadTree>(4);
+  final List<QuadTree> nodes = new List<QuadTree>(4);
 
-  List _empty = [];
+  static const List _empty = const [];
 
   QuadTree(num x, num y, num width, num height, [int maxObjects, int maxLevels, int level]) {
     reset(x.toInt(), y.toInt(), width.toInt(), height.toInt(), maxObjects, maxLevels, level);
@@ -50,7 +50,7 @@ class QuadTree {
 
 
   populate(Group group) {
-    group.forEach(this.populateHandler, true);
+    group.forEach(populateHandler, true);
   }
 
 
@@ -168,7 +168,7 @@ class QuadTree {
       index = this.getIndex(source);
     } else {
       if (source.body == null) {
-        return this._empty;
+        return _empty;
       }
       returnObjects = this.objects;
       index = this.getIndex(source.body);
@@ -196,7 +196,7 @@ class QuadTree {
 
     this.objects.clear();
 
-    var i = this.nodes.length;
+    int i = this.nodes.length;
 
     while (i-- > 0) {
       if (this.nodes[i] != null) {

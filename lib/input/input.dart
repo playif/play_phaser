@@ -504,7 +504,8 @@ class Input {
 
   int addMoveCallback(Function callback, callbackContext) {
     this.moveCallbacks.add({
-        'callback': callback, 'context': callbackContext
+      'callback': callback,
+      'context': callbackContext
     });
     return this.moveCallbacks.length - 1;
   }
@@ -542,8 +543,7 @@ class Input {
     if (next == 0) {
       window.console.warn("You can only have 10 Pointer objects");
       return null;
-    }
-    else {
+    } else {
       //reflect(this).getField(new Symbol('pointer$next'))
       this.pointers[next] = new Pointer(this.game, next);
       return this.pointers[next];
@@ -618,7 +618,7 @@ class Input {
    * @param {boolean} [hard=false] - A soft reset won't reset any events or callbacks that are bound. A hard reset will.
    */
 
-  reset([bool hard=false]) {
+  reset([bool hard = false]) {
 
     if (!this.game.isBooted || this.resetLocked) {
       return;
@@ -682,14 +682,12 @@ class Input {
     if (this.maxPointers < 10 && this.totalActivePointers == this.maxPointers) {
       return null;
     }
-
+    //print(identifier);
     if (this.pointers[1].active == false) {
       return this.pointers[1].start(event);
-    }
-    else if (this.pointers[2].active == false) {
+    } else if (this.pointers[2].active == false) {
       return this.pointers[2].start(event);
-    }
-    else {
+    } else {
       for (var i = 3; i <= 10; i++) {
         if (this.pointers[i] != null && this.pointers[i].active == false) {
           return this.pointers[i].start(event);
@@ -709,16 +707,20 @@ class Input {
    */
 
   Pointer updatePointer(event) {
-
-    if (this.pointers[1].active && this.pointers[1].identifier == event['identifier']) {
+    int identifier;
+    if (event is JsObject) {
+      identifier = event['identifier'];
+    } else {
+      identifier = event.identifier;
+    }
+    //print(identifier);
+    if (this.pointers[1].active && this.pointers[1].identifier == identifier) {
       return this.pointers[1].move(event);
-    }
-    else if (this.pointers[2].active && this.pointers[2].identifier == event['identifier']) {
+    } else if (this.pointers[2].active && this.pointers[2].identifier == identifier) {
       return this.pointers[2].move(event);
-    }
-    else {
+    } else {
       for (var i = 3; i <= 10; i++) {
-        if (this.pointers[i] != null && this.pointers[i].active && this.pointers[i].identifier == event['identifier']) {
+        if (this.pointers[i] != null && this.pointers[i].active && this.pointers[i].identifier == identifier) {
           return this.pointers[i].move(event);
         }
       }
@@ -736,16 +738,20 @@ class Input {
    */
 
   Pointer stopPointer(event) {
-
-    if (this.pointers[1].active && this.pointers[1].identifier == event['identifier']) {
+    int identifier;
+    if (event is JsObject) {
+      identifier = event['identifier'];
+    } else {
+      identifier = event.identifier;
+    }
+    //print(identifier);
+    if (this.pointers[1].active && this.pointers[1].identifier == identifier) {
       return this.pointers[1].stop(event);
-    }
-    else if (this.pointers[2].active && this.pointers[2].identifier == event['identifier']) {
+    } else if (this.pointers[2].active && this.pointers[2].identifier == identifier) {
       return this.pointers[2].stop(event);
-    }
-    else {
+    } else {
       for (var i = 3; i <= 10; i++) {
-        if (this.pointers[i] != null && this.pointers[i].active && this.pointers[i].identifier == event['identifier']) {
+        if (this.pointers[i] != null && this.pointers[i].active && this.pointers[i].identifier == identifier) {
           return this.pointers[i].stop(event);
         }
       }
@@ -762,17 +768,15 @@ class Input {
    * @return {Phaser.Pointer} A Pointer object or null if no Pointer object matches the requested state.
    */
 
-  Pointer getPointer([bool state=false]) {
+  Pointer getPointer([bool state = false]) {
 
     //state = state || false;
 
     if (this.pointers[1].active == state) {
       return this.pointers[1];
-    }
-    else if (this.pointers[2].active == state) {
+    } else if (this.pointers[2].active == state) {
       return this.pointers[2];
-    }
-    else {
+    } else {
       for (var i = 3; i <= 10; i++) {
         if (this.pointers[i] != null && this.pointers[i].active == state) {
           return this.pointers[i];
@@ -799,11 +803,9 @@ class Input {
 
     if (this.pointers[1].identifier == identifier) {
       return this.pointers[1];
-    }
-    else if (this.pointers[2].identifier == identifier) {
+    } else if (this.pointers[2].identifier == identifier) {
       return this.pointers[2];
-    }
-    else {
+    } else {
       for (var i = 3; i <= 10; i++) {
         if (this.pointers[i] != null && this.pointers[i].identifier == identifier) {
           return this.pointers[i];
@@ -829,11 +831,9 @@ class Input {
 
     if (this.pointers[1].pointerId == pointerId) {
       return this.pointers[1];
-    }
-    else if (this.pointers[2].pointerId == pointerId) {
+    } else if (this.pointers[2].pointerId == pointerId) {
       return this.pointers[2];
-    }
-    else {
+    } else {
       for (var i = 3; i <= 10; i++) {
         if (this.pointers[i] != null && this.pointers[i].pointerId == pointerId) {
           return this.pointers[i];
@@ -862,10 +862,7 @@ class Input {
     var wt = displayObject.worldTransform;
     var id = 1 / (wt.a * wt.d + wt.b * -wt.c);
 
-    return output.setTo(
-        wt.d * id * pointer.x + -wt.b * id * pointer.y + (wt.ty * wt.b - wt.tx * wt.d) * id,
-        wt.a * id * pointer.y + -wt.c * id * pointer.x + (-wt.ty * wt.a + wt.tx * wt.c) * id
-    );
+    return output.setTo(wt.d * id * pointer.x + -wt.b * id * pointer.y + (wt.ty * wt.b - wt.tx * wt.d) * id, wt.a * id * pointer.y + -wt.c * id * pointer.x + (-wt.ty * wt.a + wt.tx * wt.c) * id);
 
   }
 
@@ -888,7 +885,7 @@ class Input {
 
     localPoint.copyFrom(this._localPoint);
 
-    if (displayObject.hitArea!= null) {
+    if (displayObject.hitArea != null) {
       if (displayObject.hitArea.contains(this._localPoint.x, this._localPoint.y)) {
 //        print(this._localPoint.x);
 //        print(this._localPoint.y);
@@ -896,8 +893,7 @@ class Input {
       }
 
       return false;
-    }
-    else if (displayObject is TileSprite) {
+    } else if (displayObject is TileSprite) {
       var width = displayObject.width;
       var height = displayObject.height;
       var x1 = -width * displayObject.anchor.x;
@@ -909,22 +905,22 @@ class Input {
           return true;
         }
       }
-    }
-    else if (displayObject is SpriteInterface) {
-        var width = (displayObject as SpriteInterface).texture.frame.width;
-        var height = (displayObject as SpriteInterface).texture.frame.height;
-        var x1 = -width * displayObject.anchor.x;
+    } else if (displayObject is SpriteInterface) {
+      var width = (displayObject as SpriteInterface).texture.frame.width;
+      var height = (displayObject as SpriteInterface).texture.frame.height;
+      var x1 = -width * displayObject.anchor.x;
 
-        if (this._localPoint.x > x1 && this._localPoint.x < x1 + width) {
-          var y1 = -height * displayObject.anchor.y;
+      if (this._localPoint.x > x1 && this._localPoint.x < x1 + width) {
+        var y1 = -height * displayObject.anchor.y;
 
-          if (this._localPoint.y > y1 && this._localPoint.y < y1 + height) {
-            return true;
-          }
+        if (this._localPoint.y > y1 && this._localPoint.y < y1 + height) {
+          return true;
         }
       }
+    }
 
-    for (var i = 0, len = displayObject.children.length; i < len; i++) {
+    for (var i = 0,
+        len = displayObject.children.length; i < len; i++) {
       if (this.hitTest(displayObject.children[i], pointer, localPoint)) {
         return true;
       }
