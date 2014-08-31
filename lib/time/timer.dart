@@ -1,5 +1,7 @@
 part of Phaser;
- 
+
+typedef void TimerFunc(Timer timer);
+
 class Timer {
   Game game;
   bool autoDestroy=true;
@@ -8,7 +10,7 @@ class Timer {
   double elapsed = 0.0;
   List<TimerEvent> events = [];
 
-  Signal onComplete = new Signal();
+  Signal<TimerFunc> onComplete = new Signal();
 
   double nextTick = 0.0;
   int timeCap = 1000;

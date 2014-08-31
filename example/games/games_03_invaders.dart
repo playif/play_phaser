@@ -35,12 +35,12 @@ class games_03_invaders extends State {
 
   create() {
 
-    game.world.setBounds(0, 0, 800, 480);
+    game.world.setBounds(0, 0, 800, 600);
 
     game.physics.startSystem(Physics.ARCADE);
 
     //  The scrolling starfield background
-    starfield = game.add.tileSprite(0, 0, 800, 480, 'starfield');
+    starfield = game.add.tileSprite(0, 0, 800, 600, 'starfield');
 
     //  Our bullet group
     bullets = game.add.group();

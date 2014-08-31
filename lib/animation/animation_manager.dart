@@ -22,10 +22,10 @@ class AnimationManager {
 
   int get frameTotal => frameData.total;
 
-  bool get paused => currentAnim.isPaused;
+  bool get paused => currentAnim._isPaused;
 
   set paused(bool value) {
-    currentAnim.isPaused = value;
+    currentAnim._isPaused = value;
   }
 
   int get frame {

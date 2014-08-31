@@ -23,10 +23,10 @@ class Button extends Image {
   String onDownSoundMarker;
   String onUpSoundMarker;
 
-  Signal onInputOver;
-  Signal onInputOut;
-  Signal onInputDown;
-  Signal onInputUp;
+  Signal<InputFunc> onInputOver;
+  Signal<InputFunc> onInputOut;
+  Signal<InputFunc> onInputDown;
+  Signal<InputUpFunc> onInputUp;
 
   bool freezeFrames;
   bool forceOut;

@@ -1,5 +1,7 @@
 part of Phaser;
 
+typedef void SoundFunc(Sound sound);
+
 class Marker {
   String name;
   num start;
@@ -39,14 +41,14 @@ class Sound {
   GainNode gainNode;
   bool loop;
 
-  Signal onDecoded;
-  Signal onPlay;
-  Signal onPause;
-  Signal onResume;
-  Signal onLoop;
-  Signal onStop;
-  Signal onMute;
-  Signal onMarkerComplete;
+  Signal<SoundFunc> onDecoded;
+  Signal<SoundFunc> onPlay;
+  Signal<SoundFunc> onPause;
+  Signal<SoundFunc> onResume;
+  Signal<SoundFunc> onLoop;
+  Signal<SoundFunc> onStop;
+  Signal<SoundFunc> onMute;
+  Signal<SoundFunc> onMarkerComplete;
   num _volume;
   var _buffer;
   bool _muted;

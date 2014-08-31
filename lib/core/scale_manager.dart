@@ -1,5 +1,9 @@
 part of Phaser;
 
+typedef void ScreenFunc(int orientation, bool a, bool b);
+
+typedef void ResizeFunc(num width, num height);
+
 class ScaleManager {
   Game game;
   num width, height;
@@ -58,27 +62,27 @@ class ScaleManager {
   /**
    * @property {Phaser.Signal} enterLandscape - The event that is dispatched when the browser enters landscape orientation.
    */
-  Signal enterLandscape;
+  Signal<ScreenFunc> enterLandscape;
 
   /**
    * @property {Phaser.Signal} enterPortrait - The event that is dispatched when the browser enters horizontal orientation.
    */
-  Signal enterPortrait;
+  Signal<ScreenFunc> enterPortrait;
 
   /**
    * @property {Phaser.Signal} enterIncorrectOrientation - The event that is dispatched when the browser enters an incorrect orientation, as defined by forceOrientation.
    */
-  Signal enterIncorrectOrientation;
+  Signal<GameFunc> enterIncorrectOrientation;
 
   /**
    * @property {Phaser.Signal} leaveIncorrectOrientation - The event that is dispatched when the browser leaves an incorrect orientation, as defined by forceOrientation.
    */
-  Signal leaveIncorrectOrientation;
+  Signal<GameFunc> leaveIncorrectOrientation;
 
   /**
    * @property {Phaser.Signal} hasResized - The event that is dispatched when the game scale changes.
    */
-  Signal hasResized;
+  Signal<ResizeFunc> hasResized;
 
   /**
    * This is the DOM element that will have the Full Screen mode called on it. It defaults to the game canvas, but can be retargetted to any valid DOM element.
@@ -91,12 +95,12 @@ class ScaleManager {
   /**
    * @property {Phaser.Signal} enterFullScreen - The event that is dispatched when the browser enters full screen mode (if it supports the FullScreen API).
    */
-  Signal enterFullScreen;
+  Signal<ScreenFunc> enterFullScreen;
 
   /**
    * @property {Phaser.Signal} leaveFullScreen - The event that is dispatched when the browser leaves full screen mode (if it supports the FullScreen API).
    */
-  Signal leaveFullScreen;
+  Signal<ScreenFunc> leaveFullScreen;
 
   /**
    * @property {number} orientation - The orientation value of the game (as defined by window.orientation if set). 90 = landscape. 0 = portrait.

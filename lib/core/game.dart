@@ -46,10 +46,10 @@ class Game {
   bool stepping;
   bool pendingStep;
   num stepCount;
-  Signal onPause;
-  Signal onResume;
-  Signal onBlur;
-  Signal onFocus;
+  Signal<GameFunc> onPause;
+  Signal<GameFunc> onResume;
+  Signal<GameFunc> onBlur;
+  Signal<GameFunc> onFocus;
   bool _paused;
   bool _codePaused;
   bool preserveDrawingBuffer;

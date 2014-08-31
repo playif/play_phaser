@@ -69,7 +69,7 @@ class Mouse {
    * @property {Phaser.Signal} pointerLock - This event is dispatched when the browser enters or leaves pointer lock state.
    * @default
    */
-  Signal pointerLock;
+  Signal<InputFunc> pointerLock;
 
   /**
    * @property {MouseEvent} event - The browser mouse DOM event. Will be set to null if no mouse event has ever been received.

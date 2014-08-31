@@ -6,6 +6,9 @@ part of Phaser;
 //part "arcade/body.dart";
 //part "arcade/arcade.dart";
 
+typedef void CollideFunc(GameObject obj1, GameObject obj2);
+typedef bool ProcessFunc(GameObject obj1, GameObject obj2);
+
 
 class Physics {
   Game game;

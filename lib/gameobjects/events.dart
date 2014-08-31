@@ -1,23 +1,37 @@
 part of Phaser;
 
+//typedef bool InputHandler();
+typedef void GameFunc();
+
+typedef void GameObjectFunc(GameObject object);
+
+typedef void InputFunc(GameObject object, Pointer pointer);
+
+typedef void InputUpFunc(GameObject object, Pointer pointer, bool isOver);
+
+typedef void GroupFunc(GameObject object, Group group);
+
+typedef void AnimationFunc(GameObject object, Animation animation);
+
+/// The Events component is a collection of events fired by the parent [GameObject].
 class Events {
-  Signal onAddedToGroup;
-  Signal onRemovedFromGroup;
-  Signal onKilled;
-  Signal onRevived;
-  Signal onOutOfBounds;
-  Signal onEnterBounds;
+  Signal<GroupFunc> onAddedToGroup;
+  Signal<GroupFunc> onRemovedFromGroup;
+  Signal<GameObjectFunc> onKilled;
+  Signal<GameObjectFunc> onRevived;
+  Signal<GameObjectFunc> onOutOfBounds;
+  Signal<GameObjectFunc> onEnterBounds;
 
-  Signal onInputOver;
-  Signal onInputOut;
-  Signal onInputDown;
-  Signal onInputUp;
-  Signal onDragStart;
-  Signal onDragStop;
+  Signal<InputFunc> onInputOver;
+  Signal<InputFunc> onInputOut;
+  Signal<InputFunc> onInputDown;
+  Signal<InputUpFunc> onInputUp;
+  Signal<InputFunc> onDragStart;
+  Signal<InputFunc> onDragStop;
 
-  Signal onAnimationStart;
-  Signal onAnimationComplete;
-  Signal onAnimationLoop;
+  Signal<AnimationFunc> onAnimationStart;
+  Signal<AnimationFunc> onAnimationComplete;
+  Signal<AnimationFunc> onAnimationLoop;
 
   GameObject sprite;
 

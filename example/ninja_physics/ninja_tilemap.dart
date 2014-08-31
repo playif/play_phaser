@@ -19,7 +19,7 @@ class ninja_tilemap extends State {
 
   create() {
 
-    Sprite sky = game.add.image(0, 0, 'sky');
+    Image sky = game.add.image(0, 0, 'sky');
     sky.fixedToCamera = true;
 
     //  Activate the Ninja physics system

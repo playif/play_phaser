@@ -1,6 +1,5 @@
 part of Phaser;
 
-
 class Ninja {
 
   /**
@@ -91,7 +90,7 @@ class Ninja {
    * @param {boolean} [children=true] - Should a body be created on all children of this object? If true it will recurse down the display list as far as it can go.
    */
 
-  enableAABB(object, [bool children=true]) {
+  enableAABB(object, [bool children = true]) {
     this.enable(object, 1, 0, 0, children);
   }
 
@@ -105,7 +104,7 @@ class Ninja {
    * @param {boolean} [children=true] - Should a body be created on all children of this object? If true it will recurse down the display list as far as it can go.
    */
 
-  enableCircle(object, radius, [bool children=true]) {
+  enableCircle(object, radius, [bool children = true]) {
 
     this.enable(object, 2, 0, radius, children);
 
@@ -123,7 +122,7 @@ class Ninja {
    * @param {boolean} [children=true] - Should a body be created on all children of this object? If true it will recurse down the display list as far as it can go.
    */
 
-  enableTile(object, [int id =1, bool children=true]) {
+  enableTile(object, [int id = 1, bool children = true]) {
 
     this.enable(object, 3, id, 0, children);
 
@@ -269,9 +268,9 @@ class Ninja {
     this.clearTilemapLayerBodies(map, layer);
 
     for (int y = 0,
-    h = map.layers[layer].height; y < h; y++) {
+        h = map.layers[layer].height; y < h; y++) {
       for (int x = 0,
-      w = map.layers[layer].width; x < w; x++) {
+          w = map.layers[layer].width; x < w; x++) {
         Tile tile = map.layers[layer].data[y][x];
 //        if (tile != null) {
 //          print(tile.index);
@@ -303,7 +302,7 @@ class Ninja {
    * @returns {boolean} True if an overlap occured otherwise false.
    */
 
-  bool overlap(GameObject object1, object2, [Function overlapCallback, Function processCallback]) {
+  bool overlap(GameObject object1, object2, [CollideFunc overlapCallback, ProcessFunc processCallback]) {
 
     //overlapCallback = overlapCallback || null;
     //processCallback = processCallback || null;
@@ -314,7 +313,7 @@ class Ninja {
 
     if (object2 is List) {
       for (var i = 0,
-      len = object2.length; i < len; i++) {
+          len = object2.length; i < len; i++) {
         this.collideHandler(object1, object2[i], overlapCallback, processCallback, true);
       }
     } else {
@@ -342,7 +341,7 @@ class Ninja {
    * @returns {boolean} True if a collision occured otherwise false.
    */
 
-  bool collide(GameObject object1, object2, [Function collideCallback, Function processCallback]) {
+  bool collide(GameObject object1, object2, [CollideFunc collideCallback, ProcessFunc processCallback]) {
 
     //collideCallback = collideCallback || null;
     //processCallback = processCallback || null;
@@ -353,7 +352,7 @@ class Ninja {
 
     if (object2 is List) {
       for (int i = 0,
-      len = object2.length; i < len; i++) {
+          len = object2.length; i < len; i++) {
         this.collideHandler(object1, object2[i], collideCallback, processCallback, false);
       }
     } else {
@@ -377,7 +376,7 @@ class Ninja {
    * @param {boolean} overlapOnly - Just run an overlap or a full collision.
    */
 
-  collideHandler(GameObject object1, GameObject object2, [collideCallback, processCallback, bool overlapOnly]) {
+  collideHandler(GameObject object1, GameObject object2, [CollideFunc collideCallback,ProcessFunc processCallback, bool overlapOnly]) {
 
     //  Only collide valid objects
     if (object2 == null && (object1.type == GROUP || object1.type == EMITTER)) {
@@ -396,8 +395,7 @@ class Ninja {
           throw new Expando("Not implement yet!");
           //this.collideSpriteVsTilemapLayer(object1, object2, collideCallback, processCallback);
         }
-      }
-      //  GROUPS
+      } //  GROUPS
       else if (object1.type == GROUP) {
         if (object2.type == SPRITE || object2.type == TILESPRITE) {
           this.collideSpriteVsGroup(object2, object1, collideCallback, processCallback, overlapOnly);
@@ -407,28 +405,26 @@ class Ninja {
           throw new Expando("Not implement yet!");
           //this.collideGroupVsTilemapLayer(object1, object2, collideCallback, processCallback);
         }
-      }
-      //  TILEMAP LAYERS
+      } //  TILEMAP LAYERS
       else if (object1.type == TILEMAPLAYER) {
-          if (object2.type == SPRITE || object2.type == TILESPRITE) {
-            throw new Expando("Not implement yet!");
-            //this.collideSpriteVsTilemapLayer(object2, object1, collideCallback, processCallback);
-          } else if (object2.type == GROUP || object2.type == EMITTER) {
-            throw new Expando("Not implement yet!");
-            //this.collideGroupVsTilemapLayer(object2, object1, collideCallback, processCallback);
-          }
+        if (object2.type == SPRITE || object2.type == TILESPRITE) {
+          throw new Expando("Not implement yet!");
+          //this.collideSpriteVsTilemapLayer(object2, object1, collideCallback, processCallback);
+        } else if (object2.type == GROUP || object2.type == EMITTER) {
+          throw new Expando("Not implement yet!");
+          //this.collideGroupVsTilemapLayer(object2, object1, collideCallback, processCallback);
         }
-        //  EMITTER
-        else if (object1.type == EMITTER) {
-            if (object2.type == SPRITE || object2.type == TILESPRITE) {
-              this.collideSpriteVsGroup(object2, object1, collideCallback, processCallback, overlapOnly);
-            } else if (object2.type == GROUP || object2.type == EMITTER) {
-              this.collideGroupVsGroup(object1, object2, collideCallback, processCallback, overlapOnly);
-            } else if (object2.type == TILEMAPLAYER) {
-              throw new Expando("Not implement yet!");
-              //this.collideGroupVsTilemapLayer(object1, object2, collideCallback, processCallback);
-            }
-          }
+      } //  EMITTER
+      else if (object1.type == EMITTER) {
+        if (object2.type == SPRITE || object2.type == TILESPRITE) {
+          this.collideSpriteVsGroup(object2, object1, collideCallback, processCallback, overlapOnly);
+        } else if (object2.type == GROUP || object2.type == EMITTER) {
+          this.collideGroupVsGroup(object1, object2, collideCallback, processCallback, overlapOnly);
+        } else if (object2.type == TILEMAPLAYER) {
+          throw new Expando("Not implement yet!");
+          //this.collideGroupVsTilemapLayer(object1, object2, collideCallback, processCallback);
+        }
+      }
     }
 
   }
@@ -439,8 +435,8 @@ class Ninja {
    * @method Phaser.Physics.Ninja#collideSpriteVsSprite
    * @private
    */
-
-  collideSpriteVsSprite(Sprite sprite1, Sprite sprite2, Function collideCallback, Function processCallback, bool overlapOnly) {
+ 
+  collideSpriteVsSprite(Sprite sprite1, Sprite sprite2, CollideFunc collideCallback, ProcessFunc processCallback, bool overlapOnly) {
 
     if (this.separate(sprite1.body as ninja.Body, sprite2.body as ninja.Body)) {
       if (collideCallback != null) {
@@ -459,7 +455,7 @@ class Ninja {
    * @private
    */
 
-  collideSpriteVsGroup(Sprite sprite, Group group, Function collideCallback, Function processCallback, bool overlapOnly) {
+  collideSpriteVsGroup(Sprite sprite, Group group, CollideFunc collideCallback, ProcessFunc processCallback, bool overlapOnly) {
 
     if (group.length == 0) {
       return;
@@ -475,7 +471,7 @@ class Ninja {
     // this._potentials = this.quadTree.retrieve(sprite);
 
     for (var i = 0,
-    len = group.children.length; i < len; i++) {
+        len = group.children.length; i < len; i++) {
       //  We have our potential suspects, are they in this group?
       if (group.children[i].exists && group.children[i].body && this.separate(sprite.body as ninja.Body, group.children[i].body as ninja.Body)) {
         if (collideCallback != null) {
@@ -495,7 +491,7 @@ class Ninja {
    * @private
    */
 
-  collideGroupVsSelf(Group group, Function collideCallback, Function processCallback, bool overlapOnly) {
+  collideGroupVsSelf(Group group, CollideFunc collideCallback, ProcessFunc processCallback, bool overlapOnly) {
 
     if (group.length == 0) {
       return;
@@ -520,14 +516,14 @@ class Ninja {
    * @private
    */
 
-  collideGroupVsGroup(Group group1, Group group2, Function collideCallback, Function processCallback, overlapOnly) {
+  collideGroupVsGroup(Group group1, Group group2, CollideFunc collideCallback, ProcessFunc processCallback, overlapOnly) {
 
     if (group1.length == 0 || group2.length == 0) {
       return;
     }
 
     for (var i = 0,
-    len = group1.children.length; i < len; i++) {
+        len = group1.children.length; i < len; i++) {
       if (group1.children[i].exists) {
         this.collideSpriteVsGroup(group1.children[i], group2, collideCallback, processCallback, overlapOnly);
       }
@@ -551,23 +547,23 @@ class Ninja {
     }
 
     if (body1.aabb != null && body2.aabb != null) {
-      return body1.aabb.collideAABBVsAABB(body2.aabb);
+      return body1.aabb.collideAABBVsAABB(body2.aabb) != false;
     }
 
     if (body1.aabb != null && body2.tile != null) {
-      return body1.aabb.collideAABBVsTile(body2.tile);
+      return body1.aabb.collideAABBVsTile(body2.tile) != false;
     }
 
     if (body1.tile != null && body2.aabb != null) {
-      return body2.aabb.collideAABBVsTile(body1.tile);
+      return body2.aabb.collideAABBVsTile(body1.tile) != false;
     }
 
     if (body1.circle != null && body2.tile != null) {
-      return body1.circle.collideCircleVsTile(body2.tile);
+      return body1.circle.collideCircleVsTile(body2.tile) != false;
     }
 
     if (body1.tile != null && body2.circle != null) {
-      return body2.circle.collideCircleVsTile(body1.tile);
+      return body2.circle.collideCircleVsTile(body1.tile) != false;
     }
     throw new Exception("Error!");
   }

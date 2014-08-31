@@ -133,7 +133,7 @@ class Time {
    * @param {boolean} [autoDestroy=true] - A Timer that is set to automatically destroy itself will do so after all of its events have been dispatched (assuming no looping events).
    * @return {Phaser.Timer} The Timer object that was created.
    */
-  create ([bool autoDestroy=true]) {
+  Timer create ([bool autoDestroy=true]) {
 
     var timer = new Timer(this.game, autoDestroy);
 

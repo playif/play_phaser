@@ -1,40 +1,69 @@
 part of Phaser;
 
 class Animation {
+  /// A reference to the currently running [Game].
   Game game;
+
+  /// A reference to the parent Sprite that owns this Animation.
   Sprite _parent;
+
+  /// The user defined name given to this [Animation].
   String name;
+
+  /// The [FrameData] the [Animation] uses.
   FrameData _frameData;
+
+
   List<num> _frames;
+
+  /// The delay in ms between each frame of the [Animation].
   num delay;
+
+  /// The loop state of the [Animation].
   bool loop;
 
-  //bool paused
-
+  /// The number of times the animation has looped since it was last started.
   int loopCount = 0;
+
+  /// Should the parent of this Animation be killed when the animation completes?
   bool killOnComplete = false;
+
+  /// The finished state of the Animation. Set to true once playback completes, false during playback.
   bool isFinished = false;
+
+  /// The playing state of the Animation. Set to false once playback completes, true during playback.
   bool isPlaying = false;
-  bool isPaused = false;
+
+  /// The paused state of the Animation.
+  bool _isPaused = false;
+
+  /// The time the animation paused.
   num _pauseStartTime = 0;
   int _frameIndex = 0;
   num _frameDiff = 0;
   num _frameSkip = 1;
 
+  /// The currently displayed frame of the [Animation].
   Frame currentFrame;
-  Signal onStart;
-  Signal onComplete;
-  Signal onLoop;
+
+  /// This event is dispatched when this Animation starts playback.
+  Signal<AnimationFunc> onStart;
+
+  /// This event is dispatched when this Animation completes playback. If the animation is set to loop this is never fired, listen for onAnimationLoop instead.
+  Signal<AnimationFunc> onComplete;
+
+  /// This event is dispatched when this Animation loops.
+  Signal<AnimationFunc> onLoop;
 
   double _timeLastFrame;
   double _timeNextFrame;
 
-//  bool __tilePattern;
+  /// Gets and sets the paused state of this [Animation].
 
-  bool get paused => isPaused;
+  bool get paused => _isPaused;
 
   set paused(bool value) {
-    this.isPaused = value;
+    this._isPaused = value;
     if (value) {
       //  Paused
       this._pauseStartTime = this.game.time.now;
@@ -47,8 +76,11 @@ class Animation {
     }
   }
 
+  /// The total number of frames in the currently loaded [FrameData], or -1 if no [FrameData] is loaded.
 
   num get frameTotal => this._frames.length;
+
+  /// Gets or sets the current frame index and updates the [Texture] Cache for display.
 
   int get frame {
     if (this.currentFrame != null) {
@@ -67,6 +99,8 @@ class Animation {
     }
   }
 
+  /// Gets or sets the current speed of the animation, the time between each frame of the animation, given in ms. Takes effect from the NEXT frame. Minimum value is 1.
+
   num get speed {
     return (1000 / this.delay).round();
   }
@@ -76,6 +110,11 @@ class Animation {
       this.delay = 1000 / value;
     }
   }
+
+  /**
+   * An Animation instance contains a single animation and the controls to play it.
+   * It is created by the [AnimationManager], consists of [Frame] objects and belongs to a single [GameObject] such as a [Sprite].
+   */
 
   Animation(this.game, this._parent, this.name, this._frameData, [this._frames, num frameRate=60, this.loop=false]) {
     currentFrame = _frameData.getFrame(this._frames[this._frameIndex]);
@@ -92,21 +131,18 @@ class Animation {
     }
 
     //  Set-up some event listeners
-    this.game.onPause.add(this.onPause);
-    this.game.onResume.add(this.onResume);
+    this.game.onPause.add(this._onPause);
+    this.game.onResume.add(this._onResume);
   }
+
+  /// Plays this animation.
 
   play([num frameRate, bool loop, bool killOnComplete=false]) {
 
-
     if (frameRate is num) {
+      //  If they set a new frame rate then use it, otherwise use the one set on creation
       this.delay = 1000 / frameRate;
     }
-
-//    if (frameRate is num) {
-//      //  If they set a new frame rate then use it, otherwise use the one set on creation
-//
-//    }
 
     if (loop is bool) {
       //  If they set a new loop value then use it, otherwise use the one set on creation
@@ -141,8 +177,9 @@ class Animation {
     this.onStart.dispatch([this._parent, this]);
 
     return this;
-
   }
+
+  /// Sets this animation back to the first frame and restarts the animation.
 
   restart() {
 
@@ -161,6 +198,8 @@ class Animation {
     this.onStart.dispatch([this._parent, this]);
 
   }
+
+  /// Sets this animations playback to a given frame with the given ID.
 
   setFrame(frameId, [bool useLocalFrameIndex=false]) {
 
@@ -201,10 +240,13 @@ class Animation {
 
   }
 
+
+  /**
+   * Stops playback of this animation and set it to a finished state. If a resetFrame is provided it will stop playback and set frame to the first in the animation.
+   * If `dispatchComplete` is true it will dispatch the complete events, otherwise they'll be ignored.
+   */
+
   stop([bool resetFrame =false, bool dispatchComplete=false]) {
-//
-//    if ( resetFrame == null) { resetFrame = false; }
-//    if (dispatchComplete == null) { dispatchComplete = false; }
 
     this.isPlaying = false;
     this.isFinished = true;
@@ -221,32 +263,27 @@ class Animation {
 
   }
 
+  /// Called when the Game enters a paused state.
 
-  onPause() {
-
+  _onPause() {
     if (this.isPlaying) {
       this._frameDiff = this._timeNextFrame - this.game.time.now;
     }
-
   }
 
-  onResume() {
+  /// Called when the Game resumes from a paused state.
 
+  _onResume() {
     if (this.isPlaying) {
       this._timeNextFrame = this.game.time.now + this._frameDiff;
     }
-
   }
 
-  /**
-   * Updates this animation. Called automatically by the AnimationManager.
-   *
-   * @method Phaser.Animation#update
-   */
+  /// Updates this animation. Called automatically by the [AnimationManager].
 
   update() {
 
-    if (this.isPaused) {
+    if (this._isPaused) {
       return false;
     }
 
@@ -312,17 +349,10 @@ class Animation {
 
   }
 
-  /**
-   * Advances by the given number of frames in the Animation, taking the loop value into consideration.
-   *
-   * @method Phaser.Animation#next
-   * @param {number} [quantity=1] - The number of frames to advance.
-   */
+  /// Advances by the given number of frames in the [Animation], taking the loop value into consideration.
 
   next([int quantity =1]) {
-
     //if (typeof quantity == 'undefined') { quantity = 1; }
-
     var frame = this._frameIndex + quantity;
 
     if (frame >= this._frames.length) {
@@ -348,19 +378,11 @@ class Animation {
         }
       }
     }
-
   }
 
-  /**
-   * Moves backwards the given number of frames in the Animation, taking the loop value into consideration.
-   *
-   * @method Phaser.Animation#previous
-   * @param {number} [quantity=1] - The number of frames to move back.
-   */
+  /// Moves backwards the given number of frames in the [Animation], taking the loop value into consideration.
 
   previous([int quantity=1]) {
-
-    //if (typeof quantity == 'undefined') { quantity = 1; }
 
     var frame = this._frameIndex - quantity;
 
@@ -390,12 +412,7 @@ class Animation {
 
   }
 
-  /**
-   * Changes the FrameData object this Animation is using.
-   *
-   * @method Phaser.Animation#updateFrameData
-   * @param {Phaser.FrameData} frameData - The FrameData object that contains all frames used by this Animation.
-   */
+  /// Changes the [FrameData] object this [Animation] is using.
 
   updateFrameData(FrameData frameData) {
 
@@ -404,15 +421,11 @@ class Animation {
 
   }
 
-  /**
-   * Cleans up this animation ready for deletion. Nulls all values and references.
-   *
-   * @method Phaser.Animation#destroy
-   */
+  /// Cleans up this animation ready for deletion. Nulls all values and references.
 
   destroy() {
-    this.game.onPause.remove(this.onPause);
-    this.game.onResume.remove(this.onResume);
+    this.game.onPause.remove(this._onPause);
+    this.game.onResume.remove(this._onResume);
 
     this.game = null;
     this._parent = null;
@@ -424,14 +437,11 @@ class Animation {
     this.onStart.dispose();
     this.onLoop.dispose();
     this.onComplete.dispose();
-
   }
 
   /**
    * Called internally when the animation finishes playback.
    * Sets the isPlaying and isFinished states and dispatches the onAnimationComplete event if it exists on the parent and local onComplete event.
-   *
-   * @method Phaser.Animation#complete
    */
 
   complete() {
@@ -450,6 +460,11 @@ class Animation {
 
   }
 
+  /**
+   * Really handy function for when you are creating arrays of animation data but it's using frame names and not numbers.
+   * For example imagine you've got 30 frames named: 'explosion_0001-large' to 'explosion_0030-large'
+   * You could use this function to generate those by doing: Phaser.Animation.generateFrameNames('explosion_', 1, 30, '-large', 4);
+   */
 
   static List<String> generateFrameNames([String prefix='', int start, int stop, String suffix, zeroPad]) {
 

@@ -406,8 +406,8 @@ class Pointer {
         this._nextDrop = this.game.time.now + this.game.input.recordRate;
 
         this._history.add({
-          x: this.position.x,
-          y: this.position.y
+            x: this.position.x,
+            y: this.position.y
         });
 
         if (this._history.length > this.game.input.recordLimit) {
@@ -633,9 +633,13 @@ class Pointer {
       this.game.input.currentPointers--;
     }
 
-    this.game.input.interactiveItems.forEach((InputHandler e) {
-      e._releasedHandler(this);
-    });
+    int i = game.input.interactiveItems.length;
+    while (i-- > 0) {
+      game.input.interactiveItems[i]._releasedHandler(this);
+    }
+    //this.game.input.interactiveItems.forEach((InputHandler e) {
+    //  e._releasedHandler(this);
+    //});
 
     this.targetObject = null;
 

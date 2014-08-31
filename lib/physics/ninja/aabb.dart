@@ -382,21 +382,21 @@ class AABB extends Shape {
    */
   collideAABBVsAABB (AABB aabb) {
 
-    var pos = this.pos;
-    var c = aabb;
+    Phaser.Point pos = this.pos;
+    AABB c = aabb;
 
-    var tx = c.pos.x;
-    var ty = c.pos.y;
-    var txw = c.xw;
-    var tyw = c.yw;
+    num tx = c.pos.x;
+    num ty = c.pos.y;
+    num txw = c.xw;
+    num tyw = c.yw;
 
-    var dx = pos.x - tx;//tile->obj delta
-    var px = (txw + this.xw) - Phaser.Math.abs(dx);//penetration depth in x
+    num dx = pos.x - tx;//tile->obj delta
+    num px = (txw + this.xw) - Phaser.Math.abs(dx);//penetration depth in x
 
     if (0 < px)
     {
-      var dy = pos.y - ty;//tile->obj delta
-      var py = (tyw + this.yw) - Phaser.Math.abs(dy);//pen depth in y
+      num dy = pos.y - ty;//tile->obj delta
+      num py = (tyw + this.yw) - Phaser.Math.abs(dy);//pen depth in y
 
       if (0 < py)
       {
@@ -434,7 +434,7 @@ class AABB extends Shape {
           }
         }
 
-        var l = Phaser.Math.sqrt(px * px + py * py);
+        num l = Phaser.Math.sqrt(px * px + py * py);
         this.reportCollisionVsBody(px, py, px / l, py / l, c);
 
         return COL_AXIS;

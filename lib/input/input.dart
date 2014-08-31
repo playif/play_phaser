@@ -1,5 +1,7 @@
 part of Phaser;
 
+typedef void PointerFunc(Pointer point, event);
+
 class Input {
 
 
@@ -54,10 +56,10 @@ class Input {
   //Gamepad gamepad;
 
   bool resetLocked;
-  Signal onDown;
-  Signal onUp;
-  Signal onTap;
-  Signal onHold;
+  Signal<PointerFunc> onDown;
+  Signal<PointerFunc> onUp;
+  Signal<PointerFunc> onTap;
+  Signal<PointerFunc> onHold;
   int minPriorityID;
 
   List<InputHandler> interactiveItems;

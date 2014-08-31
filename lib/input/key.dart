@@ -1,5 +1,7 @@
 part of Phaser;
 
+typedef void KeyFunc(Key key);
+
 class Key {
   Game game;
   bool enabled;
@@ -17,11 +19,11 @@ class Key {
   double timeUp;
   int repeats;
   int keyCode;
-  Signal onDown = new Signal();
+  Signal<KeyFunc> onDown = new Signal();
   Function onHoldCallback;
 
   //var onHoldContext;
-  Signal onUp;
+  Signal<KeyFunc> onUp;
 
   Key(this.game, int keycode) {
 

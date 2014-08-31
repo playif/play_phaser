@@ -54,9 +54,9 @@ class games_06_starstruck extends State {
     player.body.collideWorldBounds = true;
     player.body.setSize(20, 32, 5, 16);
 
-    player.animations.add('left', [0, 1, 2, 3]);
+    player.animations.add('left', [0, 1, 2, 3],16);
     player.animations.add('turn', [4],60);
-    player.animations.add('right', [5, 6, 7, 8]);
+    player.animations.add('right', [5, 6, 7, 8],16);
 
     game.camera.follow(player);
 

@@ -458,17 +458,17 @@ class Tween {
   /**
    * @property {Phaser.Signal} onStart - The onStart event is fired when the Tween begins.
    */
-  Signal onStart = new Signal();
+  Signal<GameObjectFunc> onStart = new Signal();
 
   /**
    * @property {Phaser.Signal} onLoop - The onLoop event is fired if the Tween loops.
    */
-  Signal onLoop = new Signal();
+  Signal<GameObjectFunc> onLoop = new Signal();
 
   /**
    * @property {Phaser.Signal} onComplete - The onComplete event is fired when the Tween completes. Does not fire if the Tween is set to loop.
    */
-  Signal onComplete = new Signal();
+  Signal<GameObjectFunc> onComplete = new Signal();
 
   /**
    * @property {boolean} isRunning - If the tween is running this is set to true, otherwise false. Tweens that are in a delayed state, waiting to start, are considered as being running.

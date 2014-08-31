@@ -1,5 +1,16 @@
 part of Phaser;
 
+typedef void LoaderStartFunc(int length);
+
+typedef void FileStartFunc(int progress, String key);
+
+typedef void FileCompleteFunc(int progress, String key, bool success, int totalLoadedFiles, int length);
+
+typedef void FileError(val, Map file);
+
+typedef void PackCompleteFunc(val, bool success, int totalLoadedPacks, int length);
+
+
 class Loader {
   Game game;
 
@@ -21,16 +32,16 @@ class Loader {
 
   String baseURL;
 
-  Signal onLoadStart;
+  Signal<LoaderStartFunc> onLoadStart;
 
-  Signal onFileStart;
-  Signal onFileComplete;
+  Signal<FileStartFunc> onFileStart;
+  Signal<FileCompleteFunc> onFileComplete;
 
-  Signal onFileError;
+  Signal<FileError> onFileError;
 
-  Signal onLoadComplete;
+  Signal<GameFunc> onLoadComplete;
 
-  Signal onPackComplete;
+  Signal<PackCompleteFunc> onPackComplete;
 
   List<Map> _packList;
 
@@ -603,10 +614,10 @@ class Loader {
    */
 
   Loader spritesheet(String key, String url, int frameWidth, [int frameHeight, int frameMax = -1, int margin = 0, int spacing = 0]) {
-    if (frameHeight == null){
+    if (frameHeight == null) {
       frameHeight = frameWidth;
     }
-    
+
 //    if (frameMax == null) {
 //      frameMax = -1;
 //    }
@@ -1514,7 +1525,7 @@ class Loader {
         } else {
 
 
-          (file['data'] as AudioElement).onCanPlayThrough.listen((e){
+          (file['data'] as AudioElement).onCanPlayThrough.listen((e) {
 //            window.console.log("p1");
 
             GAMES[this.game.id].load.fileComplete(index);

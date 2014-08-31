@@ -15,7 +15,7 @@ class Cache {
   Map _bitmapDatas;
   Map _bitmapFont;
 
-  Signal onSoundUnlock = new Signal();
+  Signal<SoundFunc> onSoundUnlock = new Signal();
   List _cacheMap;
 
   static const int CANVAS = 1;

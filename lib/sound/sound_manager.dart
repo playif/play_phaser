@@ -2,7 +2,7 @@ part of Phaser;
 
 class SoundManager {
   Game game;
-  Signal onSoundDecode;
+  Signal<SoundFunc> onSoundDecode;
   bool _codeMuted;
   bool _muted;
   double _volume;

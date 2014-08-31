@@ -42,7 +42,7 @@ class ninja_impact extends State{
 
   }
 
-  collisionHandler() {
+  collisionHandler(GameObject obj1, GameObject obj2) {
     game.stage.backgroundColor = 0xff0000;
   }
 
