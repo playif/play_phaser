@@ -235,20 +235,33 @@ class Touch {
       return;
     }
 
+    
     if (this.preventDefault) {
       event.preventDefault();
     }
-    JsObject ev = new JsObject.fromBrowserObject(event);
+    if (game.device.cocoonJS) {
+      JsObject ev = new JsObject.fromBrowserObject(event);
+      JsArray changedTouches = new JsArray.from(ev["changedTouches"]);
+      //  event.targetTouches = list of all touches on the TARGET ELEMENT (i.e. game dom element)
+      //  event.touches = list of all touches on the ENTIRE DOCUMENT, not just the target element
+      //  event.changedTouches = the touches that CHANGED in this event, not the total number of them
+      for (var i = 0; i < changedTouches.length; i++) {
+        JsObject touchEvent = new JsObject.fromBrowserObject(changedTouches[i]);
+        this.game.input.startPointer(touchEvent);
+      }
+    } else {
 
-
-    JsArray changedTouches = new JsArray.from(ev["changedTouches"]);
-    //  event.targetTouches = list of all touches on the TARGET ELEMENT (i.e. game dom element)
-    //  event.touches = list of all touches on the ENTIRE DOCUMENT, not just the target element
-    //  event.changedTouches = the touches that CHANGED in this event, not the total number of them
-    for (var i = 0; i < changedTouches.length; i++) {
-      JsObject touchEvent = new JsObject.fromBrowserObject(changedTouches[i]);
-      this.game.input.startPointer(touchEvent);
+      TouchList changedTouches = event.changedTouches;
+      //  event.targetTouches = list of all touches on the TARGET ELEMENT (i.e. game dom element)
+      //  event.touches = list of all touches on the ENTIRE DOCUMENT, not just the target element
+      //  event.changedTouches = the touches that CHANGED in this event, not the total number of them
+      for (var i = 0; i < changedTouches.length; i++) {
+        this.game.input.startPointer(changedTouches[i]);
+      }
     }
+
+
+
 
   }
 
@@ -274,18 +287,31 @@ class Touch {
     if (this.preventDefault) {
       event.preventDefault();
     }
+    if (game.device.cocoonJS) {
 
-    JsObject ev = new JsObject.fromBrowserObject(event);
+      JsObject ev = new JsObject.fromBrowserObject(event);
+      JsArray changedTouches = new JsArray.from(ev["changedTouches"]);
 
+      //  Touch cancel - touches that were disrupted (perhaps by moving into a plugin or browser chrome)
+      //  http://www.w3.org/TR/touch-events/#dfn-touchcancel
+      for (var i = 0; i < changedTouches.length; i++) {
+        JsObject touchEvent = new JsObject.fromBrowserObject(changedTouches[i]);
+        this.game.input.stopPointer(touchEvent);
+      }
 
-    JsArray changedTouches = new JsArray.from(ev["changedTouches"]);
+    } else {
 
-    //  Touch cancel - touches that were disrupted (perhaps by moving into a plugin or browser chrome)
-    //  http://www.w3.org/TR/touch-events/#dfn-touchcancel
-    for (var i = 0; i < changedTouches.length; i++) {
-      JsObject touchEvent = new JsObject.fromBrowserObject(changedTouches[i]);
-      this.game.input.stopPointer(touchEvent);
+      TouchList changedTouches = event.changedTouches;
+
+      //  Touch cancel - touches that were disrupted (perhaps by moving into a plugin or browser chrome)
+      //  http://www.w3.org/TR/touch-events/#dfn-touchcancel
+      for (var i = 0; i < changedTouches.length; i++) {
+        this.game.input.stopPointer(changedTouches[i]);
+      }
     }
+
+
+
 
   }
 
@@ -355,15 +381,25 @@ class Touch {
       event.preventDefault();
     }
 
-    JsObject ev = new JsObject.fromBrowserObject(event);
+    if (game.device.cocoonJS) {
+      JsObject ev = new JsObject.fromBrowserObject(event);
+      JsArray changedTouches = new JsArray.from(ev["changedTouches"]);
+
+      for (var i = 0; i < changedTouches.length; i++) {
+        JsObject touchEvent = new JsObject.fromBrowserObject(changedTouches[i]);
+        this.game.input.updatePointer(touchEvent);
+      }
+    } else {
 
 
-    JsArray changedTouches = new JsArray.from(ev["changedTouches"]);
+      TouchList changedTouches = event.changedTouches;
 
-    for (var i = 0; i < changedTouches.length; i++) {
-      JsObject touchEvent = new JsObject.fromBrowserObject(changedTouches[i]);
-      this.game.input.updatePointer(touchEvent);
+      for (var i = 0; i < changedTouches.length; i++) {
+
+        this.game.input.updatePointer(changedTouches[i]);
+      }
     }
+
 
   }
 
@@ -385,19 +421,31 @@ class Touch {
       event.preventDefault();
     }
 
-    JsObject ev = new JsObject.fromBrowserObject(event);
+    if (game.device.cocoonJS) {
+      JsObject ev = new JsObject.fromBrowserObject(event);
+      JsArray changedTouches = new JsArray.from(ev["changedTouches"]);
+      
+      //  For touch end its a list of the touch points that have been removed from the surface
+      //  https://developer.mozilla.org/en-US/docs/DOM/TouchList
+      //  event.changedTouches = the touches that CHANGED in this event, not the total number of them
+      for (var i = 0; i < changedTouches.length; i++) {
+        JsObject touchEvent = new JsObject.fromBrowserObject(changedTouches[i]);
+        this.game.input.stopPointer(touchEvent);
+      }
+      
+    } else {
 
 
-    JsArray changedTouches = new JsArray.from(ev["changedTouches"]);
+      TouchList changedTouches = event.changedTouches;
 
-
-    //  For touch end its a list of the touch points that have been removed from the surface
-    //  https://developer.mozilla.org/en-US/docs/DOM/TouchList
-    //  event.changedTouches = the touches that CHANGED in this event, not the total number of them
-    for (var i = 0; i < changedTouches.length; i++) {
-      JsObject touchEvent = new JsObject.fromBrowserObject(changedTouches[i]);
-      this.game.input.stopPointer(touchEvent);
+      //  For touch end its a list of the touch points that have been removed from the surface
+      //  https://developer.mozilla.org/en-US/docs/DOM/TouchList
+      //  event.changedTouches = the touches that CHANGED in this event, not the total number of them
+      for (int i = 0; i < changedTouches.length; i++) {
+        this.game.input.stopPointer(changedTouches[i]);
+      }
     }
+
 
   }
 
@@ -409,16 +457,6 @@ class Touch {
   stop() {
 
     if (this.game.device.touch) {
-      print("touch stopped");
-      //      this.game.canvas.onTouchStart(onData)// .listen(this._onTouchStart);
-      //      this.game.canvas.onTouchMove.listen(this._onTouchMove);
-      //      this.game.canvas.onTouchEnd.listen(this._onTouchEnd);
-      //      this.game.canvas.onTouchCancel.listen(this._onTouchCancel);
-      //
-      //      if (!this.game.device.cocoonJS) {
-      //        this.game.canvas.onTouchEnter.listen(this._onTouchEnter);
-      //        this.game.canvas.onTouchLeave.listen(this._onTouchLeave);
-      //      }
 
       onTouchStartListener.cancel();
       onTouchMoveListener.cancel();
