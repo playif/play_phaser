@@ -100,6 +100,9 @@ The number of examples for each class.
 
 Change log
 ==========
+0.10.1
+ * Add types to all functions and Signals.
+
 0.10.0
  * Ninja physics with examples.
 
