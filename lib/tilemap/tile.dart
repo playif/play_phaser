@@ -26,7 +26,7 @@ class Tile {
 
   num alpha;
 
-  Map properties;
+  Map<String, String> properties;
 
   bool scanned;
 
@@ -46,9 +46,9 @@ class Tile {
 
   bool collideDown;
 
-  bool collides=false;
-  
-  bool debug=false;
+  bool collides = false;
+
+  bool debug = false;
 
 
   Function collisionCallback;
@@ -380,7 +380,7 @@ class Tile {
 
     if (collides && faces) {
       //  Does this tile have any collide flags OR interesting face?
-      return (this.collideLeft || this.collideRight || this.collideUp || this.collideDown || this.faceTop || this.faceBottom || this.faceLeft || this.faceRight || this.collisionCallback !=null);
+      return (this.collideLeft || this.collideRight || this.collideUp || this.collideDown || this.faceTop || this.faceBottom || this.faceLeft || this.faceRight || this.collisionCallback != null);
     }
     else if (collides) {
       //  Does this tile collide?

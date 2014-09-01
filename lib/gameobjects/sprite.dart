@@ -2,25 +2,6 @@ part of Phaser;
 
 class Sprite extends PIXI.Sprite implements GameObject, AnimationInterface {
 
-  //  int getTweenableValues(int tweenType, List<num> returnValues) {
-  //    switch (tweenType) {
-  //      case 0:
-  //        returnValues[0]=this.x;
-  //        break;
-  //    }
-  //
-  //    return 1;
-  //  }
-  //
-  //  void setTweenableValues(int tweenType, List<num> newValues) {
-  //    switch (tweenType) {
-  //      case 0:
-  //        this.x=newValues[0];
-  //        break;
-  //    }
-  //
-  //  }
-
 
   Game game;
 
@@ -640,8 +621,8 @@ class Sprite extends PIXI.Sprite implements GameObject, AnimationInterface {
       return;
     }
 
-    this.cropRect.clone(this._crop);
-    //this._crop = Rectangle.clone(this.cropRect, this._crop);
+    this._crop = this.cropRect.clone();
+
     this._crop.x += this._frame.x;
     this._crop.y += this._frame.y;
 

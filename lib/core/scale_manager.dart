@@ -734,10 +734,6 @@ class ScaleManager {
 
   setScreenSize([bool force=false]) {
 
-//    if (force == null) {
-//      force = false;
-//    }
-
     if (!this.game.device.iPad && !this.game.device.webApp && !this.game.device.desktop) {
       if (this.game.device.android && !this.game.device.chrome) {
         window.scrollTo(0, 1);
@@ -774,8 +770,11 @@ class ScaleManager {
       }
 
       this.setSize();
-      this._check.cancel();
-      this._check = null;
+
+      if(this._check != null){
+        this._check.cancel();
+        this._check = null;
+      }
     }
 
   }

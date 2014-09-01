@@ -53,6 +53,9 @@ part "camera/camera_03_camera_view.dart";
 part "tilemaps/tilemaps_01_blank_map.dart";
 part "tilemaps/tilemaps_16_tilemap_ray_cast.dart";
 
+part "sprites/sprites_06_dynamic_crop.dart";
+part "sprites/sprites_09_horizontal_crop.dart";
+
 part "display/display_01_alpha_mask.dart";
 part "display/display_02_bitmapdata_atlas.dart";
 part "display/display_14_bitmapdata_wobble.dart";
@@ -124,6 +127,11 @@ Map<String, State> examples = {
 
     "tilemaps_01_blank_map": new tilemaps_01_blank_map(),
     "tilemaps_16_tilemap_ray_cast": new tilemaps_16_tilemap_ray_cast(),
+
+
+    "sprites_06_dynamic_crop": new sprites_06_dynamic_crop(),
+    "sprites_09_horizontal_crop": new sprites_09_horizontal_crop(),
+
 
     "display_01_alpha_mask":new display_01_alpha_mask(),
     "display_02_bitmapdata_atlas":new display_02_bitmapdata_atlas(),
