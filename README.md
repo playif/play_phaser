@@ -95,6 +95,7 @@ The number of examples for each class.
 * loader
 * ninja physics * 4
 * particles
+* sprite * 2
 * tile maps * 2
 * tweens
 
