@@ -64,6 +64,7 @@
       <excludeFolder url="file://$MODULE_DIR$/example/ninja_physics/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/particles/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/sprites/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/tilemaps/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/tweens/packages" />
       <excludeFolder url="file://$MODULE_DIR$/packages/play_phaser" />
