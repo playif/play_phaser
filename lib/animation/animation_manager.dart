@@ -1,17 +1,37 @@
 part of Phaser;
 
 class AnimationManager {
+
+  /// A reference to the parent Sprite that owns this [AnimationManager].
   AnimationInterface sprite;
+
+  /// A reference to the currently running [Game].
   Game game;
+
+  /// The currently displayed [Frame] of animation, if any.
   Frame currentFrame;
+
+  /// The currently displayed animation, if any.
   Animation currentAnim;
+
+  /// Should the animation data continue to update even if the [Sprite].visible is set to false.
   bool updateIfVisible = true;
+
+  /// Set to true once animation data has been loaded.
   bool isLoaded = false;
+
+
   FrameData _frameData;
+
+  /// The current animations [FrameData].
 
   FrameData get frameData => _frameData;
 
-  Map<String, Animation> _anims = {};
+  /// An internal object that stores all of the [Animation] instances.
+  Map<String, Animation> _anims = {
+  };
+
+  /// An internal object to help avoid gc.
   List _outputFrames = [];
   int _frameIndex = 0;
 
@@ -20,14 +40,17 @@ class AnimationManager {
   bool __tilePattern;
   bool tilingTexture;
 
+  /// The total number of frames in the currently loaded [FrameData], or -1 if no [FrameData] is loaded.
   int get frameTotal => frameData.total;
 
+  /// Gets and sets the paused state of the current animation.
   bool get paused => currentAnim._isPaused;
 
   set paused(bool value) {
     currentAnim._isPaused = value;
   }
 
+  /// Gets or sets the current frame index and updates the [Texture] Cache for display.
   int get frame {
     if (this.currentFrame != null) {
       return this._frameIndex;
@@ -51,6 +74,7 @@ class AnimationManager {
     }
   }
 
+  /// Gets or sets the current frame name and updates the [Texture] Cache for display.
   String get frameName {
     if (this.currentFrame != null) {
       return this.currentFrame.name;
@@ -81,6 +105,11 @@ class AnimationManager {
   }
 
 
+  /**
+   * Loads FrameData into the internal temporary vars and resets the frame index to zero.
+   * This is called automatically when a new Sprite is created.
+   */
+
   bool loadFrameData(FrameData frameData, [frame = 0]) {
     if (this.isLoaded) {
       //   We need to update the frameData that the animations are using
@@ -108,12 +137,13 @@ class AnimationManager {
     } else {
       return false;
     }
-//    this.frameData = frameData;
-//    this.frame = frame;
-//    this.isLoaded = true;
 
   }
 
+  /**
+   * Adds a new animation under the given key. Optionally set the frames, frame rate and loop.
+   * Animations added in this way are played back with the play function.
+   */
   Animation add(String name, [List frames, num frameRate = 60, bool loop = true, bool useNumericIndex]) {
 
     if (frames == null) {
@@ -127,8 +157,6 @@ class AnimationManager {
     }
 
     //frameRate = frameRate || 60;
-
-
 
 
     //  If they didn't set the useNumericIndex then let's at least try and guess it
@@ -165,6 +193,7 @@ class AnimationManager {
 
   }
 
+  /// Check whether the frames in the given array are valid and exist.
   bool validateFrames(List frames, [bool useNumericIndex = true]) {
 
     for (int i = 0; i < frames.length; i++) {
@@ -183,6 +212,10 @@ class AnimationManager {
 
   }
 
+  /**
+   * Play an animation based on the given key. The animation should previously have been added via sprite.animations.add()
+   * If the requested animation is already playing this request will be ignored. If you need to reset an already running animation do so directly on the Animation object itself.
+   */
   play(name, [num frameRate, bool loop, bool killOnComplete = false]) {
 
     if (this._anims[name] != null) {
@@ -204,6 +237,10 @@ class AnimationManager {
 
   }
 
+  /**
+   * Stop playback of an animation. If a name is given that specific animation is stopped, otherwise the current animation is stopped.
+   * The currentAnim property of the AnimationManager is automatically set to the animation given.
+   */
   stop([name, resetFrame = false]) {
     if (name is String) {
       if (this._anims[name] != null) {
@@ -217,6 +254,7 @@ class AnimationManager {
     }
   }
 
+  /// The main update function is called by the Sprites update loop. It's responsible for updating animation frames and firing related events.
   bool update() {
 
     if (this.updateIfVisible && !this.sprite.visible) {
@@ -232,6 +270,25 @@ class AnimationManager {
 
   }
 
+  /// Advances by the given number of frames in the current animation, taking the loop value into consideration.
+  next (int quantity) {
+    if (this.currentAnim != null)
+    {
+      this.currentAnim.next(quantity);
+      this.currentFrame = this.currentAnim.currentFrame;
+    }
+  }
+
+  /// Moves backwards the given number of frames in the current animation, taking the loop value into consideration.
+  previous (int quantity) {
+    if (this.currentAnim != null)
+    {
+      this.currentAnim.previous(quantity);
+      this.currentFrame = this.currentAnim.currentFrame;
+    }
+  }
+
+  ///  Returns an animation that was previously added by name.
   Animation getAnimation(String name) {
     if (name is String) {
       if (this._anims[name] != null) {
@@ -241,6 +298,7 @@ class AnimationManager {
     return null;
   }
 
+  /// Refreshes the current frame data back to the parent Sprite and also resets the texture data.
   refreshFrame() {
     this.sprite.setTexture(PIXI.TextureCache[this.currentFrame.uuid]);
     if (this.sprite.__tilePattern != null) {
@@ -249,12 +307,16 @@ class AnimationManager {
     }
   }
 
-
+  /**
+   * Destroys all references this AnimationManager contains.
+   * Iterates through the list of animations stored in this manager and calls destroy on each of them.
+   */
   destroy() {
     for (String anim in this._anims.keys) {
       this._anims[anim].destroy();
     }
-    this._anims = {};
+    this._anims = {
+    };
     this._frameData = null;
     this._frameIndex = 0;
     this.currentAnim = null;

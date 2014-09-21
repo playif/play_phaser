@@ -1,13 +1,6 @@
 part of Phaser;
 
 class AnimationParser {
-//  Game game;
-//  String key;
-//  num frameWidth;
-//  num frameHeight;
-//  int frameMax;
-//  num margin;
-//  num spacing;
 
   static FrameData spriteSheet(Game game, String key, num frameWidth, num frameHeight,
                                [int frameMax=-1, num margin=0, num spacing=0]) {

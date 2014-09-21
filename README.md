@@ -109,7 +109,7 @@ Change log
 0.10.2
  * Fix a ScaleManager bug (thanks to [#4](https://github.com/playif/play_phaser/issues/4)).
  * Fix a Sprite.crop bug (thanks to [#5](https://github.com/playif/play_phaser/issues/5)).
- * Add two example, sprite_06 and sprite_07
+ * Add two examples, sprite_06 and sprite_07
  
 0.10.1
  * Add types to all functions and Signals.
