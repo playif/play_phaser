@@ -923,11 +923,14 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
 
   }
 
-  int ascendingSortHandler(a, b) {
+  int ascendingSortHandler(GameObject a, GameObject b) {
+    var va,vb;
+    va=reflect(a).getField(new Symbol(this._sortProperty)).reflectee;
+    vb=reflect(b).getField(new Symbol(this._sortProperty)).reflectee;
 
-    if (a[this._sortProperty] < b[this._sortProperty]) {
+    if (va < vb) {
       return -1;
-    } else if (a[this._sortProperty] > b[this._sortProperty]) {
+    } else if (va > vb) {
       return 1;
     } else {
       if (a.z < b.z) {
@@ -936,15 +939,17 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
         return 1;
       }
     }
-
   }
 
 
-  int descendingSortHandler(a, b) {
+  int descendingSortHandler(GameObject a, GameObject b) {
+    var va,vb;
+    va=reflect(a).getField(new Symbol(this._sortProperty)).reflectee;
+    vb=reflect(b).getField(new Symbol(this._sortProperty)).reflectee;
 
-    if (a[this._sortProperty] < b[this._sortProperty]) {
+    if (va < vb) {
       return 1;
-    } else if (a[this._sortProperty] > b[this._sortProperty]) {
+    } else if (va > vb) {
       return -1;
     } else {
       return 0;

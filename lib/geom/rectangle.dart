@@ -66,7 +66,7 @@ class Rectangle extends PIXI.Rectangle {
     this.x = value - this.halfWidth;
   }
 
-  num get centerY => this.x + this.halfHeight;
+  num get centerY => this.y + this.halfHeight;
 
   set centerY(num value) {
     this.y = value - this.halfHeight;

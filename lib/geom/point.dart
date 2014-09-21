@@ -381,7 +381,7 @@ class Point extends PIXI.Point {
    * @return {number} The result.
    */
 
-  dot(a) {
+  dot(Point a) {
 
     return ((this.x * a.x) + (this.y * a.y));
 
@@ -395,7 +395,7 @@ class Point extends PIXI.Point {
    * @return {number} The result.
    */
 
-  num cross(a) {
+  num cross(Point a) {
 
     return ((this.x * a.y) - (this.y * a.x));
 
@@ -452,32 +452,52 @@ class Point extends PIXI.Point {
     return '[{Point (x=${this.x} y=${this.y})}]';
 
   }
-  
-  Point operator + (Point b) {
+
+  Point operator + (b) {
     Point out = new Point();
-    out.x = x + b.x;
-    out.y = y + b.y;
+    if (b is Point) {
+      out.x = x + b.x;
+      out.y = y + b.y;
+    } else {
+      out.x = x + b;
+      out.y = y + b;
+    }
     return out;
   }
 
-  Point operator - (Point b) {
+  Point operator - (b) {
     Point out = new Point();
-    out.x = x - b.x;
-    out.y = y - b.y;
+    if (b is Point) {
+      out.x = x - b.x;
+      out.y = y - b.y;
+    } else {
+      out.x = x - b;
+      out.y = y - b;
+    }
     return out;
   }
 
-  Point operator * (Point b) {
+  Point operator * (b) {
     Point out = new Point();
-    out.x = x * b.x;
-    out.y = y * b.y;
+    if (b is Point) {
+      out.x = x * b.x;
+      out.y = y * b.y;
+    } else {
+      out.x = x * b;
+      out.y = y * b;
+    }
     return out;
   }
 
-  Point operator / (Point b) {
+  Point operator / (b) {
     Point out = new Point();
-    out.x = x / b.x;
-    out.y = y / b.y;
+    if (b is Point) {
+      out.x = x / b.x;
+      out.y = y / b.y;
+    } else {
+      out.x = x / b;
+      out.y = y / b;
+    }
     return out;
   }
 
