@@ -954,40 +954,6 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
     }
   }
 
-
-  //  GameObject iterate(key, value, returnType, [bool callback =false, callbackContext, args]) {
-  //
-  //    if (returnType == Group.RETURN_TOTAL && this.children.length == 0) {
-  //      return 0;
-  //    }
-  //
-  //
-  //    var total = 0;
-  //
-  //    for (var i = 0, len = this.children.length; i < len; i++) {
-  //      if (this.children[i][key] == value) {
-  //        total++;
-  //
-  //        if (callback) {
-  //          args[0] = this.children[i];
-  //          callback( args);
-  //        }
-  //
-  //        if (returnType == Group.RETURN_CHILD) {
-  //          return this.children[i];
-  //        }
-  //      }
-  //    }
-  //
-  //    if (returnType == Group.RETURN_TOTAL) {
-  //      return total;
-  //    }
-  //    else if (returnType == Group.RETURN_CHILD) {
-  //      return null;
-  //    }
-  //
-  //  }
-
   T getFirst([SelectWhere where]) {
     return this.children.firstWhere(where, orElse: () => null);
   }
