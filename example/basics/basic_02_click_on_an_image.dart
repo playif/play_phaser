@@ -2,13 +2,9 @@ part of example;
 
 
 class basic_02_click_on_an_image extends State {
-  //Phaser.Game game;
   Text text;
   Sprite image;
   int counter = 0;
-
-  double t = 0.5;
-
 
   preload() {
     //  You can fill the preloader with as many assets as your game requires
@@ -37,22 +33,15 @@ class basic_02_click_on_an_image extends State {
     image.events.onInputDown.add(listener);
 
 
-    text = game.add.text(250, 16, 'Hi', new TextStyle(fill: '#ffffff'));
+    text = game.add.text(250, 16, 'Please click the image below:', new TextStyle(fill: '#ffffff'));
 
   }
 
   update() {
-
-    //image.anchor.set(t);
-    //image.x += 1;
-    //image.rotation += 0.1;
-    //text.x += 1;
-
-    //t+=0.01;
+    image.rotation += 0.1;
   }
 
   listener(Sprite s, Pointer p) {
-    //print("here");
     counter++;
     text.setText("You clicked " + counter.toString() + " times!");
     //text.text="You clicked " + counter.toString() + " times!";
