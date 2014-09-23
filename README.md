@@ -133,5 +133,5 @@ TODO
 
 
 [1]: https://github.com/playif/play_pixi
-[2]: https://github.com/playif/play_phraser
+[2]: https://github.com/playif/play_phaser
 [3]: http://playif.github.io/phaser_example/index.html
