@@ -6,6 +6,7 @@ typedef bool SelectWhere(Sprite);
 
 class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements GameObject {
   Game game;
+
   GameObject get parent => super.parent;
 
 
@@ -46,7 +47,9 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
   Events events;
 
   Point _anchor = new Point();
+
   Point get anchor => _anchor;
+
   set anchor(Point value) {
     //TODO
   }
@@ -69,7 +72,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
   Point position = new Point();
 
   Group(Game game, [Group parent, this.name = 'group', this.addToStage = false, this.enableBody = false, this.physicsBodyType = 0])
-      : super() {
+  : super() {
     this.game = game;
 
 
@@ -288,8 +291,8 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
     //var child = new this.classType(this.game, x, y, key, frame);
     //GameObject child = reflectClass(classType).newInstance(const Symbol(""), [this.game, x, y, key, frame]).reflectee;
     T child = creator()
-        ..x = x
-        ..y = y;
+      ..x = x
+      ..y = y;
 
     if (child is Sprite) {
       (child as Sprite).loadTexture(key, frame);
@@ -856,7 +859,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
 
   forEach(Function callback, [bool checkExists = false]) {
     for (int i = 0,
-        len = this.children.length; i < len; i++) {
+    len = this.children.length; i < len; i++) {
       if (checkExists == false) {
         callback(this.children[i]);
       } else if (this.children[i].exists) {
@@ -924,9 +927,9 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
   }
 
   int ascendingSortHandler(GameObject a, GameObject b) {
-    var va,vb;
-    va=reflect(a).getField(new Symbol(this._sortProperty)).reflectee;
-    vb=reflect(b).getField(new Symbol(this._sortProperty)).reflectee;
+    var va, vb;
+    va = reflect(a).getField(new Symbol(this._sortProperty)).reflectee;
+    vb = reflect(b).getField(new Symbol(this._sortProperty)).reflectee;
 
     if (va < vb) {
       return -1;
@@ -939,9 +942,9 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
 
 
   int descendingSortHandler(GameObject a, GameObject b) {
-    var va,vb;
-    va=reflect(a).getField(new Symbol(this._sortProperty)).reflectee;
-    vb=reflect(b).getField(new Symbol(this._sortProperty)).reflectee;
+    var va, vb;
+    va = reflect(a).getField(new Symbol(this._sortProperty)).reflectee;
+    vb = reflect(b).getField(new Symbol(this._sortProperty)).reflectee;
 
     if (va < vb) {
       return 1;

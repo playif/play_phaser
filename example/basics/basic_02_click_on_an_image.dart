@@ -55,5 +55,6 @@ class basic_02_click_on_an_image extends State {
     //print("here");
     counter++;
     text.setText("You clicked " + counter.toString() + " times!");
+    //text.text="You clicked " + counter.toString() + " times!";
   }
 }

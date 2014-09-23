@@ -463,7 +463,7 @@ class Text extends PIXI.Text implements GameObject {
 
     this.context.font = this.style.font;
 
-    var outputText = this.text;
+    String outputText = this.text;
 
     // word wrap
     // preserve original text
@@ -536,6 +536,14 @@ class Text extends PIXI.Text implements GameObject {
     this.updateTexture();
   }
 
+  updateTransform() {
+    if (this._dirty) {
+      this.updateText();
+      this._dirty = false;
+    }
+    super.updateTransform();
+  }
+
   /**
    * Greedy wrapping algorithm that will wrap words as the line grows longer than its horizontal bounds.
    *
@@ -605,17 +613,23 @@ class Text extends PIXI.Text implements GameObject {
   //Object.defineProperty(Phaser.Text.prototype, 'text', {
 
   String get text {
+//    print(_text);
     return this._text;
   }
 
   set text(String value) {
-
     if (value != this._text) {
       this._text = value;
       this._dirty = true;
       this.updateTransform();
     }
 
+  }
+
+  /// Set the copy for the text object. To split a line you can use '\n'
+  setText(Object text) {
+    this._text = text.toString();
+    this._dirty = true;
   }
 
   //});

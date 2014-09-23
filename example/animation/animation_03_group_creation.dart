@@ -2,11 +2,9 @@ part of example;
 
 class animation_03_group_creation extends State {
   preload() {
-
     game.load.atlas('seacreatures', 'assets/sprites/seacreatures_json.png', 'assets/sprites/seacreatures_json.json');
     game.load.image('undersea', 'assets/pics/undersea.jpg');
     game.load.image('coral', 'assets/pics/seabed.png');
-
   }
 
   Group group;
@@ -46,7 +44,7 @@ class animation_03_group_creation extends State {
 
   }
 
-//  update(){
-//    group.sort('y',Group.SORT_DESCENDING);
-//  }
+  update(){
+    group.sort('y',Group.SORT_DESCENDING);
+  }
 }
