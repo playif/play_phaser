@@ -923,7 +923,6 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
     this.children.sort(sortHandler);
 
     this.updateZ();
-
   }
 
   int ascendingSortHandler(GameObject a, GameObject b) {
@@ -953,7 +952,6 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
     } else {
       return 0;
     }
-
   }
 
 
