@@ -933,11 +933,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
     } else if (va > vb) {
       return 1;
     } else {
-      if (a.z < b.z) {
-        return -1;
-      } else {
-        return 1;
-      }
+      return 0;
     }
   }
 
