@@ -52,7 +52,7 @@ class RandomDataGenerator {
     data = data.toString();
 
     for (i = 0; i < data.length; i++) {
-      n += data.charCodeAt(i);
+      n += data.codeUnitAt(i);
       h = (0.02519603282416938 * n).toInt();
       n = h >> 0;
       h -= n;

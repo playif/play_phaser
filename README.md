@@ -105,7 +105,7 @@ Change log
  * Fix Rectangle class centerY getter has a typo! (thanks to [#8](https://github.com/playif/play_phaser/issues/8)).
  * Fix Group.sort Class has no instance method '[]'. (thanks to [#7](https://github.com/playif/play_phaser/issues/7)).
  * Add Point operator overloading with num. (thanks to [#6](https://github.com/playif/play_phaser/issues/6)
- 
+
 0.10.2
  * Fix a ScaleManager bug (thanks to [#4](https://github.com/playif/play_phaser/issues/4)).
  * Fix a Sprite.crop bug (thanks to [#5](https://github.com/playif/play_phaser/issues/5)).

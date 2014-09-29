@@ -261,7 +261,7 @@ class SoundManager {
       this._unlockSource = this.context.createBufferSource();
       this._unlockSource.buffer = buffer;
       this._unlockSource.connectNode(this.context.destination);
-      this._unlockSource.noteOn(0);
+      this._unlockSource.start(0);//.noteOn(0);
     }
 
   }

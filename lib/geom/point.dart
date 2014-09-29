@@ -381,10 +381,8 @@ class Point extends PIXI.Point {
    * @return {number} The result.
    */
 
-  dot(Point a) {
-
+  num dot(Point a) {
     return ((this.x * a.x) + (this.y * a.y));
-
   }
 
   /**
@@ -396,9 +394,7 @@ class Point extends PIXI.Point {
    */
 
   num cross(Point a) {
-
     return ((this.x * a.y) - (this.y * a.x));
-
   }
 
   /**

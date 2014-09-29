@@ -314,15 +314,16 @@ class Graphics extends PIXI.Graphics implements GameObject {
       cull = false;
     }
 
-    var triangle = new Polygon(points);
+    Polygon triangle = new Polygon(points);
 
     if (cull) {
-      var cameraToFace = new Point(this.game.camera.x - points[0].x, this.game.camera.y - points[0].y);
-      var ab = new Point(points[1].x - points[0].x, points[1].y - points[0].y);
-      var cb = new Point(points[1].x - points[2].x, points[1].y - points[2].y);
-      var faceNormal = cb.cross(ab);
+      Point cameraToFace = new Point(this.game.camera.x - points[0].x, this.game.camera.y - points[0].y);
+      Point ab = new Point(points[1].x - points[0].x, points[1].y - points[0].y);
+      Point cb = new Point(points[1].x - points[2].x, points[1].y - points[2].y);
+      num faceNormal = cb.cross(ab);
 
-      if (cameraToFace.dot(faceNormal) > 0) {
+      // TODO
+      if (cameraToFace.dot(new Point(faceNormal)) > 0) {
         this.drawPolygon(triangle);
       }
     } else {
