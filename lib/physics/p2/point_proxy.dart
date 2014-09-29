@@ -4,3 +4,4 @@ class PointProxy {
   PointProxy() {
   }
 }
+ 
