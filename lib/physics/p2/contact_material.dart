@@ -1,6 +1,6 @@
 part of P2;
 
-class ContactMaterial {
-  ContactMaterial() {
+class ContactMaterial extends p2.ContactMaterial {
+  ContactMaterial(Material materialA, Material materialB) :super() {
   }
 }

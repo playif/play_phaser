@@ -1,6 +1,11 @@
 part of P2;
 
-class Material {
-  Material() {
+class Material extends p2.Material {
+  Material(String name) {
+    /**
+     * @property {string} name - The user defined name given to this Material.
+     * @default
+     */
+    this.name = name;
   }
 }
