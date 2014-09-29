@@ -2,24 +2,26 @@ part of example;
 
 class animation_03_group_creation extends State {
   preload() {
-
     game.load.atlas('seacreatures', 'assets/sprites/seacreatures_json.png', 'assets/sprites/seacreatures_json.json');
     game.load.image('undersea', 'assets/pics/undersea.jpg');
     game.load.image('coral', 'assets/pics/seabed.png');
-
   }
+
+  Group group;
 
   create() {
 
     game.add.sprite(0, 0, 'undersea');
 
     //  Here we create our group and populate it with 6 sprites
-    var group = game.add.group();
+    group = game.add.group();
 
     for (var i = 0; i < 6; i++) {
       //  They are evenly spaced out on the X coordinate, with a random Y coordinate
       Sprite sprite = group.create(120 * i, game.rnd.integerInRange(100, 400), 'seacreatures', 'octopus0000');
     }
+
+
 
     //  These are the frame names for the octopus animation. We use the generateFrames function to help create the array.
     var frameNames = Animation.generateFrameNames('octopus', 0, 24, '', 4);
@@ -36,7 +38,13 @@ class animation_03_group_creation extends State {
     //group.callAll('play', null, 'swim');
     group.forEach((Sprite s) => s.play('swim'));
 
+    group.sort('y',Group.SORT_ASCENDING);
+
     game.add.sprite(0, 466, 'coral');
 
+  }
+
+  update(){
+    group.sort('y',Group.SORT_DESCENDING);
   }
 }

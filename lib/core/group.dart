@@ -6,6 +6,7 @@ typedef bool SelectWhere(Sprite);
 
 class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements GameObject {
   Game game;
+
   GameObject get parent => super.parent;
 
 
@@ -46,7 +47,9 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
   Events events;
 
   Point _anchor = new Point();
+
   Point get anchor => _anchor;
+
   set anchor(Point value) {
     //TODO
   }
@@ -69,7 +72,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
   Point position = new Point();
 
   Group(Game game, [Group parent, this.name = 'group', this.addToStage = false, this.enableBody = false, this.physicsBodyType = 0])
-      : super() {
+  : super() {
     this.game = game;
 
 
@@ -288,8 +291,8 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
     //var child = new this.classType(this.game, x, y, key, frame);
     //GameObject child = reflectClass(classType).newInstance(const Symbol(""), [this.game, x, y, key, frame]).reflectee;
     T child = creator()
-        ..x = x
-        ..y = y;
+      ..x = x
+      ..y = y;
 
     if (child is Sprite) {
       (child as Sprite).loadTexture(key, frame);
@@ -856,7 +859,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
 
   forEach(Function callback, [bool checkExists = false]) {
     for (int i = 0,
-        len = this.children.length; i < len; i++) {
+    len = this.children.length; i < len; i++) {
       if (checkExists == false) {
         callback(this.children[i]);
       } else if (this.children[i].exists) {
@@ -920,32 +923,27 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
     this.children.sort(sortHandler);
 
     this.updateZ();
-
   }
 
   int ascendingSortHandler(GameObject a, GameObject b) {
-    var va,vb;
-    va=reflect(a).getField(new Symbol(this._sortProperty)).reflectee;
-    vb=reflect(b).getField(new Symbol(this._sortProperty)).reflectee;
+    var va, vb;
+    va = reflect(a).getField(new Symbol(this._sortProperty)).reflectee;
+    vb = reflect(b).getField(new Symbol(this._sortProperty)).reflectee;
 
     if (va < vb) {
       return -1;
     } else if (va > vb) {
       return 1;
     } else {
-      if (a.z < b.z) {
-        return -1;
-      } else {
-        return 1;
-      }
+      return 0;
     }
   }
 
 
   int descendingSortHandler(GameObject a, GameObject b) {
-    var va,vb;
-    va=reflect(a).getField(new Symbol(this._sortProperty)).reflectee;
-    vb=reflect(b).getField(new Symbol(this._sortProperty)).reflectee;
+    var va, vb;
+    va = reflect(a).getField(new Symbol(this._sortProperty)).reflectee;
+    vb = reflect(b).getField(new Symbol(this._sortProperty)).reflectee;
 
     if (va < vb) {
       return 1;
@@ -954,42 +952,7 @@ class Group<T extends GameObject> extends PIXI.DisplayObjectContainer implements
     } else {
       return 0;
     }
-
   }
-
-
-  //  GameObject iterate(key, value, returnType, [bool callback =false, callbackContext, args]) {
-  //
-  //    if (returnType == Group.RETURN_TOTAL && this.children.length == 0) {
-  //      return 0;
-  //    }
-  //
-  //
-  //    var total = 0;
-  //
-  //    for (var i = 0, len = this.children.length; i < len; i++) {
-  //      if (this.children[i][key] == value) {
-  //        total++;
-  //
-  //        if (callback) {
-  //          args[0] = this.children[i];
-  //          callback( args);
-  //        }
-  //
-  //        if (returnType == Group.RETURN_CHILD) {
-  //          return this.children[i];
-  //        }
-  //      }
-  //    }
-  //
-  //    if (returnType == Group.RETURN_TOTAL) {
-  //      return total;
-  //    }
-  //    else if (returnType == Group.RETURN_CHILD) {
-  //      return null;
-  //    }
-  //
-  //  }
 
   T getFirst([SelectWhere where]) {
     return this.children.firstWhere(where, orElse: () => null);
