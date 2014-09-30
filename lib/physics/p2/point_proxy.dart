@@ -1,6 +1,8 @@
 part of P2;
 
 class PointProxy {
+
+
   PointProxy(world, destination) {
     this.world = world;
     this.destination = destination;
@@ -10,79 +12,75 @@ class PointProxy {
    * @name Phaser.Physics.P2.PointProxy#x
    * @property {number} x - The x property of this PointProxy get and set in pixels.
    */
-  Object.defineProperty(Phaser.Physics.P2.PointProxy.prototype, "x", {
+  //Object.defineProperty(Phaser.Physics.P2.PointProxy.prototype, "x", {
 
-  get: function () {
+  num get x {
 
-  return this.world.mpx(this.destination[0]);
-
-  },
-
-  set: function (value) {
-
-  this.destination[0] = this.world.pxm(value);
+    return this.world.mpx(this.destination[0]);
 
   }
 
-  });
+  set x(num value) {
+
+    this.destination[0] = this.world.pxm(value);
+
+  }
+
 
   /**
    * @name Phaser.Physics.P2.PointProxy#y
    * @property {number} y - The y property of this PointProxy get and set in pixels.
    */
-  Object.defineProperty(Phaser.Physics.P2.PointProxy.prototype, "y", {
+  //Object.defineProperty(Phaser.Physics.P2.PointProxy.prototype, "y", {
 
-  get: function () {
+  num get y {
 
-  return this.world.mpx(this.destination[1]);
-
-  },
-
-  set: function (value) {
-
-  this.destination[1] = this.world.pxm(value);
+    return this.world.mpx(this.destination[1]);
 
   }
 
-  });
+  set y(num value) {
+
+    this.destination[1] = this.world.pxm(value);
+
+  }
+
 
   /**
    * @name Phaser.Physics.P2.PointProxy#mx
    * @property {number} mx - The x property of this PointProxy get and set in meters.
    */
-  Object.defineProperty(Phaser.Physics.P2.PointProxy.prototype, "mx", {
+  //Object.defineProperty(Phaser.Physics.P2.PointProxy.prototype, "mx", {
 
-  get: function () {
+  num get mx {
 
-  return this.destination[0];
-
-  },
-
-  set: function (value) {
-
-  this.destination[0] = value;
+    return this.destination[0];
 
   }
 
-  });
+  set mx(num value) {
+
+    this.destination[0] = value;
+
+  }
+
 
   /**
    * @name Phaser.Physics.P2.PointProxy#my
    * @property {number} my - The x property of this PointProxy get and set in meters.
    */
-  Object.defineProperty(Phaser.Physics.P2.PointProxy.prototype, "my", {
+  //Object.defineProperty(Phaser.Physics.P2.PointProxy.prototype, "my", {
 
-  get: function () {
+  num get my {
 
-  return this.destination[1];
-
-  },
-
-  set: function (value) {
-
-  this.destination[1] = value;
+    return this.destination[1];
 
   }
 
-  });
+  set my(num value) {
+
+    this.destination[1] = value;
+
+  }
+
 }

@@ -12,6 +12,7 @@ abstract class SpriteInterface implements CoreInterfact {
   setTexture(PIXI.Texture texture);
   Body body;
   Point anchor;
+  num width,height,rotation;
 }
 
 abstract class AnimationInterface implements SpriteInterface {

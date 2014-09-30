@@ -1,11 +1,15 @@
 part of P2;
 
 class LockConstraint extends p2.LockConstraint {
-  LockConstraint(world, bodyA, bodyB, offset, angle, maxForce) {
+  Phaser.Game game;
+  Phaser.P2 world;
 
-    if (typeof offset === 'undefined') { offset = [0, 0]; }
-    if (typeof angle === 'undefined') { angle = 0; }
-    if (typeof maxForce === 'undefined') { maxForce = Number.MAX_VALUE; }
+  LockConstraint(world, bodyA, bodyB, offset, angle, maxForce):
+  super() {
+
+    if (offset == null) { offset = [0, 0]; }
+    if (angle == null) { angle = 0; }
+    if (maxForce == null) { maxForce = double.MAX_FINITE; }
 
     /**
      * @property {Phaser.Game} game - Local reference to game.

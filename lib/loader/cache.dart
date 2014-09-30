@@ -559,7 +559,7 @@ class Cache {
    * @return {object} The requested physics object data if found.
    */
 
-  getPhysicsData(String key, String object, String fixtureKey) {
+  getPhysicsData(String key, [String object, String fixtureKey]) {
 
     if (object == null) {
       //  Get 'em all

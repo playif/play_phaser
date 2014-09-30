@@ -1,7 +1,7 @@
 part of P2;
 
 class InversePointProxy {
-  Phaser.World world;
+  Phaser.P2 world;
   var destination;
 
   /**
@@ -84,7 +84,7 @@ class InversePointProxy {
 
   //});
 
-  InversePointProxy(Phaser.World world, destination) {
+  InversePointProxy(Phaser.P2 world, destination) {
     this.world = world;
     this.destination = destination;
   }

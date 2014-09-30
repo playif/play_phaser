@@ -3,8 +3,8 @@ part of P2;
 class FixtureList {
   List rawList;
   Map namedFixtures;
-  List groupedFixtures;
-  List allFixtures;
+  List<Map> groupedFixtures;
+  List<Map> allFixtures;
 
   FixtureList(list) {
     if (list is! List) {
@@ -108,7 +108,7 @@ class FixtureList {
     List fixtures = [];
 
     if (keys) {
-      if (!(keys is Array)) {
+      if (!(keys is List)) {
         keys = [keys];
       }
 
@@ -162,7 +162,8 @@ class FixtureList {
 
   parse() {
 
-    var key, value, _ref, _results;
+    var key, value;
+    List _ref, _results;
     _ref = this.rawList;
     _results = [];
 
@@ -177,7 +178,7 @@ class FixtureList {
         this.namedFixtures[key] = this.flatten(value);
       }
 
-      _results.push(this.allFixtures = this.flatten(this.groupedFixtures));
+      _results.add(this.allFixtures = this.flatten(this.groupedFixtures));
     }
 
   }
@@ -196,7 +197,7 @@ class FixtureList {
     self = arguments.callee;
 
     array.forEach((item) {
-      return Array.prototype.push.apply(result, (Array.isArray(item) ? self(item) : [item]));
+      return Array.prototype.push.apply(result, ((item is List) ? self(item) : [item]));
     });
 
     return result;

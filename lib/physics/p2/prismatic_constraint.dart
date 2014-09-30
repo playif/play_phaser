@@ -1,13 +1,17 @@
 part of P2;
 
 class PrismaticConstraint extends p2.PrismaticConstraint {
-  PrismaticConstraint(world, bodyA, bodyB, lockRotation, anchorA, anchorB, axis, maxForce) {
+  Phaser.Game game;
+  Phaser.P2 world;
 
-    if (typeof lockRotation === 'undefined') { lockRotation = true; }
-    if (typeof anchorA === 'undefined') { anchorA = [0, 0]; }
-    if (typeof anchorB === 'undefined') { anchorB = [0, 0]; }
-    if (typeof axis === 'undefined') { axis = [0, 0]; }
-    if (typeof maxForce === 'undefined') { maxForce = Number.MAX_VALUE; }
+  PrismaticConstraint(world, bodyA, bodyB, lockRotation, anchorA, anchorB, axis, maxForce)
+  :super() {
+
+    if ( lockRotation == null) { lockRotation = true; }
+    if ( anchorA == null) { anchorA = [0, 0]; }
+    if ( anchorB == null) { anchorB = [0, 0]; }
+    if ( axis == null) { axis = [0, 0]; }
+    if ( maxForce == null) { maxForce = double.MAX_FINITE; }
 
     /**
      * @property {Phaser.Game} game - Local reference to game.

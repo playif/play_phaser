@@ -1,6 +1,8 @@
 library P2;
 //import "dart:html" as dom;
 //import "../../phaser.dart";
+import "dart:math" as Math;
+
 import "../../phaser.dart" as Phaser;
 import "package:p2/p2.dart" as p2;
 //part "body.dart";
@@ -21,17 +23,22 @@ part "rotational_spring.dart";
 part "spring.dart";
 part "world.dart";
 
-class Body {
+class Body extends p2.Body implements Phaser.Body {
   /// Local reference to game.
   Phaser.Game game;
+
   /// Local reference to the P2 World.
-  Phaser.World world;
+  Phaser.P2 world;
+
   /// Reference to the parent Sprite.
   Phaser.Sprite sprite;
+
   /// The type of physics system this body belongs to.
   int type;
+
   /// The offset of the Physics Body from the Sprite x/y position.
   Phaser.Point offset;
+
   /// The p2 Body data.
   p2.Body data;
 
@@ -40,14 +47,13 @@ class Body {
   Phaser.Point gravity;
   Phaser.Signal onBeginContact;
   Phaser.Signal onEndContact;
-  List<Body> collidesWith;
+  List<CollisionGroup> collidesWith;
   bool removeNextStep;
   BodyDebug debugBody;
 
   bool _collideWorldBounds;
   Map _bodyCallbacks;
   Map _groupCallbacks;
-
 
 
   Body(Phaser.Game game, [Phaser.Sprite sprite, num x=0, num y=0, num mass=1]) {
@@ -62,7 +68,7 @@ class Body {
      * @property {p2.Body} data -
      * @protected
      */
-    this.data = new p2.Body( position: [ this.world.pxmi(x), this.world.pxmi(y) ], mass: mass );
+    this.data = new p2.Body(position: [ this.world.pxmi(x), this.world.pxmi(y) ], mass: mass);
 
     this.data.parent = this;
 
@@ -120,7 +126,8 @@ class Body {
      * @property {object} _bodyCallbacks - Array of Body callbacks.
      * @private
      */
-    this._bodyCallbacks = {};
+    this._bodyCallbacks = {
+    };
 
     /**
      * @property {object} _bodyCallbackContext - Array of Body callback contexts.
@@ -132,7 +139,8 @@ class Body {
      * @property {object} _groupCallbacks - Array of Group callbacks.
      * @private
      */
-    this._groupCallbacks = {};
+    this._groupCallbacks = {
+    };
 
     /**
      * @property {object} _bodyCallbackContext - Array of Grouo callback contexts.
@@ -141,21 +149,14 @@ class Body {
     //this._groupCallbackContext = {};
 
     //  Set-up the default shape
-    if (sprite != null)
-    {
+    if (sprite != null) {
       this.setRectangleFromSprite(sprite);
 
-      if (sprite.exists)
-      {
+      if (sprite.exists) {
         this.game.physics.p2.addBody(this);
       }
     }
 
-  }
-  
-  
-  addToWorld(){
-    
   }
 
   /**
@@ -169,30 +170,26 @@ class Body {
    * @param {function} callback - The callback to fire on impact. Set to null to clear a previously set callback.
    * @param {object} callbackContext - The context under which the callback will fire.
    */
-  createBodyCallback (object, callback, callbackContext) {
 
-    var id = -1;
+  createBodyCallback(object, Function callback) {
 
-    if (object['id'])
-    {
+    int id = -1;
+
+    if (object['id']) {
       id = object.id;
     }
-    else if (object['body'])
-    {
+    else if (object['body']) {
       id = object.body.id;
     }
 
-    if (id > -1)
-    {
-      if (callback == null)
-      {
-        delete (this._bodyCallbacks[id]);
-        delete (this._bodyCallbackContext[id]);
+    if (id > -1) {
+      if (callback == null) {
+        this._bodyCallbacks.remove(id);
+        //this._bodyCallbackContext.re[id]);
       }
-      else
-      {
+      else {
         this._bodyCallbacks[id] = callback;
-        this._bodyCallbackContext[id] = callbackContext;
+        //this._bodyCallbackContext[id] = callbackContext;
       }
     }
 
@@ -210,17 +207,16 @@ class Body {
    * @param {function} callback - The callback to fire on impact. Set to null to clear a previously set callback.
    * @param {object} callbackContext - The context under which the callback will fire.
    */
-  createGroupCallback (CollisionGroup group, Function callback) {
 
-    if (callback == null)
-    {
-      delete (this._groupCallbacks[group.mask]);
-      delete (this._groupCallbacksContext[group.mask]);
+  createGroupCallback(CollisionGroup group, Function callback) {
+
+    if (callback == null) {
+      this._groupCallbacks.remove(group.mask);
+      //delete (this._groupCallbacksContext[group.mask]);
     }
-    else
-    {
+    else {
       this._groupCallbacks[group.mask] = callback;
-      this._groupCallbackContext[group.mask] = callbackContext;
+      //this._groupCallbackContext[group.mask] = callbackContext;
     }
 
   }
@@ -231,17 +227,16 @@ class Body {
    * @method Phaser.Physics.P2.Body#getCollisionMask
    * @return {number} The bitmask.
    */
-  getCollisionMask () {
 
-    var mask = 0;
+  num getCollisionMask() {
 
-    if (this._collideWorldBounds)
-    {
+    int mask = 0;
+
+    if (this._collideWorldBounds) {
       mask = this.game.physics.p2.boundsCollisionGroup.mask;
     }
 
-    for (var i = 0; i < this.collidesWith.length; i++)
-    {
+    for (var i = 0; i < this.collidesWith.length; i++) {
       mask = mask | this.collidesWith[i].mask;
     }
 
@@ -255,19 +250,17 @@ class Body {
    * @method Phaser.Physics.P2.Body#updateCollisionMask
    * @param {p2.Shape} [shape] - An optional Shape. If not provided the collision group will be added to all Shapes in this Body.
    */
-  updateCollisionMask (p2.Shape shape) {
+
+  updateCollisionMask(p2.Shape shape) {
 
     var mask = this.getCollisionMask();
 
-    if ( shape == null)
-    {
-      for (var i = this.data.shapes.length - 1; i >= 0; i--)
-      {
+    if (shape == null) {
+      for (var i = this.data.shapes.length - 1; i >= 0; i--) {
         this.data.shapes[i].collisionMask = mask;
       }
     }
-    else
-    {
+    else {
       shape.collisionMask = mask;
     }
 
@@ -281,20 +274,18 @@ class Body {
    * @param {Phaser.Physics.CollisionGroup} group - The Collision Group that this Bodies shapes will use.
    * @param {p2.Shape} [shape] - An optional Shape. If not provided the collision group will be added to all Shapes in this Body.
    */
-  setCollisionGroup (CollisionGroup group,p2.Shape shape) {
+
+  setCollisionGroup(CollisionGroup group, p2.Shape shape) {
 
     var mask = this.getCollisionMask();
 
-    if ( shape == null)
-    {
-      for (var i = this.data.shapes.length - 1; i >= 0; i--)
-      {
+    if (shape == null) {
+      for (var i = this.data.shapes.length - 1; i >= 0; i--) {
         this.data.shapes[i].collisionGroup = group.mask;
         this.data.shapes[i].collisionMask = mask;
       }
     }
-    else
-    {
+    else {
       shape.collisionGroup = group.mask;
       shape.collisionMask = mask;
     }
@@ -309,38 +300,31 @@ class Body {
    * @param {boolean} [clearMask=true] - Clear the collisionMask value from the shape/s?
    * @param {p2.Shape} [shape] - An optional Shape. If not provided the collision data will be cleared from all Shapes in this Body.
    */
-  clearCollision ([bool clearGroup=true, bool clearMask=true, p2.Shape shape]) {
 
-    if (shape == null)
-    {
-      for (var i = this.data.shapes.length - 1; i >= 0; i--)
-      {
-        if (clearGroup)
-        {
+  clearCollision([bool clearGroup=true, bool clearMask=true, p2.Shape shape]) {
+
+    if (shape == null) {
+      for (var i = this.data.shapes.length - 1; i >= 0; i--) {
+        if (clearGroup) {
           this.data.shapes[i].collisionGroup = null;
         }
 
-        if (clearMask)
-        {
+        if (clearMask) {
           this.data.shapes[i].collisionMask = null;
         }
       }
     }
-    else
-    {
-      if (clearGroup)
-      {
+    else {
+      if (clearGroup) {
         shape.collisionGroup = null;
       }
 
-      if (clearMask)
-      {
+      if (clearMask) {
         shape.collisionMask = null;
       }
     }
 
-    if (clearGroup)
-    {
+    if (clearGroup) {
       this.collidesWith.clear();
     }
 
@@ -355,47 +339,38 @@ class Body {
    * @param {object} [callbackContext] - The context under which the callback will be called.
    * @param {p2.Shape} [shape] - An optional Shape. If not provided the collision mask will be added to all Shapes in this Body.
    */
-  collides (group, callback, shape) {
 
-    if (Array.isArray(group))
-    {
-      for (var i = 0; i < group.length; i++)
-      {
-        if (this.collidesWith.indexOf(group[i]) == -1)
-        {
-          this.collidesWith.push(group[i]);
+  collides(group, Function callback, p2.Shape shape) {
 
-          if (callback)
-          {
-            this.createGroupCallback(group[i], callback, callbackContext);
+    if (group is List) {
+      for (var i = 0; i < group.length; i++) {
+        if (this.collidesWith.indexOf(group[i]) == -1) {
+          this.collidesWith.add(group[i]);
+
+          if (callback != null) {
+            this.createGroupCallback(group[i], callback);
           }
         }
       }
     }
-    else
-    {
-      if (this.collidesWith.indexOf(group) == -1)
-      {
-        this.collidesWith.push(group);
+    else {
+      if (this.collidesWith.indexOf(group) == -1) {
+        this.collidesWith.add(group);
 
-        if (callback)
-        {
-          this.createGroupCallback(group, callback, callbackContext);
+        if (callback != null) {
+          this.createGroupCallback(group, callback);
         }
       }
     }
 
-    var mask = this.getCollisionMask();
+    int mask = this.getCollisionMask();
 
-    if ( shape == null)
-    {
-      for (var i = this.data.shapes.length - 1; i >= 0; i--)
-      {
+    if (shape == null) {
+      for (var i = this.data.shapes.length - 1; i >= 0; i--) {
         this.data.shapes[i].collisionMask = mask;
       }
     }
-    else
-    {
+    else {
       shape.collisionMask = mask;
     }
 
@@ -406,10 +381,9 @@ class Body {
    *
    * @method Phaser.Physics.P2.Body#adjustCenterOfMass
    */
-  adjustCenterOfMass () {
 
+  adjustCenterOfMass() {
     this.data.adjustCenterOfMass();
-
   }
 
   /**
@@ -418,10 +392,9 @@ class Body {
    * @method Phaser.Physics.P2.Body#applyDamping
    * @param {number} dt - Current time step.
    */
-  applyDamping (dt) {
 
+  applyDamping(num dt) {
     this.data.applyDamping(dt);
-
   }
 
   /**
@@ -432,10 +405,9 @@ class Body {
    * @param {number} worldX - The world x point to apply the force on.
    * @param {number} worldY - The world y point to apply the force on.
    */
-  applyForce (force, worldX, worldY) {
 
+  applyForce(List force, num worldX, num worldY) {
     this.data.applyForce(force, [this.world.pxmi(worldX), this.world.pxmi(worldY)]);
-
   }
 
   /**
@@ -443,7 +415,8 @@ class Body {
    *
    * @method Phaser.Physics.P2.Body#setZeroForce
    */
-  setZeroForce () {
+
+  setZeroForce() {
 
     this.data.setZeroForce();
 
@@ -454,7 +427,8 @@ class Body {
    *
    * @method Phaser.Physics.P2.Body#setZeroRotation
    */
-  setZeroRotation () {
+
+  setZeroRotation() {
 
     this.data.angularVelocity = 0;
 
@@ -465,7 +439,8 @@ class Body {
    *
    * @method Phaser.Physics.P2.Body#setZeroVelocity
    */
-  setZeroVelocity () {
+
+  setZeroVelocity() {
 
     this.data.velocity[0] = 0;
     this.data.velocity[1] = 0;
@@ -477,7 +452,8 @@ class Body {
    *
    * @method Phaser.Physics.P2.Body#setZeroDamping
    */
-  setZeroDamping () {
+
+  setZeroDamping() {
 
     this.data.damping = 0;
     this.data.angularDamping = 0;
@@ -491,7 +467,8 @@ class Body {
    * @param {Float32Array|Array} out - The vector to store the result in.
    * @param {Float32Array|Array} worldPoint - The input world vector.
    */
-  toLocalFrame (out, worldPoint) {
+
+  toLocalFrame(out, worldPoint) {
 
     return this.data.toLocalFrame(out, worldPoint);
 
@@ -504,7 +481,8 @@ class Body {
    * @param {Array} out - The vector to store the result in.
    * @param {Array} localPoint - The input local vector.
    */
-  toWorldFrame (out, localPoint) {
+
+  toWorldFrame(out, localPoint) {
 
     return this.data.toWorldFrame(out, localPoint);
 
@@ -516,7 +494,8 @@ class Body {
    * @method Phaser.Physics.P2.Body#rotateLeft
    * @param {number} speed - The speed at which it should rotate.
    */
-  rotateLeft (speed) {
+
+  rotateLeft(speed) {
 
     this.data.angularVelocity = this.world.pxm(-speed);
 
@@ -528,7 +507,8 @@ class Body {
    * @method Phaser.Physics.P2.Body#rotateRight
    * @param {number} speed - The speed at which it should rotate.
    */
-  rotateRight (speed) {
+
+  rotateRight(speed) {
 
     this.data.angularVelocity = this.world.pxm(speed);
 
@@ -541,7 +521,8 @@ class Body {
    * @method Phaser.Physics.P2.Body#moveForward
    * @param {number} speed - The speed at which it should move forwards.
    */
-  moveForward (speed) {
+
+  moveForward(speed) {
 
     var magnitude = this.world.pxmi(-speed);
     var angle = this.data.angle + Math.PI / 2;
@@ -558,7 +539,8 @@ class Body {
    * @method Phaser.Physics.P2.Body#moveBackward
    * @param {number} speed - The speed at which it should move backwards.
    */
-  moveBackward (speed) {
+
+  moveBackward(speed) {
 
     var magnitude = this.world.pxmi(-speed);
     var angle = this.data.angle + Math.PI / 2;
@@ -575,7 +557,8 @@ class Body {
    * @method Phaser.Physics.P2.Body#thrust
    * @param {number} speed - The speed at which it should thrust.
    */
-  thrust (speed) {
+
+  thrust(speed) {
 
     var magnitude = this.world.pxmi(-speed);
     var angle = this.data.angle + Math.PI / 2;
@@ -592,7 +575,8 @@ class Body {
    * @method Phaser.Physics.P2.Body#reverse
    * @param {number} speed - The speed at which it should reverse.
    */
-  reverse (speed) {
+
+  reverse(speed) {
 
     var magnitude = this.world.pxmi(-speed);
     var angle = this.data.angle + Math.PI / 2;
@@ -609,7 +593,8 @@ class Body {
    * @method Phaser.Physics.P2.Body#moveLeft
    * @param {number} speed - The speed at which it should move to the left, in pixels per second.
    */
-  moveLeft (speed) {
+
+  moveLeft(speed) {
 
     this.data.velocity[0] = this.world.pxmi(-speed);
 
@@ -622,7 +607,8 @@ class Body {
    * @method Phaser.Physics.P2.Body#moveRight
    * @param {number} speed - The speed at which it should move to the right, in pixels per second.
    */
-  moveRight (speed) {
+
+  moveRight(speed) {
 
     this.data.velocity[0] = this.world.pxmi(speed);
 
@@ -635,7 +621,8 @@ class Body {
    * @method Phaser.Physics.P2.Body#moveUp
    * @param {number} speed - The speed at which it should move up, in pixels per second.
    */
-  moveUp (speed) {
+
+  moveUp(speed) {
 
     this.data.velocity[1] = this.world.pxmi(-speed);
 
@@ -648,7 +635,8 @@ class Body {
    * @method Phaser.Physics.P2.Body#moveDown
    * @param {number} speed - The speed at which it should move down, in pixels per second.
    */
-  moveDown (speed) {
+
+  moveDown(speed) {
 
     this.data.velocity[1] = this.world.pxmi(speed);
 
@@ -660,10 +648,10 @@ class Body {
    * @method Phaser.Physics.P2.Body#preUpdate
    * @protected
    */
-  preUpdate () {
 
-    if (this.removeNextStep)
-    {
+  preUpdate() {
+
+    if (this.removeNextStep) {
       this.removeFromWorld();
       this.removeNextStep = false;
     }
@@ -676,13 +664,13 @@ class Body {
    * @method Phaser.Physics.P2.Body#postUpdate
    * @protected
    */
-  postUpdate () {
+
+  postUpdate() {
 
     this.sprite.x = this.world.mpxi(this.data.position[0]);
     this.sprite.y = this.world.mpxi(this.data.position[1]);
 
-    if (!this.fixedRotation)
-    {
+    if (!this.fixedRotation) {
       this.sprite.rotation = this.data.angle;
     }
 
@@ -697,22 +685,25 @@ class Body {
    * @param {boolean} [resetDamping=false] - Resets the linear and angular damping.
    * @param {boolean} [resetMass=false] - Sets the Body mass back to 1.
    */
-  reset (num x, num y, [bool resetDamping=false, bool resetMass=false]) {
 
-    if ( resetDamping == null) { resetDamping = false; }
-    if ( resetMass == null) { resetMass = false; }
+  reset(num x, num y, [bool resetDamping=false, bool resetMass=false]) {
+
+    if (resetDamping == null) {
+      resetDamping = false;
+    }
+    if (resetMass == null) {
+      resetMass = false;
+    }
 
     this.setZeroForce();
     this.setZeroVelocity();
     this.setZeroRotation();
 
-    if (resetDamping)
-    {
+    if (resetDamping) {
       this.setZeroDamping();
     }
 
-    if (resetMass)
-    {
+    if (resetMass) {
       this.mass = 1;
     }
 
@@ -726,21 +717,18 @@ class Body {
    *
    * @method Phaser.Physics.P2.Body#addToWorld
    */
-  addToWorld () {
 
-    if (this.game.physics.p2._toRemove)
-    {
-      for (var i = 0; i < this.game.physics.p2._toRemove.length; i++)
-      {
-        if (this.game.physics.p2._toRemove[i] == this)
-        {
+  addToWorld() {
+
+    if (this.game.physics.p2._toRemove) {
+      for (var i = 0; i < this.game.physics.p2._toRemove.length; i++) {
+        if (this.game.physics.p2._toRemove[i] == this) {
           this.game.physics.p2._toRemove.splice(i, 1);
         }
       }
     }
 
-    if (this.data.world != this.game.physics.p2.world)
-    {
+    if (this.data.world != this.game.physics.p2.world) {
       this.game.physics.p2.addBody(this);
     }
 
@@ -751,10 +739,10 @@ class Body {
    *
    * @method Phaser.Physics.P2.Body#removeFromWorld
    */
-  removeFromWorld () {
 
-    if (this.data.world == this.game.physics.p2.world)
-    {
+  removeFromWorld() {
+
+    if (this.data.world == this.game.physics.p2.world) {
       this.game.physics.p2.removeBodyNextStep(this);
     }
 
@@ -765,19 +753,21 @@ class Body {
    *
    * @method Phaser.Physics.P2.Body#destroy
    */
-  destroy () {
+
+  destroy() {
 
     this.removeFromWorld();
 
     this.clearShapes();
 
-    this._bodyCallbacks = {};
-    this._bodyCallbackContext = {};
-    this._groupCallbacks = {};
-    this._groupCallbackContext = {};
+    this._bodyCallbacks = {
+    };
+    //this._bodyCallbackContext = {};
+    this._groupCallbacks = {
+    };
+    //this._groupCallbackContext = {};
 
-    if (this.debugBody)
-    {
+    if (this.debugBody != null) {
       this.debugBody.destroy();
     }
 
@@ -792,12 +782,12 @@ class Body {
    *
    * @method Phaser.Physics.P2.Body#clearShapes
    */
-  clearShapes () {
+
+  clearShapes() {
 
     var i = this.data.shapes.length;
 
-    while (i-- >0)
-    {
+    while (i-- > 0) {
       this.data.removeShape(this.data.shapes[i]);
     }
 
@@ -816,11 +806,18 @@ class Body {
    * @param {number} [rotation=0] - Local rotation of the shape relative to the body center of mass, specified in radians.
    * @return {p2.Shape} The shape that was added to the body.
    */
-  p2.Shape addShape (shape, offsetX, offsetY, rotation) {
 
-    if ( offsetX == null) { offsetX = 0; }
-    if ( offsetY == null) { offsetY = 0; }
-    if ( rotation == null) { rotation = 0; }
+  p2.Shape addShape(p2.Shape shape, [num offsetX=0, num offsetY=0,num rotation=0]) {
+
+    if (offsetX == null) {
+      offsetX = 0;
+    }
+    if (offsetY == null) {
+      offsetY = 0;
+    }
+    if (rotation == null) {
+      rotation = 0;
+    }
 
     this.data.addShape(shape, [this.world.pxmi(offsetX), this.world.pxmi(offsetY)], rotation);
     this.shapeChanged();
@@ -839,7 +836,8 @@ class Body {
    * @param {number} [rotation=0] - Local rotation of the shape relative to the body center of mass, specified in radians.
    * @return {p2.Circle} The Circle shape that was added to the Body.
    */
-  p2.Circle addCircle(num radius,[num offsetX=0, num offsetY=0, num rotation=0]) {
+
+  p2.Circle addCircle(num radius, [num offsetX=0, num offsetY=0, num rotation=0]) {
 
     var shape = new p2.Circle(this.world.pxm(radius));
 
@@ -858,7 +856,8 @@ class Body {
    * @param {number} [rotation=0] - Local rotation of the shape relative to the body center of mass, specified in radians.
    * @return {p2.Rectangle} The Rectangle shape that was added to the Body.
    */
-  p2.Rectangle addRectangle (num width, num height,[num offsetX=0, num offsetY=0, num rotation=0]) {
+
+  p2.Rectangle addRectangle(num width, num height, [num offsetX=0, num offsetY=0, num rotation=0]) {
 
     var shape = new p2.Rectangle(this.world.pxm(width), this.world.pxm(height));
 
@@ -875,7 +874,8 @@ class Body {
    * @param {number} [rotation=0] - Local rotation of the shape relative to the body center of mass, specified in radians.
    * @return {p2.Plane} The Plane shape that was added to the Body.
    */
-  p2.Plane addPlane ([num offsetX=0, num offsetY=0, num rotation=0]) {
+
+  p2.Plane addPlane([num offsetX=0, num offsetY=0, num rotation=0]) {
 
     var shape = new p2.Plane();
 
@@ -892,7 +892,8 @@ class Body {
    * @param {number} [rotation=0] - Local rotation of the shape relative to the body center of mass, specified in radians.
    * @return {p2.Particle} The Particle shape that was added to the Body.
    */
-  p2.Particle addParticle ([num offsetX=0, num offsetY=0,num rotation=0]) {
+
+  p2.Particle addParticle([num offsetX=0, num offsetY=0, num rotation=0]) {
 
     var shape = new p2.Particle();
 
@@ -912,7 +913,8 @@ class Body {
    * @param {number} [rotation=0] - Local rotation of the shape relative to the body center of mass, specified in radians.
    * @return {p2.Line} The Line shape that was added to the Body.
    */
-  p2.Line addLine (num length, [num offsetX=0, num offsetY=0, num rotation=0]) {
+
+  p2.Line addLine(num length, [num offsetX=0, num offsetY=0, num rotation=0]) {
 
     var shape = new p2.Line(this.world.pxm(length));
 
@@ -932,7 +934,8 @@ class Body {
    * @param {number} [rotation=0] - Local rotation of the shape relative to the body center of mass, specified in radians.
    * @return {p2.Capsule} The Capsule shape that was added to the Body.
    */
-  p2.Capsule addCapsule (num length, num radius, [num offsetX=0, num offsetY=0, num rotation=0]) {
+
+  p2.Capsule addCapsule(num length, num radius, [num offsetX=0, num offsetY=0, num rotation=0]) {
     var shape = new p2.Capsule(this.world.pxm(length), this.world.pxm(radius));
     return this.addShape(shape, offsetX, offsetY, rotation);
   }
@@ -951,343 +954,336 @@ class Body {
    *                                       or the arguments passed can be flat x,y values e.g. `setPolygon(options, x,y, x,y, x,y, ...)` where `x` and `y` are numbers.
    * @return {boolean} True on success, else false.
    */
-  bool addPolygon (options, points) {
 
-    options = options || {};
+  bool addPolygon(List points, {bool optimalDecomp: false, bool skipSimpleCheck: false, num removeCollinearPoints: 0}) {
 
-    if (!Array.isArray(points))
-    {
-      points = Array.prototype.slice.call(arguments, 1);
-    }
+    //options = options || {};
 
-    var path = [];
+//    if (points is! List)
+//    {
+//      points = Array.prototype.slice.call(arguments, 1);
+//    }
+
+    List path = [];
 
     //  Did they pass in a single array of points?
-    if (points.length == 1 && points[0] is List)
-  {
-  path = points[0].slice(0);
-  }
-  else if (points[0] is List)
-  {
-  path = points.slice();
-  }
-  else if ( points[0] is num)
-  {
-  //  We've a list of numbers
-  for (var i = 0, len = points.length; i < len; i += 2)
-  {
-  path.push([points[i], points[i + 1]]);
-  }
-  }
-
-  //  top and tail
-  var idx = path.length - 1;
-
-  if (path[idx][0] == path[0][0] && path[idx][1] == path[0][1])
-  {
-  path.pop();
-  }
-
-  //  Now process them into p2 values
-  for (var p = 0; p < path.length; p++)
-  {
-  path[p][0] = this.world.pxmi(path[p][0]);
-  path[p][1] = this.world.pxmi(path[p][1]);
-  }
-
-  var result = this.data.fromPolygon(path, options);
-
-  this.shapeChanged();
-
-  return result;
-
-}
-
-/**
- * Remove a shape from the body. Will automatically update the mass properties and bounding radius.
- *
- * @method Phaser.Physics.P2.Body#removeShape
- * @param {p2.Circle|p2.Rectangle|p2.Plane|p2.Line|p2.Particle} shape - The shape to remove from the body.
- * @return {boolean} True if the shape was found and removed, else false.
- */
-bool removeShape (p2.Shape shape) {
-
-  bool result = this.data.removeShape(shape);
-
-  this.shapeChanged();
-
-  return result;
-}
-
-/**
- * Clears any previously set shapes. Then creates a new Circle shape and adds it to this Body.
- *
- * @method Phaser.Physics.P2.Body#setCircle
- * @param {number} radius - The radius of this circle (in pixels)
- * @param {number} [offsetX=0] - Local horizontal offset of the shape relative to the body center of mass.
- * @param {number} [offsetY=0] - Local vertical offset of the shape relative to the body center of mass.
- * @param {number} [rotation=0] - Local rotation of the shape relative to the body center of mass, specified in radians.
- */
-setCircle (num radius, [num offsetX=0, num offsetY=0, num rotation=0]) {
-
-  this.clearShapes();
-
-  return this.addCircle(radius, offsetX, offsetY, rotation);
-
-}
-
-/**
- * Clears any previously set shapes. The creates a new Rectangle shape at the given size and offset, and adds it to this Body.
- * If you wish to create a Rectangle to match the size of a Sprite or Image see Body.setRectangleFromSprite.
- *
- * @method Phaser.Physics.P2.Body#setRectangle
- * @param {number} [width=16] - The width of the rectangle in pixels.
- * @param {number} [height=16] - The height of the rectangle in pixels.
- * @param {number} [offsetX=0] - Local horizontal offset of the shape relative to the body center of mass.
- * @param {number} [offsetY=0] - Local vertical offset of the shape relative to the body center of mass.
- * @param {number} [rotation=0] - Local rotation of the shape relative to the body center of mass, specified in radians.
- * @return {p2.Rectangle} The Rectangle shape that was added to the Body.
- */
-setRectangle ([num width, num height, num offsetX=0, num offsetY=0, num rotation=0]) {
-
-  if ( width == null) { width = 16; }
-  if ( height == null) { height = 16; }
-
-  this.clearShapes();
-
-  return this.addRectangle(width, height, offsetX, offsetY, rotation);
-
-}
-
-/**
- * Clears any previously set shapes.
- * Then creates a Rectangle shape sized to match the dimensions and orientation of the Sprite given.
- * If no Sprite is given it defaults to using the parent of this Body.
- *
- * @method Phaser.Physics.P2.Body#setRectangleFromSprite
- * @param {Phaser.Sprite|Phaser.Image} [sprite] - The Sprite on which the Rectangle will get its dimensions.
- * @return {p2.Rectangle} The Rectangle shape that was added to the Body.
- */
-setRectangleFromSprite (Phaser.SpriteInterface sprite) {
-
-  if ( sprite == null) { sprite = this.sprite; }
-
-  this.clearShapes();
-
-  return this.addRectangle(sprite.width, sprite.height, 0, 0, sprite.rotation);
-
-}
-
-/**
- * Adds the given Material to all Shapes that belong to this Body.
- * If you only wish to apply it to a specific Shape in this Body then provide that as the 2nd parameter.
- *
- * @method Phaser.Physics.P2.Body#setMaterial
- * @param {Phaser.Physics.P2.Material} material - The Material that will be applied.
- * @param {p2.Shape} [shape] - An optional Shape. If not provided the Material will be added to all Shapes in this Body.
- */
-setMaterial (Material material,Shape shape) {
-
-  if (shape == null)
-  {
-    for (var i = this.data.shapes.length - 1; i >= 0; i--)
-    {
-      this.data.shapes[i].material = material;
+    if (points.length == 1 && points[0] is List) {
+      path = points[0].toList();
     }
+    else if (points[0] is List) {
+      path = points.toList();
+    }
+    else if (points[0] is num) {
+        //  We've a list of numbers
+        for (var i = 0, len = points.length; i < len; i += 2) {
+          path.add([points[i], points[i + 1]]);
+        }
+      }
+
+    //  top and tail
+    int idx = path.length - 1;
+
+    if (path[idx][0] == path[0][0] && path[idx][1] == path[0][1]) {
+      path.removeLast();
+    }
+
+    //  Now process them into p2 values
+    for (var p = 0; p < path.length; p++) {
+      path[p][0] = this.world.pxmi(path[p][0]);
+      path[p][1] = this.world.pxmi(path[p][1]);
+    }
+
+    bool result = this.data.fromPolygon(path, optimalDecomp: optimalDecomp, skipSimpleCheck: skipSimpleCheck, removeCollinearPoints: removeCollinearPoints);
+
+    this.shapeChanged();
+
+    return result;
+
   }
-  else
-  {
-    shape.material = material;
+
+  /**
+   * Remove a shape from the body. Will automatically update the mass properties and bounding radius.
+   *
+   * @method Phaser.Physics.P2.Body#removeShape
+   * @param {p2.Circle|p2.Rectangle|p2.Plane|p2.Line|p2.Particle} shape - The shape to remove from the body.
+   * @return {boolean} True if the shape was found and removed, else false.
+   */
+
+  bool removeShape(p2.Shape shape) {
+
+    bool result = this.data.removeShape(shape);
+
+    this.shapeChanged();
+
+    return result;
   }
 
-}
+  /**
+   * Clears any previously set shapes. Then creates a new Circle shape and adds it to this Body.
+   *
+   * @method Phaser.Physics.P2.Body#setCircle
+   * @param {number} radius - The radius of this circle (in pixels)
+   * @param {number} [offsetX=0] - Local horizontal offset of the shape relative to the body center of mass.
+   * @param {number} [offsetY=0] - Local vertical offset of the shape relative to the body center of mass.
+   * @param {number} [rotation=0] - Local rotation of the shape relative to the body center of mass, specified in radians.
+   */
 
-/**
- * Updates the debug draw if any body shapes change.
- *
- * @method Phaser.Physics.P2.Body#shapeChanged
- */
-shapeChanged() {
+  setCircle(num radius, [num offsetX=0, num offsetY=0, num rotation=0]) {
 
-  if (this.debugBody)
-  {
-    this.debugBody.draw();
+    this.clearShapes();
+
+    return this.addCircle(radius, offsetX, offsetY, rotation);
+
   }
 
-}
+  /**
+   * Clears any previously set shapes. The creates a new Rectangle shape at the given size and offset, and adds it to this Body.
+   * If you wish to create a Rectangle to match the size of a Sprite or Image see Body.setRectangleFromSprite.
+   *
+   * @method Phaser.Physics.P2.Body#setRectangle
+   * @param {number} [width=16] - The width of the rectangle in pixels.
+   * @param {number} [height=16] - The height of the rectangle in pixels.
+   * @param {number} [offsetX=0] - Local horizontal offset of the shape relative to the body center of mass.
+   * @param {number} [offsetY=0] - Local vertical offset of the shape relative to the body center of mass.
+   * @param {number} [rotation=0] - Local rotation of the shape relative to the body center of mass, specified in radians.
+   * @return {p2.Rectangle} The Rectangle shape that was added to the Body.
+   */
 
-/**
- * Reads the shape data from a physics data file stored in the Game.Cache and adds it as a polygon to this Body.
- * The shape data format is based on the custom phaser export in.
- *
- * @method Phaser.Physics.P2.Body#addPhaserPolygon
- * @param {string} key - The key of the Physics Data file as stored in Game.Cache.
- * @param {string} object - The key of the object within the Physics data file that you wish to load the shape data from.
- */
-addPhaserPolygon (String key, String object) {
+  setRectangle([num width, num height, num offsetX=0, num offsetY=0, num rotation=0]) {
 
-  var data = this.game.cache.getPhysicsData(key, object);
-  var createdFixtures = [];
+    if (width == null) {
+      width = 16;
+    }
+    if (height == null) {
+      height = 16;
+    }
 
-  //  Cycle through the fixtures
-  for (var i = 0; i < data.length; i++)
-  {
-    var fixtureData = data[i];
-    var shapesOfFixture = this.addFixture(fixtureData);
+    this.clearShapes();
 
-    //  Always add to a group
-    createdFixtures[fixtureData.filter.group] = createdFixtures[fixtureData.filter.group] || [];
-    createdFixtures[fixtureData.filter.group] = createdFixtures[fixtureData.filter.group].concat(shapesOfFixture);
+    return this.addRectangle(width, height, offsetX, offsetY, rotation);
 
-    //  if (unique) fixture key is provided
-    if (fixtureData.fixtureKey)
-    {
-      createdFixtures[fixtureData.fixtureKey] = shapesOfFixture;
+  }
+
+  /**
+   * Clears any previously set shapes.
+   * Then creates a Rectangle shape sized to match the dimensions and orientation of the Sprite given.
+   * If no Sprite is given it defaults to using the parent of this Body.
+   *
+   * @method Phaser.Physics.P2.Body#setRectangleFromSprite
+   * @param {Phaser.Sprite|Phaser.Image} [sprite] - The Sprite on which the Rectangle will get its dimensions.
+   * @return {p2.Rectangle} The Rectangle shape that was added to the Body.
+   */
+
+  setRectangleFromSprite(Phaser.SpriteInterface sprite) {
+
+    if (sprite == null) {
+      sprite = this.sprite;
+    }
+
+    this.clearShapes();
+
+    return this.addRectangle(sprite.width, sprite.height, 0, 0, sprite.rotation);
+
+  }
+
+  /**
+   * Adds the given Material to all Shapes that belong to this Body.
+   * If you only wish to apply it to a specific Shape in this Body then provide that as the 2nd parameter.
+   *
+   * @method Phaser.Physics.P2.Body#setMaterial
+   * @param {Phaser.Physics.P2.Material} material - The Material that will be applied.
+   * @param {p2.Shape} [shape] - An optional Shape. If not provided the Material will be added to all Shapes in this Body.
+   */
+
+  setMaterial(Material material, [p2.Shape shape]) {
+
+    if (shape == null) {
+      for (var i = this.data.shapes.length - 1; i >= 0; i--) {
+        this.data.shapes[i].material = material;
+      }
+    }
+    else {
+      shape.material = material;
+    }
+
+  }
+
+  /**
+   * Updates the debug draw if any body shapes change.
+   *
+   * @method Phaser.Physics.P2.Body#shapeChanged
+   */
+
+  shapeChanged() {
+    if (this.debugBody != null) {
+      this.debugBody.draw();
     }
   }
 
-  this.data.aabbNeedsUpdate = true;
-  this.shapeChanged();
+  /**
+   * Reads the shape data from a physics data file stored in the Game.Cache and adds it as a polygon to this Body.
+   * The shape data format is based on the custom phaser export in.
+   *
+   * @method Phaser.Physics.P2.Body#addPhaserPolygon
+   * @param {string} key - The key of the Physics Data file as stored in Game.Cache.
+   * @param {string} object - The key of the object within the Physics data file that you wish to load the shape data from.
+   */
 
-  return createdFixtures;
+  addPhaserPolygon(String key, String object) {
 
-}
+    Map data = this.game.cache.getPhysicsData(key, object);
+    List createdFixtures = [];
 
-/**
- * Add a polygon fixture. This is used during #loadPolygon.
- *
- * @method Phaser.Physics.P2.Body#addFixture
- * @param {string} fixtureData - The data for the fixture. It contains: isSensor, filter (collision) and the actual polygon shapes.
- * @return {array} An array containing the generated shapes for the given polygon.
- */
-List addFixture (String fixtureData) {
+    //  Cycle through the fixtures
+    for (int i = 0; i < data.length; i++) {
+      Map fixtureData = data[i];
+      var shapesOfFixture = this.addFixture(fixtureData);
 
-  var generatedShapes = [];
+      //  Always add to a group
+      createdFixtures[fixtureData['filter'].group] = createdFixtures[fixtureData['filter'].group] || [];
+      createdFixtures[fixtureData['filter'].group] = createdFixtures[fixtureData['filter'].group].concat(shapesOfFixture);
 
-  if (fixtureData.circle)
-  {
-    var shape = new p2.Circle(this.world.pxm(fixtureData.circle.radius));
-    shape.collisionGroup = fixtureData.filter.categoryBits;
-    shape.collisionMask = fixtureData.filter.maskBits;
-    shape.sensor = fixtureData.isSensor;
+      //  if (unique) fixture key is provided
+      if (fixtureData['fixtureKey'] != null) {
+        createdFixtures[fixtureData['fixtureKey']] = shapesOfFixture;
+      }
+    }
 
-    var offset = p2.vec2.create();
-    offset[0] = this.world.pxmi(fixtureData.circle.position[0] - this.sprite.width/2);
-    offset[1] = this.world.pxmi(fixtureData.circle.position[1] - this.sprite.height/2);
+    this.data.aabbNeedsUpdate = true;
+    this.shapeChanged();
 
-    this.data.addShape(shape, offset);
-    generatedShapes.push(shape);
+    return createdFixtures;
+
   }
-  else
-  {
-    var polygons = fixtureData.polygons;
-    var cm = p2.vec2.create();
 
-    for (var i = 0; i < polygons.length; i++)
-    {
-      var shapes = polygons[i];
-      var vertices = [];
+  /**
+   * Add a polygon fixture. This is used during #loadPolygon.
+   *
+   * @method Phaser.Physics.P2.Body#addFixture
+   * @param {string} fixtureData - The data for the fixture. It contains: isSensor, filter (collision) and the actual polygon shapes.
+   * @return {array} An array containing the generated shapes for the given polygon.
+   */
 
-      for (var s = 0; s < shapes.length; s += 2)
-      {
-        vertices.push([ this.world.pxmi(shapes[s]), this.world.pxmi(shapes[s + 1]) ]);
+  List addFixture(Map fixtureData) {
+
+    List generatedShapes = [];
+
+    if (fixtureData['circle'] != null) {
+      p2.Circle shape = new p2.Circle(this.world.pxm(fixtureData['circle'].radius));
+      shape.collisionGroup = fixtureData['filter'].categoryBits;
+      shape.collisionMask = fixtureData['filter'].maskBits;
+      shape.sensor = fixtureData['isSensor'];
+
+      List offset = p2.vec2.create();
+      offset[0] = this.world.pxmi(fixtureData['circle'].position[0] - this.sprite.width / 2);
+      offset[1] = this.world.pxmi(fixtureData['circle'].position[1] - this.sprite.height / 2);
+
+      this.data.addShape(shape, offset);
+      generatedShapes.add(shape);
+    }
+    else {
+      Map polygons = fixtureData['polygons'];
+      List cm = p2.vec2.create();
+
+      for (int i = 0; i < polygons.length; i++) {
+        Map shapes = polygons[i];
+        List vertices = [];
+
+        for (int s = 0; s < shapes.length; s += 2) {
+          vertices.add([ this.world.pxmi(shapes[s]), this.world.pxmi(shapes[s + 1]) ]);
+        }
+
+        p2.Convex shape = new p2.Convex(vertices);
+
+        //  Move all vertices so its center of mass is in the local center of the convex
+        for (int j = 0; j != shape.vertices.length; j++) {
+          List v = shape.vertices[j];
+          p2.vec2.sub(v, v, shape.centerOfMass);
+        }
+
+        p2.vec2.scale(cm, shape.centerOfMass, 1);
+
+        cm[0] -= this.world.pxmi(this.sprite.width / 2);
+        cm[1] -= this.world.pxmi(this.sprite.height / 2);
+
+        shape.updateTriangles();
+        shape.updateCenterOfMass();
+        shape.updateBoundingRadius();
+
+        shape.collisionGroup = fixtureData['filter'].categoryBits;
+        shape.collisionMask = fixtureData['filter'].maskBits;
+        shape.sensor = fixtureData['isSensor'];
+
+        this.data.addShape(shape, cm);
+
+        generatedShapes.add(shape);
+      }
+    }
+
+    return generatedShapes;
+
+  }
+
+  /**
+   * Reads the shape data from a physics data file stored in the Game.Cache and adds it as a polygon to this Body.
+   *
+   * @method Phaser.Physics.P2.Body#loadPolygon
+   * @param {string} key - The key of the Physics Data file as stored in Game.Cache.
+   * @param {string} object - The key of the object within the Physics data file that you wish to load the shape data from.
+   * @return {boolean} True on success, else false.
+   */
+
+  bool loadPolygon(String key, String object) {
+
+    Map data = this.game.cache.getPhysicsData(key, object);
+
+    //  We've multiple Convex shapes, they should be CCW automatically
+    List cm = p2.vec2.create();
+
+    for (int i = 0; i < data.length; i++) {
+      List vertices = [];
+
+      for (int s = 0; s < data[i].shape.length; s += 2) {
+        vertices.add([ this.world.pxmi(data[i].shape[s]), this.world.pxmi(data[i].shape[s + 1]) ]);
       }
 
-      var shape = new p2.Convex(vertices);
+      p2.Convex c = new p2.Convex(vertices);
 
-      //  Move all vertices so its center of mass is in the local center of the convex
-      for (var j = 0; j != shape.vertices.length; j++)
-      {
-        var v = shape.vertices[j];
-        p2.vec2.sub(v, v, shape.centerOfMass);
+      // Move all vertices so its center of mass is in the local center of the convex
+      for (int j = 0; j != c.vertices.length; j++) {
+        var v = c.vertices[j];
+        p2.vec2.sub(v, v, c.centerOfMass);
       }
 
-      p2.vec2.scale(cm, shape.centerOfMass, 1);
+      p2.vec2.scale(cm, c.centerOfMass, 1);
 
       cm[0] -= this.world.pxmi(this.sprite.width / 2);
       cm[1] -= this.world.pxmi(this.sprite.height / 2);
 
-      shape.updateTriangles();
-      shape.updateCenterOfMass();
-      shape.updateBoundingRadius();
+      c.updateTriangles();
+      c.updateCenterOfMass();
+      c.updateBoundingRadius();
 
-      shape.collisionGroup = fixtureData.filter.categoryBits;
-      shape.collisionMask = fixtureData.filter.maskBits;
-      shape.sensor = fixtureData.isSensor;
-
-      this.data.addShape(shape, cm);
-
-      generatedShapes.push(shape);
+      this.data.addShape(c, cm);
     }
+
+    this.data.aabbNeedsUpdate = true;
+    this.shapeChanged();
+
+    return true;
+
   }
-
-  return generatedShapes;
-
-}
-
-/**
- * Reads the shape data from a physics data file stored in the Game.Cache and adds it as a polygon to this Body.
- *
- * @method Phaser.Physics.P2.Body#loadPolygon
- * @param {string} key - The key of the Physics Data file as stored in Game.Cache.
- * @param {string} object - The key of the object within the Physics data file that you wish to load the shape data from.
- * @return {boolean} True on success, else false.
- */
-bool loadPolygon (String key, String object) {
-
-  var data = this.game.cache.getPhysicsData(key, object);
-
-  //  We've multiple Convex shapes, they should be CCW automatically
-  var cm = p2.vec2.create();
-
-  for (var i = 0; i < data.length; i++)
-  {
-    var vertices = [];
-
-    for (var s = 0; s < data[i].shape.length; s += 2)
-    {
-      vertices.push([ this.world.pxmi(data[i].shape[s]), this.world.pxmi(data[i].shape[s + 1]) ]);
-    }
-
-    var c = new p2.Convex(vertices);
-
-    // Move all vertices so its center of mass is in the local center of the convex
-    for (var j = 0; j != c.vertices.length; j++)
-    {
-      var v = c.vertices[j];
-      p2.vec2.sub(v, v, c.centerOfMass);
-    }
-
-    p2.vec2.scale(cm, c.centerOfMass, 1);
-
-    cm[0] -= this.world.pxmi(this.sprite.width / 2);
-    cm[1] -= this.world.pxmi(this.sprite.height / 2);
-
-    c.updateTriangles();
-    c.updateCenterOfMass();
-    c.updateBoundingRadius();
-
-    this.data.addShape(c, cm);
-  }
-
-  this.data.aabbNeedsUpdate = true;
-  this.shapeChanged();
-
-  return true;
-
-}
-
 
 
 //Phaser.Physics.P2.Body.prototype.constructor = Phaser.Physics.P2.Body;
 
-/// Dynamic body. Dynamic bodies body can move and respond to collisions and forces.
-static const int DYNAMIC = 1;
+  /// Dynamic body. Dynamic bodies body can move and respond to collisions and forces.
+  static const int DYNAMIC = 1;
 
-/// Static body. Static bodies do not move, and they do not respond to forces or collision.
-static const int STATIC = 2;
+  /// Static body. Static bodies do not move, and they do not respond to forces or collision.
+  static const int STATIC = 2;
 
-/// Kinematic body. Kinematic bodies only moves according to its .velocity, and does not respond to collisions or force.
-static const int KINEMATIC = 4;
+  /// Kinematic body. Kinematic bodies only moves according to its .velocity, and does not respond to collisions or force.
+  static const int KINEMATIC = 4;
 
 }

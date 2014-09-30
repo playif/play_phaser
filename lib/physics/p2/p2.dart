@@ -1,5 +1,9 @@
 part of Phaser;
 
+class Walls {
+  p2.Body left, right, top, bottom;
+}
+
 class P2 {
 
 
@@ -159,6 +163,8 @@ class P2 {
 
   Function impactCallback;
 
+  Walls walls;
+
 
   P2(Game game, config) {
     /**
@@ -216,9 +222,10 @@ class P2 {
     /**
      * @property {object} walls - An object containing the 4 wall bodies that bound the physics world.
      */
-    this.walls = {
-        left: null, right: null, top: null, bottom: null
-    };
+    this.walls = new Walls();
+//    {
+//        left: null, right: null, top: null, bottom: null
+//    };
 
     /**
      * @property {Phaser.Signal} onBodyAdded - Dispatched when a new Body is added to the World.
@@ -289,8 +296,8 @@ class P2 {
     }
 
     //  Hook into the World events
-    this.world.on("beginContact", this.beginContactHandler, this);
-    this.world.on("endContact", this.endContactHandler, this);
+    this.world.on("beginContact", this.beginContactHandler);
+    this.world.on("endContact", this.endContactHandler);
 
     /**
      * @property {array} collisionGroups - An array containing the collision groups that have been defined in the World.
@@ -468,10 +475,10 @@ class P2 {
     //this.callbackContext = context;
 
     if (callback != null) {
-      this.world.on("postBroadphase", this.postBroadphaseHandler, this);
+      this.world.on("postBroadphase", this.postBroadphaseHandler);
     }
     else {
-      this.world.off("postBroadphase", this.postBroadphaseHandler, this);
+      this.world.off("postBroadphase", this.postBroadphaseHandler);
     }
 
   }
@@ -486,7 +493,7 @@ class P2 {
 
   postBroadphaseHandler(Map event) {
 
-    int i = event.pairs.length;
+    int i = event['pairs'].length;
 
     if (this.postBroadphaseCallback && i > 0) {
       while ((i -= 2) >= 0) {
@@ -508,26 +515,26 @@ class P2 {
 
   impactHandler(Map event) {
 
-    if (event.bodyA.parent && event.bodyB.parent) {
+    if (event['bodyA'].parent != null && event['bodyB'].parent != null) {
       //  Body vs. Body callbacks
-      var a = event.bodyA.parent;
-      var b = event.bodyB.parent;
+      var a = event['bodyA'].parent;
+      var b = event['bodyB'].parent;
 
-      if (a._bodyCallbacks[event.bodyB.id]) {
-        a._bodyCallbacks[event.bodyB.id].call(a._bodyCallbackContext[event.bodyB.id], a, b, event.shapeA, event.shapeB);
+      if (a._bodyCallbacks[event['bodyB'].id] != null) {
+        a._bodyCallbacks[event['bodyB'].id].call(a._bodyCallbackContext[event['bodyB'].id], a, b, event['shapeA'], event['shapeB']);
       }
 
-      if (b._bodyCallbacks[event.bodyA.id]) {
-        b._bodyCallbacks[event.bodyA.id].call(b._bodyCallbackContext[event.bodyA.id], b, a, event.shapeB, event.shapeA);
+      if (b._bodyCallbacks[event['bodyA'].id] != null) {
+        b._bodyCallbacks[event['bodyA'].id].call(b._bodyCallbackContext[event['bodyA'].id], b, a, event['shapeB'], event['shapeA']);
       }
 
       //  Body vs. Group callbacks
-      if (a._groupCallbacks[event.shapeB.collisionGroup]) {
-        a._groupCallbacks[event.shapeB.collisionGroup].call(a._groupCallbackContext[event.shapeB.collisionGroup], a, b, event.shapeA, event.shapeB);
+      if (a._groupCallbacks[event['shapeB'].collisionGroup] != null) {
+        a._groupCallbacks[event['shapeB'].collisionGroup].call(a._groupCallbackContext[event['shapeB'].collisionGroup], a, b, event['shapeA'], event['shapeB']);
       }
 
-      if (b._groupCallbacks[event.shapeA.collisionGroup]) {
-        b._groupCallbacks[event.shapeA.collisionGroup].call(b._groupCallbackContext[event.shapeA.collisionGroup], b, a, event.shapeB, event.shapeA);
+      if (b._groupCallbacks[event['shapeA'].collisionGroup] != null) {
+        b._groupCallbacks[event['shapeA'].collisionGroup].call(b._groupCallbackContext[event['shapeA'].collisionGroup], b, a, event['shapeB'], event['shapeA']);
       }
     }
 
@@ -542,14 +549,14 @@ class P2 {
 
   beginContactHandler(Map event) {
 
-    this.onBeginContact.dispatch(event.bodyA, event.bodyB, event.shapeA, event.shapeB, event.contactEquations);
+    this.onBeginContact.dispatch(event['bodyA'], event['bodyB'], event['shapeA'], event['shapeB'], event.contactEquations);
 
-    if (event.bodyA.parent) {
-      event.bodyA.parent.onBeginContact.dispatch(event.bodyB.parent, event.shapeA, event.shapeB, event.contactEquations);
+    if (event['bodyA'].parent != null) {
+      event['bodyA'].parent.onBeginContact.dispatch(event['bodyB'].parent, event['shapeA'], event['shapeB'], event.contactEquations);
     }
 
-    if (event.bodyB.parent) {
-      event.bodyB.parent.onBeginContact.dispatch(event.bodyA.parent, event.shapeB, event.shapeA, event.contactEquations);
+    if (event['bodyB'].parent != null) {
+      event['bodyB'].parent.onBeginContact.dispatch(event['bodyA'].parent, event['shapeB'], event['shapeA'], event.contactEquations);
     }
 
   }
@@ -563,14 +570,14 @@ class P2 {
 
   endContactHandler(Map event) {
 
-    this.onEndContact.dispatch(event.bodyA, event.bodyB, event.shapeA, event.shapeB);
+    this.onEndContact.dispatch(event['bodyA'], event['bodyB'], event['shapeA'], event['shapeB']);
 
-    if (event.bodyA.parent) {
-      event.bodyA.parent.onEndContact.dispatch(event.bodyB.parent, event.shapeA, event.shapeB);
+    if (event['bodyA'].parent != null) {
+      event['bodyA'].parent.onEndContact.dispatch(event['bodyB'].parent, event['shapeA'], event['shapeB']);
     }
 
-    if (event.bodyB.parent) {
-      event.bodyB.parent.onEndContact.dispatch(event.bodyA.parent, event.shapeB, event.shapeA);
+    if (event['bodyB'].parent != null) {
+      event['bodyB'].parent.onEndContact.dispatch(event['bodyA'].parent, event['shapeB'], event['shapeA']);
     }
 
   }
@@ -587,10 +594,8 @@ class P2 {
    * @param {boolean} [setCollisionGroup=true] - If true the Bounds will be set to use its own Collision Group.
    */
 
-  setBoundsToWorld(left, right, top, bottom, setCollisionGroup) {
-
+  setBoundsToWorld([bool left=true, bool right=true, bool top=true, bool bottom=true, bool setCollisionGroup=true]) {
     this.setBounds(this.game.world.bounds.x, this.game.world.bounds.y, this.game.world.bounds.width, this.game.world.bounds.height, left, right, top, bottom, setCollisionGroup);
-
   }
 
   /**
@@ -618,19 +623,19 @@ class P2 {
       bottom = true;
     }
 
-    if (left && this.walls.left) {
+    if (left && this.walls.left != null) {
       this.walls.left.shapes[0].material = material;
     }
 
-    if (right && this.walls.right) {
+    if (right && this.walls.right != null) {
       this.walls.right.shapes[0].material = material;
     }
 
-    if (top && this.walls.top) {
+    if (top && this.walls.top != null) {
       this.walls.top.shapes[0].material = material;
     }
 
-    if (bottom && this.walls.bottom) {
+    if (bottom && this.walls.bottom != null) {
       this.walls.bottom.shapes[0].material = material;
     }
 
@@ -720,9 +725,9 @@ class P2 {
     }
 
     if (left) {
-      this.walls.left = new p2.Body({
+      this.walls.left = new p2.Body(
           mass: 0, position: [ this.pxmi(x), this.pxmi(y) ], angle: 1.5707963267948966
-      });
+      );
       this.walls.left.addShape(new p2.Plane());
 
       if (setCollisionGroup) {
@@ -733,9 +738,9 @@ class P2 {
     }
 
     if (right) {
-      this.walls.right = new p2.Body({
+      this.walls.right = new p2.Body(
           mass: 0, position: [ this.pxmi(x + width), this.pxmi(y) ], angle: -1.5707963267948966
-      });
+      );
       this.walls.right.addShape(new p2.Plane());
 
       if (setCollisionGroup) {
@@ -746,9 +751,9 @@ class P2 {
     }
 
     if (top) {
-      this.walls.top = new p2.Body({
+      this.walls.top = new p2.Body(
           mass: 0, position: [ this.pxmi(x), this.pxmi(y) ], angle: -3.141592653589793
-      });
+      );
       this.walls.top.addShape(new p2.Plane());
 
       if (setCollisionGroup) {
@@ -759,9 +764,9 @@ class P2 {
     }
 
     if (bottom) {
-      this.walls.bottom = new p2.Body({
+      this.walls.bottom = new p2.Body(
           mass: 0, position: [ this.pxmi(x), this.pxmi(y + height) ]
-      });
+      );
       this.walls.bottom.addShape(new p2.Plane());
 
       if (setCollisionGroup) {
@@ -892,7 +897,7 @@ class P2 {
    */
 
   p2.Spring addSpring(p2.Spring spring) {
-    if (spring is Spring || spring is RotationalSpring) {
+    if (spring is p2.Spring || spring is p2.RotationalSpring) {
       this.world.addSpring(spring.data);
     }
     else {
@@ -911,7 +916,7 @@ class P2 {
    */
 
   p2.Spring removeSpring(p2.Spring spring) {
-    if (spring is Spring || spring is RotationalSpring) {
+    if (spring is p2.Spring || spring is p2.RotationalSpring) {
       this.world.removeSpring(spring.data);
     }
     else {
@@ -941,7 +946,7 @@ class P2 {
       window.console.warn('Cannot create Constraint, invalid body objects given');
     }
     else {
-      return this.addConstraint(new DistanceConstraint(this, bodyA, bodyB, distance, localAnchorA, localAnchorB, maxForce));
+      return this.addConstraint(new p2.DistanceConstraint(this, bodyA, bodyB, distance, localAnchorA, localAnchorB, maxForce));
     }
   }
 
@@ -963,7 +968,7 @@ class P2 {
       window.console.warn('Cannot create Constraint, invalid body objects given');
     }
     else {
-      return this.addConstraint(new GearConstraint(this, bodyA, bodyB, angle, ratio));
+      return this.addConstraint(new p2.GearConstraint(this, bodyA, bodyB, angle, ratio));
     }
   }
 
@@ -1121,7 +1126,7 @@ class P2 {
    * @param {array<Phaser.Physics.P2.Body>} bodies - An Array of Body objects that the given Material will be set on.
    */
 
-  setMaterial(p2.Material material, List<Body> bodies) {
+  setMaterial(p2.Material material, List<p2.Body> bodies) {
     int i = bodies.length;
     while (i-- > 0) {
       bodies[i].setMaterial(material);
@@ -1139,7 +1144,7 @@ class P2 {
    * @return {Phaser.Physics.P2.Material} The Material that was created. This is also stored in Phaser.Physics.P2.materials.
    */
 
-  p2.Material createMaterial([String name='', Body body]) {
+  p2.Material createMaterial([String name='', p2.Body body]) {
     p2.Material material = new p2.Material(name);
     this.materials.add(material);
     if (body != null) {
@@ -1250,7 +1255,7 @@ class P2 {
   getConstraints() {
 
     List output = [];
-    var i = this.world.constraints.length;
+    int i = this.world.constraints.length;
 
     while (i-- > 0) {
       output.add(this.world.constraints[i].parent);
@@ -1600,7 +1605,7 @@ class P2 {
    * @return {array} An array of the Phaser.Physics.P2.Body objects that were created.
    */
 
-  convertTilemap(map, layer, addToWorld, optimize) {
+  List<p2.Body> convertTilemap(map, layer, addToWorld, optimize) {
 
     layer = map.getLayer(layer);
 
@@ -1614,17 +1619,17 @@ class P2 {
     //  If the bodies array is already populated we need to nuke it
     this.clearTilemapLayerBodies(map, layer);
 
-    var width = 0;
-    var sx = 0;
-    var sy = 0;
+    num width = 0;
+    num sx = 0;
+    num sy = 0;
 
-    for (var y = 0, h = map.layers[layer].height; y < h; y++) {
+    for (int y = 0, h = map.layers[layer].height; y < h; y++) {
       width = 0;
 
-      for (var x = 0, w = map.layers[layer].width; x < w; x++) {
+      for (int x = 0, w = map.layers[layer].width; x < w; x++) {
         var tile = map.layers[layer].data[y][x];
 
-        if (tile && tile.index > -1 && tile.collides) {
+        if (tile != null && tile.index > -1 && tile.collides) {
           if (optimize) {
             var right = map.getTileRight(layer, x, y);
 
@@ -1674,64 +1679,40 @@ class P2 {
    * Convert p2 physics value (meters) to pixel scale.
    * By default Phaser uses a scale of 20px per meter.
    * If you need to modify this you can over-ride these functions via the Physics Configuration object.
-   *
-   * @method Phaser.Physics.P2#mpx
-   * @param {number} v - The value to convert.
-   * @return {number} The scaled value.
    */
 
-  mpx(v) {
-
+  num mpx(num v) {
     return v *= 20;
-
   }
 
   /**
    * Convert pixel value to p2 physics scale (meters).
    * By default Phaser uses a scale of 20px per meter.
    * If you need to modify this you can over-ride these functions via the Physics Configuration object.
-   *
-   * @method Phaser.Physics.P2#pxm
-   * @param {number} v - The value to convert.
-   * @return {number} The scaled value.
    */
 
-  pxm(v) {
-
+  num pxm(num v) {
     return v * 0.05;
-
   }
 
   /**
    * Convert p2 physics value (meters) to pixel scale and inverses it.
    * By default Phaser uses a scale of 20px per meter.
    * If you need to modify this you can over-ride these functions via the Physics Configuration object.
-   *
-   * @method Phaser.Physics.P2#mpxi
-   * @param {number} v - The value to convert.
-   * @return {number} The scaled value.
    */
 
-  mpxi(v) {
-
+  num mpxi(num v) {
     return v *= -20;
-
   }
 
   /**
    * Convert pixel value to p2 physics scale (meters) and inverses it.
    * By default Phaser uses a scale of 20px per meter.
    * If you need to modify this you can over-ride these functions via the Physics Configuration object.
-   *
-   * @method Phaser.Physics.P2#pxmi
-   * @param {number} v - The value to convert.
-   * @return {number} The scaled value.
    */
 
-  pxmi(v) {
-
+  num pxmi(num v) {
     return v * -0.05;
-
   }
 
 }

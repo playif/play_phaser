@@ -1,10 +1,14 @@
 part of P2;
 
 class GearConstraint extends p2.GearConstraint {
-  GearConstraint(world, bodyA, bodyB, angle, ratio) {
+  Phaser.Game game;
+  Phaser.P2 world;
 
-    if (typeof angle === 'undefined') { angle = 0; }
-    if (typeof ratio === 'undefined') { ratio = 1; }
+  GearConstraint(Phaser.P2 world, Body bodyA, Body bodyB, [num angle, num ratio])
+  :super(){
+
+    if (angle == null) { angle = 0; }
+    if (ratio == null) { ratio = 1; }
 
     /**
      * @property {Phaser.Game} game - Local reference to game.
@@ -16,8 +20,8 @@ class GearConstraint extends p2.GearConstraint {
      */
     this.world = world;
 
-    var options = { angle: angle, ratio: ratio };
+    //var options = { angle: angle, ratio: ratio };
 
-    p2.GearConstraint.call(this, bodyA, bodyB, options);
+    //p2.GearConstraint.call(this, bodyA, bodyB, options);
   }
 }

@@ -1,8 +1,8 @@
 part of P2;
 
 class CollisionGroup {
-  num bitmask;
+  num mask;
   CollisionGroup(num bitmask) {
-    this.bitmask=bitmask;
+    this.mask=bitmask;
   }
 }
