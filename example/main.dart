@@ -1,7 +1,8 @@
 library example;
 import "package:play_phaser/phaser.dart";
+import "package:play_phaser/physics/p2/body.dart" as p2;
 //import "package:play_phaser/physics/ninja/body.dart" as Ninja;
-
+ 
 import "dart:html" as dom;
 
 //@MirrorsUsed(targets: const [GameObject, Gem, Sprite, Text, Particle],  override: '*')
@@ -70,6 +71,10 @@ part "games/games_04_matching_pairs.dart";
 part "games/games_05_simon.dart";
 part "games/games_06_starstruck.dart";
 part "games/games_07_tanks.dart";
+
+part "p2_physics/p2_01_accelerate_to_object.dart";
+part "p2_physics/p2_02_basic_movement.dart";
+part "p2_physics/p2_05_chain.dart";
 
 //Map<String, Map<String, State>> Examples = {
 //    "Basic":{
@@ -148,6 +153,10 @@ Map<String, State> examples = {
     "games_06_starstruck":new games_06_starstruck(),
     "games_07_tanks":new games_07_tanks(),
 
+    "p2_01_accelerate_to_object":new p2_01_accelerate_to_object(),
+    "p2_02_basic_movement":new p2_02_basic_movement(),
+    "p2_05_chain":new p2_05_chain(),
+
 };
 
 main() {
@@ -188,7 +197,7 @@ main() {
   });
   //print("start 1");
   //game.state.add("games_02_gemmatch", new games_03_invaders());
-  game.state.start("basic_01_load_an_image");
+  game.state.start("p2_05_chain");
 
   //game.canvas.style.cursor = "pointer";
   //game.boot();

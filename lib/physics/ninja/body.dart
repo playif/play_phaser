@@ -110,6 +110,8 @@ class Body extends Phaser.Body {
    * @default
    */
   num maxSpeed;
+  
+  
 
 
   Body(Phaser.Ninja system, [Phaser.Sprite sprite = null, int type = 1, int id = 1, num radius = 16, num x = 0, num y = 0, num width = 0, num height = 0]) {

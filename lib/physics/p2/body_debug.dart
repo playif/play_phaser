@@ -2,7 +2,7 @@ part of P2;
 
 class BodyDebug extends Phaser.Group {
   Phaser.Game game;
-  Body body;
+  p2.Body body;
 
   /// The canvas to render the debug info to.
   Phaser.Graphics canvas;
@@ -10,7 +10,7 @@ class BodyDebug extends Phaser.Group {
 
   bool debugPolygons;
 
-  BodyDebug(Phaser.Game game, Body body, {num pixelsPerLengthUnit: 20, bool debugPolygons: false, num lineWidth: 1, num alpha: 0.5})
+  BodyDebug(Phaser.Game game, p2.Body body, {num pixelsPerLengthUnit: 20, bool debugPolygons: false, num lineWidth: 1, num alpha: 0.5})
       : super(game) {
     this.game = game;
     this.body = body;
@@ -386,17 +386,14 @@ class BodyDebug extends Phaser.Group {
    * @method Phaser.Physics.P2.BodyDebug#componentToHex
    */
 
-  componentToHex(c) {
-
-    var hex;
-    hex = c.toString(16);
-
-    if (hex.len == 2) {
+  componentToHex(int c) {
+    String hex;
+    hex = c.toRadixString(16);
+    if (hex.length == 2) {
       return hex;
     } else {
       return hex + '0';
     }
-
   }
 
 }

@@ -5,7 +5,7 @@ class RevoluteConstraint extends p2.RevoluteConstraint {
   Phaser.P2 world;
   //p2.LinearSpring data;
 
-  RevoluteConstraint(Phaser.P2 world, Body bodyA, List pivotA, Body bodyB, List pivotB, num maxForce, List worldPivot)
+  RevoluteConstraint(Phaser.P2 world, p2.Body bodyA, List pivotA, p2.Body bodyB, List pivotB, num maxForce, List worldPivot)
       : super(bodyA, bodyB, worldPivot: worldPivot, localPivotA: pivotA, localPivotB: pivotB, maxForce: maxForce) {
 
     if (maxForce == null) {

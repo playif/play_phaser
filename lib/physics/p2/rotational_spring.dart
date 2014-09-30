@@ -1,12 +1,12 @@
 part of P2;
 
-class RotationalSpring extends RotationalSpring {
+class RotationalSpring {
   Phaser.Game game;
   Phaser.P2 world;
-  p2.LinearSpring data;
+  p2.RotationalSpring data;
 
-  RotationalSpring(Phaser.P2 world, Body bodyA, Body bodyB, num restAngle, num stiffness, num damping)
-      : super() {
+  RotationalSpring(Phaser.P2 world, p2.Body bodyA, p2.Body bodyB, [num restAngle, num stiffness, num damping])
+       {
     /** 
      * @property {Phaser.Game} game - Local reference to game.
      */
@@ -27,20 +27,20 @@ class RotationalSpring extends RotationalSpring {
       damping = 1;
     }
 
-    if (restAngle) {
+    if (restAngle != null) {
       restAngle = world.pxm(restAngle);
     }
 
-    var options = {
-      restAngle: restAngle,
-      stiffness: stiffness,
-      damping: damping
-    };
+//    var options = {
+//      restAngle: restAngle,
+//      stiffness: stiffness,
+//      damping: damping
+//    };
 
     /**
      * @property {p2.RotationalSpring} data - The actual p2 spring object.
      */
-    this.data = new p2.RotationalSpring(bodyA, bodyB, options);
+    this.data = new p2.RotationalSpring(bodyA, bodyB, restAngle:restAngle, stiffness:stiffness, damping:damping);
 
     this.data.parent = this;
   }

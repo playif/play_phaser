@@ -13,7 +13,7 @@ class FixtureList {
 
     this.rawList = list;
     this.init();
-    this.parse(this.rawList);
+    this.parse();
 
   }
 
@@ -103,29 +103,23 @@ class FixtureList {
    * @param {array} keys - A list of fixture keys
    */
 
-  getFixtures(List keys) {
-
+  getFixtures(keys) {
     List fixtures = [];
-
-    if (keys) {
+    if (keys != null) {
       if (!(keys is List)) {
         keys = [keys];
       }
-
-      var self = this;
+      //var self = this;
       keys.forEach((key) {
-        if (self.namedFixtures[key]) {
-          fixtures.add(self.namedFixtures[key]);
+        if (this.namedFixtures[key]) {
+          fixtures.add(this.namedFixtures[key]);
         }
       });
-
       return this.flatten(fixtures);
-
     }
     else {
       return this.allFixtures;
     }
-
   }
 
   /**
@@ -161,26 +155,23 @@ class FixtureList {
    */
 
   parse() {
-
     var key, value;
     List _ref, _results;
     _ref = this.rawList;
     _results = [];
-
     for (key in _ref) {
       value = _ref[key];
-
-      if (!isNaN(key - 0)) {
-        this.groupedFixtures[key] = this.groupedFixtures[key] || [];
-        this.groupedFixtures[key] = this.groupedFixtures[key].concat(value);
+      if (key is num) {
+        if(this.groupedFixtures[key] == null){
+          this.groupedFixtures[key] = {};
+        }
+        this.groupedFixtures[key].addAll(value);
       }
       else {
         this.namedFixtures[key] = this.flatten(value);
       }
-
       _results.add(this.allFixtures = this.flatten(this.groupedFixtures));
     }
-
   }
 
   /**
@@ -190,18 +181,12 @@ class FixtureList {
    * @param {array} array - The array to flatten. Notice: This will happen recursive not shallow.
    */
 
-  flatten(array) {
-
-    var result, self;
-    result = [];
-    self = arguments.callee;
-
+  flatten(List array) {
+    List result = [];
     array.forEach((item) {
-      return Array.prototype.push.apply(result, ((item is List) ? self(item) : [item]));
+      result.add((item is List) ? item : [item]);
     });
-
     return result;
-
   }
 
 }

@@ -20,10 +20,12 @@ import "tween/tweenengine.dart" as tween;
 import "dart:mirrors";
 
 import "package:play_pixi/pixi.dart" as PIXI;
+import "package:p2/p2.dart" as p2js;
 
 import "physics/arcade/body.dart" as arcade;
 import "physics/ninja/body.dart" as ninja;
 import "physics/p2/body.dart" as p2;
+
 
 
 part "animation/animation.dart";

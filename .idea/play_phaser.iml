@@ -62,12 +62,15 @@
       <excludeFolder url="file://$MODULE_DIR$/example/input/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/loader/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/ninja_physics/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/example/p2_physics/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/particles/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/sprites/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/tilemaps/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/tweens/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/p2" />
       <excludeFolder url="file://$MODULE_DIR$/packages/play_phaser" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/play_pixi" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

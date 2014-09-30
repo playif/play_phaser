@@ -23,12 +23,12 @@ part "rotational_spring.dart";
 part "spring.dart";
 part "world.dart";
 
-class Body extends p2.Body implements Phaser.Body {
+class Body implements Phaser.Body {
   /// Local reference to game.
   Phaser.Game game;
 
   /// Local reference to the P2 World.
-  Phaser.P2 world;
+  Phaser.P2 system;
 
   /// Reference to the parent Sprite.
   Phaser.Sprite sprite;
@@ -42,8 +42,22 @@ class Body extends p2.Body implements Phaser.Body {
   /// The p2 Body data.
   p2.Body data;
 
-  InversePointProxy velocity;
-  InversePointProxy force;
+  //bool fixedRotation;
+
+  InversePointProxy _velocity;
+  Phaser.Point get velocity => new Phaser.Point(_velocity.x, _velocity.y);
+  set velocity(Phaser.Point value) {
+    _velocity.x = value.x;
+    _velocity.y = value.y;
+  }
+
+  InversePointProxy _force;
+  Phaser.Point get force => new Phaser.Point(_force.x, _force.y);
+  set force(Phaser.Point value) {
+    _force.x = value.x;
+    _force.y = value.y;
+  }
+  
   Phaser.Point gravity;
   Phaser.Signal onBeginContact;
   Phaser.Signal onEndContact;
@@ -55,11 +69,476 @@ class Body extends p2.Body implements Phaser.Body {
   Map _bodyCallbacks;
   Map _groupCallbacks;
 
+  //num mass;
 
-  Body(Phaser.Game game, [Phaser.Sprite sprite, num x=0, num y=0, num mass=1]) {
+  /**
+  * @name Phaser.Physics.P2.Body#static
+  * @property {boolean} static - Returns true if the Body is static. Setting Body.static to 'false' will make it dynamic.
+  */
+  //Object.defineProperty(Phaser.Physics.P2.Body.prototype, "static", {
+
+  num height;
+  Phaser.Point tilePadding;
+  setSize(num x, num y, num width, num height){
+    throw new Exception("Should not be called in P2!");
+  }
+  
+  
+  
+  bool get static {
+
+    return (this.data.type == p2.Body.STATIC);
+
+  }
+
+  set static(bool value) {
+
+    if (value && this.data.type != p2.Body.STATIC) {
+      this.data.type = p2.Body.STATIC;
+      this.mass = 0;
+    } else if (!value && this.data.type == p2.Body.STATIC) {
+      this.data.type = p2.Body.DYNAMIC;
+
+      if (this.mass == 0) {
+        this.mass = 1;
+      }
+    }
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Physics.P2.Body#dynamic
+  * @property {boolean} dynamic - Returns true if the Body is dynamic. Setting Body.dynamic to 'false' will make it static.
+  */
+  //Object.defineProperty(Phaser.Physics.P2.Body.prototype, "dynamic", {
+
+  bool get dynamic {
+
+    return (this.data.type == p2.Body.DYNAMIC);
+
+  }
+
+  set dynamic(bool value) {
+
+    if (value && this.data.type != p2.Body.DYNAMIC) {
+      this.data.type = p2.Body.DYNAMIC;
+
+      if (this.mass == 0) {
+        this.mass = 1;
+      }
+    } else if (!value && this.data.type == p2.Body.DYNAMIC) {
+      this.data.type = p2.Body.STATIC;
+      this.mass = 0;
+    }
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Physics.P2.Body#kinematic
+  * @property {boolean} kinematic - Returns true if the Body is kinematic. Setting Body.kinematic to 'false' will make it static.
+  */
+  //Object.defineProperty(Phaser.Physics.P2.Body.prototype, "kinematic", {
+
+  bool get kinematic {
+
+    return (this.data.type == p2.Body.KINEMATIC);
+
+  }
+
+  set kinematic(bool value) {
+
+    if (value && this.data.type != p2.Body.KINEMATIC) {
+      this.data.type = p2.Body.KINEMATIC;
+      this.mass = 4;
+    } else if (!value && this.data.type == p2.Body.KINEMATIC) {
+      this.data.type = p2.Body.STATIC;
+      this.mass = 0;
+    }
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Physics.P2.Body#allowSleep
+  * @property {boolean} allowSleep -
+  */
+  //Object.defineProperty(Phaser.Physics.P2.Body.prototype, "allowSleep", {
+
+  bool get allowSleep {
+
+    return this.data.allowSleep;
+
+  }
+
+  set allowSleep(bool value) {
+
+    if (value != this.data.allowSleep) {
+      this.data.allowSleep = value;
+    }
+
+  }
+
+  //});
+
+  /**
+  * The angle of the Body in degrees from its original orientation. Values from 0 to 180 represent clockwise rotation; values from 0 to -180 represent counterclockwise rotation.
+  * Values outside this range are added to or subtracted from 360 to obtain a value within the range. For example, the statement Body.angle = 450 is the same as Body.angle = 90.
+  * If you wish to work in radians instead of degrees use the property Body.rotation instead. Working in radians is faster as it doesn't have to convert values.
+  *
+  * @name Phaser.Physics.P2.Body#angle
+  * @property {number} angle - The angle of this Body in degrees.
+  */
+  //Object.defineProperty(Phaser.Physics.P2.Body.prototype, "angle", {
+
+  num get angle {
+
+    return Phaser.Math.wrapAngle(Phaser.Math.radToDeg(this.data.angle));
+
+  }
+
+  set angle(num value) {
+
+    this.data.angle = Phaser.Math.degToRad(Phaser.Math.wrapAngle(value));
+
+  }
+
+  //});
+
+  /**
+  * Damping is specified as a value between 0 and 1, which is the proportion of velocity lost per second.
+  * @name Phaser.Physics.P2.Body#angularDamping
+  * @property {number} angularDamping - The angular damping acting acting on the body.
+  */
+  //Object.defineProperty(Phaser.Physics.P2.Body.prototype, "angularDamping", {
+
+  num get angularDamping {
+
+    return this.data.angularDamping;
+
+  }
+
+  set angularDamping(num value) {
+
+    this.data.angularDamping = value;
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Physics.P2.Body#angularForce
+  * @property {number} angularForce - The angular force acting on the body.
+  */
+  //Object.defineProperty(Phaser.Physics.P2.Body.prototype, "angularForce", {
+
+  num get angularForce {
+
+    return this.data.angularForce;
+
+  }
+
+  set angularForce(num value) {
+
+    this.data.angularForce = value;
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Physics.P2.Body#angularVelocity
+  * @property {number} angularVelocity - The angular velocity of the body.
+  */
+  //Object.defineProperty(Phaser.Physics.P2.Body.prototype, "angularVelocity", {
+
+  num get angularVelocity {
+
+    return this.data.angularVelocity;
+
+  }
+
+  set angularVelocity(num value) {
+
+    this.data.angularVelocity = value;
+
+  }
+
+  //});
+
+  /**
+  * Damping is specified as a value between 0 and 1, which is the proportion of velocity lost per second.
+  * @name Phaser.Physics.P2.Body#damping
+  * @property {number} damping - The linear damping acting on the body in the velocity direction.
+  */
+  //Object.defineProperty(Phaser.Physics.P2.Body.prototype, "damping", {
+
+  num get damping {
+
+    return this.data.damping;
+
+  }
+
+  set damping(num value) {
+
+    this.data.damping = value;
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Physics.P2.Body#fixedRotation
+  * @property {boolean} fixedRotation -
+  */
+  //Object.defineProperty(Phaser.Physics.P2.Body.prototype, "fixedRotation", {
+
+  bool get fixedRotation {
+
+    return this.data.fixedRotation;
+
+  }
+
+  set fixedRotation(bool value) {
+
+    if (value != this.data.fixedRotation) {
+      this.data.fixedRotation = value;
+    }
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Physics.P2.Body#inertia
+  * @property {number} inertia - The inertia of the body around the Z axis..
+  */
+  //Object.defineProperty(Phaser.Physics.P2.Body.prototype, "inertia", {
+
+  num get inertia {
+
+    return this.data.inertia;
+
+  }
+
+  set inertia(num value) {
+
+    this.data.inertia = value;
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Physics.P2.Body#mass
+  * @property {number} mass -
+  */
+  //Object.defineProperty(Phaser.Physics.P2.Body.prototype, "mass", {
+
+  num get mass {
+
+    return this.data.mass;
+
+  }
+
+  set mass(num value) {
+
+    if (value != this.data.mass) {
+      this.data.mass = value;
+      this.data.updateMassProperties();
+    }
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Physics.P2.Body#motionState
+  * @property {number} motionState - The type of motion this body has. Should be one of: Body.STATIC (the body does not move), Body.DYNAMIC (body can move and respond to collisions) and Body.KINEMATIC (only moves according to its .velocity).
+  */
+  //Object.defineProperty(Phaser.Physics.P2.Body.prototype, "motionState", {
+
+  num get motionState {
+
+    return this.data.type;
+
+  }
+
+  set motionState(num value) {
+
+    if (value != this.data.type) {
+      this.data.type = value;
+    }
+
+  }
+
+  //});
+
+  /**
+  * The angle of the Body in radians.
+  * If you wish to work in degrees instead of radians use the Body.angle property instead. Working in radians is faster as it doesn't have to convert values.
+  *
+  * @name Phaser.Physics.P2.Body#rotation
+  * @property {number} rotation - The angle of this Body in radians.
+  */
+  //Object.defineProperty(Phaser.Physics.P2.Body.prototype, "rotation", {
+
+  num get rotation {
+
+    return this.data.angle;
+
+  }
+
+  set rotation(num value) {
+
+    this.data.angle = value;
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Physics.P2.Body#sleepSpeedLimit
+  * @property {number} sleepSpeedLimit - .
+  */
+  //Object.defineProperty(Phaser.Physics.P2.Body.prototype, "sleepSpeedLimit", {
+
+  num get sleepSpeedLimit {
+
+    return this.data.sleepSpeedLimit;
+
+  }
+
+  set sleepSpeedLimit(num value) {
+
+    this.data.sleepSpeedLimit = value;
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Physics.P2.Body#x
+  * @property {number} x - The x coordinate of this Body.
+  */
+  //Object.defineProperty(Phaser.Physics.P2.Body.prototype, "x", {
+
+  num get x {
+
+    return this.system.mpxi(this.data.position[0]);
+
+  }
+
+  set x(num value) {
+
+    this.data.position[0] = this.system.pxmi(value);
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Physics.P2.Body#y
+  * @property {number} y - The y coordinate of this Body.
+  */
+  //Object.defineProperty(Phaser.Physics.P2.Body.prototype, "y", {
+
+  num get y {
+
+    return this.system.mpxi(this.data.position[1]);
+
+  }
+
+  set y(num value) {
+
+    this.data.position[1] = this.system.pxmi(value);
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Physics.P2.Body#id
+  * @property {number} id - The Body ID. Each Body that has been added to the World has a unique ID.
+  * @readonly
+  */
+  //Object.defineProperty(Phaser.Physics.P2.Body.prototype, "id", {
+
+  get id {
+
+    return this.data.id;
+
+  }
+
+  //});
+
+  /**
+  * @name Phaser.Physics.P2.Body#debug
+  * @property {boolean} debug - Enable or disable debug drawing of this body
+  */
+  //Object.defineProperty(Phaser.Physics.P2.Body.prototype, "debug", {
+
+  bool get debug {
+
+    return (this.debugBody != null);
+
+  }
+
+  set debug(bool value) {
+
+    if (value && this.debugBody == null) {
+      //  This will be added to the global space
+      this.debugBody = new BodyDebug(this.game, this.data);
+    } else if (!value && this.debugBody != null) {
+      this.debugBody.destroy();
+      this.debugBody = null;
+    }
+
+  }
+
+  //});
+
+  /**
+  * A Body can be set to collide against the World bounds automatically if this is set to true. Otherwise it will leave the World.
+  * Note that this only applies if your World has bounds! The response to the collision should be managed via CollisionMaterials.
+  * Also note that when you set this it will only effect Body shapes that already exist. If you then add further shapes to your Body
+  * after setting this it will *not* proactively set them to collide with the bounds.
+  *
+  * @name Phaser.Physics.P2.Body#collideWorldBounds
+  * @property {boolean} collideWorldBounds - Should the Body collide with the World bounds?
+  */
+  //Object.defineProperty(Phaser.Physics.P2.Body.prototype, "collideWorldBounds", {
+
+  bool get collideWorldBounds {
+
+    return this._collideWorldBounds;
+
+  }
+
+  set collideWorldBounds(bool value) {
+
+    if (value && !this._collideWorldBounds) {
+      this._collideWorldBounds = true;
+      this.updateCollisionMask();
+    } else if (!value && this._collideWorldBounds) {
+      this._collideWorldBounds = false;
+      this.updateCollisionMask();
+    }
+
+  }
+
+  //});
+
+
+
+  Body(Phaser.Game game, [Phaser.Sprite sprite, num x = 0, num y = 0, num mass = 1]) {
 
     this.game = game;
-    this.world = game.physics.p2;
+    this.system = game.physics.p2;
     this.sprite = sprite;
     this.type = Phaser.Physics.P2JS;
     this.offset = new Phaser.Point();
@@ -68,19 +547,19 @@ class Body extends p2.Body implements Phaser.Body {
      * @property {p2.Body} data -
      * @protected
      */
-    this.data = new p2.Body(position: [ this.world.pxmi(x), this.world.pxmi(y) ], mass: mass);
+    this.data = new p2.Body(position: [this.system.pxmi(x), this.system.pxmi(y)], mass: mass);
 
     this.data.parent = this;
 
     /**
      * @property {Phaser.InversePointProxy} velocity - The velocity of the body. Set velocity.x to a negative value to move to the left, position to the right. velocity.y negative values move up, positive move down.
      */
-    this.velocity = new InversePointProxy(this.world, this.data.velocity);
+    this._velocity = new InversePointProxy(this.system, this.data.velocity);
 
     /**
      * @property {Phaser.InversePointProxy} force - The force applied to the body.
      */
-    this.force = new InversePointProxy(this.world, this.data.force);
+    this._force = new InversePointProxy(this.system, this.data.force);
 
     /**
      * @property {Phaser.Point} gravity - A locally applied gravity force to the Body. Applied directly before the world step. NOTE: Not currently implemented.
@@ -126,8 +605,7 @@ class Body extends p2.Body implements Phaser.Body {
      * @property {object} _bodyCallbacks - Array of Body callbacks.
      * @private
      */
-    this._bodyCallbacks = {
-    };
+    this._bodyCallbacks = {};
 
     /**
      * @property {object} _bodyCallbackContext - Array of Body callback contexts.
@@ -139,8 +617,7 @@ class Body extends p2.Body implements Phaser.Body {
      * @property {object} _groupCallbacks - Array of Group callbacks.
      * @private
      */
-    this._groupCallbacks = {
-    };
+    this._groupCallbacks = {};
 
     /**
      * @property {object} _bodyCallbackContext - Array of Grouo callback contexts.
@@ -177,8 +654,7 @@ class Body extends p2.Body implements Phaser.Body {
 
     if (object['id']) {
       id = object.id;
-    }
-    else if (object['body']) {
+    } else if (object['body']) {
       id = object.body.id;
     }
 
@@ -186,8 +662,7 @@ class Body extends p2.Body implements Phaser.Body {
       if (callback == null) {
         this._bodyCallbacks.remove(id);
         //this._bodyCallbackContext.re[id]);
-      }
-      else {
+      } else {
         this._bodyCallbacks[id] = callback;
         //this._bodyCallbackContext[id] = callbackContext;
       }
@@ -213,8 +688,7 @@ class Body extends p2.Body implements Phaser.Body {
     if (callback == null) {
       this._groupCallbacks.remove(group.mask);
       //delete (this._groupCallbacksContext[group.mask]);
-    }
-    else {
+    } else {
       this._groupCallbacks[group.mask] = callback;
       //this._groupCallbackContext[group.mask] = callbackContext;
     }
@@ -251,7 +725,7 @@ class Body extends p2.Body implements Phaser.Body {
    * @param {p2.Shape} [shape] - An optional Shape. If not provided the collision group will be added to all Shapes in this Body.
    */
 
-  updateCollisionMask(p2.Shape shape) {
+  updateCollisionMask([p2.Shape shape]) {
 
     var mask = this.getCollisionMask();
 
@@ -259,8 +733,7 @@ class Body extends p2.Body implements Phaser.Body {
       for (var i = this.data.shapes.length - 1; i >= 0; i--) {
         this.data.shapes[i].collisionMask = mask;
       }
-    }
-    else {
+    } else {
       shape.collisionMask = mask;
     }
 
@@ -284,8 +757,7 @@ class Body extends p2.Body implements Phaser.Body {
         this.data.shapes[i].collisionGroup = group.mask;
         this.data.shapes[i].collisionMask = mask;
       }
-    }
-    else {
+    } else {
       shape.collisionGroup = group.mask;
       shape.collisionMask = mask;
     }
@@ -301,7 +773,7 @@ class Body extends p2.Body implements Phaser.Body {
    * @param {p2.Shape} [shape] - An optional Shape. If not provided the collision data will be cleared from all Shapes in this Body.
    */
 
-  clearCollision([bool clearGroup=true, bool clearMask=true, p2.Shape shape]) {
+  clearCollision([bool clearGroup = true, bool clearMask = true, p2.Shape shape]) {
 
     if (shape == null) {
       for (var i = this.data.shapes.length - 1; i >= 0; i--) {
@@ -313,8 +785,7 @@ class Body extends p2.Body implements Phaser.Body {
           this.data.shapes[i].collisionMask = null;
         }
       }
-    }
-    else {
+    } else {
       if (clearGroup) {
         shape.collisionGroup = null;
       }
@@ -352,8 +823,7 @@ class Body extends p2.Body implements Phaser.Body {
           }
         }
       }
-    }
-    else {
+    } else {
       if (this.collidesWith.indexOf(group) == -1) {
         this.collidesWith.add(group);
 
@@ -369,8 +839,7 @@ class Body extends p2.Body implements Phaser.Body {
       for (var i = this.data.shapes.length - 1; i >= 0; i--) {
         this.data.shapes[i].collisionMask = mask;
       }
-    }
-    else {
+    } else {
       shape.collisionMask = mask;
     }
 
@@ -397,17 +866,10 @@ class Body extends p2.Body implements Phaser.Body {
     this.data.applyDamping(dt);
   }
 
-  /**
-   * Apply force to a world point. This could for example be a point on the RigidBody surface. Applying force this way will add to Body.force and Body.angularForce.
-   *
-   * @method Phaser.Physics.P2.Body#applyForce
-   * @param {Float32Array|Array} force - The force vector to add.
-   * @param {number} worldX - The world x point to apply the force on.
-   * @param {number} worldY - The world y point to apply the force on.
-   */
 
+  /// Apply force to a world point. This could for example be a point on the RigidBody surface. Applying force this way will add to Body.force and Body.angularForce.
   applyForce(List force, num worldX, num worldY) {
-    this.data.applyForce(force, [this.world.pxmi(worldX), this.world.pxmi(worldY)]);
+    this.data.applyForce(force, [this.system.pxmi(worldX), this.system.pxmi(worldY)]);
   }
 
   /**
@@ -442,8 +904,8 @@ class Body extends p2.Body implements Phaser.Body {
 
   setZeroVelocity() {
 
-    this.data.velocity[0] = 0;
-    this.data.velocity[1] = 0;
+    this.data.velocity[0] = 0.0;
+    this.data.velocity[1] = 0.0;
 
   }
 
@@ -497,7 +959,7 @@ class Body extends p2.Body implements Phaser.Body {
 
   rotateLeft(speed) {
 
-    this.data.angularVelocity = this.world.pxm(-speed);
+    this.data.angularVelocity = this.system.pxm(-speed);
 
   }
 
@@ -510,7 +972,7 @@ class Body extends p2.Body implements Phaser.Body {
 
   rotateRight(speed) {
 
-    this.data.angularVelocity = this.world.pxm(speed);
+    this.data.angularVelocity = this.system.pxm(speed);
 
   }
 
@@ -524,7 +986,7 @@ class Body extends p2.Body implements Phaser.Body {
 
   moveForward(speed) {
 
-    var magnitude = this.world.pxmi(-speed);
+    var magnitude = this.system.pxmi(-speed);
     var angle = this.data.angle + Math.PI / 2;
 
     this.data.velocity[0] = magnitude * Math.cos(angle);
@@ -542,7 +1004,7 @@ class Body extends p2.Body implements Phaser.Body {
 
   moveBackward(speed) {
 
-    var magnitude = this.world.pxmi(-speed);
+    var magnitude = this.system.pxmi(-speed);
     var angle = this.data.angle + Math.PI / 2;
 
     this.data.velocity[0] = -(magnitude * Math.cos(angle));
@@ -560,7 +1022,7 @@ class Body extends p2.Body implements Phaser.Body {
 
   thrust(speed) {
 
-    var magnitude = this.world.pxmi(-speed);
+    var magnitude = this.system.pxmi(-speed);
     var angle = this.data.angle + Math.PI / 2;
 
     this.data.force[0] += magnitude * Math.cos(angle);
@@ -578,7 +1040,7 @@ class Body extends p2.Body implements Phaser.Body {
 
   reverse(speed) {
 
-    var magnitude = this.world.pxmi(-speed);
+    var magnitude = this.system.pxmi(-speed);
     var angle = this.data.angle + Math.PI / 2;
 
     this.data.force[0] -= magnitude * Math.cos(angle);
@@ -596,7 +1058,7 @@ class Body extends p2.Body implements Phaser.Body {
 
   moveLeft(speed) {
 
-    this.data.velocity[0] = this.world.pxmi(-speed);
+    this.data.velocity[0] = this.system.pxmi(-speed);
 
   }
 
@@ -610,7 +1072,7 @@ class Body extends p2.Body implements Phaser.Body {
 
   moveRight(speed) {
 
-    this.data.velocity[0] = this.world.pxmi(speed);
+    this.data.velocity[0] = this.system.pxmi(speed);
 
   }
 
@@ -624,7 +1086,7 @@ class Body extends p2.Body implements Phaser.Body {
 
   moveUp(speed) {
 
-    this.data.velocity[1] = this.world.pxmi(-speed);
+    this.data.velocity[1] = this.system.pxmi(-speed);
 
   }
 
@@ -638,7 +1100,7 @@ class Body extends p2.Body implements Phaser.Body {
 
   moveDown(speed) {
 
-    this.data.velocity[1] = this.world.pxmi(speed);
+    this.data.velocity[1] = this.system.pxmi(speed);
 
   }
 
@@ -667,8 +1129,8 @@ class Body extends p2.Body implements Phaser.Body {
 
   postUpdate() {
 
-    this.sprite.x = this.world.mpxi(this.data.position[0]);
-    this.sprite.y = this.world.mpxi(this.data.position[1]);
+    this.sprite.x = this.system.mpxi(this.data.position[0]);
+    this.sprite.y = this.system.mpxi(this.data.position[1]);
 
     if (!this.fixedRotation) {
       this.sprite.rotation = this.data.angle;
@@ -686,7 +1148,7 @@ class Body extends p2.Body implements Phaser.Body {
    * @param {boolean} [resetMass=false] - Sets the Body mass back to 1.
    */
 
-  reset(num x, num y, [bool resetDamping=false, bool resetMass=false]) {
+  reset(num x, num y, [bool resetDamping = false, bool resetMass = false]) {
 
     if (resetDamping == null) {
       resetDamping = false;
@@ -720,15 +1182,15 @@ class Body extends p2.Body implements Phaser.Body {
 
   addToWorld() {
 
-    if (this.game.physics.p2._toRemove) {
-      for (var i = 0; i < this.game.physics.p2._toRemove.length; i++) {
-        if (this.game.physics.p2._toRemove[i] == this) {
-          this.game.physics.p2._toRemove.splice(i, 1);
+    if (this.game.physics.p2.toRemove != null) {
+      for (var i = 0; i < this.game.physics.p2.toRemove.length; i++) {
+        if (this.game.physics.p2.toRemove[i] == this) {
+          this.game.physics.p2.toRemove.removeAt(i);
         }
       }
     }
 
-    if (this.data.world != this.game.physics.p2.world) {
+    if (this.data.world != this.game.physics.p2) {
       this.game.physics.p2.addBody(this);
     }
 
@@ -742,7 +1204,7 @@ class Body extends p2.Body implements Phaser.Body {
 
   removeFromWorld() {
 
-    if (this.data.world == this.game.physics.p2.world) {
+    if (this.data.world == this.game.physics.p2) {
       this.game.physics.p2.removeBodyNextStep(this);
     }
 
@@ -760,11 +1222,9 @@ class Body extends p2.Body implements Phaser.Body {
 
     this.clearShapes();
 
-    this._bodyCallbacks = {
-    };
+    this._bodyCallbacks = {};
     //this._bodyCallbackContext = {};
-    this._groupCallbacks = {
-    };
+    this._groupCallbacks = {};
     //this._groupCallbackContext = {};
 
     if (this.debugBody != null) {
@@ -807,7 +1267,7 @@ class Body extends p2.Body implements Phaser.Body {
    * @return {p2.Shape} The shape that was added to the body.
    */
 
-  p2.Shape addShape(p2.Shape shape, [num offsetX=0, num offsetY=0,num rotation=0]) {
+  p2.Shape addShape(p2.Shape shape, [num offsetX = 0, num offsetY = 0, num rotation = 0]) {
 
     if (offsetX == null) {
       offsetX = 0;
@@ -819,7 +1279,7 @@ class Body extends p2.Body implements Phaser.Body {
       rotation = 0;
     }
 
-    this.data.addShape(shape, [this.world.pxmi(offsetX), this.world.pxmi(offsetY)], rotation);
+    this.data.addShape(shape, [this.system.pxmi(offsetX), this.system.pxmi(offsetY)], rotation);
     this.shapeChanged();
 
     return shape;
@@ -837,9 +1297,9 @@ class Body extends p2.Body implements Phaser.Body {
    * @return {p2.Circle} The Circle shape that was added to the Body.
    */
 
-  p2.Circle addCircle(num radius, [num offsetX=0, num offsetY=0, num rotation=0]) {
+  p2.Circle addCircle(num radius, [num offsetX = 0, num offsetY = 0, num rotation = 0]) {
 
-    var shape = new p2.Circle(this.world.pxm(radius));
+    var shape = new p2.Circle(this.system.pxm(radius));
 
     return this.addShape(shape, offsetX, offsetY, rotation);
 
@@ -857,9 +1317,9 @@ class Body extends p2.Body implements Phaser.Body {
    * @return {p2.Rectangle} The Rectangle shape that was added to the Body.
    */
 
-  p2.Rectangle addRectangle(num width, num height, [num offsetX=0, num offsetY=0, num rotation=0]) {
+  p2.Rectangle addRectangle(num width, num height, [num offsetX = 0, num offsetY = 0, num rotation = 0]) {
 
-    var shape = new p2.Rectangle(this.world.pxm(width), this.world.pxm(height));
+    var shape = new p2.Rectangle(this.system.pxm(width), this.system.pxm(height));
 
     return this.addShape(shape, offsetX, offsetY, rotation);
 
@@ -875,7 +1335,7 @@ class Body extends p2.Body implements Phaser.Body {
    * @return {p2.Plane} The Plane shape that was added to the Body.
    */
 
-  p2.Plane addPlane([num offsetX=0, num offsetY=0, num rotation=0]) {
+  p2.Plane addPlane([num offsetX = 0, num offsetY = 0, num rotation = 0]) {
 
     var shape = new p2.Plane();
 
@@ -893,7 +1353,7 @@ class Body extends p2.Body implements Phaser.Body {
    * @return {p2.Particle} The Particle shape that was added to the Body.
    */
 
-  p2.Particle addParticle([num offsetX=0, num offsetY=0, num rotation=0]) {
+  p2.Particle addParticle([num offsetX = 0, num offsetY = 0, num rotation = 0]) {
 
     var shape = new p2.Particle();
 
@@ -914,9 +1374,9 @@ class Body extends p2.Body implements Phaser.Body {
    * @return {p2.Line} The Line shape that was added to the Body.
    */
 
-  p2.Line addLine(num length, [num offsetX=0, num offsetY=0, num rotation=0]) {
+  p2.Line addLine(num length, [num offsetX = 0, num offsetY = 0, num rotation = 0]) {
 
-    var shape = new p2.Line(this.world.pxm(length));
+    var shape = new p2.Line(this.system.pxm(length));
 
     return this.addShape(shape, offsetX, offsetY, rotation);
 
@@ -935,8 +1395,8 @@ class Body extends p2.Body implements Phaser.Body {
    * @return {p2.Capsule} The Capsule shape that was added to the Body.
    */
 
-  p2.Capsule addCapsule(num length, num radius, [num offsetX=0, num offsetY=0, num rotation=0]) {
-    var shape = new p2.Capsule(this.world.pxm(length), this.world.pxm(radius));
+  p2.Capsule addCapsule(num length, num radius, [num offsetX = 0, num offsetY = 0, num rotation = 0]) {
+    var shape = new p2.Capsule(this.system.pxm(length), this.system.pxm(radius));
     return this.addShape(shape, offsetX, offsetY, rotation);
   }
 
@@ -969,16 +1429,15 @@ class Body extends p2.Body implements Phaser.Body {
     //  Did they pass in a single array of points?
     if (points.length == 1 && points[0] is List) {
       path = points[0].toList();
-    }
-    else if (points[0] is List) {
+    } else if (points[0] is List) {
       path = points.toList();
-    }
-    else if (points[0] is num) {
-        //  We've a list of numbers
-        for (var i = 0, len = points.length; i < len; i += 2) {
-          path.add([points[i], points[i + 1]]);
-        }
+    } else if (points[0] is num) {
+      //  We've a list of numbers
+      for (var i = 0,
+          len = points.length; i < len; i += 2) {
+        path.add([points[i], points[i + 1]]);
       }
+    }
 
     //  top and tail
     int idx = path.length - 1;
@@ -989,8 +1448,8 @@ class Body extends p2.Body implements Phaser.Body {
 
     //  Now process them into p2 values
     for (var p = 0; p < path.length; p++) {
-      path[p][0] = this.world.pxmi(path[p][0]);
-      path[p][1] = this.world.pxmi(path[p][1]);
+      path[p][0] = this.system.pxmi(path[p][0]);
+      path[p][1] = this.system.pxmi(path[p][1]);
     }
 
     bool result = this.data.fromPolygon(path, optimalDecomp: optimalDecomp, skipSimpleCheck: skipSimpleCheck, removeCollinearPoints: removeCollinearPoints);
@@ -1028,7 +1487,7 @@ class Body extends p2.Body implements Phaser.Body {
    * @param {number} [rotation=0] - Local rotation of the shape relative to the body center of mass, specified in radians.
    */
 
-  setCircle(num radius, [num offsetX=0, num offsetY=0, num rotation=0]) {
+  setCircle(num radius, [num offsetX = 0, num offsetY = 0, num rotation = 0]) {
 
     this.clearShapes();
 
@@ -1049,7 +1508,7 @@ class Body extends p2.Body implements Phaser.Body {
    * @return {p2.Rectangle} The Rectangle shape that was added to the Body.
    */
 
-  setRectangle([num width, num height, num offsetX=0, num offsetY=0, num rotation=0]) {
+  setRectangle([num width, num height, num offsetX = 0, num offsetY = 0, num rotation = 0]) {
 
     if (width == null) {
       width = 16;
@@ -1101,8 +1560,7 @@ class Body extends p2.Body implements Phaser.Body {
       for (var i = this.data.shapes.length - 1; i >= 0; i--) {
         this.data.shapes[i].material = material;
       }
-    }
-    else {
+    } else {
       shape.material = material;
     }
 
@@ -1137,11 +1595,14 @@ class Body extends p2.Body implements Phaser.Body {
     //  Cycle through the fixtures
     for (int i = 0; i < data.length; i++) {
       Map fixtureData = data[i];
-      var shapesOfFixture = this.addFixture(fixtureData);
+      List shapesOfFixture = this.addFixture(fixtureData);
 
       //  Always add to a group
-      createdFixtures[fixtureData['filter'].group] = createdFixtures[fixtureData['filter'].group] || [];
-      createdFixtures[fixtureData['filter'].group] = createdFixtures[fixtureData['filter'].group].concat(shapesOfFixture);
+      if (createdFixtures[fixtureData['filter'].group] == null) {
+        createdFixtures[fixtureData['filter'].group] = [];
+      }
+
+      createdFixtures[fixtureData['filter'].group].addAll(shapesOfFixture);
 
       //  if (unique) fixture key is provided
       if (fixtureData['fixtureKey'] != null) {
@@ -1169,19 +1630,18 @@ class Body extends p2.Body implements Phaser.Body {
     List generatedShapes = [];
 
     if (fixtureData['circle'] != null) {
-      p2.Circle shape = new p2.Circle(this.world.pxm(fixtureData['circle'].radius));
+      p2.Circle shape = new p2.Circle(this.system.pxm(fixtureData['circle'].radius));
       shape.collisionGroup = fixtureData['filter'].categoryBits;
       shape.collisionMask = fixtureData['filter'].maskBits;
       shape.sensor = fixtureData['isSensor'];
 
       List offset = p2.vec2.create();
-      offset[0] = this.world.pxmi(fixtureData['circle'].position[0] - this.sprite.width / 2);
-      offset[1] = this.world.pxmi(fixtureData['circle'].position[1] - this.sprite.height / 2);
+      offset[0] = this.system.pxmi(fixtureData['circle'].position[0] - this.sprite.width / 2);
+      offset[1] = this.system.pxmi(fixtureData['circle'].position[1] - this.sprite.height / 2);
 
       this.data.addShape(shape, offset);
       generatedShapes.add(shape);
-    }
-    else {
+    } else {
       Map polygons = fixtureData['polygons'];
       List cm = p2.vec2.create();
 
@@ -1190,7 +1650,7 @@ class Body extends p2.Body implements Phaser.Body {
         List vertices = [];
 
         for (int s = 0; s < shapes.length; s += 2) {
-          vertices.add([ this.world.pxmi(shapes[s]), this.world.pxmi(shapes[s + 1]) ]);
+          vertices.add([this.system.pxmi(shapes[s]), this.system.pxmi(shapes[s + 1])]);
         }
 
         p2.Convex shape = new p2.Convex(vertices);
@@ -1203,8 +1663,8 @@ class Body extends p2.Body implements Phaser.Body {
 
         p2.vec2.scale(cm, shape.centerOfMass, 1);
 
-        cm[0] -= this.world.pxmi(this.sprite.width / 2);
-        cm[1] -= this.world.pxmi(this.sprite.height / 2);
+        cm[0] -= this.system.pxmi(this.sprite.width / 2);
+        cm[1] -= this.system.pxmi(this.sprite.height / 2);
 
         shape.updateTriangles();
         shape.updateCenterOfMass();
@@ -1244,7 +1704,7 @@ class Body extends p2.Body implements Phaser.Body {
       List vertices = [];
 
       for (int s = 0; s < data[i].shape.length; s += 2) {
-        vertices.add([ this.world.pxmi(data[i].shape[s]), this.world.pxmi(data[i].shape[s + 1]) ]);
+        vertices.add([this.system.pxmi(data[i].shape[s]), this.system.pxmi(data[i].shape[s + 1])]);
       }
 
       p2.Convex c = new p2.Convex(vertices);
@@ -1257,8 +1717,8 @@ class Body extends p2.Body implements Phaser.Body {
 
       p2.vec2.scale(cm, c.centerOfMass, 1);
 
-      cm[0] -= this.world.pxmi(this.sprite.width / 2);
-      cm[1] -= this.world.pxmi(this.sprite.height / 2);
+      cm[0] -= this.system.pxmi(this.sprite.width / 2);
+      cm[1] -= this.system.pxmi(this.sprite.height / 2);
 
       c.updateTriangles();
       c.updateCenterOfMass();

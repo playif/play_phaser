@@ -15,8 +15,7 @@ class Physics {
   Map config;
   Arcade arcade;
   Ninja ninja;
-  
-  var p2;
+  P2 p2;
 
   var box2d;
   var chipmunk;
@@ -75,7 +74,7 @@ class Physics {
     /**
      * @property {Phaser.Physics.P2} p2 - The P2.JS Physics system.
      */
-    //this.p2 = null;
+    this.p2 = null;
 
     /**
      * @property {Phaser.Physics.Ninja} ninja - The N+ Ninja Physics System.
@@ -133,14 +132,14 @@ class Physics {
    * @param {number} The physics system to start.
    */
 
-  startSystem(int system) {
+  startSystem(int system, {p2js.Solver solver, List gravity, bool doProfiling: false, p2js.Broadphase broadphase, bool islandSplit: false, bool fake: false}) {
 
     if (system == Physics.ARCADE) {
       this.arcade = new Arcade(this.game);
     }
-//    else if (system == Physics.P2JS) {
-//      this.p2 = new Physics.P2(this.game, this.config);
-//    }
+    else if (system == Physics.P2JS) {
+      this.p2 = new P2(this.game, solver: solver, gravity: gravity, doProfiling: doProfiling, broadphase: broadphase, islandSplit: islandSplit, fake: fake);
+    }
     if (system == Physics.NINJA) {
       this.ninja = new Ninja(this.game);
     }
@@ -203,13 +202,10 @@ class Physics {
    */
 
   preUpdate() {
-
     //  ArcadePhysics / Ninja don't have a core to preUpdate
-
     if (this.p2!= null) {
       this.p2.preUpdate();
     }
-
   }
 
   /**
@@ -220,13 +216,10 @@ class Physics {
    */
 
   update() {
-
     //  ArcadePhysics / Ninja don't have a core to update
-
     if (this.p2!= null) {
       this.p2.update();
     }
-
   }
 
   /**

@@ -2,7 +2,7 @@ part of P2;
 
 class InversePointProxy {
   Phaser.P2 world;
-  var destination;
+  List destination;
 
   /**
    * @name Phaser.Physics.P2.InversePointProxy#x
@@ -11,15 +11,11 @@ class InversePointProxy {
   //Object.defineProperty(Phaser.Physics.P2.InversePointProxy.prototype, "x", {
 
   get x {
-
     return this.world.mpxi(this.destination[0]);
-
   }
 
   set x(value) {
-
     this.destination[0] = this.world.pxmi(value);
-
   }
 
   //});
@@ -31,15 +27,11 @@ class InversePointProxy {
   //Object.defineProperty(Phaser.Physics.P2.InversePointProxy.prototype, "y", {
 
   num get y {
-
     return this.world.mpxi(this.destination[1]);
-
   }
 
   set y(num value) {
-
     this.destination[1] = this.world.pxmi(value);
-
   }
 
   //});
@@ -51,15 +43,11 @@ class InversePointProxy {
   //Object.defineProperty(Phaser.Physics.P2.InversePointProxy.prototype, "mx", {
 
   num get mx {
-
     return this.destination[0];
-
   }
 
   set mx(num value) {
-
     this.destination[0] = -value;
-
   }
 
   //});
@@ -71,20 +59,16 @@ class InversePointProxy {
   //Object.defineProperty(Phaser.Physics.P2.InversePointProxy.prototype, "my", {
 
   num get my {
-
     return this.destination[1];
-
   }
 
   set my(num value) {
-
     this.destination[1] = -value;
-
   }
 
   //});
 
-  InversePointProxy(Phaser.P2 world, destination) {
+  InversePointProxy(Phaser.P2 world, List destination) {
     this.world = world;
     this.destination = destination;
   }
