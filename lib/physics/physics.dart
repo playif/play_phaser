@@ -150,7 +150,7 @@ class Physics {
 //        throw new Exception('The Chipmunk physics system has not been implemented yet.');
 //      }
 
-    this.setBoundsToWorld();
+    //this.setBoundsToWorld();
 
   }
 

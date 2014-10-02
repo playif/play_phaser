@@ -6,7 +6,7 @@ class RevoluteConstraint extends p2.RevoluteConstraint {
   //p2.LinearSpring data;
 
   RevoluteConstraint(Phaser.P2 world, p2.Body bodyA, List pivotA, p2.Body bodyB, List pivotB, num maxForce, List worldPivot)
-      : super(bodyA, bodyB, worldPivot: worldPivot, localPivotA: pivotA, localPivotB: pivotB, maxForce: maxForce) {
+      : super(bodyA, bodyB, worldPivot: worldPivot!=null? [world.pxmi(worldPivot[0]), world.pxmi(worldPivot[1])]:null, localPivotA: [world.pxmi(pivotA[0]), world.pxmi(pivotA[1])], localPivotB: [world.pxmi(pivotB[0]), world.pxmi(pivotB[1])], maxForce: maxForce) {
 
     if (maxForce == null) {
       maxForce = double.MAX_FINITE;
@@ -25,12 +25,12 @@ class RevoluteConstraint extends p2.RevoluteConstraint {
      */
     this.world = world;
 
-    pivotA = [world.pxmi(pivotA[0]), world.pxmi(pivotA[1])];
-    pivotB = [world.pxmi(pivotB[0]), world.pxmi(pivotB[1])];
-
-    if (worldPivot != null) {
-      worldPivot = [world.pxmi(worldPivot[0]), world.pxmi(worldPivot[1])];
-    }
+//    pivotA = [world.pxmi(pivotA[0]), world.pxmi(pivotA[1])];
+//    pivotB = [world.pxmi(pivotB[0]), world.pxmi(pivotB[1])];
+//
+//    if (worldPivot != null) {
+//      worldPivot = [world.pxmi(worldPivot[0]), world.pxmi(worldPivot[1])];
+//    }
 
 
     //p2.RevoluteConstraint.call(this, bodyA, bodyB, options);

@@ -23,7 +23,7 @@ part "rotational_spring.dart";
 part "spring.dart";
 part "world.dart";
 
-class Body implements Phaser.Body {
+class Body extends Phaser.Body {
   /// Local reference to game.
   Phaser.Game game;
 
@@ -44,24 +44,24 @@ class Body implements Phaser.Body {
 
   //bool fixedRotation;
 
-  InversePointProxy _velocity;
-  Phaser.Point get velocity => new Phaser.Point(_velocity.x, _velocity.y);
-  set velocity(Phaser.Point value) {
-    _velocity.x = value.x;
-    _velocity.y = value.y;
-  }
+  InversePointProxy velocity;
+//  Phaser.Point get velocity => new Phaser.Point(_velocity.x, _velocity.y);
+//  set velocity(Phaser.Point value) {
+//    _velocity.x = value.x;
+//    _velocity.y = value.y;
+//  }
 
-  InversePointProxy _force;
-  Phaser.Point get force => new Phaser.Point(_force.x, _force.y);
-  set force(Phaser.Point value) {
-    _force.x = value.x;
-    _force.y = value.y;
-  }
+  InversePointProxy force;
+//  Phaser.Point get force => new Phaser.Point(_force.x, _force.y);
+//  set force(Phaser.Point value) {
+//    _force.x = value.x;
+//    _force.y = value.y;
+//  }
   
   Phaser.Point gravity;
   Phaser.Signal onBeginContact;
   Phaser.Signal onEndContact;
-  List<CollisionGroup> collidesWith;
+  Set<CollisionGroup> collidesWith;
   bool removeNextStep;
   BodyDebug debugBody;
 
@@ -554,12 +554,12 @@ class Body implements Phaser.Body {
     /**
      * @property {Phaser.InversePointProxy} velocity - The velocity of the body. Set velocity.x to a negative value to move to the left, position to the right. velocity.y negative values move up, positive move down.
      */
-    this._velocity = new InversePointProxy(this.system, this.data.velocity);
+    this.velocity = new InversePointProxy(this.system, this.data.velocity);
 
     /**
      * @property {Phaser.InversePointProxy} force - The force applied to the body.
      */
-    this._force = new InversePointProxy(this.system, this.data.force);
+    this.force = new InversePointProxy(this.system, this.data.force);
 
     /**
      * @property {Phaser.Point} gravity - A locally applied gravity force to the Body. Applied directly before the world step. NOTE: Not currently implemented.
@@ -583,7 +583,7 @@ class Body implements Phaser.Body {
     /**
      * @property {array} collidesWith - Array of CollisionGroups that this Bodies shapes collide with.
      */
-    this.collidesWith = [];
+    this.collidesWith = new Set();
 
     /**
      * @property {boolean} removeNextStep - To avoid deleting this body during a physics step, and causing all kinds of problems, set removeNextStep to true to have it removed in the next preUpdate.
@@ -709,10 +709,14 @@ class Body implements Phaser.Body {
     if (this._collideWorldBounds) {
       mask = this.game.physics.p2.boundsCollisionGroup.mask;
     }
-
-    for (var i = 0; i < this.collidesWith.length; i++) {
-      mask = mask | this.collidesWith[i].mask;
-    }
+    
+    this.collidesWith.forEach((CollisionGroup c){
+      mask = mask | c.mask;
+    });
+//
+//    for (var i = 0; i < this.collidesWith.length; i++) {
+//      mask = mask | this.collidesWith[i].mask;
+//    }
 
     return mask;
 
@@ -727,10 +731,10 @@ class Body implements Phaser.Body {
 
   updateCollisionMask([p2.Shape shape]) {
 
-    var mask = this.getCollisionMask();
+    int mask = this.getCollisionMask();
 
     if (shape == null) {
-      for (var i = this.data.shapes.length - 1; i >= 0; i--) {
+      for (int i = this.data.shapes.length - 1; i >= 0; i--) {
         this.data.shapes[i].collisionMask = mask;
       }
     } else {
@@ -748,12 +752,12 @@ class Body implements Phaser.Body {
    * @param {p2.Shape} [shape] - An optional Shape. If not provided the collision group will be added to all Shapes in this Body.
    */
 
-  setCollisionGroup(CollisionGroup group, p2.Shape shape) {
+  setCollisionGroup(CollisionGroup group, [p2.Shape shape]) {
 
-    var mask = this.getCollisionMask();
+    int mask = this.getCollisionMask();
 
     if (shape == null) {
-      for (var i = this.data.shapes.length - 1; i >= 0; i--) {
+      for (int i = this.data.shapes.length - 1; i >= 0; i--) {
         this.data.shapes[i].collisionGroup = group.mask;
         this.data.shapes[i].collisionMask = mask;
       }
@@ -811,22 +815,21 @@ class Body implements Phaser.Body {
    * @param {p2.Shape} [shape] - An optional Shape. If not provided the collision mask will be added to all Shapes in this Body.
    */
 
-  collides(group, Function callback, p2.Shape shape) {
+  collides(group, [Function callback, p2.Shape shape]) {
 
     if (group is List) {
-      for (var i = 0; i < group.length; i++) {
-        if (this.collidesWith.indexOf(group[i]) == -1) {
+      for (int i = 0; i < group.length; i++) {
+        
+        if(!this.collidesWith.contains(group[i])){
           this.collidesWith.add(group[i]);
-
           if (callback != null) {
             this.createGroupCallback(group[i], callback);
           }
         }
       }
     } else {
-      if (this.collidesWith.indexOf(group) == -1) {
+      if(!this.collidesWith.contains(group)){
         this.collidesWith.add(group);
-
         if (callback != null) {
           this.createGroupCallback(group, callback);
         }
@@ -836,7 +839,7 @@ class Body implements Phaser.Body {
     int mask = this.getCollisionMask();
 
     if (shape == null) {
-      for (var i = this.data.shapes.length - 1; i >= 0; i--) {
+      for (int i = this.data.shapes.length - 1; i >= 0; i--) {
         this.data.shapes[i].collisionMask = mask;
       }
     } else {

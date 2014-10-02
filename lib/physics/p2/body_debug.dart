@@ -90,7 +90,7 @@ class BodyDebug extends Phaser.Group {
         offset = obj.shapeOffsets[i];
         angle = obj.shapeAngles[i];
         offset = offset == null ? 0 : offset;
-        angle = angle == null ? 0 : offset;
+        angle = angle == null ? 0 : angle;
 
         if (child is p2.Circle) {
           this.drawCircle(sprite, offset[0] * this.ppu, offset[1] * this.ppu, angle, (child as p2.Circle).radius * this.ppu, color, lw);

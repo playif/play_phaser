@@ -400,7 +400,7 @@ class P2 {
         } else {
           this.enableBody(object[i], debug);
 
-          if (children && object[i].hasOwnProperty('children') && object[i].children.length > 0) {
+          if (children && object[i].children.length > 0) {
             this.enable(object[i], debug, true);
           }
         }
@@ -521,20 +521,20 @@ class P2 {
       var b = event['bodyB'].parent;
 
       if (a._bodyCallbacks[event['bodyB'].id] != null) {
-        a._bodyCallbacks[event['bodyB'].id].call(a._bodyCallbackContext[event['bodyB'].id], a, b, event['shapeA'], event['shapeB']);
+        a._bodyCallbacks[event['bodyB'].id](a, b, event['shapeA'], event['shapeB']);
       }
 
       if (b._bodyCallbacks[event['bodyA'].id] != null) {
-        b._bodyCallbacks[event['bodyA'].id].call(b._bodyCallbackContext[event['bodyA'].id], b, a, event['shapeB'], event['shapeA']);
+        b._bodyCallbacks[event['bodyA'].id](b, a, event['shapeB'], event['shapeA']);
       }
 
       //  Body vs. Group callbacks
       if (a._groupCallbacks[event['shapeB'].collisionGroup] != null) {
-        a._groupCallbacks[event['shapeB'].collisionGroup].call(a._groupCallbackContext[event['shapeB'].collisionGroup], a, b, event['shapeA'], event['shapeB']);
+        a._groupCallbacks[event['shapeB'].collisionGroup](a, b, event['shapeA'], event['shapeB']);
       }
 
       if (b._groupCallbacks[event['shapeA'].collisionGroup] != null) {
-        b._groupCallbacks[event['shapeA'].collisionGroup].call(b._groupCallbackContext[event['shapeA'].collisionGroup], b, a, event['shapeB'], event['shapeA']);
+        b._groupCallbacks[event['shapeA'].collisionGroup](b, a, event['shapeB'], event['shapeA']);
       }
     }
 

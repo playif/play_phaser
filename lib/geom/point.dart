@@ -22,6 +22,7 @@ class Point extends PIXI.Point {
 //          break;
 //      }
 //    }
+  
 
   Point([num x=0, num y=0])
   :super(x, y) {

@@ -1,6 +1,6 @@
 part of P2;
 
-class InversePointProxy {
+class InversePointProxy extends Phaser.Point {
   Phaser.P2 world;
   List destination;
 
@@ -68,9 +68,9 @@ class InversePointProxy {
 
   //});
 
-  InversePointProxy(Phaser.P2 world, List destination) {
-    this.world = world;
-    this.destination = destination;
+  InversePointProxy(this.world, this.destination):super() {
+//    this.world = world;
+//    this.destination = destination;
   }
 
 }
