@@ -502,7 +502,7 @@ class Pointer {
     int i = this.game.input.moveCallbacks.length;
 
     while (i-- > 0) {
-      this.game.input.moveCallbacks[i].callback(this, this.x, this.y);
+      this.game.input.moveCallbacks[i]['callback'](this.x, this.y);
     }
 
     //  Easy out if we're dragging something and it still exists

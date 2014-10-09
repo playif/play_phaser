@@ -1,12 +1,5 @@
-library Arcade;
+part of Arcade;
 
-import "../../phaser.dart" as Phaser;
-
-//part "body.dart";
-
-//class Collision {
-//  bool none, any, up, down, left, right;
-//}
 
 class Body extends Phaser.Body {
   //TODO extract interface

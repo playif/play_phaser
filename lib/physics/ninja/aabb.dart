@@ -7,7 +7,7 @@ class AABB extends Shape {
 
 
   ///property {Phaser.Physics.Ninja} system - A reference to the physics system.
-  Phaser.Ninja system;
+  Ninja system;
 
 
   /// property {Phaser.Point} pos - The position of this object.

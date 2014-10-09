@@ -69,6 +69,10 @@ class Frame extends Rectangle {
     return out;
   }
 
+  /**
+   * Clones this Frame into a new Phaser.Frame object and returns it.
+   * Note that all properties are cloned, including the name, index and UUID.
+   */
   Frame clone([Frame output]) {
     if (output != null) {
       output
@@ -82,5 +86,19 @@ class Frame extends Rectangle {
       return output;
     }
     return new Frame(this.index, this.x, this.y, this.width, this.height, this.name, this.uuid);
+//    
+//    Frame output = new Frame(this.index, this.x, this.y, this.width, this.height, this.name, this.uuid);
+
+//      output
+//          ..index = this.index
+//          ..x = x
+//          ..y = y
+//          ..width = width
+//          ..height = height
+//          ..name = name
+//          ..uuid = uuid;
+
+//    return output;
+    
   }
 }

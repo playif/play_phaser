@@ -4,10 +4,10 @@ class Spring {
   /// Local reference to game.
   Phaser.Game game;
   /// Local reference to P2 World.
-  Phaser.P2 world;
+  P2 world;
   p2.LinearSpring data;
 
-  Spring(Phaser.P2 world, p2.Body bodyA, p2.Body bodyB, [num restLength, num stiffness, num damping, List worldA, List worldB, List localA, List localB])
+  Spring(P2 world, p2.Body bodyA, p2.Body bodyB, [num restLength, num stiffness, num damping, List worldA, List worldB, List localA, List localB])
       {
 
     this.game = world.game;

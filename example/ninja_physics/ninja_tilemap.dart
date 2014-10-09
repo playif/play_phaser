@@ -11,7 +11,7 @@ class ninja_tilemap extends State {
 
   }
 
-  Sprite sprite1;
+  Sprite<ninja.Body> sprite1;
   CursorKeys cursors;
   Tilemap map;
   TilemapLayer layer;

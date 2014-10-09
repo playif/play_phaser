@@ -2,10 +2,10 @@ part of P2;
 
 class RotationalSpring {
   Phaser.Game game;
-  Phaser.P2 world;
+  P2 world;
   p2.RotationalSpring data;
 
-  RotationalSpring(Phaser.P2 world, p2.Body bodyA, p2.Body bodyB, [num restAngle, num stiffness, num damping])
+  RotationalSpring(P2 world, p2.Body bodyA, p2.Body bodyB, [num restAngle, num stiffness, num damping])
        {
     /** 
      * @property {Phaser.Game} game - Local reference to game.

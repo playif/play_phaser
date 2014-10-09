@@ -504,10 +504,9 @@ class Input {
    * @return {number} The index of the callback entry. Use this index when calling Input.deleteMoveCallback.
    */
 
-  int addMoveCallback(Function callback, callbackContext) {
+  int addMoveCallback(Function callback) {
     this.moveCallbacks.add({
-      'callback': callback,
-      'context': callbackContext
+      'callback': callback
     });
     return this.moveCallbacks.length - 1;
   }

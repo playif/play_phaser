@@ -1,11 +1,4 @@
-library Ninja;
-import "dart:html" as dom;
-import "../../phaser.dart" as Phaser;
-
-part "aabb.dart";
-part "circle.dart";
-part "shape.dart";
-part "tile.dart";
+part of Ninja;
 
 
 class Body extends Phaser.Body {
@@ -22,7 +15,7 @@ class Body extends Phaser.Body {
 
 
   /// @property {Phaser.Physics.Ninja} system - The parent physics system.
-  Phaser.Ninja system;
+  Ninja system;
 
   /// @property {Phaser.Physics.Ninja.AABB} aabb - The AABB object this body is using for collision.
   AABB aabb;
@@ -114,7 +107,7 @@ class Body extends Phaser.Body {
   
 
 
-  Body(Phaser.Ninja system, [Phaser.Sprite sprite = null, int type = 1, int id = 1, num radius = 16, num x = 0, num y = 0, num width = 0, num height = 0]) {
+  Body(Ninja system, [Phaser.Sprite sprite = null, int type = 1, int id = 1, num radius = 16, num x = 0, num y = 0, num width = 0, num height = 0]) {
 
     this.sprite = sprite;
 

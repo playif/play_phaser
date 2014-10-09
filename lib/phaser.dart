@@ -7,11 +7,9 @@ import "dart:async" as async;
 import "dart:html";
 import "dart:convert";
 import "dart:collection";
-//import "dart:web_gl";
 import "dart:math" as DMath;
 import "dart:js";
 
-import "tween/tweenengine.dart" as tween;
 
 //@MirrorsUsed(targets: 'Phaser',  override: '*')
 //@MirrorsUsed(targets: const [GameObject, Sprite, Text, Particle], symbols: const ["*",'x','y'],  override: '*')
@@ -22,9 +20,9 @@ import "dart:mirrors";
 import "package:play_pixi/pixi.dart" as PIXI;
 import "package:p2/p2.dart" as p2js;
 
-import "physics/arcade/body.dart" as arcade;
-import "physics/ninja/body.dart" as ninja;
-import "physics/p2/body.dart" as p2;
+import "arcade.dart" as Arcade;
+import "ninja.dart" as Ninja;
+import "p2.dart" as P2;
 
 
 
@@ -109,9 +107,9 @@ part "particles/particles.dart";
 
 part "physics/physics.dart";
 part "physics/ibody.dart";
-part "physics/arcade/arcade.dart";
-part "physics/ninja/ninja.dart";
-part "physics/p2/p2.dart";
+
+//part "physics/ninja/ninja.dart";
+//part "physics/p2/p2.dart";
 
 
 part "sound/sound.dart";
@@ -147,6 +145,7 @@ part "utils/utils.dart";
 
 const String VERSION = '2.0.5';
 final List<Game> GAMES = [];
+
 
 const int AUTO = 0;
 const int CANVAS = 1;

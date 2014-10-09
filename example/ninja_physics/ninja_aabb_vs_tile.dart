@@ -8,9 +8,9 @@ class ninja_aabb_vs_tile extends State {
 
   }
 
-  Sprite sprite1;
-  Sprite sprite2;
-  Sprite tile;
+  Sprite<ninja.Body> sprite1;
+  Sprite<ninja.Body> sprite2;
+  Sprite<ninja.Body> tile;
   CursorKeys cursors;
 
   create() {

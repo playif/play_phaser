@@ -2,9 +2,9 @@ part of P2;
 
 class GearConstraint extends p2.GearConstraint {
   Phaser.Game game;
-  Phaser.P2 world;
+  P2 world;
 
-  GearConstraint(Phaser.P2 world, p2.Body bodyA, p2.Body bodyB, [num angle=0, num ratio=1])
+  GearConstraint(P2 world, p2.Body bodyA, p2.Body bodyB, [num angle=0, num ratio=1])
   :super(bodyA, bodyB, angle:angle, ratio: ratio){
 
     if (angle == null) { angle = 0; }

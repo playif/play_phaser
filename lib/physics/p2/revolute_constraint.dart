@@ -2,10 +2,10 @@ part of P2;
 
 class RevoluteConstraint extends p2.RevoluteConstraint {
   Phaser.Game game;
-  Phaser.P2 world;
+  P2 world;
   //p2.LinearSpring data;
 
-  RevoluteConstraint(Phaser.P2 world, p2.Body bodyA, List pivotA, p2.Body bodyB, List pivotB, num maxForce, List worldPivot)
+  RevoluteConstraint(P2 world, p2.Body bodyA, List pivotA, p2.Body bodyB, List pivotB, num maxForce, List worldPivot)
       : super(bodyA, bodyB, worldPivot: worldPivot!=null? [world.pxmi(worldPivot[0]), world.pxmi(worldPivot[1])]:null, localPivotA: [world.pxmi(pivotA[0]), world.pxmi(pivotA[1])], localPivotB: [world.pxmi(pivotB[0]), world.pxmi(pivotB[1])], maxForce: maxForce) {
 
     if (maxForce == null) {

@@ -1,7 +1,7 @@
-part of Phaser;
+part of P2;
 
 class Walls {
-  p2js.Body left, right, top, bottom;
+  p2.Body left, right, top, bottom;
 }
 
 class P2 {
@@ -112,22 +112,22 @@ class P2 {
     return this.world.bodies.length;
   }
 
-  Game game;
+  Phaser.Game game;
   //Map config;
-  p2js.World world;
+  p2.World world;
   num frameRate;
   bool useElapsedTime;
   bool paused;
   List<p2.Material> materials;
-  p2.InversePointProxy gravity;
-  Signal onBodyAdded;
-  Signal onBodyRemoved;
-  Signal onSpringAdded;
-  Signal onSpringRemoved;
-  Signal onConstraintAdded;
-  Signal onConstraintRemoved;
-  Signal onContactMaterialAdded;
-  Signal onContactMaterialRemoved;
+  InversePointProxy gravity;
+  Phaser.Signal onBodyAdded;
+  Phaser.Signal onBodyRemoved;
+  Phaser.Signal onSpringAdded;
+  Phaser.Signal onSpringRemoved;
+  Phaser.Signal onConstraintAdded;
+  Phaser.Signal onConstraintRemoved;
+  Phaser.Signal onContactMaterialAdded;
+  Phaser.Signal onContactMaterialRemoved;
 
   /// A postBroadphase callback.
   Function postBroadphaseCallback;
@@ -136,22 +136,22 @@ class P2 {
   //this.callbackContext = null;
 
   /// Dispatched when a first contact is created between two bodies. This event is fired before the step has been done.
-  Signal onBeginContact;
+  Phaser.Signal onBeginContact;
 
   /// Dispatched when final contact occurs between two bodies. This event is fired before the step has been done.
-  Signal onEndContact;
+  Phaser.Signal onEndContact;
 
   /// An array containing the collision groups that have been defined in the World.
   List collisionGroups;
 
   /// A default collision group.
-  p2.CollisionGroup nothingCollisionGroup;
+  CollisionGroup nothingCollisionGroup;
 
   /// A default collision group.
-  p2.CollisionGroup boundsCollisionGroup;
+  CollisionGroup boundsCollisionGroup;
 
   /// A default collision group.
-  p2.CollisionGroup everythingCollisionGroup;
+  CollisionGroup everythingCollisionGroup;
 
   /// An array of the bodies the world bounds collides with.
   List boundsCollidesWith;
@@ -168,7 +168,7 @@ class P2 {
   Walls walls;
 
 
-  P2(Game game, {p2js.Solver solver, List gravity, bool doProfiling: false, p2js.Broadphase broadphase, bool islandSplit: false, bool fake: false}) {
+  P2(Phaser.Game game, {p2.Solver solver, List gravity, bool doProfiling: false, p2.Broadphase broadphase, bool islandSplit: false, bool fake: false}) {
     /**
      * @property {Phaser.Game} game - Local reference to game.
      */
@@ -191,7 +191,7 @@ class P2 {
      * @property {p2.World} world - The p2 World in which the simulation is run.
      * @protected
      */
-    this.world = new p2js.World(solver: solver, gravity: gravity, doProfiling: doProfiling, broadphase: broadphase, islandSplit: islandSplit, fake: fake);
+    this.world = new p2.World(solver: solver, gravity: gravity, doProfiling: doProfiling, broadphase: broadphase, islandSplit: islandSplit, fake: fake);
 
     /**
      * @property {number} frameRate - The frame rate the world will be stepped at. Defaults to 1 / 60, but you can change here. Also see useElapsedTime property.
@@ -220,7 +220,7 @@ class P2 {
     /**
      * @property {Phaser.Physics.P2.InversePointProxy} gravity - The gravity applied to all bodies each step.
      */
-    this.gravity = new p2.InversePointProxy(this, this.world.gravity);
+    this.gravity = new InversePointProxy(this, this.world.gravity);
 
     /**
      * @property {object} walls - An object containing the 4 wall bodies that bound the physics world.
@@ -233,42 +233,42 @@ class P2 {
     /**
      * @property {Phaser.Signal} onBodyAdded - Dispatched when a new Body is added to the World.
      */
-    this.onBodyAdded = new Signal();
+    this.onBodyAdded = new Phaser.Signal();
 
     /**
      * @property {Phaser.Signal} onBodyRemoved - Dispatched when a Body is removed from the World.
      */
-    this.onBodyRemoved = new Signal();
+    this.onBodyRemoved = new Phaser.Signal();
 
     /**
      * @property {Phaser.Signal} onSpringAdded - Dispatched when a new Spring is added to the World.
      */
-    this.onSpringAdded = new Signal();
+    this.onSpringAdded = new Phaser.Signal();
 
     /**
      * @property {Phaser.Signal} onSpringRemoved - Dispatched when a Spring is removed from the World.
      */
-    this.onSpringRemoved = new Signal();
+    this.onSpringRemoved = new Phaser.Signal();
 
     /**
      * @property {Phaser.Signal} onConstraintAdded - Dispatched when a new Constraint is added to the World.
      */
-    this.onConstraintAdded = new Signal();
+    this.onConstraintAdded = new Phaser.Signal();
 
     /**
      * @property {Phaser.Signal} onConstraintRemoved - Dispatched when a Constraint is removed from the World.
      */
-    this.onConstraintRemoved = new Signal();
+    this.onConstraintRemoved = new Phaser.Signal();
 
     /**
      * @property {Phaser.Signal} onContactMaterialAdded - Dispatched when a new ContactMaterial is added to the World.
      */
-    this.onContactMaterialAdded = new Signal();
+    this.onContactMaterialAdded = new Phaser.Signal();
 
     /**
      * @property {Phaser.Signal} onContactMaterialRemoved - Dispatched when a ContactMaterial is removed from the World.
      */
-    this.onContactMaterialRemoved = new Signal();
+    this.onContactMaterialRemoved = new Phaser.Signal();
 
     /**
      * @property {function} postBroadphaseCallback - A postBroadphase callback.
@@ -283,12 +283,12 @@ class P2 {
     /**
      * @property {Phaser.Signal} onBeginContact - Dispatched when a first contact is created between two bodies. This event is fired before the step has been done.
      */
-    this.onBeginContact = new Signal();
+    this.onBeginContact = new Phaser.Signal();
 
     /**
      * @property {Phaser.Signal} onEndContact - Dispatched when final contact occurs between two bodies. This event is fired before the step has been done.
      */
-    this.onEndContact = new Signal();
+    this.onEndContact = new Phaser.Signal();
 
     //  Pixel to meter function overrides
 //    if (config.hasOwnProperty('mpx') && config.hasOwnProperty('pxm') && config.hasOwnProperty('mpxi') && config.hasOwnProperty('pxmi')) {
@@ -310,17 +310,17 @@ class P2 {
     /**
      * @property {Phaser.Physics.P2.CollisionGroup} nothingCollisionGroup - A default collision group.
      */
-    this.nothingCollisionGroup = new p2.CollisionGroup(1);
+    this.nothingCollisionGroup = new CollisionGroup(1);
 
     /**
      * @property {Phaser.Physics.P2.CollisionGroup} boundsCollisionGroup - A default collision group.
      */
-    this.boundsCollisionGroup = new p2.CollisionGroup(2);
+    this.boundsCollisionGroup = new CollisionGroup(2);
 
     /**
      * @property {Phaser.Physics.P2.CollisionGroup} everythingCollisionGroup - A default collision group.
      */
-    this.everythingCollisionGroup = new p2.CollisionGroup(2147483648);
+    this.everythingCollisionGroup = new CollisionGroup(2147483648-1);
 
     /**
      * @property {array} boundsCollidesWith - An array of the bodies the world bounds collides with.
@@ -350,7 +350,7 @@ class P2 {
    * @param {Phaser.Physics.P2.Body} body - The body to remove at the start of the next step.
    */
 
-  removeBodyNextStep(p2.Body body) {
+  removeBodyNextStep(Body body) {
     this._toRemove.add(body);
   }
 
@@ -394,7 +394,7 @@ class P2 {
       i = object.length;
 
       while (i-- > 0) {
-        if (object[i] is Group) {
+        if (object[i] is Phaser.Group) {
           //  If it's a Group then we do it on the children regardless
           this.enable(object[i].children, debug, children);
         } else {
@@ -406,7 +406,7 @@ class P2 {
         }
       }
     } else {
-      if (object is Group) {
+      if (object is Phaser.Group) {
         //  If it's a Group then we do it on the children regardless
         this.enable(object.children, debug, children);
       } else {
@@ -429,12 +429,12 @@ class P2 {
    * @param {boolean} debug - Create a debug object to go with this body?
    */
 
-  enableBody(Sprite object, bool debug) {
+  enableBody(Phaser.Sprite object, bool debug) {
 
     if (object.body == null) {
-      p2.Body body=new p2.Body(this.game, object, object.x, object.y, 1);
+      Body body = new Body(this.game, object, object.x, object.y, 1);
       body.debug = debug;
-      
+
       object.body = body;
       object.anchor.set(0.5);
     }
@@ -650,7 +650,7 @@ class P2 {
 
     int mask = this.everythingCollisionGroup.mask;
 
-    if (setCollisionGroup == null) {
+    if (setCollisionGroup != true) {
       mask = this.boundsCollisionGroup.mask;
     }
 
@@ -721,8 +721,8 @@ class P2 {
     }
 
     if (left) {
-      this.walls.left = new p2js.Body(mass: 0, position: [this.pxmi(x), this.pxmi(y)], angle: 1.5707963267948966);
-      this.walls.left.addShape(new p2js.Plane());
+      this.walls.left = new p2.Body(mass: 0, position: [this.pxmi(x), this.pxmi(y)], angle: 1.5707963267948966);
+      this.walls.left.addShape(new p2.Plane());
 
       if (setCollisionGroup) {
         this.walls.left.shapes[0].collisionGroup = this.boundsCollisionGroup.mask;
@@ -732,8 +732,8 @@ class P2 {
     }
 
     if (right) {
-      this.walls.right = new p2js.Body(mass: 0, position: [this.pxmi(x + width), this.pxmi(y)], angle: -1.5707963267948966);
-      this.walls.right.addShape(new p2js.Plane());
+      this.walls.right = new p2.Body(mass: 0, position: [this.pxmi(x + width), this.pxmi(y)], angle: -1.5707963267948966);
+      this.walls.right.addShape(new p2.Plane());
 
       if (setCollisionGroup) {
         this.walls.right.shapes[0].collisionGroup = this.boundsCollisionGroup.mask;
@@ -743,8 +743,8 @@ class P2 {
     }
 
     if (top) {
-      this.walls.top = new p2js.Body(mass: 0, position: [this.pxmi(x), this.pxmi(y)], angle: -3.141592653589793);
-      this.walls.top.addShape(new p2js.Plane());
+      this.walls.top = new p2.Body(mass: 0, position: [this.pxmi(x), this.pxmi(y)], angle: -3.141592653589793);
+      this.walls.top.addShape(new p2.Plane());
 
       if (setCollisionGroup) {
         this.walls.top.shapes[0].collisionGroup = this.boundsCollisionGroup.mask;
@@ -754,8 +754,8 @@ class P2 {
     }
 
     if (bottom) {
-      this.walls.bottom = new p2js.Body(mass: 0, position: [this.pxmi(x), this.pxmi(y + height)]);
-      this.walls.bottom.addShape(new p2js.Plane());
+      this.walls.bottom = new p2.Body(mass: 0, position: [this.pxmi(x), this.pxmi(y + height)]);
+      this.walls.bottom.addShape(new p2.Plane());
 
       if (setCollisionGroup) {
         this.walls.bottom.shapes[0].collisionGroup = this.boundsCollisionGroup.mask;
@@ -845,7 +845,7 @@ class P2 {
    * @return {boolean} True if the Body was added successfully, otherwise false.
    */
 
-  bool addBody(p2.Body body) {
+  bool addBody(Body body) {
     if (body.data.world != null) {
       return false;
     } else {
@@ -865,7 +865,7 @@ class P2 {
    * @return {Phaser.Physics.P2.Body} The Body that was removed.
    */
 
-  p2.Body removeBody(p2.Body body) {
+  Body removeBody(Body body) {
     if (body.data.world == this.world) {
       this.world.removeBody(body.data);
 
@@ -882,8 +882,8 @@ class P2 {
    * @return {Phaser.Physics.P2.Spring} The Spring that was added.
    */
 
-  p2.Spring addSpring(spring) {
-    if (spring is p2.Spring || spring is p2.RotationalSpring) {
+  Spring addSpring(spring) {
+    if (spring is Spring || spring is RotationalSpring) {
       this.world.addSpring(spring.data);
     } else {
       this.world.addSpring(spring);
@@ -900,8 +900,8 @@ class P2 {
    * @return {Phaser.Physics.P2.Spring} The Spring that was removed.
    */
 
-  p2.Spring removeSpring(spring) {
-    if (spring is p2.Spring || spring is p2.RotationalSpring) {
+  Spring removeSpring(spring) {
+    if (spring is Spring || spring is RotationalSpring) {
       this.world.removeSpring(spring.data);
     } else {
       this.world.removeSpring(spring);
@@ -923,13 +923,13 @@ class P2 {
    * @return {Phaser.Physics.P2.DistanceConstraint} The constraint
    */
 
-  p2.DistanceConstraint createDistanceConstraint(bodyA, bodyB, [num distance, List localAnchorA, List localAnchorB, num maxForce]) {
+  DistanceConstraint createDistanceConstraint(bodyA, bodyB, [num distance, List localAnchorA, List localAnchorB, num maxForce]) {
     bodyA = this.getBody(bodyA);
     bodyB = this.getBody(bodyB);
     if (bodyA == null || bodyB == null) {
-      window.console.warn('Cannot create Constraint, invalid body objects given');
+      print('Cannot create Constraint, invalid body objects given');
     } else {
-      return this.addConstraint(new p2.DistanceConstraint(this, bodyA, bodyB, distance, localAnchorA, localAnchorB, maxForce));
+      return this.addConstraint(new DistanceConstraint(this, bodyA, bodyB, distance, localAnchorA, localAnchorB, maxForce));
     }
     return null;
   }
@@ -945,13 +945,13 @@ class P2 {
    * @return {Phaser.Physics.P2.GearConstraint} The constraint
    */
 
-  p2.GearConstraint createGearConstraint(bodyA, bodyB, [num angle = 0, num ratio = 1]) {
+  GearConstraint createGearConstraint(bodyA, bodyB, [num angle = 0, num ratio = 1]) {
     bodyA = this.getBody(bodyA);
     bodyB = this.getBody(bodyB);
     if (bodyA == null || bodyB == null) {
-      window.console.warn('Cannot create Constraint, invalid body objects given');
+      print('Cannot create Constraint, invalid body objects given');
     } else {
-      return this.addConstraint(new p2.GearConstraint(this, bodyA, bodyB, angle, ratio));
+      return this.addConstraint(new GearConstraint(this, bodyA, bodyB, angle, ratio));
     }
     return null;
   }
@@ -970,15 +970,15 @@ class P2 {
    * @return {Phaser.Physics.P2.RevoluteConstraint} The constraint
    */
 
-  p2.RevoluteConstraint createRevoluteConstraint(bodyA, List pivotA, bodyB, List pivotB, [num maxForce, List worldPivot]) {
+  RevoluteConstraint createRevoluteConstraint(bodyA, List pivotA, bodyB, List pivotB, [num maxForce = double.MAX_FINITE, List worldPivot]) {
 
     bodyA = this.getBody(bodyA);
     bodyB = this.getBody(bodyB);
 
     if (bodyA == null || bodyB == null) {
-      window.console.warn('Cannot create Constraint, invalid body objects given');
+      print('Cannot create Constraint, invalid body objects given');
     } else {
-      return this.addConstraint(new p2.RevoluteConstraint(this, bodyA, pivotA, bodyB, pivotB, maxForce, worldPivot));
+      return this.addConstraint(new RevoluteConstraint(this, bodyA, pivotA, bodyB, pivotB, maxForce, worldPivot));
     }
     return null;
   }
@@ -995,13 +995,13 @@ class P2 {
    * @return {Phaser.Physics.P2.LockConstraint} The constraint
    */
 
-  p2.LockConstraint createLockConstraint(bodyA, bodyB, [List offset, num angle = 0, num maxForce]) {
+  LockConstraint createLockConstraint(bodyA, bodyB, [List offset, num angle = 0, num maxForce]) {
     bodyA = this.getBody(bodyA);
     bodyB = this.getBody(bodyB);
     if (bodyA == null || bodyB == null) {
-      window.console.warn('Cannot create Constraint, invalid body objects given');
+      print('Cannot create Constraint, invalid body objects given');
     } else {
-      return this.addConstraint(new p2.LockConstraint(this, bodyA, bodyB, offset, angle, maxForce));
+      return this.addConstraint(new LockConstraint(this, bodyA, bodyB, offset, angle, maxForce));
     }
     return null;
   }
@@ -1021,13 +1021,13 @@ class P2 {
    * @return {Phaser.Physics.P2.PrismaticConstraint} The constraint
    */
 
-  p2.PrismaticConstraint createPrismaticConstraint(bodyA, bodyB, [bool lockRotation = true, List anchorA, List anchorB, List axis, num maxForce]) {
+  PrismaticConstraint createPrismaticConstraint(bodyA, bodyB, [bool lockRotation = true, List anchorA, List anchorB, List axis, num maxForce]) {
     bodyA = this.getBody(bodyA);
     bodyB = this.getBody(bodyB);
     if (bodyA == null || bodyB == null) {
-      window.console.warn('Cannot create Constraint, invalid body objects given');
+      print('Cannot create Constraint, invalid body objects given');
     } else {
-      return this.addConstraint(new p2.PrismaticConstraint(this, bodyA, bodyB, lockRotation, anchorA, anchorB, axis, maxForce));
+      return this.addConstraint(new PrismaticConstraint(this, bodyA, bodyB, lockRotation, anchorA, anchorB, axis, maxForce));
     }
     return null;
   }
@@ -1040,7 +1040,7 @@ class P2 {
    * @return {Phaser.Physics.P2.Constraint} The Constraint that was added.
    */
 
-  p2js.Constraint addConstraint(p2js.Constraint constraint) {
+  p2.Constraint addConstraint(p2.Constraint constraint) {
     this.world.addConstraint(constraint);
     this.onConstraintAdded.dispatch(constraint);
     return constraint;
@@ -1054,7 +1054,7 @@ class P2 {
    * @return {Phaser.Physics.P2.Constraint} The Constraint that was removed.
    */
 
-  p2js.Constraint removeConstraint(p2js.Constraint constraint) {
+  p2.Constraint removeConstraint(p2.Constraint constraint) {
     this.world.removeConstraint(constraint);
     this.onConstraintRemoved.dispatch(constraint);
     return constraint;
@@ -1068,7 +1068,7 @@ class P2 {
    * @return {Phaser.Physics.P2.ContactMaterial} The Contact Material that was added.
    */
 
-  p2.ContactMaterial addContactMaterial(p2.ContactMaterial material) {
+  ContactMaterial addContactMaterial(ContactMaterial material) {
     this.world.addContactMaterial(material);
     this.onContactMaterialAdded.dispatch(material);
     return material;
@@ -1082,7 +1082,7 @@ class P2 {
    * @return {Phaser.Physics.P2.ContactMaterial} The Contact Material that was removed.
    */
 
-  p2.ContactMaterial removeContactMaterial(p2.ContactMaterial material) {
+  ContactMaterial removeContactMaterial(ContactMaterial material) {
     this.world.removeContactMaterial(material);
     this.onContactMaterialRemoved.dispatch(material);
     return material;
@@ -1097,7 +1097,7 @@ class P2 {
    * @return {Phaser.Physics.P2.ContactMaterial|boolean} The Contact Material or false if none was found matching the Materials given.
    */
 
-  p2.ContactMaterial getContactMaterial(p2.Material materialA, p2.Material materialB) {
+  ContactMaterial getContactMaterial(Material materialA, Material materialB) {
     return this.world.getContactMaterial(materialA, materialB);
   }
 
@@ -1109,7 +1109,7 @@ class P2 {
    * @param {array<Phaser.Physics.P2.Body>} bodies - An Array of Body objects that the given Material will be set on.
    */
 
-  setMaterial(p2.Material material, List<p2.Body> bodies) {
+  setMaterial(p2.Material material, List<Body> bodies) {
     int i = bodies.length;
     while (i-- > 0) {
       bodies[i].setMaterial(material);
@@ -1127,8 +1127,8 @@ class P2 {
    * @return {Phaser.Physics.P2.Material} The Material that was created. This is also stored in Phaser.Physics.P2.materials.
    */
 
-  p2.Material createMaterial([String name = '', p2.Body body]) {
-    p2.Material material = new p2.Material(name);
+  Material createMaterial([String name = '', Body body]) {
+    Material material = new Material(name);
     this.materials.add(material);
     if (body != null) {
       body.setMaterial(material);
@@ -1146,14 +1146,14 @@ class P2 {
    * @return {Phaser.Physics.P2.ContactMaterial} The Contact Material that was created.
    */
 
-  p2.ContactMaterial createContactMaterial(p2.Material materialA, p2.Material materialB, {num friction: 0.3, num restitution: 0, num stiffness: p2js.Equation.DEFAULT_STIFFNESS, num relaxation: p2js.Equation.DEFAULT_RELAXATION, num frictionStiffness: p2js.Equation.DEFAULT_STIFFNESS, num frictionRelaxation: p2js.Equation.DEFAULT_RELAXATION, num surfaceVelocity: 0}) {
+  ContactMaterial createContactMaterial(Material materialA, Material materialB, {num friction: 0.3, num restitution: 0, num stiffness: p2.Equation.DEFAULT_STIFFNESS, num relaxation: p2.Equation.DEFAULT_RELAXATION, num frictionStiffness: p2.Equation.DEFAULT_STIFFNESS, num frictionRelaxation: p2.Equation.DEFAULT_RELAXATION, num surfaceVelocity: 0}) {
     if (materialA == null) {
       materialA = this.createMaterial();
     }
     if (materialB == null) {
       materialB = this.createMaterial();
     }
-    p2.ContactMaterial contact = new p2.ContactMaterial(materialA, materialB, friction: friction, restitution: restitution, stiffness: stiffness, relaxation: relaxation, frictionStiffness: frictionStiffness, frictionRelaxation: frictionRelaxation, surfaceVelocity: surfaceVelocity);
+    ContactMaterial contact = new ContactMaterial(materialA, materialB, friction: friction, restitution: restitution, stiffness: stiffness, relaxation: relaxation, frictionStiffness: frictionStiffness, frictionRelaxation: frictionRelaxation, surfaceVelocity: surfaceVelocity);
     return this.addContactMaterial(contact);
   }
 
@@ -1185,7 +1185,7 @@ class P2 {
    * @return {p2.Body} The p2.Body, or null if not found.
    */
 
-  p2js.Body getBody(object) {
+  p2.Body getBody(object) {
 
     if (object is p2.Body) {
       //  Native p2 body
@@ -1193,7 +1193,7 @@ class P2 {
     } else if (object is Body) {
       //  Phaser P2 Body
       return object.data;
-    } else if (object is Sprite && object.body.type == Physics.P2JS) {
+    } else if (object is Phaser.Sprite && object.body.type == Phaser.Physics.P2JS) {
       //  Sprite, TileSprite, etc
       return object.body.data;
     }
@@ -1254,7 +1254,7 @@ class P2 {
    * @return {Array} Array of bodies that overlap the point.
    */
 
-  List hitTest(Point worldPoint, [List bodies, num precision = 5, bool filterStatic = false]) {
+  List<p2.Body> hitTest(Phaser.Point worldPoint, [List bodies, num precision = 5, bool filterStatic = false]) {
 
     if (bodies == null) {
       bodies = this.world.bodies;
@@ -1268,16 +1268,16 @@ class P2 {
 
     List physicsPosition = [this.pxmi(worldPoint.x), this.pxmi(worldPoint.y)];
 
-    List query = [];
+    List<p2.Body> query = [];
     int i = bodies.length;
 
     while (i-- > 0) {
-      if (bodies[i] is p2.Body && !(filterStatic && (bodies[i] as p2.Body).data.type == p2.Body.STATIC)) {
-        query.add((bodies[i] as p2.Body).data);
-      } else if (bodies[i] is p2js.Body && (bodies[i] as p2js.Body).parent && !(filterStatic && bodies[i].type == p2.Body.STATIC)) {
+      if (bodies[i] is Body && !(filterStatic && (bodies[i] as Body).data.type == p2.Body.STATIC)) {
+        query.add((bodies[i] as Body).data);
+      } else if (bodies[i] is p2.Body && bodies[i].parent != null && !(filterStatic && bodies[i].type == p2.Body.STATIC)) {
         query.add(bodies[i]);
-      } else if (bodies[i] is Sprite && !(filterStatic && ((bodies[i] as Sprite).body as p2.Body).data.type == p2.Body.STATIC)) {
-        query.add(((bodies[i] as Sprite).body as p2.Body).data);
+      } else if (bodies[i] is Phaser.Sprite && !(filterStatic && ((bodies[i] as Phaser.Sprite).body as Body).data.type == p2.Body.STATIC)) {
+        query.add(((bodies[i] as Phaser.Sprite).body as Body).data);
       }
     }
 
@@ -1304,33 +1304,33 @@ class P2 {
    * @param {Phaser.Group|Phaser.Sprite} [object] - An optional Sprite or Group to apply the Collision Group to. If a Group is given it will be applied to all top-level children.
    */
 
-  createCollisionGroup(object) {
+  createCollisionGroup([Phaser.GameObject object]) {
 
     num bitmask = Math.pow(2, this._collisionGroupID);
 
     if (this.walls.left != null) {
-      this.walls.left.shapes[0].collisionMask = this.walls.left.shapes[0].collisionMask | bitmask;
+      this.walls.left.shapes[0].collisionMask |= bitmask;
     }
 
     if (this.walls.right != null) {
-      this.walls.right.shapes[0].collisionMask = this.walls.right.shapes[0].collisionMask | bitmask;
+      this.walls.right.shapes[0].collisionMask |= bitmask;
     }
 
     if (this.walls.top != null) {
-      this.walls.top.shapes[0].collisionMask = this.walls.top.shapes[0].collisionMask | bitmask;
+      this.walls.top.shapes[0].collisionMask |= bitmask;
     }
 
     if (this.walls.bottom != null) {
-      this.walls.bottom.shapes[0].collisionMask = this.walls.bottom.shapes[0].collisionMask | bitmask;
+      this.walls.bottom.shapes[0].collisionMask |= bitmask;
     }
 
     this._collisionGroupID++;
 
-    var group = new p2.CollisionGroup(bitmask);
+    CollisionGroup group = new CollisionGroup(bitmask);
 
     this.collisionGroups.add(group);
 
-    if (object) {
+    if (object != null) {
       this.setCollisionGroup(object, group);
     }
 
@@ -1347,11 +1347,11 @@ class P2 {
    * @param {Phaser.Physics.CollisionGroup} group - The Collision Group that this Bodies shapes will use.
    */
 
-  setCollisionGroup(object, p2.CollisionGroup group) {
+  setCollisionGroup(object, CollisionGroup group) {
 
-    if (object is Group) {
+    if (object is Phaser.Group) {
       for (var i = 0; i < object.total; i++) {
-        if (object.children[i]['body'] && object.children[i]['body'].type == Physics.P2JS) {
+        if (object.children[i]['body'] && object.children[i]['body'].type == Phaser.Physics.P2JS) {
           object.children[i].body.setCollisionGroup(group);
         }
       }
@@ -1383,9 +1383,9 @@ class P2 {
     bodyB = this.getBody(bodyB);
 
     if (!bodyA || !bodyB) {
-      window.console.warn('Cannot create Spring, invalid body objects given');
+      print('Cannot create Spring, invalid body objects given');
     } else {
-      return this.addSpring(new p2.Spring(this, bodyA, bodyB, restLength, stiffness, damping, worldA, worldB, localA, localB));
+      return this.addSpring(new Spring(this, bodyA, bodyB, restLength, stiffness, damping, worldA, worldB, localA, localB));
     }
 
   }
@@ -1408,9 +1408,9 @@ class P2 {
     bodyB = this.getBody(bodyB);
 
     if (!bodyA || !bodyB) {
-      window.console.warn('Cannot create Rotational Spring, invalid body objects given');
+      print('Cannot create Rotational Spring, invalid body objects given');
     } else {
-      return this.addSpring(new p2.RotationalSpring(this, bodyA, bodyB, restAngle, stiffness, damping));
+      return this.addSpring(new RotationalSpring(this, bodyA, bodyB, restAngle, stiffness, damping));
     }
 
   }
@@ -1433,13 +1433,13 @@ class P2 {
    * @return {Phaser.Physics.P2.Body} The body
    */
 
-  p2.Body createBody(num x, num y, num mass, data, {bool addToWorld: false, bool optimalDecomp: false, bool skipSimpleCheck: false, num removeCollinearPoints: 0}) {
+  Body createBody(num x, num y, num mass, data, {bool addToWorld: false, bool optimalDecomp: false, bool skipSimpleCheck: false, num removeCollinearPoints: 0}) {
 
     if (addToWorld == null) {
       addToWorld = false;
     }
 
-    p2.Body body = new p2.Body(this.game, null, x, y, mass);
+    Body body = new Body(this.game, null, x, y, mass);
 
     if (data) {
       var result = body.addPolygon(data, optimalDecomp: optimalDecomp, skipSimpleCheck: skipSimpleCheck, removeCollinearPoints: removeCollinearPoints);
@@ -1474,13 +1474,13 @@ class P2 {
    *                                       or the arguments passed can be flat x,y values e.g. `setPolygon(options, x,y, x,y, x,y, ...)` where `x` and `y` are numbers.
    */
 
-  p2.Body createParticle(num x, num y, num mass, bool addToWorld, List data, {bool optimalDecomp: false, bool skipSimpleCheck: false, num removeCollinearPoints: 0}) {
+  Body createParticle(num x, num y, num mass, bool addToWorld, List data, {bool optimalDecomp: false, bool skipSimpleCheck: false, num removeCollinearPoints: 0}) {
 
     if (addToWorld == null) {
       addToWorld = false;
     }
 
-    p2.Body body = new p2.Body(this.game, null, x, y, mass);
+    Body body = new Body(this.game, null, x, y, mass);
 
     if (data != null) {
       bool result = body.addPolygon(data, optimalDecomp: optimalDecomp, skipSimpleCheck: skipSimpleCheck, removeCollinearPoints: removeCollinearPoints);
@@ -1509,7 +1509,7 @@ class P2 {
    * @return {array} An array of the Phaser.Physics.Body objects that have been created.
    */
 
-  convertCollisionObjects(Tilemap map, layer, [bool addToWorld = true]) {
+  convertCollisionObjects(Phaser.Tilemap map, layer, [bool addToWorld = true]) {
 
     if (addToWorld == null) {
       addToWorld = true;
@@ -1530,7 +1530,7 @@ class P2 {
 
       Map object = map.collision[layer][i];
 
-      p2.Body body = this.createBody(object['x'], object['y'], 0, object['polyline'], addToWorld: addToWorld);
+      Body body = this.createBody(object['x'], object['y'], 0, object['polyline'], addToWorld: addToWorld);
 
       if (body != null) {
         output.add(body);
@@ -1549,7 +1549,7 @@ class P2 {
    * @param {number|string|Phaser.TilemapLayer} [layer] - The layer to operate on. If not given will default to map.currentLayer.
    */
 
-  clearTilemapLayerBodies(Tilemap map, layer) {
+  clearTilemapLayerBodies(Phaser.Tilemap map, layer) {
 
     layer = map.getLayer(layer);
 
@@ -1577,7 +1577,7 @@ class P2 {
    * @return {array} An array of the Phaser.Physics.P2.Body objects that were created.
    */
 
-  List<p2.Body> convertTilemap(Tilemap map, layer, [bool addToWorld = true, bool optimize = true]) {
+  List<Body> convertTilemap(Phaser.Tilemap map, layer, [bool addToWorld = true, bool optimize = true]) {
 
     layer = map.getLayer(layer);
 

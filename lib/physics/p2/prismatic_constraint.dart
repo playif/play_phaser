@@ -2,9 +2,9 @@ part of P2;
 
 class PrismaticConstraint extends p2.PrismaticConstraint {
   Phaser.Game game;
-  Phaser.P2 world;
+  P2 world;
 
-  PrismaticConstraint(Phaser.P2 world, p2.Body bodyA, p2.Body bodyB, bool lockRotation, List anchorA, List anchorB, List axis, num maxForce)
+  PrismaticConstraint(P2 world, p2.Body bodyA, p2.Body bodyB, bool lockRotation, List anchorA, List anchorB, List axis, num maxForce)
   :super(bodyA, bodyB,localAnchorA: [ world.pxmi(anchorA[0]), world.pxmi(anchorA[1]) ], localAnchorB: [ world.pxmi(anchorB[0]), world.pxmi(anchorB[1]) ], localAxisA: axis, disableRotationalLock: !lockRotation, maxForce: maxForce) {
 
     if ( lockRotation == null) { lockRotation = true; }

@@ -1,21 +1,14 @@
 part of Phaser;
-//Physics;
-
-//import "../phaser.dart";
-
-//part "arcade/body.dart";
-//part "arcade/arcade.dart";
 
 typedef void CollideFunc(GameObject obj1, GameObject obj2);
 typedef bool ProcessFunc(GameObject obj1, GameObject obj2);
 
-
 class Physics {
   Game game;
   Map config;
-  Arcade arcade;
-  Ninja ninja;
-  P2 p2;
+  Arcade.Arcade arcade;
+  Ninja.Ninja ninja;
+  P2.P2 p2;
 
   var box2d;
   var chipmunk;
@@ -106,7 +99,7 @@ class Physics {
 
     if ((!this.config.containsKey('arcade') || this.config['arcade'] == true)) {
       //  If Arcade isn't specified, we create it automatically if we can
-      this.arcade = new Arcade(this.game);
+      this.arcade = new Arcade.Arcade(this.game);
       this.game.time.deltaCap = 0.2;
     }
 
@@ -135,13 +128,13 @@ class Physics {
   startSystem(int system, {p2js.Solver solver, List gravity, bool doProfiling: false, p2js.Broadphase broadphase, bool islandSplit: false, bool fake: false}) {
 
     if (system == Physics.ARCADE) {
-      this.arcade = new Arcade(this.game);
+      this.arcade = new Arcade.Arcade(this.game);
     }
     else if (system == Physics.P2JS) {
-      this.p2 = new P2(this.game, solver: solver, gravity: gravity, doProfiling: doProfiling, broadphase: broadphase, islandSplit: islandSplit, fake: fake);
+      this.p2 = new P2.P2(this.game, solver: solver, gravity: gravity, doProfiling: doProfiling, broadphase: broadphase, islandSplit: islandSplit, fake: fake);
     }
     if (system == Physics.NINJA) {
-      this.ninja = new Ninja(this.game);
+      this.ninja = new Ninja.Ninja(this.game);
     }
 //    else if (system == Physics.BOX2D && this.box2d == null) {
 //      throw new Exception('The Box2D physics system has not been implemented yet.');

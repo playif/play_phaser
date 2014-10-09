@@ -1,6 +1,6 @@
 part of Phaser;
 
-class Sprite extends PIXI.Sprite implements GameObject, AnimationInterface {
+class Sprite<T extends Body> extends PIXI.Sprite implements GameObject, AnimationInterface {
 
 
   Game game;
@@ -19,7 +19,7 @@ class Sprite extends PIXI.Sprite implements GameObject, AnimationInterface {
   Point world;
   bool autoCull;
   InputHandler input;
-  Body body = null;
+  T body = null;
   bool alive;
   num health;
   bool checkWorldBounds = false;

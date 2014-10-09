@@ -1,34 +1,11 @@
-library P2;
-//import "dart:html" as dom;
-//import "../../phaser.dart";
-import "dart:math" as Math;
-
-import "../../phaser.dart" as Phaser;
-import "package:p2/p2.dart" as p2;
-//part "body.dart";
-
-part "body_debug.dart";
-part "collision_group.dart";
-part "contact_material.dart";
-part "distance_constraint.dart";
-part "fixture_list.dart";
-part "gear_constraint.dart";
-part "inverse_point_proxy.dart";
-part "lock_constraint.dart";
-part "material.dart";
-part "point_proxy.dart";
-part "prismatic_constraint.dart";
-part "revolute_constraint.dart";
-part "rotational_spring.dart";
-part "spring.dart";
-part "world.dart";
+part of P2;
 
 class Body extends Phaser.Body {
   /// Local reference to game.
   Phaser.Game game;
 
   /// Local reference to the P2 World.
-  Phaser.P2 system;
+  P2 system;
 
   /// Reference to the parent Sprite.
   Phaser.Sprite sprite;
@@ -535,7 +512,7 @@ class Body extends Phaser.Body {
 
 
 
-  Body(Phaser.Game game, [Phaser.Sprite sprite, num x = 0, num y = 0, num mass = 1]) {
+  Body(Phaser.Game game, [Phaser.Sprite sprite, num x = 0, num y = 0, num mass = 0]) {
 
     this.game = game;
     this.system = game.physics.p2;
@@ -1698,7 +1675,7 @@ class Body extends Phaser.Body {
 
   bool loadPolygon(String key, String object) {
 
-    Map data = this.game.cache.getPhysicsData(key, object);
+    List<Map> data = this.game.cache.getPhysicsData(key, object);
 
     //  We've multiple Convex shapes, they should be CCW automatically
     List cm = p2.vec2.create();
@@ -1706,8 +1683,8 @@ class Body extends Phaser.Body {
     for (int i = 0; i < data.length; i++) {
       List vertices = [];
 
-      for (int s = 0; s < data[i].shape.length; s += 2) {
-        vertices.add([this.system.pxmi(data[i].shape[s]), this.system.pxmi(data[i].shape[s + 1])]);
+      for (int s = 0; s < data[i]['shape'].length; s += 2) {
+        vertices.add([this.system.pxmi(data[i]['shape'][s]), this.system.pxmi(data[i]['shape'][s + 1])]);
       }
 
       p2.Convex c = new p2.Convex(vertices);

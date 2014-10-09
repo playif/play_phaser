@@ -569,17 +569,17 @@ class Cache {
         window.console.warn('Phaser.Cache.getPhysicsData: Invalid key: "' + key + '"');
       }
     } else {
-      if (this._physics[key] && this._physics[key]['data'][object]) {
-        Map fixtures = this._physics[key]['data'][object];
+      if (this._physics.containsKey(key) && this._physics[key]['data'].containsKey(object)) {
+        List<Map> fixtures = this._physics[key]['data'][object];
 
         //try to find a fixture by it's fixture key if given
         if (fixtures != null && fixtureKey != null) {
-          for (var fixture in fixtures.keys) {
+          for (Map fixture in fixtures) {
             //  This contains the fixture data of a polygon or a circle
-            fixture = fixtures[fixture];
+            //fixture = fixtures[fixture];
 
             //  Test the key
-            if (fixture.fixtureKey == fixtureKey) {
+            if (fixture['fixtureKey'] == fixtureKey) {
               return fixture;
             }
 

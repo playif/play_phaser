@@ -1,16 +1,16 @@
-part of Phaser;
+part of Ninja;
 
 class Ninja {
 
   /**
    * @property {Phaser.Game} game - Local reference to game.
    */
-  Game game;
+  Phaser.Game game;
 
   /**
    * @property {Phaser.Time} time - Local reference to game.time.
    */
-  Time time;
+  Phaser.Time time;
 
   /**
    * @property {number} gravity - The World gravity setting.
@@ -20,7 +20,7 @@ class Ninja {
   /**
    * @property {Phaser.Rectangle} bounds - The bounds inside of which the physics world exists. Defaults to match the world bounds.
    */
-  Rectangle bounds;
+  Phaser.Rectangle bounds;
 
   /**
    * @property {number} maxObjects - Used by the QuadTree to set the maximum number of objects per quad.
@@ -35,14 +35,14 @@ class Ninja {
   /**
    * @property {Phaser.QuadTree} quadTree - The world QuadTree.
    */
-  QuadTree quadTree;
+  Phaser.QuadTree quadTree;
 
 
   bool _result = false;
   int _total = 0;
 
 
-  Ninja(Game game) {
+  Ninja(Phaser.Game game) {
     /**
      * @property {Phaser.Game} game - Local reference to game.
      */
@@ -61,7 +61,7 @@ class Ninja {
     /**
      * @property {Phaser.Rectangle} bounds - The bounds inside of which the physics world exists. Defaults to match the world bounds.
      */
-    this.bounds = new Rectangle(0, 0, game.world.width, game.world.height);
+    this.bounds = new Phaser.Rectangle(0, 0, game.world.width, game.world.height);
 
     /**
      * @property {number} maxObjects - Used by the QuadTree to set the maximum number of objects per quad.
@@ -76,7 +76,7 @@ class Ninja {
     /**
      * @property {Phaser.QuadTree} quadTree - The world QuadTree.
      */
-    this.quadTree = new QuadTree(this.game.world.bounds.x, this.game.world.bounds.y, this.game.world.bounds.width, this.game.world.bounds.height, this.maxObjects, this.maxLevels);
+    this.quadTree = new Phaser.QuadTree(this.game.world.bounds.x, this.game.world.bounds.y, this.game.world.bounds.width, this.game.world.bounds.height, this.maxObjects, this.maxLevels);
 
   }
 
@@ -147,7 +147,7 @@ class Ninja {
       int i = object.length;
 
       while (i-- > 0) {
-        if (object[i] is Group) {
+        if (object[i] is Phaser.Group) {
           //  If it's a Group then we do it on the children regardless
           this.enable(object[i].children, type, id, radius, children);
         } else {
@@ -159,7 +159,7 @@ class Ninja {
         }
       }
     } else {
-      if (object is Group) {
+      if (object is Phaser.Group) {
         //  If it's a Group then we do it on the children regardless
         this.enable(object.children, type, id, radius, children);
       } else {
@@ -181,10 +181,10 @@ class Ninja {
    * @param {object} object - The game object to create the physics body on. A body will only be created if this object has a null `body` property.
    */
 
-  enableBody(SpriteInterface object, [int type = 1, int id = 1, num radius = 0]) {
+  enableBody(Phaser.SpriteInterface object, [int type = 1, int id = 1, num radius = 0]) {
 
     if (object.body == null) {
-      object.body = new ninja.Body(this, object, type, id, radius);
+      object.body = new Body(this, object, type, id, radius);
       object.anchor.set(0.5);
     }
 
@@ -226,7 +226,7 @@ class Ninja {
    * @param {number|string|Phaser.TilemapLayer} [layer] - The layer to operate on. If not given will default to map.currentLayer.
    */
 
-  clearTilemapLayerBodies(Tilemap map, layer) {
+  clearTilemapLayerBodies(Phaser.Tilemap map, layer) {
 
     layer = map.getLayer(layer);
 
@@ -260,7 +260,7 @@ class Ninja {
    * @return {array} An array of the Phaser.Physics.Ninja.Tile objects that were created.
    */
 
-  List<Body> convertTilemap(Tilemap map, layer, Map<int, int> slopeMap) {
+  List<Body> convertTilemap(Phaser.Tilemap map, layer, Map<int, int> slopeMap) {
 
     layer = map.getLayer(layer);
 
@@ -271,12 +271,12 @@ class Ninja {
         h = map.layers[layer].height; y < h; y++) {
       for (int x = 0,
           w = map.layers[layer].width; x < w; x++) {
-        Tile tile = map.layers[layer].data[y][x];
+        Phaser.Tile tile = map.layers[layer].data[y][x];
 //        if (tile != null) {
 //          print(tile.index);
 //        }
         if (tile != null && slopeMap.containsKey(tile.index)) {
-          ninja.Body body = new ninja.Body(this, null, 3, slopeMap[tile.index], 0, tile.worldX + tile.centerX, tile.worldY + tile.centerY, tile.width, tile.height);
+          Body body = new Body(this, null, 3, slopeMap[tile.index], 0, tile.worldX + tile.centerX, tile.worldY + tile.centerY, tile.width, tile.height);
 
           map.layers[layer].bodies.add(body);
         }
@@ -302,7 +302,7 @@ class Ninja {
    * @returns {boolean} True if an overlap occured otherwise false.
    */
 
-  bool overlap(GameObject object1, object2, [CollideFunc overlapCallback, ProcessFunc processCallback]) {
+  bool overlap(Phaser.GameObject object1, object2, [Phaser.CollideFunc overlapCallback, Phaser.ProcessFunc processCallback]) {
 
     //overlapCallback = overlapCallback || null;
     //processCallback = processCallback || null;
@@ -341,7 +341,7 @@ class Ninja {
    * @returns {boolean} True if a collision occured otherwise false.
    */
 
-  bool collide(GameObject object1, object2, [CollideFunc collideCallback, ProcessFunc processCallback]) {
+  bool collide(Phaser.GameObject object1, object2, [Phaser.CollideFunc collideCallback, Phaser.ProcessFunc processCallback]) {
 
     //collideCallback = collideCallback || null;
     //processCallback = processCallback || null;
@@ -376,51 +376,51 @@ class Ninja {
    * @param {boolean} overlapOnly - Just run an overlap or a full collision.
    */
 
-  collideHandler(GameObject object1, GameObject object2, [CollideFunc collideCallback,ProcessFunc processCallback, bool overlapOnly]) {
+  collideHandler(Phaser.GameObject object1, Phaser.GameObject object2, [Phaser.CollideFunc collideCallback, Phaser.ProcessFunc processCallback, bool overlapOnly]) {
 
     //  Only collide valid objects
-    if (object2 == null && (object1.type == GROUP || object1.type == EMITTER)) {
+    if (object2 == null && (object1.type == Phaser.GROUP || object1.type == Phaser.EMITTER)) {
       this.collideGroupVsSelf(object1, collideCallback, processCallback, overlapOnly);
       return;
     }
 
     if (object1 != null && object2 != null && object1.exists && object2.exists) {
       //  SPRITES
-      if (object1.type == SPRITE || object1.type == TILESPRITE) {
-        if (object2.type == SPRITE || object2.type == TILESPRITE) {
+      if (object1.type == Phaser.SPRITE || object1.type == Phaser.TILESPRITE) {
+        if (object2.type == Phaser.SPRITE || object2.type == Phaser.TILESPRITE) {
           this.collideSpriteVsSprite(object1, object2, collideCallback, processCallback, overlapOnly);
-        } else if (object2.type == GROUP || object2.type == EMITTER) {
+        } else if (object2.type == Phaser.GROUP || object2.type == Phaser.EMITTER) {
           this.collideSpriteVsGroup(object1, object2, collideCallback, processCallback, overlapOnly);
-        } else if (object2.type == TILEMAPLAYER) {
+        } else if (object2.type == Phaser.TILEMAPLAYER) {
           throw new Expando("Not implement yet!");
           //this.collideSpriteVsTilemapLayer(object1, object2, collideCallback, processCallback);
         }
       } //  GROUPS
-      else if (object1.type == GROUP) {
-        if (object2.type == SPRITE || object2.type == TILESPRITE) {
+      else if (object1.type == Phaser.GROUP) {
+        if (object2.type == Phaser.SPRITE || object2.type == Phaser.TILESPRITE) {
           this.collideSpriteVsGroup(object2, object1, collideCallback, processCallback, overlapOnly);
-        } else if (object2.type == GROUP || object2.type == EMITTER) {
+        } else if (object2.type == Phaser.GROUP || object2.type == Phaser.EMITTER) {
           this.collideGroupVsGroup(object1, object2, collideCallback, processCallback, overlapOnly);
-        } else if (object2.type == TILEMAPLAYER) {
+        } else if (object2.type == Phaser.TILEMAPLAYER) {
           throw new Expando("Not implement yet!");
           //this.collideGroupVsTilemapLayer(object1, object2, collideCallback, processCallback);
         }
       } //  TILEMAP LAYERS
-      else if (object1.type == TILEMAPLAYER) {
-        if (object2.type == SPRITE || object2.type == TILESPRITE) {
+      else if (object1.type == Phaser.TILEMAPLAYER) {
+        if (object2.type == Phaser.SPRITE || object2.type == Phaser.TILESPRITE) {
           throw new Expando("Not implement yet!");
           //this.collideSpriteVsTilemapLayer(object2, object1, collideCallback, processCallback);
-        } else if (object2.type == GROUP || object2.type == EMITTER) {
+        } else if (object2.type == Phaser.GROUP || object2.type == Phaser.EMITTER) {
           throw new Expando("Not implement yet!");
           //this.collideGroupVsTilemapLayer(object2, object1, collideCallback, processCallback);
         }
       } //  EMITTER
-      else if (object1.type == EMITTER) {
-        if (object2.type == SPRITE || object2.type == TILESPRITE) {
+      else if (object1.type == Phaser.EMITTER) {
+        if (object2.type == Phaser.SPRITE || object2.type == Phaser.TILESPRITE) {
           this.collideSpriteVsGroup(object2, object1, collideCallback, processCallback, overlapOnly);
-        } else if (object2.type == GROUP || object2.type == EMITTER) {
+        } else if (object2.type == Phaser.GROUP || object2.type == Phaser.EMITTER) {
           this.collideGroupVsGroup(object1, object2, collideCallback, processCallback, overlapOnly);
-        } else if (object2.type == TILEMAPLAYER) {
+        } else if (object2.type == Phaser.TILEMAPLAYER) {
           throw new Expando("Not implement yet!");
           //this.collideGroupVsTilemapLayer(object1, object2, collideCallback, processCallback);
         }
@@ -435,10 +435,10 @@ class Ninja {
    * @method Phaser.Physics.Ninja#collideSpriteVsSprite
    * @private
    */
- 
-  collideSpriteVsSprite(Sprite sprite1, Sprite sprite2, CollideFunc collideCallback, ProcessFunc processCallback, bool overlapOnly) {
 
-    if (this.separate(sprite1.body as ninja.Body, sprite2.body as ninja.Body)) {
+  collideSpriteVsSprite(Phaser.Sprite sprite1, Phaser.Sprite sprite2, Phaser.CollideFunc collideCallback, Phaser.ProcessFunc processCallback, bool overlapOnly) {
+
+    if (this.separate(sprite1.body as Body, sprite2.body as Body)) {
       if (collideCallback != null) {
         collideCallback(sprite1, sprite2);
       }
@@ -455,7 +455,7 @@ class Ninja {
    * @private
    */
 
-  collideSpriteVsGroup(Sprite sprite, Group group, CollideFunc collideCallback, ProcessFunc processCallback, bool overlapOnly) {
+  collideSpriteVsGroup(Phaser.Sprite sprite, Phaser.Group group, Phaser.CollideFunc collideCallback, Phaser.ProcessFunc processCallback, bool overlapOnly) {
 
     if (group.length == 0) {
       return;
@@ -473,7 +473,7 @@ class Ninja {
     for (var i = 0,
         len = group.children.length; i < len; i++) {
       //  We have our potential suspects, are they in this group?
-      if (group.children[i].exists && group.children[i].body && this.separate(sprite.body as ninja.Body, group.children[i].body as ninja.Body)) {
+      if (group.children[i].exists && group.children[i].body && this.separate(sprite.body as Body, group.children[i].body as Body)) {
         if (collideCallback != null) {
           collideCallback(sprite, group.children[i]);
         }
@@ -491,7 +491,7 @@ class Ninja {
    * @private
    */
 
-  collideGroupVsSelf(Group group, CollideFunc collideCallback, ProcessFunc processCallback, bool overlapOnly) {
+  collideGroupVsSelf(Phaser.Group group, Phaser.CollideFunc collideCallback, Phaser.ProcessFunc processCallback, bool overlapOnly) {
 
     if (group.length == 0) {
       return;
@@ -516,7 +516,7 @@ class Ninja {
    * @private
    */
 
-  collideGroupVsGroup(Group group1, Group group2, CollideFunc collideCallback, ProcessFunc processCallback, overlapOnly) {
+  collideGroupVsGroup(Phaser.Group group1, Phaser.Group group2, Phaser.CollideFunc collideCallback, Phaser.ProcessFunc processCallback, overlapOnly) {
 
     if (group1.length == 0 || group2.length == 0) {
       return;
@@ -540,9 +540,9 @@ class Ninja {
    * @returns {boolean} Returns true if the bodies collided, otherwise false.
    */
 
-  bool separate(ninja.Body body1, ninja.Body body2) {
+  bool separate(Body body1, Body body2) {
 
-    if (body1.type != Physics.NINJA || body2.type != Physics.NINJA) {
+    if (body1.type != Phaser.Physics.NINJA || body2.type != Phaser.Physics.NINJA) {
       return false;
     }
 

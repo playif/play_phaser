@@ -8,11 +8,11 @@ class ninja_impact extends State{
 
   }
 
-  Sprite sprite1;
+  Sprite<ninja.Body> sprite1;
   CursorKeys cursors;
 
-  Sprite tile1;
-  Sprite tile2;
+  Sprite<ninja.Body> tile1;
+  Sprite<ninja.Body> tile2;
 
 
 

@@ -179,7 +179,7 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
 
       if (this.body != null && this.body.type == Physics.P2JS) {
         //TODO
-        (this.body as p2.Body).addToWorld();
+        (this.body as P2.Body).addToWorld();
       }
 
       this.visible = true;

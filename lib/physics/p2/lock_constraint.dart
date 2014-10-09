@@ -4,7 +4,7 @@ class LockConstraint extends p2.LockConstraint {
   /// Local reference to game.
   Phaser.Game game;
   /// Local reference to P2 World.
-  Phaser.P2 world;
+  P2 world;
 
   LockConstraint(world, bodyA, bodyB, offset, angle, maxForce) : super(bodyA, bodyB, localOffsetB: [world.pxm(offset[0]), world.pxm(offset[1])], localAngleB: angle, maxForce: maxForce) {
     if (offset == null) {

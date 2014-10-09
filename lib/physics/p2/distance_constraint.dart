@@ -2,7 +2,7 @@ part of P2;
 
 class DistanceConstraint extends p2.DistanceConstraint {
   Phaser.Game game;
-  Phaser.P2 world;
+  P2 world;
   /**
    * A constraint that tries to keep the distance between two bodies constant.
    *
@@ -17,7 +17,7 @@ class DistanceConstraint extends p2.DistanceConstraint {
    * @param {Array} [localAnchorB] - The anchor point for bodyB, defined locally in bodyB frame. Defaults to [0,0].
    * @param {object} [maxForce=Number.MAX_VALUE] - Maximum force to apply.
    */
-  DistanceConstraint(Phaser.P2 world, p2.Body bodyA, p2.Body bodyB, [num distance=100, List localAnchorA=const [0,0], List localAnchorB=const [0,0], num maxForce=double.MAX_FINITE])
+  DistanceConstraint(P2 world, p2.Body bodyA, p2.Body bodyB, [num distance=100, List localAnchorA=const [0,0], List localAnchorB=const [0,0], num maxForce=double.MAX_FINITE])
   :super(bodyA,bodyB,distance:distance,localAnchorA:localAnchorA,localAnchorB:localAnchorB,maxForce:maxForce) {
     this.game=world.game;
     this.world=world;

@@ -10,8 +10,8 @@ class ninja_aabb_vs_aabb extends State {
 
   }
 
-  Sprite sprite1;
-  Sprite sprite2;
+  Sprite<ninja.Body> sprite1;
+  Sprite<ninja.Body> sprite2;
   Tile tile;
   CursorKeys cursors;
 

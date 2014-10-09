@@ -8,7 +8,7 @@ class p2_02_basic_movement extends State{
 
   }
 
-  Sprite sprite;
+  Sprite<p2.Body> sprite;
   CursorKeys cursors;
 
   create() {
@@ -28,9 +28,8 @@ class p2_02_basic_movement extends State{
     game.physics.p2.enable(sprite);
 
     //  Modify a few body properties
-    p2.Body body=sprite.body;
-    body.setZeroDamping();
-    body.fixedRotation = true;
+    sprite.body.setZeroDamping();
+    sprite.body.fixedRotation = true;
 
     Text text = game.add.text(20, 20, 'move with arrow keys', new TextStyle( fill: '#ffffff' ));
 
@@ -39,8 +38,7 @@ class p2_02_basic_movement extends State{
   }
 
   update() {
-    p2.Body body=sprite.body;
-    body.setZeroVelocity();
+    sprite.body.setZeroVelocity();
 
     if (cursors.left.isDown)
     {

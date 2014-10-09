@@ -1,7 +1,7 @@
 part of P2;
 
 class InversePointProxy extends Phaser.Point {
-  Phaser.P2 world;
+  P2 world;
   List destination;
 
   /**

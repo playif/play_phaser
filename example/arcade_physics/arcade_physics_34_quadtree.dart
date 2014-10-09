@@ -8,7 +8,7 @@ class arcade_physics_34_quadtree extends State {
     game.load.image('baddie', 'assets/sprites/space-baddie.png');
   }
 
-  Sprite ship;
+  Sprite<arcade.Body> ship;
   Group aliens;
   CursorKeys cursors;
 
@@ -23,7 +23,7 @@ class arcade_physics_34_quadtree extends State {
     aliens.enableBody = true;
 
     for (var i = 0; i < 200; i++) {
-      Sprite s = aliens.create(game.world.randomX, game.world.randomY, 'baddie');
+      Sprite<arcade.Body> s = aliens.create(game.world.randomX, game.world.randomY, 'baddie');
       s.scale.set(1);
       s.body.collideWorldBounds = true;
       s.body.bounce.set(1);

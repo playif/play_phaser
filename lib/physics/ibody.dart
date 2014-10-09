@@ -25,7 +25,7 @@ abstract class Body extends Rectangle {
   bool collideWorldBounds;
   var bounce;
   int type;
-  updateBounds();
+  //updateBounds();
   num angularVelocity;
   Point gravity;
   var drag;
@@ -45,15 +45,15 @@ abstract class Body extends Rectangle {
   bool safeRemove;
   
   setSize(num x, num y, num width, num height);
-  onFloor();
+  //onFloor();
   reset(num x, num y, [bool a1, bool a2]);
   destroy();
   addToWorld();
   removeFromWorld();
   postUpdate();
   preUpdate();
-  render(CanvasRenderingContext2D context, [String color='rgba(0,255,0,0.4)', bool filled=true]);
-  renderBodyInfo(Debug debug);
+  //render(CanvasRenderingContext2D context, [String color='rgba(0,255,0,0.4)', bool filled=true]);
+  //renderBodyInfo(Debug debug);
   
   CollisionInfo touching;
 

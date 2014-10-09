@@ -3,11 +3,11 @@ part of P2;
 class PointProxy {
 
   /// Local reference to the P2 World.
-  Phaser.P2 world;
+  P2 world;
   
   List destination;
 
-  PointProxy(Phaser.P2 world, List destination) {
+  PointProxy(P2 world, List destination) {
     this.world = world;
     this.destination = destination;
   }
