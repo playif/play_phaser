@@ -122,25 +122,6 @@ class basic_01_load_an_image extends State {
 
 
 
-```
-
-The number of examples for each class.
-
-* animation * 4
-* arcade physics
-* audio * 2
-* basics * 5
-* camera * 3
-* display * 5
-* games * 7
-* input
-* loader
-* ninja physics * 4
-* particles
-* sprite * 2
-* tile maps * 2
-* tweens
-
 Change log
 ==========
 0.11.0 
