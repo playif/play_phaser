@@ -94,7 +94,7 @@ class RequestAnimationFrame {
 
     //print(time);
 
-    this.game.update(new DateTime.now().millisecondsSinceEpoch.toDouble());
+    this.game.update(new DateTime.now().millisecondsSinceEpoch);
 
     this._timeOutID = window.requestAnimationFrame(this._onLoop);
 

@@ -125,8 +125,11 @@ class basic_01_load_an_image extends State {
 Change log
 ==========
 0.11.0 
- * Add P2.js
+ * Add P2.js (with some examples)
  * Update to Phaser 2.1.1
+ * Add a Rope example.
+ * Fix a text bug (thanks to [#9](https://github.com/playif/play_phaser/issues/9)
+ 
 
 0.10.3
  * Fix Rectangle class centerY getter has a typo! (thanks to [#8](https://github.com/playif/play_phaser/issues/8)).

@@ -30,7 +30,7 @@ class Tween {
    * @private
    * @default
    */
-  double _duration = 1000.0;
+  num _duration = 1000.0;
 
   /**
    * @property {number} _repeat - Private repeat counter.
@@ -65,7 +65,7 @@ class Tween {
    * @private
    * @default null
    */
-  double _startTime = null;
+  num _startTime = null;
 
   /**
    * @property {function} _easingFunction - The easing function used for the tween.
@@ -118,7 +118,7 @@ class Tween {
    * @private
    * @default
    */
-  double _pausedTime = 0.0;
+  num _pausedTime = 0.0;
 
   /**
    * @property {boolean} _codePaused - Was the Tween paused by code or by Game focus loss?

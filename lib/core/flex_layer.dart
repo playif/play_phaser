@@ -22,7 +22,22 @@ part of Phaser;
  * @param {Phaser.Point} scale - A reference to the Point object used for layer scaling.
  */
 class FlexLayer extends Group {
-  FlexLayer(manager, position, bounds, scale) {
+  ScaleManager manager;
+  bool persist;
+  FlexGrid grid;
+  Rectangle bounds;
+  Point scale;
+
+  Point topLeft;
+  Point topMiddle;
+  Point topRight;
+
+  Point bottomLeft;
+  Point bottomMiddle;
+  Point bottomRight;
+
+  FlexLayer(FlexGrid manager, Point position, Rectangle bounds, Point scale)
+      : super(manager.game, null, '__flexLayer' + manager.game.rnd.uuid(), false) {
 
     //Group.call(this, manager.game, null, '__flexLayer' + manager.game.rnd.uuid(), false);
 
@@ -49,11 +64,11 @@ class FlexLayer extends Group {
     this.scale = scale;
 
     this.topLeft = bounds.topLeft;
-    this.topMiddle = new Phaser.Point(bounds.halfWidth, 0);
+    this.topMiddle = new Point(bounds.halfWidth, 0);
     this.topRight = bounds.topRight;
 
     this.bottomLeft = bounds.bottomLeft;
-    this.bottomMiddle = new Phaser.Point(bounds.halfWidth, bounds.bottom);
+    this.bottomMiddle = new Point(bounds.halfWidth, bounds.bottom);
     this.bottomRight = bounds.bottomRight;
 
   }
@@ -63,7 +78,7 @@ class FlexLayer extends Group {
 
   debug() {
 
-    this.game.debug.text(this.bounds.width + ' x ' + this.bounds.height, this.bounds.x + 4, this.bounds.y + 16);
+    this.game.debug.text(this.bounds.width.toString()  + ' x ' + this.bounds.height.toString() , this.bounds.x + 4, this.bounds.y + 16);
     this.game.debug.geom(this.bounds, 'rgba(0,0,255,0.9', false);
 
     this.game.debug.geom(this.topLeft, 'rgba(255,255,255,0.9');

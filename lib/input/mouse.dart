@@ -293,32 +293,32 @@ class Mouse {
 
     var _this = this;
 
-    this._onMouseDown = (event) {
+    this._onMouseDown = (MouseEvent event) {
       return _this.onMouseDown(event);
     };
 
-    this._onMouseMove = (event) {
+    this._onMouseMove = (MouseEvent event) {
       return _this.onMouseMove(event);
     };
 
-    this._onMouseUp = (event) {
+    this._onMouseUp = (MouseEvent event) {
       return _this.onMouseUp(event);
     };
 
-    this._onMouseUpGlobal = (event) {
+    this._onMouseUpGlobal = (MouseEvent event) {
       return _this.onMouseUpGlobal(event);
     };
 
 
-    this._onMouseOut = (event) {
+    this._onMouseOut = (MouseEvent event) {
       return _this.onMouseOut(event);
     };
 
-    this._onMouseOver = (event) {
+    this._onMouseOver = (MouseEvent event) {
       return _this.onMouseOver(event);
     };
 
-    this._onMouseWheel = (event) {
+    this._onMouseWheel = (MouseEvent event) {
       return _this.onMouseWheel(event);
     };
 
@@ -346,7 +346,7 @@ class Mouse {
    * @param {MouseEvent} event - The native event from the browser. This gets stored in Mouse.event.
    */
 
-  onMouseDown(event) {
+  onMouseDown(MouseEvent event) {
 
     this.event = event;
 
@@ -404,7 +404,7 @@ class Mouse {
    * @param {MouseEvent} event - The native event from the browser. This gets stored in Mouse.event.
    */
 
-  onMouseUp(event) {
+  onMouseUp(MouseEvent event) {
 
     this.event = event;
 
@@ -427,31 +427,29 @@ class Mouse {
     this.game.input.mousePointer.stop(event);
 
   }
-  
+
   /**
       * The internal method that handles the mouse up event from the window.
       * 
       * @method Phaser.Mouse#onMouseUpGlobal
       * @param {MouseEvent} event - The native event from the browser. This gets stored in Mouse.event.
       */
-      onMouseUpGlobal (event) {
+  onMouseUpGlobal(MouseEvent event) {
 
-          if (!this.game.input.mousePointer.withinGame)
-          {
-              this.button = Mouse.NO_BUTTON;
+    if (!this.game.input.mousePointer.withinGame) {
+      this.button = Mouse.NO_BUTTON;
 
-              if (this.mouseUpCallback != null)
-              {
-                  this.mouseUpCallback(event);
-              }
-
-              event['identifier'] = 0;
-
-              this.game.input.mousePointer.stop(event);
-          }
-
+      if (this.mouseUpCallback != null) {
+        this.mouseUpCallback(event);
       }
-  
+
+      //event.id['identifier'] = 0;
+
+      this.game.input.mousePointer.stop(event);
+    }
+
+  }
+
 
   /**
    * The internal method that handles the mouse out event from the browser.
@@ -460,14 +458,14 @@ class Mouse {
    * @param {MouseEvent} event - The native event from the browser. This gets stored in Mouse.event.
    */
 
-  onMouseOut(event) {
+  onMouseOut(MouseEvent event) {
 
     this.event = event;
 
     if (this.capture) {
       event.preventDefault();
     }
-    
+
     this.game.input.mousePointer.withinGame = false;
 
     if (this.mouseOutCallback != null) {
@@ -522,14 +520,14 @@ class Mouse {
    * @param {MouseEvent} event - The native event from the browser. This gets stored in Mouse.event.
    */
 
-  onMouseOver(event) {
+  onMouseOver(MouseEvent event) {
 
     this.event = event;
 
     if (this.capture) {
       event.preventDefault();
     }
-    
+
     this.game.input.mousePointer.withinGame = true;
 
     if (this.mouseOverCallback != null) {
@@ -623,7 +621,7 @@ class Mouse {
     this.game.canvas.removeEventListener('mouseout', this._onMouseOut, true);
     this.game.canvas.removeEventListener('mousewheel', this._onMouseWheel, true);
     this.game.canvas.removeEventListener('DOMMouseScroll', this._onMouseWheel, true);
-    
+
     window.removeEventListener('mouseup', this._onMouseUpGlobal, true);
 
     document.removeEventListener('pointerlockchange', this._pointerLockChange, true);

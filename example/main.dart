@@ -56,6 +56,8 @@ part "camera/camera_03_camera_view.dart";
 part "tilemaps/tilemaps_01_blank_map.dart";
 part "tilemaps/tilemaps_16_tilemap_ray_cast.dart";
 
+part "rope/rope_01_demo.dart";
+
 part "sprites/sprites_06_dynamic_crop.dart";
 part "sprites/sprites_09_horizontal_crop.dart";
 
@@ -140,6 +142,7 @@ Map<String, State> examples = {
     "sprites_06_dynamic_crop": new sprites_06_dynamic_crop(),
     "sprites_09_horizontal_crop": new sprites_09_horizontal_crop(),
 
+    "rope_01_demo": new rope_01_demo(),
 
     "display_01_alpha_mask":new display_01_alpha_mask(),
     "display_02_bitmapdata_atlas":new display_02_bitmapdata_atlas(),
@@ -201,7 +204,7 @@ main() {
   });
   //print("start 1");
   //game.state.add("games_02_gemmatch", new games_03_invaders());
-  game.state.start("p2_21_pick_up_object");
+  game.state.start("basic_01_load_an_image");
 
   //game.canvas.style.cursor = "pointer";
   //game.boot();

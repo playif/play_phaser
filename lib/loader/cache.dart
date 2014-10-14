@@ -328,9 +328,9 @@ class Cache {
       'url': null,
       'data': img
     };
-    this._images['__default'].frame = new Frame(0, 0, 0, 32, 32, '', '');
-    this._images['__default'].frameData = new FrameData();
-    this._images['__default'].frameData.addFrame(new Frame(0, 0, 0, 32, 32, null, this.game.rnd.uuid()));
+    this._images['__default']['frame'] = new Frame(0, 0, 0, 32, 32, '', '');
+    this._images['__default']['frameData'] = new FrameData();
+    this._images['__default']['frameData'].addFrame(new Frame(0, 0, 0, 32, 32, null, this.game.rnd.uuid()));
 
     PIXI.BaseTextureCache['__default'] = new PIXI.BaseTexture(img);
     PIXI.TextureCache['__default'] = new PIXI.Texture(PIXI.BaseTextureCache['__default']);
@@ -357,9 +357,9 @@ class Cache {
       'url': null,
       'data': img
     };
-    this._images['__missing'].frame = new Frame(0, 0, 0, 32, 32, '', '');
-    this._images['__missing'].frameData = new FrameData();
-    this._images['__missing'].frameData.addFrame(new Frame(0, 0, 0, 32, 32, null, this.game.rnd.uuid()));
+    this._images['__missing']['frame'] = new Frame(0, 0, 0, 32, 32, '', '');
+    this._images['__missing']['frameData'] = new FrameData();
+    this._images['__missing']['frameData'].addFrame(new Frame(0, 0, 0, 32, 32, null, this.game.rnd.uuid()));
     PIXI.BaseTextureCache['__missing'] = new PIXI.BaseTexture(img);
     PIXI.TextureCache['__missing'] = new PIXI.Texture(PIXI.BaseTextureCache['__missing']);
   }
@@ -413,8 +413,8 @@ class Cache {
     };
 
     this._images[key]['frame'] = new Frame(0, 0, 0, data.width, data.height, key, this.game.rnd.uuid());
-    this._images[key].frameData = new FrameData();
-    this._images[key].frameData.addFrame(new Frame(0, 0, 0, data.width, data.height, url, this.game.rnd.uuid()));
+    this._images[key]['frameData'] = new FrameData();
+    this._images[key]['frameData'].addFrame(new Frame(0, 0, 0, data.width, data.height, url, this.game.rnd.uuid()));
     PIXI.BaseTextureCache[key] = new PIXI.BaseTexture(data);
     PIXI.TextureCache[key] = new PIXI.Texture(PIXI.BaseTextureCache[key]);
   }

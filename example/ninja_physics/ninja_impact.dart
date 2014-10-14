@@ -71,4 +71,9 @@ class ninja_impact extends State{
     }
 
   }
+  
+  shutdown(){
+    game.stage.backgroundColor = 0x000000;
+  }
+  
 }

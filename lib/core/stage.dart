@@ -164,11 +164,11 @@ class Stage extends PIXI.Stage implements GameObject {
   */
   parseConfig(Map config) {
 
-    if (config['disableVisibilityChange']) {
+    if (config.containsKey('disableVisibilityChange')) {
       this.disableVisibilityChange = config['disableVisibilityChange'];
     }
 
-    if (config['backgroundColor']) {
+    if (config.containsKey('backgroundColor')) {
       this.backgroundColor = config['backgroundColor'];
     }
 

@@ -141,6 +141,7 @@ class games_07_tanks extends State {
 
     //  This will force it to decelerate and limit its speed
     game.physics.enable(tank, Physics.ARCADE);
+    game.physics.arcade.gravity.y = 0;
     tank.body.drag.set(0.2);
     tank.body.maxVelocity.setTo(400, 400);
     tank.body.collideWorldBounds = true;

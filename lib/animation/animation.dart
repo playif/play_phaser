@@ -1,5 +1,7 @@
 part of Phaser;
 
+typedef AnimationUpdateFunc(Animation anim, Frame frame);
+
 class Animation {
   /// A reference to the currently running [Game].
   Game game;
@@ -56,10 +58,10 @@ class Animation {
   Signal<AnimationFunc> onLoop;
 
   /// This event is dispatched when the Animation changes frame. By default this event is disabled due to its intensive nature. Enable it with: `Animation.enableUpdate = true`.
-  Signal<AnimationFunc> onUpdate;
+  Signal<AnimationUpdateFunc> onUpdate;
 
-  double _timeLastFrame;
-  double _timeNextFrame;
+  num _timeLastFrame;
+  num _timeNextFrame;
 
   /// Gets and sets the paused state of this [Animation].
 
@@ -99,7 +101,7 @@ class Animation {
       this._parent.setFrame(this.currentFrame);
 
       if (this.onUpdate != null) {
-        this.onUpdate.dispatch(this.currentFrame);
+        this.onUpdate.dispatch([this, this.currentFrame]);
       }
     }
   }
@@ -190,7 +192,7 @@ class Animation {
     this._frameIndex = 0;
 
     this.currentFrame = this._frameData.getFrame(this._frames[this._frameIndex]);
-    this._parent.setTexture(PIXI.TextureCache[this.currentFrame.uuid]);
+    //this._parent.setTexture(PIXI.TextureCache[this.currentFrame.uuid]);
 
     //  TODO: Double check if required
     if (this._parent.__tilePattern != null) {
@@ -334,38 +336,32 @@ class Animation {
         if (this.loop) {
           this._frameIndex %= this._frames.length;
           this.currentFrame = this._frameData.getFrame(this._frames[this._frameIndex]);
-
-          if (this.currentFrame != null) {
-            this._parent.setTexture(PIXI.TextureCache[this.currentFrame.uuid]);
-
-            if (this._parent.__tilePattern != null) {
-              this._parent.__tilePattern = null;
-              this._parent.tilingTexture = null;
-            }
-          }
-
+          
           this.loopCount++;
           this._parent.events.onAnimationLoop.dispatch([this._parent, this]);
           this.onLoop.dispatch([this._parent, this]);
         } else {
           this.complete();
-        }
-      } else {
-        this.currentFrame = this._frameData.getFrame(this._frames[this._frameIndex]);
-
-        if (this.currentFrame != null) {
-          this._parent.setTexture(PIXI.TextureCache[this.currentFrame.uuid]);
-
-          if (this._parent.__tilePattern != null) {
-            this._parent.__tilePattern = null;
-            this._parent.tilingTexture = null;
-          }
-
-          if (this.onUpdate != null) {
-            this.onUpdate.dispatch(this.currentFrame);
-          }
+          return false;
         }
       }
+
+      this.currentFrame = this._frameData.getFrame(this._frames[this._frameIndex]);
+
+      if (this.currentFrame != null) {
+        this._parent.setFrame(this.currentFrame);
+        //this._parent.setTexture(PIXI.TextureCache[this.currentFrame.uuid]);
+
+        if (this._parent.__tilePattern != null) {
+          this._parent.__tilePattern = null;
+          this._parent.tilingTexture = null;
+        }
+
+        if (this.onUpdate != null) {
+          this.onUpdate.dispatch([this, this.currentFrame]);
+        }
+      }
+
 
       return true;
     }
@@ -403,7 +399,7 @@ class Animation {
       }
 
       if (this.onUpdate != null) {
-        this.onUpdate.dispatch(this.currentFrame);
+        this.onUpdate.dispatch([this, this.currentFrame]);
       }
     }
   }
@@ -437,7 +433,7 @@ class Animation {
       }
 
       if (this.onUpdate != null) {
-        this.onUpdate.dispatch(this.currentFrame);
+        this.onUpdate.dispatch([this, this.currentFrame]);
       }
 
     }

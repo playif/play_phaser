@@ -6,7 +6,7 @@ class Game {
   /// The calculated game height in pixels.
   num height;
   PIXI.Renderer renderer;
-  String parent;
+  var parent;
   StateManager state;
   bool transparent;
   bool antialias;
@@ -665,7 +665,7 @@ class Game {
    * @param {number} time - The current time as provided by RequestAnimationFrame.
    */
 
-  update(double time) {
+  update(num time) {
 
     this.time.update(time);
 

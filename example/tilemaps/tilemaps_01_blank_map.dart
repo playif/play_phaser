@@ -53,7 +53,7 @@ class tilemaps_01_blank_map extends State{
     //  Create our tile selector at the top of the screen
     createTileSelector();
 
-    game.input.setMoveCallback(updateMarker);
+    game.input.addMoveCallback(updateMarker);
 
     cursors = game.input.keyboard.createCursorKeys();
 
@@ -105,11 +105,11 @@ class tilemaps_01_blank_map extends State{
 
   pickTile(sprite, pointer) {
 
-    currentTile = Math.snapToFloor(pointer.x, 32) / 32;
+    currentTile = Math.snapToFloor(pointer.x, 32) ~/ 32;
 
   }
 
-  updateMarker(Pointer p, num x, num y) {
+  updateMarker(num x, num y,bool fromClick) {
 
     marker.x = currentLayer.getTileX(game.input.activePointer.worldX) * 32;
     marker.y = currentLayer.getTileY(game.input.activePointer.worldY) * 32;

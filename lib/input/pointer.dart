@@ -40,20 +40,20 @@ class Pointer {
   bool isOver;
   bool isOut;
 
-  double timeOver;
-  double timeOut;
-  double timeDown;
-  double timeUp;
+  num timeOver;
+  num timeOut;
+  num timeDown;
+  num timeUp;
 
-  double downDuration;
+  num downDuration;
 
   bool isDragged;
 
-  double previousTapTime;
+  num previousTapTime;
   int totalTouches;
 
   //TODO
-  double msSinceLastClick = 999999999.0;
+  num msSinceLastClick = 999999999.0;
 
   InputHandler targetObject;
 
@@ -74,7 +74,7 @@ class Pointer {
       */
   bool dirty = false;
 
-  double get duration {
+  num get duration {
     if (this.isUp) {
       return -1.0;
     }

@@ -316,7 +316,7 @@ class Debug {
     * @param {string} [color] - Color of the debug info to be rendered (format is css color string).
     * @param {boolean} [filled=true] - Render the rectangle as a fillRect (default, true) or a strokeRect (false)
     */
-  ropeSegments(Rope rope, String color, [bool filled = true]) {
+  ropeSegments(Rope rope, [String color, bool filled = true]) {
     List<Rectangle> segments = rope.segments;
     segments.forEach((Rectangle segment) {
       this.rectangle(segment, color, filled);
@@ -610,6 +610,9 @@ class Debug {
     //if (typeof filled == 'undefined') { filled = true; }
 
     //color = color || 'rgba(0, 255, 0, 0.4)';
+    if(color == null){
+      color = 'rgba(0, 255, 0, 0.4)';
+    }
 
     this.start();
 

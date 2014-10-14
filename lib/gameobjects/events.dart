@@ -11,7 +11,7 @@ typedef void InputUpFunc(GameObject object, Pointer pointer, bool isOver);
 
 typedef void GroupFunc(GameObject object, Group group);
 
-typedef void AnimationFunc(GameObject object, Animation animation);
+typedef void AnimationFunc(GameObject object,Animation animation);
 
 /// The Events component is a collection of events fired by the parent [GameObject].
 class Events {

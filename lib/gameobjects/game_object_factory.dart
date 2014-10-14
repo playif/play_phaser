@@ -202,7 +202,7 @@ class GameObjectFactory {
       * @param {Phaser.Group} [group] - Optional Group to add the object to. If not specified it will be added to the World group.
       * @return {Phaser.TileSprite} The newly created tileSprite object.
       */
-  Rope rope(num x, num y, key, frame, List points, Group group) {
+  Rope rope(num x, num y, key, frame, List points, [Group group]) {
     if (group == null) {
       group = this.world;
     }

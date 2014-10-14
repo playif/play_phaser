@@ -110,13 +110,22 @@ class Rectangle extends PIXI.Rectangle {
   */
   //Object.defineProperty(Phaser.Rectangle.prototype, "topRight", {
 
-  get topRight {
+  Point get topRight {
     return new Point(this.x + this.width, this.y);
   }
 
   set topRight(value) {
     this.right = value.x;
     this.y = value.y;
+  }
+
+  Point get bottomLeft {
+    return new Point(this.x, this.y + this.height);
+  }
+
+  set bottomLeft(Point value) {
+    this.x = value.x;
+    this.bottom = value.y;
   }
 
   //});
@@ -412,8 +421,12 @@ class Rectangle extends PIXI.Rectangle {
    * @return {string} A string representation of the instance.
    */
 
-  toString() {
-    return "[{Rectangle (x=${this.x} y=${this.y} width=${this.width} height=${this.height} empty=${this.empty})}]";
+//  toString() {
+//    return "[{Rectangle (x=${this.x} y=${this.y} width=${this.width} height=${this.height} empty=${this.empty})}]";
+//  }
+
+  factory Rectangle.fromRect(source) {
+    return new Rectangle(source.x, source.y, source.width, source.height);
   }
 
 }

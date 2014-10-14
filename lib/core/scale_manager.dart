@@ -537,14 +537,14 @@ class ScaleManager {
   }
 
   parseConfig(Map config) {
-    if (config['scaleMode']) {
+    if (config.containsKey('scaleMode')) {
       this.scaleMode = config['scaleMode'];
     }
-    if (config['fullScreenScaleMode']) {
+    if (config.containsKey('fullScreenScaleMode')) {
       this.fullScreenScaleMode = config['fullScreenScaleMode'];
     }
 
-    if (config['fullScreenTarget']) {
+    if (config.containsKey('fullScreenTarget')) {
       this.fullScreenTarget = config['fullScreenTarget'];
     }
 
@@ -559,7 +559,7 @@ class ScaleManager {
       */
   setupScale(num width, num height) {
 
-    var target;
+    HtmlElement target;
     var rect = new Rectangle();
 
     if (this.game.parent != '') {
@@ -573,7 +573,7 @@ class ScaleManager {
     }
 
     // Fallback, covers an invalid ID and a non HTMLelement object
-    if (!target) {
+    if (target == null) {
       //  Use the full window
       this.parentNode = null;
       this.parentIsWindow = true;

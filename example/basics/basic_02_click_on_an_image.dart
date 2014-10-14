@@ -33,12 +33,12 @@ class basic_02_click_on_an_image extends State {
     image.events.onInputDown.add(listener);
 
 
-    text = game.add.text(250, 16, 'Please click the image below:', new TextStyle(fill: '#ffffff'));
+    text = game.add.text(250, 22, 'Please click the image below:', new TextStyle(fill: '#ffffff'));
 
   }
 
   update() {
-    image.rotation += 0.1;
+    image.rotation += 0.01;
   }
 
   listener(Sprite s, Pointer p) {

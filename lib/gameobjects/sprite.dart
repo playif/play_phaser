@@ -206,7 +206,7 @@ class Sprite<T extends Body> extends PIXI.Sprite implements GameObject, SpriteIn
   bool get destroyPhase {
     return this._cache[8] == 1;
   }
-  
+
   bool get fresh => _cache[4] == 1;
 
   bool _outOfBoundsFired = false;
@@ -325,6 +325,7 @@ class Sprite<T extends Body> extends PIXI.Sprite implements GameObject, SpriteIn
      */
     this._bounds = new Rectangle();
 
+    this.loadTexture(key, frame);
   }
 
   preUpdate() {
@@ -546,6 +547,8 @@ class Sprite<T extends Body> extends PIXI.Sprite implements GameObject, SpriteIn
       this.texture.height = frame.sourceSizeH;
       this.texture.frame.width = frame.sourceSizeW;
       this.texture.frame.height = frame.sourceSizeH;
+    } else if (!frame.trimmed && this.texture.trim != null) {
+      this.texture.trim = null;
     }
 
     if (this.cropRect != null) {
@@ -723,7 +726,7 @@ class Sprite<T extends Body> extends PIXI.Sprite implements GameObject, SpriteIn
     }
 
     this._cache[8] = 1;
-    
+
     if (this.events != null) {
       this.events.onDestroy.dispatch(this);
     }

@@ -54,7 +54,7 @@ class Rope extends PIXI.Rope implements GameObject, AnimationInterface {
   Rectangle _currentBounds;
 
   List _cache;
-  Point anchor;
+  Point anchor=new Point();
   Point cameraOffset;
   bool autoCull;
   bool alive;
@@ -62,7 +62,7 @@ class Rope extends PIXI.Rope implements GameObject, AnimationInterface {
   Body body;
   
   Rope(Game game, [num x = 0, num y = 0, key, frame, List points])
-      : super(key, points) {
+      : super(null, points) {
 
 //  this.points = [];
     this.points = points;
@@ -225,8 +225,8 @@ class Rope extends PIXI.Rope implements GameObject, AnimationInterface {
   preUpdate() {
     if (this._cache[4] == 1 && this.exists) {
       this.world.setTo(this.parent.position.x + this.position.x, this.parent.position.y + this.position.y);
-      this.worldTransform.tx = this.world.x;
-      this.worldTransform.ty = this.world.y;
+      this.worldTransform.tx = this.world.x.toDouble();
+      this.worldTransform.ty = this.world.y.toDouble();
       this._cache[0] = this.world.x;
       this._cache[1] = this.world.y;
       this._cache[2] = this.rotation;
@@ -310,7 +310,7 @@ class Rope extends PIXI.Rope implements GameObject, AnimationInterface {
  */
   update() {
     if (this._hasUpdateAnimation) {
-      this.updateAnimation.call(this);
+      this.updateAnimation();
     }
 
   }
@@ -797,8 +797,11 @@ class Rope extends PIXI.Rope implements GameObject, AnimationInterface {
   List<Rectangle> get segments {
     var segments = [];
     var index, x1, y1, x2, y2, width, height, rect;
-    for (var i = 0; i < this.points.length; i++) {
+    for (int i = 0; i < this.points.length; i++) {
       index = i * 4;
+      if (index + 4 >= this.verticies.length){
+        break;
+      }
       x1 = this.verticies[index];
       y1 = this.verticies[index + 1];
       x2 = this.verticies[index + 4];

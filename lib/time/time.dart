@@ -4,7 +4,7 @@ class Time {
   Game game;
   num time=0.0;
   num now=0.0;
-  num elapsed= 1 / 60 * 1000;
+  num elapsed= 0;
   num pausedTime=0.0;
   bool advancedTiming=false;
 
@@ -59,19 +59,19 @@ class Time {
    * @property {number} _started - The time at which the Game instance started.
    * @private
    */
-  double _started = 0.0;
+  num _started = 0.0;
 
   /**
    * @property {number} _timeLastSecond - The time (in ms) that the last second counter ticked over.
    * @private
    */
-  double _timeLastSecond = 0.0;
+  num _timeLastSecond = 0.0;
 
   /**
    * @property {number} _pauseStarted - The time the game started being paused.
    * @private
    */
-  double _pauseStarted = 0.0;
+  num _pauseStarted = 0.0;
 
   /**
    * @property {boolean} _justResumed - Internal value used to recover from the game pause state.
@@ -168,7 +168,7 @@ class Time {
    * @protected
    * @param {number} time - The current timestamp.
    */
-  update (double time) {
+  update (num time) {
 
     this.now = time;
 
@@ -182,7 +182,7 @@ class Time {
       //  For some reason the time between now and the last time the game was updated was larger than our timeCap
       //  This can happen if the Stage.disableVisibilityChange is true and you swap tabs, which makes the raf pause.
       //  In this case we'll drop to some default values to stop the game timers going nuts.
-      this.elapsed = 1 / 60;
+      this.elapsed = this.timeCap;
     }
 
     //  Calculate physics elapsed, ensure it's > 0, use 1/60 as a fallback

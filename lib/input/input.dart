@@ -1,7 +1,7 @@
 part of Phaser;
 
 typedef void PointerFunc(Pointer point, event);
-
+typedef void MoveFunc(num x, num y, bool fromClick);
 class Input {
 
 
@@ -475,22 +475,22 @@ class Input {
 
   }
 
-  /**
-   * DEPRECATED: This method will be removed in a future major point release. Please use Input.addMoveCallback instead.
-   *
-   * Sets a callback that is fired every time the activePointer receives a DOM move event such as a mousemove or touchmove.
-   * It will be called every time the activePointer moves, which in a multi-touch game can be a lot of times, so this is best
-   * to only use if you've limited input to a single pointer (i.e. mouse or touch)
-   *
-   * @method Phaser.Input#setMoveCallback
-   * @param {function} callback - The callback that will be called each time the activePointer receives a DOM move event.
-   * @param {object} callbackContext - The context in which the callback will be called.
-   */
-
-  setMoveCallback(Function callback) {
-    this.moveCallback = callback;
-    //this.moveCallbackContext = callbackContext;
-  }
+//  /**
+//   * DEPRECATED: This method will be removed in a future major point release. Please use Input.addMoveCallback instead.
+//   *
+//   * Sets a callback that is fired every time the activePointer receives a DOM move event such as a mousemove or touchmove.
+//   * It will be called every time the activePointer moves, which in a multi-touch game can be a lot of times, so this is best
+//   * to only use if you've limited input to a single pointer (i.e. mouse or touch)
+//   *
+//   * @method Phaser.Input#setMoveCallback
+//   * @param {function} callback - The callback that will be called each time the activePointer receives a DOM move event.
+//   * @param {object} callbackContext - The context in which the callback will be called.
+//   */
+//
+//  setMoveCallback(Function callback) {
+//    this.moveCallback = callback;
+//    //this.moveCallbackContext = callbackContext;
+//  }
 
   /**
    * Adds a callback that is fired every time the activePointer receives a DOM move event such as a mousemove or touchmove.
@@ -504,7 +504,7 @@ class Input {
    * @return {number} The index of the callback entry. Use this index when calling Input.deleteMoveCallback.
    */
 
-  int addMoveCallback(Function callback) {
+  int addMoveCallback(MoveFunc callback) {
     this.moveCallbacks.add({
       'callback': callback
     });
@@ -664,7 +664,7 @@ class Input {
    * @param {number} y - Sets the oldPosition.y value.
    */
 
-  resetSpeed(double x, double y) {
+  resetSpeed(num x, num y) {
 
     this._oldPosition.setTo(x, y);
     this.speed.setTo(0, 0);

@@ -11,6 +11,8 @@ class p2_01_accelerate_to_object extends State {
   Sprite<p2.Body> ship;
 
   create() {
+    game.world.setBounds(0, 0, 800, 600);
+    
     game.physics.startSystem(Physics.P2JS, gravity: [0, 0]);
     bullets = game.add.group();
     for (var i = 0; i < 10; i++) {

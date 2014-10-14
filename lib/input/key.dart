@@ -14,9 +14,9 @@ class Key {
   bool altKey;
   bool ctrlKey;
   bool shiftKey;
-  double timeDown;
-  double duration;
-  double timeUp;
+  num timeDown;
+  num duration;
+  num timeUp;
   int repeats;
   int keyCode;
   Signal<KeyFunc> onDown = new Signal();

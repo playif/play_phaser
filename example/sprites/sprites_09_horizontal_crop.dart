@@ -9,6 +9,8 @@ class sprites_09_horizontal_crop extends State{
   Rectangle cropRect;
 
   create() {
+    game.world.setBounds(0, 0, 800, 600);
+
 
     pic = game.add.sprite(game.world.centerX, 550, 'trsi');
 

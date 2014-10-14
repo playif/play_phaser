@@ -23,7 +23,7 @@ class Image extends PIXI.Sprite implements GameObject, SpriteInterface, Animatio
   }
 
   Rectangle cropRect;
-  Rectangle _frame;
+  var _frame;
 
   List _cache;
   Rectangle _crop;
@@ -451,7 +451,7 @@ class Image extends PIXI.Sprite implements GameObject, SpriteInterface, Animatio
     
     if (setFrame)
     {
-        this._frame = this.texture.frame.clone();
+        this._frame = new Rectangle.fromRect(this.texture.frame);
     }
 
     if (!smoothed)
@@ -883,17 +883,17 @@ bringToTop ([GameObject obj]) {
 */
 //Object.defineProperty(Phaser.Image.prototype, "frame", {
 
-    num get frame{
+    get frame{
         return this._frame;
     }
 
-    set frame(num value) {
+    set frame(value) {
 
         if (value != this.frame)
         {
             var frameData = this.game.cache.getFrameData(this.key);
 
-            if (frameData && value < frameData.total && frameData.getFrame(value))
+            if (frameData!= null && value < frameData.total && frameData.getFrame(value) != null)
             {
                 this.setTexture(PIXI.TextureCache[frameData.getFrame(value).uuid]);
                 this._frame = value;

@@ -58,8 +58,7 @@ class p2_05_chain extends State {
 
     }
 
-    move(double x, double y) {
-      print("Move");
+    move(num x, num y, bool fromClick) {
       // p2 uses different coordinate system, so convert the pointer position to p2's coordinate system
       //mouseBody.position = new Point(game.physics.p2.pxmi(x), game.physics.p2.pxmi(y));
       mouseBody.x = x;

@@ -68,7 +68,7 @@ class p2_21_pick_up_object extends State {
 
     // p2 uses different coordinate system, so convert the pointer position to p2's coordinate system
     List physicsPos = [game.physics.p2.pxmi(pointer.position.x), game.physics.p2.pxmi(pointer.position.y)];
-    print("hi");
+
     if (bodies.length != 0) {
 
       var clickedBody = bodies[0];
@@ -84,14 +84,13 @@ class p2_21_pick_up_object extends State {
   }
 
   release(p, e) {
-    print("Re");
+
     // remove constraint from object's body
     game.physics.p2.removeConstraint(mouseConstraint);
 
   }
 
-  move(double x, double y) {
-    print("Move");
+  move(num x, num y, bool fromClick) {
     // p2 uses different coordinate system, so convert the pointer position to p2's coordinate system
     //mouseBody.position = new Point(game.physics.p2.pxmi(x), game.physics.p2.pxmi(y));
     mouseBody.x = x;

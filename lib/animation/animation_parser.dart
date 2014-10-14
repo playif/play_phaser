@@ -2,8 +2,7 @@ part of Phaser;
 
 class AnimationParser {
 
-  static FrameData spriteSheet(Game game, String key, num frameWidth, num frameHeight,
-                               [int frameMax=-1, num margin=0, num spacing=0]) {
+  static FrameData spriteSheet(Game game, String key, num frameWidth, num frameHeight, [int frameMax = -1, num margin = 0, num spacing = 0]) {
     var img = game.cache.getImage(key);
     if (img == null) {
       return null;
@@ -45,11 +44,10 @@ class AnimationParser {
       data.addFrame(new Frame(i, x, y, frameWidth, frameHeight, '', uuid));
 
       PIXI.TextureCache[uuid] = new PIXI.Texture(PIXI.BaseTextureCache[key], new PIXI.Rectangle()
-          ..x= x
-          ..y= y
-          ..width= frameWidth
-          ..height= frameHeight
-      );
+          ..x = x
+          ..y = y
+          ..width = frameWidth
+          ..height = frameHeight);
 
       x += frameWidth + spacing;
 
@@ -82,40 +80,23 @@ class AnimationParser {
     for (var i = 0; i < frames.length; i++) {
       String uuid = game.rnd.uuid();
 
-      newFrame = data.addFrame(new Frame(
-          i,
-          frames[i]['frame']['x'],
-          frames[i]['frame']['y'],
-          frames[i]['frame']['w'],
-          frames[i]['frame']['h'],
-          frames[i]['filename'],
-          uuid
-      ));
+      newFrame = data.addFrame(new Frame(i, frames[i]['frame']['x'], frames[i]['frame']['y'], frames[i]['frame']['w'], frames[i]['frame']['h'], frames[i]['filename'], uuid));
 
       PIXI.TextureCache[uuid] = new PIXI.Texture(PIXI.BaseTextureCache[cacheKey], new PIXI.Rectangle()
-        ..x = frames[i]['frame']['x']
-        ..y = frames[i]['frame']['y']
-        ..width = frames[i]['frame']['w']
-        ..height = frames[i]['frame']['h']
-      );
+          ..x = frames[i]['frame']['x']
+          ..y = frames[i]['frame']['y']
+          ..width = frames[i]['frame']['w']
+          ..height = frames[i]['frame']['h']);
 
       if (frames[i]['trimmed']) {
-        newFrame.setTrim(
-            frames[i]['trimmed'],
-            frames[i]['sourceSize']['w'],
-            frames[i]['sourceSize']['h'],
-            frames[i]['spriteSourceSize']['x'],
-            frames[i]['spriteSourceSize']['y'],
-            frames[i]['spriteSourceSize']['w'],
-            frames[i]['spriteSourceSize']['h']
-        );
+        newFrame.setTrim(frames[i]['trimmed'], frames[i]['sourceSize']['w'], frames[i]['sourceSize']['h'], frames[i]['spriteSourceSize']['x'], frames[i]['spriteSourceSize']['y'], frames[i]['spriteSourceSize']['w'], frames[i]['spriteSourceSize']['h']);
 
-        PIXI.TextureCache[uuid].trim = new Rectangle(
-            frames[i]['spriteSourceSize']['x'],
-            frames[i]['spriteSourceSize']['y'],
-            frames[i]['sourceSize']['w'],
-            frames[i]['sourceSize']['h']
-        );
+//        PIXI.TextureCache[uuid].trim = new Rectangle(
+//            frames[i]['spriteSourceSize']['x'],
+//            frames[i]['spriteSourceSize']['y'],
+//            frames[i]['sourceSize']['w'],
+//            frames[i]['sourceSize']['h']
+//        );
       }
 
     }
@@ -144,40 +125,23 @@ class AnimationParser {
     for (String key in frames.keys) {
       String uuid = game.rnd.uuid();
 
-      newFrame = data.addFrame(new Frame(
-          i,
-          frames[key]['frame']['x'],
-          frames[key]['frame']['y'],
-          frames[key]['frame']['w'],
-          frames[key]['frame']['h'],
-          key,
-          uuid
-      ));
+      newFrame = data.addFrame(new Frame(i, frames[key]['frame']['x'], frames[key]['frame']['y'], frames[key]['frame']['w'], frames[key]['frame']['h'], key, uuid));
 
       PIXI.TextureCache[uuid] = new PIXI.Texture(PIXI.BaseTextureCache[cacheKey], new PIXI.Rectangle()
           ..x = frames[key]['frame']['x']
           ..y = frames[key]['frame']['y']
           ..width = frames[key]['frame']['w']
-          ..height = frames[key]['frame']['h']
-      );
+          ..height = frames[key]['frame']['h']);
 
       if (frames[key]['trimmed']) {
-        newFrame.setTrim(
-            frames[key]['trimmed'],
-            frames[key]['sourceSize']['w'],
-            frames[key]['sourceSize']['h'],
-            frames[key]['spriteSourceSize']['x'],
-            frames[key]['spriteSourceSize']['y'],
-            frames[key]['spriteSourceSize']['w'],
-            frames[key]['spriteSourceSize']['h']
-        );
+        newFrame.setTrim(frames[key]['trimmed'], frames[key]['sourceSize']['w'], frames[key]['sourceSize']['h'], frames[key]['spriteSourceSize']['x'], frames[key]['spriteSourceSize']['y'], frames[key]['spriteSourceSize']['w'], frames[key]['spriteSourceSize']['h']);
 
-        PIXI.TextureCache[uuid].trim = new Rectangle(
-            frames[key]['spriteSourceSize']['x'],
-            frames[key]['spriteSourceSize']['y'],
-            frames[key]['sourceSize']['w'],
-            frames[key]['sourceSize']['h']
-            );
+//        PIXI.TextureCache[uuid].trim = new Rectangle(
+//            frames[key]['spriteSourceSize']['x'],
+//            frames[key]['spriteSourceSize']['y'],
+//            frames[key]['sourceSize']['w'],
+//            frames[key]['sourceSize']['h']
+//            );
       }
 
       i++;
@@ -236,11 +200,10 @@ class AnimationParser {
       newFrame = data.addFrame(new Frame(i, x, y, width, height, name, uuid));
 
       PIXI.TextureCache[uuid] = new PIXI.Texture(PIXI.BaseTextureCache[cacheKey], new PIXI.Rectangle()
-        ..x = x
-        ..y = y
-        ..width = width
-        ..height = height
-      );
+          ..x = x
+          ..y = y
+          ..width = width
+          ..height = height);
 
       //  Trimmed?
       if (frameX != null || frameY != null) {

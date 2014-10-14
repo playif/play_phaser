@@ -7,21 +7,21 @@ class Timer {
   bool autoDestroy=true;
   bool running = false;
   bool expired = false;
-  double elapsed = 0.0;
+  num elapsed = 0.0;
   List<TimerEvent> events = [];
 
   Signal<TimerFunc> onComplete = new Signal();
 
-  double nextTick = 0.0;
+  num nextTick = 0.0;
   int timeCap = 1000;
 
   bool paused = false;
   bool _codePaused = false;
 
-  double _started = 0.0;
-  double _pauseStarted = 0.0;
-  double _pauseTotal = 0.0;
-  double _now = new DateTime.now().millisecondsSinceEpoch.toDouble();
+  num _started = 0.0;
+  num _pauseStarted = 0.0;
+  num _pauseTotal = 0.0;
+  num _now = new DateTime.now().millisecondsSinceEpoch;
 
   int _len = 0;
 

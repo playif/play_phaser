@@ -117,4 +117,8 @@ class tilemaps_16_tilemap_ray_cast extends State {
     game.debug.geom(line);
 
   }
+  
+  shutdown(){
+    game.camera.unfollow();
+  }
 }

@@ -63,7 +63,7 @@ class AnimationManager {
 
       if (this.currentFrame != null) {
         this._frameIndex = value;
-        this.sprite.setTexture(PIXI.TextureCache[this.currentFrame.uuid]);
+        this.sprite.setFrame(this.currentFrame);
 
         if (this.sprite.__tilePattern != null) {
           this.__tilePattern = false;
@@ -109,7 +109,11 @@ class AnimationManager {
    * This is called automatically when a new Sprite is created.
    */
 
-  bool loadFrameData(FrameData frameData, [frame = 0]) {
+  bool loadFrameData([FrameData frameData, frame = 0]) {
+    if (frameData == null) {
+      return false;
+    }
+
     if (this.isLoaded) {
       //   We need to update the frameData that the animations are using
       for (var anim in this._anims.keys) {
@@ -215,7 +219,7 @@ class AnimationManager {
     this._anims[name] = new Animation(this.game, this.sprite, name, this.frameData, this._outputFrames, frameRate, loop);
     this.currentAnim = this._anims[name];
     this.currentFrame = this.currentAnim.currentFrame;
-    this.sprite.setTexture(PIXI.TextureCache[this.currentFrame.uuid]);
+    //this.sprite.setTexture(PIXI.TextureCache[this.currentFrame.uuid]);
 
     if (this.sprite.__tilePattern != null) {
       this.__tilePattern = false;

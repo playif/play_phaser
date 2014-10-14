@@ -385,7 +385,7 @@ class StateManager {
   clearCurrentState() {
     if (this.current != null) {
       if (this.onShutDownCallback != null) {
-        this.onShutDownCallback(this.game);
+        this.onShutDownCallback();
       }
 
       this.game.tweens.removeAll();

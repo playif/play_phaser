@@ -480,8 +480,11 @@ class TilemapParser {
 
     // assign tile properties
 
-    var i, j, k;
-    var layer, tile, sid, set;
+    int i, j, k;
+    TilemapLayerData layer;
+    Tile tile;
+    int sid;
+    Tileset set;
 
     // go through each of the map layers
     for (i = 0; i < map.layers.length; i++) {
@@ -498,13 +501,15 @@ class TilemapParser {
           if (tile.index < 0) {
             continue;
           }
-
+          if(tile.index >= map.tiles.length){
+            continue;
+          }
           // find the relevant tileset
           sid = map.tiles[tile.index][2];
           set = map.tilesets[sid];
 
           // if that tile type has any properties, add them to the tile object
-          if (set.tileProperties && set.tileProperties[tile.index - set.firstgid]) {
+          if (set.tileProperties!= null && set.tileProperties[tile.index - set.firstgid] != null) {
             tile.properties = set.tileProperties[tile.index - set.firstgid];
           }
         }
