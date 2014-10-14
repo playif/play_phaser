@@ -4,7 +4,7 @@ class Time {
   Game game;
   num time=0.0;
   num now=0.0;
-  num elapsed=0.0;
+  num elapsed= 1 / 60 * 1000;
   num pausedTime=0.0;
   bool advancedTiming=false;
 
@@ -28,7 +28,7 @@ class Time {
   /**
    * @property {number} timeCap - If the difference in time between two frame updates exceeds this value, the frame time is reset to avoid huge elapsed counts.
    */
-  int timeCap = 1000;
+  num timeCap =  1 / 60 * 1000;
 
   /**
    * @property {number} frames - The number of frames record in the last second. Only calculated if Time.advancedTiming is true.

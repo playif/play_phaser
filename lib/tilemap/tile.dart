@@ -237,6 +237,7 @@ class Tile {
      */
     this.collideDown = false;
 
+   
     /**
      * @property {function} collisionCallback - Tile collision callback.
      * @default
@@ -344,6 +345,11 @@ class Tile {
     this.collideRight = right;
     this.collideUp = up;
     this.collideDown = down;
+    
+    this.faceLeft = left;
+    this.faceRight = right;
+    this.faceTop = up;
+    this.faceBottom = down;
 
   }
 

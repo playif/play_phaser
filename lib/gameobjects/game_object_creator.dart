@@ -8,7 +8,7 @@ class GameObjectCreator {
   GameObjectCreator(this.game) {
     world = game.world;
   }
- 
+
   /**
    * Create a new `Image` object. An Image is a light-weight object you can use to display anything that doesn't need physics or animation.
    * It can still rotate, scale, crop and receive input events. This makes it perfect for logos, backgrounds, simple buttons and other non-Sprite graphics.
@@ -65,7 +65,7 @@ class GameObjectCreator {
    * @return {Phaser.Group} The newly created group.
    */
 
-  Group group([String name, bool addToStage=false, bool enableBody=false, num physicsBodyType=0]) {
+  Group group([String name, bool addToStage = false, bool enableBody = false, num physicsBodyType = 0]) {
     return new Group(this.game, null, name, addToStage, enableBody, physicsBodyType);
   }
 
@@ -103,7 +103,7 @@ class GameObjectCreator {
    * @return {Phaser.Sound} The newly created text object.
    */
 
-  Sound audio(String key, [num volume, bool loop=false, bool connect=true]) {
+  Sound audio(String key, [num volume, bool loop = false, bool connect = true]) {
     return this.game.sound.add(key, volume, loop, connect);
   }
 
@@ -118,7 +118,7 @@ class GameObjectCreator {
    * @return {Phaser.Sound} The newly created text object.
    */
 
-  Sound sound(String key, [num volume, bool loop=false, bool connect=true]) {
+  Sound sound(String key, [num volume, bool loop = false, bool connect = true]) {
     return this.game.sound.add(key, volume, loop, connect);
   }
 
@@ -137,6 +137,24 @@ class GameObjectCreator {
 
   TileSprite tileSprite(num x, num y, num width, num height, key, frame) {
     return new TileSprite(this.game, x, y, width, height, key, frame);
+  }
+
+  /**
+      * Creates a new Rope object.
+      *
+      * @method Phaser.GameObjectCreator#rope
+      * @param {number} x - The x coordinate (in world space) to position the Rope at.
+      * @param {number} y - The y coordinate (in world space) to position the Rope at.
+      * @param {number} width - The width of the Rope.
+      * @param {number} height - The height of the Rope.
+      * @param {string|Phaser.RenderTexture|Phaser.BitmapData|PIXI.Texture} key - This is the image or texture used by the TileSprite during rendering. It can be a string which is a reference to the Cache entry, or an instance of a RenderTexture or PIXI.Texture.
+      * @param {string|number} frame - If this Rope is using part of a sprite sheet or texture atlas you can specify the exact frame to use by giving a string or numeric index.
+      * @return {Phaser.Rope} The newly created rope object.
+      */
+  Rope rope(num x, num y, key, frame, List points) {
+
+    return new Rope(this.game, x, y, key, frame, points);
+
   }
 
   /**
@@ -170,7 +188,7 @@ class GameObjectCreator {
    * @return {Phaser.Button} The newly created button object.
    */
 
-  Button button([num x=0, num y=0, String key, Function callback, overFrame, outFrame, downFrame, upFrame]) {
+  Button button([num x = 0, num y = 0, String key, Function callback, overFrame, outFrame, downFrame, upFrame]) {
     return new Button(this.game, x, y, key, callback, overFrame, outFrame, downFrame, upFrame);
   }
 
@@ -183,7 +201,7 @@ class GameObjectCreator {
    * @return {Phaser.Graphics} The newly created graphics object.
    */
 
-  Graphics graphics([num x=0, num y=0]) {
+  Graphics graphics([num x = 0, num y = 0]) {
 
     return new Graphics(this.game, x, y);
 
@@ -201,7 +219,7 @@ class GameObjectCreator {
    * @return {Phaser.Emitter} The newly created emitter object.
    */
 
-  Emitter emitter([num x, num y, num maxParticles=50]) {
+  Emitter emitter([num x, num y, num maxParticles = 50]) {
     return new Emitter(this.game, x, y, maxParticles);
   }
 
@@ -226,15 +244,7 @@ class GameObjectCreator {
    * @return {Phaser.RetroFont} The newly created RetroFont texture which can be applied to an Image or Sprite.
    */
 
-  RetroFont retroFont(String font,
-                      num characterWidth,
-                      num characterHeight,
-                      String chars,
-                      num charsPerRow, [
-      num xSpacing=0,
-      num ySpacing=0,
-      num xOffset=0,
-      num yOffset=0]) {
+  RetroFont retroFont(String font, num characterWidth, num characterHeight, String chars, num charsPerRow, [num xSpacing = 0, num ySpacing = 0, num xOffset = 0, num yOffset = 0]) {
 
     return new RetroFont(this.game, font, characterWidth, characterHeight, chars, charsPerRow, xSpacing, ySpacing, xOffset, yOffset);
 
@@ -271,7 +281,7 @@ class GameObjectCreator {
    * @param {number} [height=10] - The height of the map in tiles. If this map is created from Tiled or CSV data you don't need to specify this.
    */
 
-  Tilemap tilemap(String key, [num tileWidth=32, num tileHeight=32, num width=10, num height=10]) {
+  Tilemap tilemap(String key, [num tileWidth = 32, num tileHeight = 32, num width = 10, num height = 10]) {
     return new Tilemap(this.game, key, tileWidth, tileHeight, width, height);
   }
 
@@ -286,7 +296,7 @@ class GameObjectCreator {
    * @return {Phaser.RenderTexture} The newly created RenderTexture object.
    */
 
-  RenderTexture renderTexture([int width=100, int height=100, String key, bool addToCache = false]) {
+  RenderTexture renderTexture([int width = 100, int height = 100, String key, bool addToCache = false]) {
 
     if (key == null) {
       key = this.game.rnd.uuid();
@@ -306,14 +316,14 @@ class GameObjectCreator {
    * A BitmapData object which can be manipulated and drawn to like a traditional Canvas object and used to texture Sprites.
    *
    * @method Phaser.GameObjectCreator#bitmapData
-   * @param {number} [width=100] - The width of the BitmapData in pixels.
-   * @param {number} [height=100] - The height of the BitmapData in pixels.
+   * @param {number} [width=256] - The width of the BitmapData in pixels.
+   * @param {number} [height=256] - The height of the BitmapData in pixels.
    * @param {string} [key=''] - Asset key for the BitmapData when stored in the Cache (see addToCache parameter).
    * @param {boolean} [addToCache=false] - Should this BitmapData be added to the Game.Cache? If so you can retrieve it with Cache.getBitmapData(key)
    * @return {Phaser.BitmapData} The newly created BitmapData object.
    */
 
-  BitmapData bitmapData([int width=100, int height=100, String key, bool addToCache = false]) {
+  BitmapData bitmapData([int width = 256, int height = 256, String key, bool addToCache = false]) {
 
 
     if (key == null) {

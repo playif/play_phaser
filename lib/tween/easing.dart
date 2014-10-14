@@ -157,6 +157,7 @@ class Quints {
 
 
 class Easing {
+  static EasingFunction Default = Easing.Linear.None;
   static final Linears Linear = new Linears();
   static final Quads Quadratic = new Quads();
   static final Cubics Cubic = new Cubics();

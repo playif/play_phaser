@@ -1,6 +1,6 @@
 part of Phaser;
 
-class Sprite<T extends Body> extends PIXI.Sprite implements GameObject, AnimationInterface {
+class Sprite<T extends Body> extends PIXI.Sprite implements GameObject, SpriteInterface, AnimationInterface {
 
 
   Game game;
@@ -723,6 +723,10 @@ class Sprite<T extends Body> extends PIXI.Sprite implements GameObject, Animatio
     }
 
     this._cache[8] = 1;
+    
+    if (this.events != null) {
+      this.events.onDestroy.dispatch(this);
+    }
 
 
     if (this.parent != null) {

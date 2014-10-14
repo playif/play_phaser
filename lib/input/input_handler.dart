@@ -8,7 +8,7 @@ class InputHandler {
   bool useHandCursor;
   bool _setHandCursor;
   bool isDragged;
-  bool allowHorizontalDrag; 
+  bool allowHorizontalDrag;
   bool allowVerticalDrag;
   bool bringToTop;
   Point snapOffset;
@@ -16,6 +16,9 @@ class InputHandler {
   bool snapOnRelease;
   num snapX;
   num snapY;
+
+  num _dx = 0;
+  num _dy = 0;
 
   num snapOffsetX;
   num snapOffsetY;
@@ -40,6 +43,8 @@ class InputHandler {
 
   bool dragFromCenter;
 //  bool pixelPerfect;
+
+  bool checked = false;
 
   InputHandler(this.sprite) {
 
@@ -216,19 +221,19 @@ class InputHandler {
      */
     this._pointerData = new List<Pointer>(11);
 
-    this._pointerData[0]=new Pointer(sprite.game, 0)
-      ..x = 0
-      ..y = 0
-      ..isDown = false
-      ..isUp = false
-      ..isOver = false
-      ..isOut = false
-      ..timeOver = 0.0
-      ..timeOut = 0.0
-      ..timeDown = 0.0
-      ..timeUp = 0.0
-      ..downDuration = 0.0
-      ..isDragged = false;
+    this._pointerData[0] = new Pointer(sprite.game, 0)
+        ..x = 0
+        ..y = 0
+        ..isDown = false
+        ..isUp = false
+        ..isOver = false
+        ..isOut = false
+        ..timeOver = 0.0
+        ..timeOut = 0.0
+        ..timeDown = 0.0
+        ..timeUp = 0.0
+        ..downDuration = 0.0
+        ..isDragged = false;
 
   }
 
@@ -241,7 +246,7 @@ class InputHandler {
    * @return {Phaser.Sprite} The Sprite object to which the Input Handler is bound.
    */
 
-  GameObject start([int priority = 0, bool useHandCursor =false]) {
+  GameObject start([int priority = 0, bool useHandCursor = false]) {
 
     //  Turning on
     if (this.enabled == false) {
@@ -252,18 +257,18 @@ class InputHandler {
 
       for (int i = 0; i < 10; i++) {
         this._pointerData[i] = new Pointer(sprite.game, i)
-          ..x = 0
-          ..y = 0
-          ..isDown = false
-          ..isUp = false
-          ..isOver = false
-          ..isOut = false
-          ..timeOver = 0.0
-          ..timeOut = 0.0
-          ..timeDown = 0.0
-          ..timeUp = 0.0
-          ..downDuration = 0.0
-          ..isDragged = false;
+            ..x = 0
+            ..y = 0
+            ..isDown = false
+            ..isUp = false
+            ..isOver = false
+            ..isOut = false
+            ..timeOver = 0.0
+            ..timeOut = 0.0
+            ..timeDown = 0.0
+            ..timeUp = 0.0
+            ..downDuration = 0.0
+            ..isDragged = false;
       }
 
       this.snapOffset = new Point();
@@ -320,8 +325,7 @@ class InputHandler {
     if (this.enabled) {
       this._wasEnabled = true;
       this.stop();
-    }
-    else {
+    } else {
       this._wasEnabled = false;
     }
 
@@ -338,18 +342,18 @@ class InputHandler {
 
     for (var i = 0; i < 10; i++) {
       this._pointerData[i] = new Pointer(sprite.game, i)
-        ..x = 0
-        ..y = 0
-        ..isDown = false
-        ..isUp = false
-        ..isOver = false
-        ..isOut = false
-        ..timeOver = 0.0
-        ..timeOut = 0.0
-        ..timeDown = 0.0
-        ..timeUp = 0.0
-        ..downDuration = 0.0
-        ..isDragged = false;
+          ..x = 0
+          ..y = 0
+          ..isDown = false
+          ..isUp = false
+          ..isOver = false
+          ..isOut = false
+          ..timeOver = 0.0
+          ..timeOut = 0.0
+          ..timeDown = 0.0
+          ..timeUp = 0.0
+          ..downDuration = 0.0
+          ..isDragged = false;
     }
   }
 
@@ -363,8 +367,7 @@ class InputHandler {
     //  Turning off
     if (this.enabled == false) {
       return;
-    }
-    else {
+    } else {
       //  De-register, etc
       this.enabled = false;
       this.game.input.interactiveItems.remove(this);
@@ -389,7 +392,7 @@ class InputHandler {
 
       this.game.input.interactiveItems.remove(this);
 
-      this._pointerData= null;
+      this._pointerData = null;
       this.boundsRect = null;
       this.boundsSprite = null;
       this.sprite = null;
@@ -408,7 +411,7 @@ class InputHandler {
   * @param {boolean} [includePixelPerfect=true] - If this object has `pixelPerfectClick` or `pixelPerfectOver` set should it be considered as valid?
   * @return {boolean} True if the object this InputHandler is bound to should be considered as valid for input detection.
   */
-  bool validForInput(int highestID, int highestRenderID, [bool includePixelPerfect =true]) {
+  bool validForInput(int highestID, int highestRenderID, [bool includePixelPerfect = true]) {
 
     if (this.sprite.scale.x == 0 || this.sprite.scale.y == 0 || this.priorityID < this.game.input.minPriorityID) {
       return false;
@@ -434,7 +437,7 @@ class InputHandler {
    * @return {number} The x coordinate of the Input pointer.
    */
 
-  num pointerX([int pointer=0]) {
+  num pointerX([int pointer = 0]) {
 
     //pointer = pointer || 0;
 
@@ -450,7 +453,7 @@ class InputHandler {
    * @return {number} The y coordinate of the Input pointer.
    */
 
-  num pointerY([int pointer=0]) {
+  num pointerY([int pointer = 0]) {
 
     //pointer = pointer || 0;
 
@@ -465,7 +468,7 @@ class InputHandler {
    * @return {boolean}
    */
 
-  bool pointerDown([int pointer=0]) {
+  bool pointerDown([int pointer = 0]) {
 
     //pointer = pointer || 0;
 
@@ -480,7 +483,7 @@ class InputHandler {
    * @return {boolean}
    */
 
-  bool pointerUp([int pointer=0]) {
+  bool pointerUp([int pointer = 0]) {
 
     //pointer = pointer || 0;
 
@@ -495,7 +498,7 @@ class InputHandler {
    * @return {number}
    */
 
-  double pointerTimeDown([int pointer=0]) {
+  double pointerTimeDown([int pointer = 0]) {
 
     //pointer = pointer || 0;
 
@@ -510,7 +513,7 @@ class InputHandler {
    * @return {number}
    */
 
-  double pointerTimeUp([int pointer=0]) {
+  double pointerTimeUp([int pointer = 0]) {
 
     //pointer = pointer || 0;
 
@@ -534,8 +537,7 @@ class InputHandler {
             return true;
           }
         }
-      }
-      else {
+      } else {
         return this._pointerData[index].isOver;
       }
     }
@@ -560,8 +562,7 @@ class InputHandler {
             return true;
           }
         }
-      }
-      else {
+      } else {
         return this._pointerData[index].isOut;
       }
     }
@@ -577,7 +578,7 @@ class InputHandler {
    * @return {number}
    */
 
-  double pointerTimeOver([int pointer=0]) {
+  double pointerTimeOver([int pointer = 0]) {
 
     //pointer = pointer || 0;
 
@@ -592,7 +593,7 @@ class InputHandler {
    * @return {number}
    */
 
-  double pointerTimeOut([int pointer=0]) {
+  double pointerTimeOut([int pointer = 0]) {
 
     //pointer = pointer || 0;
 
@@ -607,7 +608,7 @@ class InputHandler {
    * @return {boolean} True if the pointer is dragging an object, otherwise false.
    */
 
-  bool pointerDragged([int pointer=0]) {
+  bool pointerDragged([int pointer = 0]) {
 
     //pointer = pointer || 0;
 
@@ -622,7 +623,23 @@ class InputHandler {
    * @return {boolean} True if the pointer is down, otherwise false.
    */
 
-  bool checkPointerDown(Pointer pointer) {
+  bool checkPointerDown(Pointer pointer, [bool fastTest = false]) {
+
+//    if (!pointer.isDown || !this.enabled || this.sprite == null || this.sprite.parent == null || !this.sprite.visible || !this.sprite.parent.visible) {
+//      return false;
+//    }
+//
+//    //  Need to pass it a temp point, in case we need it again for the pixel check
+//    if (this.game.input.hitTest(this.sprite, pointer, this._tempPoint)) {
+//      if (this.pixelPerfectClick) {
+//        return this.checkPixel(this._tempPoint.x, this._tempPoint.y);
+//      }
+//      else {
+//        return true;
+//      }
+//    }
+//
+//    return false;
 
     if (!pointer.isDown || !this.enabled || this.sprite == null || this.sprite.parent == null || !this.sprite.visible || !this.sprite.parent.visible) {
       return false;
@@ -630,16 +647,16 @@ class InputHandler {
 
     //  Need to pass it a temp point, in case we need it again for the pixel check
     if (this.game.input.hitTest(this.sprite, pointer, this._tempPoint)) {
-      if (this.pixelPerfectClick) {
+      //if (typeof fastTest === 'undefined') { fastTest = false; }
+
+      if (!fastTest && this.pixelPerfectClick) {
         return this.checkPixel(this._tempPoint.x, this._tempPoint.y);
-      }
-      else {
+      } else {
         return true;
       }
     }
 
     return false;
-
   }
 
   /**
@@ -649,7 +666,7 @@ class InputHandler {
    * @return {boolean}
    */
 
-  bool checkPointerOver(Pointer pointer) {
+  bool checkPointerOver(Pointer pointer, [bool fastTest = false]) {
 
     if (!this.enabled || this.sprite == null || this.sprite.parent == null || !this.sprite.visible || !this.sprite.parent.visible) {
       return false;
@@ -657,10 +674,11 @@ class InputHandler {
 
     //  Need to pass it a temp point, in case we need it again for the pixel check
     if (this.game.input.hitTest(this.sprite, pointer, this._tempPoint)) {
-      if (this.pixelPerfectOver) {
+      //if (typeof fastTest === 'undefined') { fastTest = false; }
+
+      if (!fastTest && this.pixelPerfectOver) {
         return this.checkPixel(this._tempPoint.x, this._tempPoint.y);
-      }
-      else {
+      } else {
         return true;
       }
     }
@@ -680,8 +698,8 @@ class InputHandler {
    */
 
   bool checkPixel(num x, num y, [Pointer pointer]) {
-    if(this.sprite is! PIXI.Sprite) return false;
-    PIXI.Sprite sprite = this.sprite as PIXI.Sprite;
+    //if(this.sprite is! PIXI.Sprite) return false;
+    Sprite sprite = this.sprite as Sprite;
     //  Grab a pixel from our image into the hitCanvas and then test it
     if (sprite.texture.baseTexture.source != null) {
       this.game.input.hitContext.clearRect(0, 0, 1, 1);
@@ -705,8 +723,24 @@ class InputHandler {
       x += sprite.texture.frame.x;
       y += sprite.texture.frame.y;
 
-      this.game.input.hitContext.drawImageScaledFromSource(
-          sprite.texture.baseTexture.source, x, y, 1, 1, 0, 0, 1, 1);
+      if (sprite.texture.trim != null) {
+        x -= sprite.texture.trim.x;
+        y -= sprite.texture.trim.y;
+
+        //  If the coordinates are outside the trim area we return false immediately, to save doing a draw call
+        if (x < sprite.texture.crop.x || x > sprite.texture.crop.x + sprite.texture.crop.width || y < sprite.texture.crop.y || y > sprite.texture.crop.y + sprite.texture.crop.height) {
+          this._dx = x;
+          this._dy = y;
+          return false;
+        }
+      }
+
+      this._dx = x;
+      this._dy = y;
+
+      this.game.input.hitContext.clearRect(0, 0, 1, 1);
+
+      this.game.input.hitContext.drawImageScaledFromSource(sprite.texture.baseTexture.source, x, y, 1, 1, 0, 0, 1, 1);
 
       var rgb = this.game.input.hitContext.getImageData(0, 0, 1, 1);
 
@@ -740,19 +774,17 @@ class InputHandler {
 
     if (this.draggable && this._draggedPointerID == pointer.id) {
       return this.updateDrag(pointer);
-    }
-    else if (this._pointerData[pointer.id].isOver == true) {
+    } else if (this._pointerData[pointer.id].isOver == true) {
       if (this.checkPointerOver(pointer)) {
         this._pointerData[pointer.id].x = pointer.x - this.sprite.x;
         this._pointerData[pointer.id].y = pointer.y - this.sprite.y;
         return true;
-      }
-      else {
+      } else {
         this._pointerOutHandler(pointer);
         return false;
       }
     }
-    
+
     return true;
   }
 
@@ -770,7 +802,7 @@ class InputHandler {
       return;
     }
 
-    if (this._pointerData[pointer.id].isOver == false) {
+    if (this._pointerData[pointer.id].isOver == false || pointer.dirty) {
       this._pointerData[pointer.id].isOver = true;
       this._pointerData[pointer.id].isOut = false;
       this._pointerData[pointer.id].timeOver = this.game.time.now;
@@ -845,6 +877,8 @@ class InputHandler {
         this.sprite.events.onInputDown.dispatch([this.sprite, pointer]);
       }
 
+      pointer.dirty = true;
+
       //  Start drag
       if (this.draggable && this.isDragged == false) {
         this.startDrag(pointer);
@@ -887,8 +921,7 @@ class InputHandler {
         if (this.sprite != null && this.sprite.events != null) {
           this.sprite.events.onInputUp.dispatch([this.sprite, pointer, true]);
         }
-      }
-      else {
+      } else {
         //  Release the inputUp signal and provide optional parameter if pointer is still over the sprite or not
         if (this.sprite != null && this.sprite.events != null) {
           this.sprite.events.onInputUp.dispatch([this.sprite, pointer, false]);
@@ -900,6 +933,8 @@ class InputHandler {
           this._setHandCursor = false;
         }
       }
+
+      pointer.dirty = true;
 
       //  Stop drag
       if (this.draggable && this.isDragged && this._draggedPointerID == pointer.id) {
@@ -944,8 +979,7 @@ class InputHandler {
         this.sprite.cameraOffset.x = Math.round((this.sprite.cameraOffset.x - (this.snapOffsetX % this.snapX)) / this.snapX) * this.snapX + (this.snapOffsetX % this.snapX);
         this.sprite.cameraOffset.y = Math.round((this.sprite.cameraOffset.y - (this.snapOffsetY % this.snapY)) / this.snapY) * this.snapY + (this.snapOffsetY % this.snapY);
       }
-    }
-    else {
+    } else {
       if (this.allowHorizontalDrag) {
         this.sprite.x = pointer.x + this._dragPoint.x + this.dragOffset.x;
       }
@@ -1065,7 +1099,7 @@ class InputHandler {
    * @return {number} The number of milliseconds the pointer has been pressed down on the Sprite, or -1 if not over.
    */
 
-  double downDuration([int pointer=0]) {
+  double downDuration([int pointer = 0]) {
 
     //pointer = pointer;
 
@@ -1088,8 +1122,7 @@ class InputHandler {
    * @param {Phaser.Sprite} [boundsSprite=null] - If you want to restrict the drag of this sprite to within the bounding box of another sprite, pass it here.
    */
 
-  enableDrag([bool lockCenter=false, bool bringToTop=false, bool pixelPerfect=false,
-             int alphaThreshold=255, Rectangle boundsRect, Sprite boundsSprite]) {
+  enableDrag([bool lockCenter = false, bool bringToTop = false, bool pixelPerfect = false, int alphaThreshold = 255, Rectangle boundsRect, Sprite boundsSprite]) {
 
     if (lockCenter == null) {
       lockCenter = false;
@@ -1164,19 +1197,16 @@ class InputHandler {
       if (this.dragFromCenter) {
         //this.sprite.centerOn(pointer.x, pointer.y);
         this._dragPoint.setTo(this.sprite.cameraOffset.x - pointer.x, this.sprite.cameraOffset.y - pointer.y);
-      }
-      else {
+      } else {
         this._dragPoint.setTo(this.sprite.cameraOffset.x - pointer.x, this.sprite.cameraOffset.y - pointer.y);
       }
-    }
-    else {
+    } else {
       if (this.dragFromCenter) {
         var bounds = this.sprite.getBounds();
         this.sprite.x = pointer.x + (this.sprite.x - bounds.centerX);
         this.sprite.y = pointer.y + (this.sprite.y - bounds.centerY);
         this._dragPoint.setTo(this.sprite.x - pointer.x, this.sprite.y - pointer.y);
-      }
-      else {
+      } else {
         this._dragPoint.setTo(this.sprite.x - pointer.x, this.sprite.y - pointer.y);
       }
     }
@@ -1209,8 +1239,7 @@ class InputHandler {
       if (this.sprite.fixedToCamera) {
         this.sprite.cameraOffset.x = Math.round((this.sprite.cameraOffset.x - (this.snapOffsetX % this.snapX)) / this.snapX) * this.snapX + (this.snapOffsetX % this.snapX);
         this.sprite.cameraOffset.y = Math.round((this.sprite.cameraOffset.y - (this.snapOffsetY % this.snapY)) / this.snapY) * this.snapY + (this.snapOffsetY % this.snapY);
-      }
-      else {
+      } else {
         this.sprite.x = Math.round((this.sprite.x - (this.snapOffsetX % this.snapX)) / this.snapX) * this.snapX + (this.snapOffsetX % this.snapX);
         this.sprite.y = Math.round((this.sprite.y - (this.snapOffsetY % this.snapY)) / this.snapY) * this.snapY + (this.snapOffsetY % this.snapY);
       }
@@ -1231,7 +1260,7 @@ class InputHandler {
    * @param {boolean} [allowVertical=true] - To enable the sprite to be dragged vertically set to true, otherwise false.
    */
 
-  setDragLock([bool allowHorizontal=true, bool allowVertical=true]) {
+  setDragLock([bool allowHorizontal = true, bool allowVertical = true]) {
 //
 //    if (typeof allowHorizontal == 'undefined') { allowHorizontal = true; }
 //    if (typeof allowVertical == 'undefined') { allowVertical = true; }
@@ -1252,8 +1281,7 @@ class InputHandler {
    * @param {number} [snapOffsetX=0] - Used to offset the top-left starting point of the snap grid.
    */
 
-  enableSnap(num snapX, num snapY, [bool onDrag=true, bool onRelease=true,
-  num snapOffsetX=0, num snapOffsetY=0]) {
+  enableSnap(num snapX, num snapY, [bool onDrag = true, bool onRelease = true, num snapOffsetX = 0, num snapOffsetY = 0]) {
 //
 //    if (typeof onDrag == 'undefined') { onDrag = true; }
 //    if (typeof onRelease == 'undefined') { onRelease = false; }
@@ -1291,30 +1319,25 @@ class InputHandler {
     if (this.sprite.fixedToCamera) {
       if (this.sprite.cameraOffset.x < this.boundsRect.left) {
         this.sprite.cameraOffset.x = this.boundsRect.left;
-      }
-      else if ((this.sprite.cameraOffset.x + this.sprite.width) > this.boundsRect.right) {
+      } else if ((this.sprite.cameraOffset.x + this.sprite.width) > this.boundsRect.right) {
         this.sprite.cameraOffset.x = this.boundsRect.right - this.sprite.width;
       }
 
       if (this.sprite.cameraOffset.y < this.boundsRect.top) {
         this.sprite.cameraOffset.y = this.boundsRect.top;
-      }
-      else if ((this.sprite.cameraOffset.y + this.sprite.height) > this.boundsRect.bottom) {
+      } else if ((this.sprite.cameraOffset.y + this.sprite.height) > this.boundsRect.bottom) {
         this.sprite.cameraOffset.y = this.boundsRect.bottom - this.sprite.height;
       }
-    }
-    else {
+    } else {
       if (this.sprite.x < this.boundsRect.left) {
         this.sprite.x = this.boundsRect.x;
-      }
-      else if ((this.sprite.x + this.sprite.width) > this.boundsRect.right) {
+      } else if ((this.sprite.x + this.sprite.width) > this.boundsRect.right) {
         this.sprite.x = this.boundsRect.right - this.sprite.width;
       }
 
       if (this.sprite.y < this.boundsRect.top) {
         this.sprite.y = this.boundsRect.top;
-      }
-      else if ((this.sprite.y + this.sprite.height) > this.boundsRect.bottom) {
+      } else if ((this.sprite.y + this.sprite.height) > this.boundsRect.bottom) {
         this.sprite.y = this.boundsRect.bottom - this.sprite.height;
       }
     }
@@ -1331,30 +1354,25 @@ class InputHandler {
     if (this.sprite.fixedToCamera && this.boundsSprite.fixedToCamera) {
       if (this.sprite.cameraOffset.x < this.boundsSprite.camerOffset.x) {
         this.sprite.cameraOffset.x = this.boundsSprite.camerOffset.x;
-      }
-      else if ((this.sprite.cameraOffset.x + this.sprite.width) > (this.boundsSprite.camerOffset.x + this.boundsSprite.width)) {
+      } else if ((this.sprite.cameraOffset.x + this.sprite.width) > (this.boundsSprite.camerOffset.x + this.boundsSprite.width)) {
         this.sprite.cameraOffset.x = (this.boundsSprite.camerOffset.x + this.boundsSprite.width) - this.sprite.width;
       }
 
       if (this.sprite.cameraOffset.y < this.boundsSprite.camerOffset.y) {
         this.sprite.cameraOffset.y = this.boundsSprite.camerOffset.y;
-      }
-      else if ((this.sprite.cameraOffset.y + this.sprite.height) > (this.boundsSprite.camerOffset.y + this.boundsSprite.height)) {
+      } else if ((this.sprite.cameraOffset.y + this.sprite.height) > (this.boundsSprite.camerOffset.y + this.boundsSprite.height)) {
         this.sprite.cameraOffset.y = (this.boundsSprite.camerOffset.y + this.boundsSprite.height) - this.sprite.height;
       }
-    }
-    else {
+    } else {
       if (this.sprite.x < this.boundsSprite.x) {
         this.sprite.x = this.boundsSprite.x;
-      }
-      else if ((this.sprite.x + this.sprite.width) > (this.boundsSprite.x + this.boundsSprite.width)) {
+      } else if ((this.sprite.x + this.sprite.width) > (this.boundsSprite.x + this.boundsSprite.width)) {
         this.sprite.x = (this.boundsSprite.x + this.boundsSprite.width) - this.sprite.width;
       }
 
       if (this.sprite.y < this.boundsSprite.y) {
         this.sprite.y = this.boundsSprite.y;
-      }
-      else if ((this.sprite.y + this.sprite.height) > (this.boundsSprite.y + this.boundsSprite.height)) {
+      } else if ((this.sprite.y + this.sprite.height) > (this.boundsSprite.y + this.boundsSprite.height)) {
         this.sprite.y = (this.boundsSprite.y + this.boundsSprite.height) - this.sprite.height;
       }
     }

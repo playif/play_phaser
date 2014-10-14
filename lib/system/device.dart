@@ -402,7 +402,7 @@ class Device {
      * @property {string} requestFullscreen - If the browser supports the Full Screen API this holds the call you need to use to activate it.
      * @default
      */
-    this.requestFullscreen = '';
+    this.requestFullscreen = 'requestFullscreen';
 
     /**
      * @property {string} cancelFullscreen - If the browser supports the Full Screen API this holds the call you need to use to cancel it.

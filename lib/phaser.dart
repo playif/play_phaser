@@ -36,6 +36,8 @@ part "animation/frame_data.dart";
 part "core/camera.dart";
 part "core/core_signal.dart";
 part "core/filter.dart";
+part "core/flex_grid.dart";
+part "core/flex_layer.dart";
 part "core/game.dart";
 part "core/group.dart";
 part "core/plugin.dart";
@@ -60,6 +62,7 @@ part "gameobjects/image.dart";
 part "gameobjects/particle.dart";
 part "gameobjects/render_texture.dart";
 part "gameobjects/retro_font.dart";
+part "gameobjects/rope.dart";
 part "gameobjects/sprite.dart";
 part "gameobjects/sprite_batch.dart";
 part "gameobjects/text.dart";
@@ -143,7 +146,7 @@ part "utils/debug.dart";
 part "utils/utils.dart";
 
 
-const String VERSION = '2.0.5';
+const String VERSION = '2.1.1';
 final List<Game> GAMES = [];
 
 
@@ -180,3 +183,5 @@ const int ELLIPSE = 16;
 const int SPRITEBATCH = 17;
 const int RETROFONT = 17;
 const int POINTER = 19;
+const int ROPE = 20;
+

@@ -1,7 +1,9 @@
 part of Phaser;
 
 class Game {
+  /// The calculated game width in pixels.
   num width;
+  /// The calculated game height in pixels.
   num height;
   PIXI.Renderer renderer;
   String parent;
@@ -484,12 +486,12 @@ class Game {
     this.device = new Device(this);
     //this.math = Math;
 
-
-    this.stage = new Stage(this, this.width, this.height);
+    this.scale = new ScaleManager(this, this.width, this.height);
+    this.stage = new Stage(this);
 
     this.setUpRenderer();
 
-    this.scale = new ScaleManager(this, this.width, this.height);
+
 
     this.device.checkFullScreenSupport();
 
@@ -630,6 +632,21 @@ class Game {
       this.renderer = new PIXI.WebGLRenderer(this.width, this.height, this.canvas, this.transparent, this.antialias, this.preserveDrawingBuffer);
       this.context = null;
     }
+    
+    if (this.device.cocoonJS)
+    {
+        if (this.renderType == CANVAS)
+        {
+          // TODO
+            //this.canvas.screencanvas = true;
+        }
+        else
+        {
+// TODO
+            // Some issue related to scaling arise with Cocoon using screencanvas and webgl renderer.
+            //this.canvas.screencanvas = false;
+        }
+    }
 
     if (this.renderType != HEADLESS) {
       this.stage.smoothed = this.antialias;
@@ -657,6 +674,7 @@ class Game {
         this.pendingStep = true;
       }
 
+      this.scale.preUpdate();
       this.debug.preUpdate();
       this.physics.preUpdate();
       this.state.preUpdate();
@@ -748,8 +766,12 @@ class Game {
 
     this.raf.stop();
 
-    this.input.destroy();
     this.state.destroy();
+    this.sound.destroy();
+    
+    this.scale.destroy();
+    this.stage.destroy();
+    this.input.destroy();
     this.physics.destroy();
 
     this.state = null;
@@ -761,7 +783,9 @@ class Game {
     this.time = null;
     this.world = null;
     this.isBooted = false;
-
+    
+    Canvas.removeFromDOM(this.canvas);
+    
   }
 
   /**

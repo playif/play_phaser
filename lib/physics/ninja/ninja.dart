@@ -78,6 +78,7 @@ class Ninja {
      */
     this.quadTree = new Phaser.QuadTree(this.game.world.bounds.x, this.game.world.bounds.y, this.game.world.bounds.width, this.game.world.bounds.height, this.maxObjects, this.maxLevels);
 
+    this.setBoundsToWorld();
   }
 
 

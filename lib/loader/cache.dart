@@ -32,7 +32,7 @@ class Cache {
 
 
   Cache(this.game) {
- 
+
     /**
      * @property {object} game - Canvas key-value container.
      * @private
@@ -205,7 +205,7 @@ class Cache {
     this._images[key] = {
       'url': url,
       'data': data,
-      'spriteSheet': true,
+//      'spriteSheet': true,
       'frameWidth': frameWidth,
       'frameHeight': frameHeight,
       'margin': margin,
@@ -250,7 +250,7 @@ class Cache {
     this._images[key] = {
       'url': url,
       'data': data,
-      'spriteSheet': true
+//      'spriteSheet': true
     };
 
     PIXI.BaseTextureCache[key] = new PIXI.BaseTexture(data);
@@ -279,11 +279,13 @@ class Cache {
     this._images[key] = {
       'url': url,
       'data': data,
-      'spriteSheet': true
+//      'spriteSheet': true
     };
 
     PIXI.BaseTextureCache[key] = new PIXI.BaseTexture(data);
     LoaderParser.bitmapFont(this.game, xmlData, key, xSpacing, ySpacing);
+
+    this._bitmapFont[key] = PIXI.BitmapText.fonts[key];
   }
 
   /**
@@ -318,9 +320,17 @@ class Cache {
     this._images['__default'] = {
       'url': null,
       'data': img,
-      'spriteSheet': false
+//      'spriteSheet': false
     };
-    this._images['__default']['frame'] = new Frame(0, 0, 0, 32, 32, '', '');
+    //this._images['__default']['frame'] = new Frame(0, 0, 0, 32, 32, '', '');
+
+    this._images['__default'] = {
+      'url': null,
+      'data': img
+    };
+    this._images['__default'].frame = new Frame(0, 0, 0, 32, 32, '', '');
+    this._images['__default'].frameData = new FrameData();
+    this._images['__default'].frameData.addFrame(new Frame(0, 0, 0, 32, 32, null, this.game.rnd.uuid()));
 
     PIXI.BaseTextureCache['__default'] = new PIXI.BaseTexture(img);
     PIXI.TextureCache['__default'] = new PIXI.Texture(PIXI.BaseTextureCache['__default']);
@@ -340,10 +350,16 @@ class Cache {
     this._images['__missing'] = {
       'url': null,
       'data': img,
-      'spriteSheet': false
+    //'spriteSheet': false
     };
-    this._images['__missing']['frame'] = new Frame(0, 0, 0, 32, 32, '', '');
-
+    //this._images['__missing']['frame'] = new Frame(0, 0, 0, 32, 32, '', '');
+    this._images['__missing'] = {
+      'url': null,
+      'data': img
+    };
+    this._images['__missing'].frame = new Frame(0, 0, 0, 32, 32, '', '');
+    this._images['__missing'].frameData = new FrameData();
+    this._images['__missing'].frameData.addFrame(new Frame(0, 0, 0, 32, 32, null, this.game.rnd.uuid()));
     PIXI.BaseTextureCache['__missing'] = new PIXI.BaseTexture(img);
     PIXI.TextureCache['__missing'] = new PIXI.Texture(PIXI.BaseTextureCache['__missing']);
   }
@@ -393,10 +409,12 @@ class Cache {
     this._images[key] = {
       'url': url,
       'data': data,
-      'spriteSheet': false
+//      'spriteSheet': false
     };
 
     this._images[key]['frame'] = new Frame(0, 0, 0, data.width, data.height, key, this.game.rnd.uuid());
+    this._images[key].frameData = new FrameData();
+    this._images[key].frameData.addFrame(new Frame(0, 0, 0, data.width, data.height, url, this.game.rnd.uuid()));
     PIXI.BaseTextureCache[key] = new PIXI.BaseTexture(data);
     PIXI.TextureCache[key] = new PIXI.Texture(PIXI.BaseTextureCache[key]);
   }
@@ -777,7 +795,7 @@ class Cache {
       return this._tilemaps[key];
     } else {
       window.console.warn('Phaser.Cache.getTilemapData: Invalid key: "' + key + '"');
-    return null;
+      return null;
     }
   }
 
@@ -790,7 +808,7 @@ class Cache {
    */
 
   FrameData getFrameData(String key) {
-    if (this._images[key] != null && this._images[key]['frameData'] != null) {
+    if (this._images[key] != null) {
       return this._images[key]['frameData'];
     }
     return null;
@@ -806,7 +824,7 @@ class Cache {
 
   updateFrameData(String key, FrameData frameData) {
     if (this._images[key] != null) {
-      this._images[key]['spriteSheet'] = true;
+      //this._images[key]['spriteSheet'] = true;
       this._images[key]['frameData'] = frameData;
     }
   }
@@ -820,7 +838,7 @@ class Cache {
    */
 
   Frame getFrameByIndex(String key, Frame frame) {
-    if (this._images[key] != null && this._images[key]['frameData'] != null) {
+    if (this._images[key] != null) {
       return this._images[key]['frameData'].getFrame(frame);
     }
     return null;
@@ -835,7 +853,7 @@ class Cache {
    */
 
   Frame getFrameByName(String key, Frame frame) {
-    if (this._images[key] != null && this._images[key]['frameData'] != null) {
+    if (this._images[key] != null) {
       return this._images[key]['frameData'].getFrameByName(frame);
     }
     return null;
@@ -850,7 +868,7 @@ class Cache {
    */
 
   Frame getFrame(String key) {
-    if (this._images[key] != null && this._images[key]['spriteSheet'] == false) {
+    if (this._images[key] != null) {
       return this._images[key]['frame'];
     }
     return null;
@@ -884,7 +902,7 @@ class Cache {
       return this._textures[key];
     } else {
       window.console.warn('Phaser.Cache.getTexture: Invalid key: "' + key + '"');
-    return null;
+      return null;
     }
   }
 
@@ -957,11 +975,11 @@ class Cache {
    * @return {boolean} True if the image is a sprite sheet.
    */
 
-  bool isSpriteSheet(String key) {
+  int getFrameCount(String key) {
     if (this._images[key] != null) {
-      return this._images[key]['spriteSheet'];
+      return this._images[key]['frameData'].length;
     }
-    return false;
+    return 0;
   }
 
   /**

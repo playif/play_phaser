@@ -68,6 +68,12 @@ class Pointer {
 
   Circle circle;
 
+  /**
+      * @property {boolean} dirty - A dirty pointer needs to re-poll any interactive objects it may have been over, regardless if it has moved or not.
+      * @default
+      */
+  bool dirty = false;
+
   double get duration {
     if (this.isUp) {
       return -1.0;
@@ -354,6 +360,7 @@ class Pointer {
     this.withinGame = true;
     this.isDown = true;
     this.isUp = false;
+    this.dirty = false;
 
     //  Work out how long it has been since the last click
     this.msSinceLastClick = this.game.time.now - this.timeDown;
@@ -397,6 +404,15 @@ class Pointer {
   update() {
 
     if (this.active) {
+      //  Force a check?
+      if (this.dirty) {
+        if (this.game.input.interactiveItems.length > 0) {
+          this.processInteractiveObjects(true);
+        }
+
+        this.dirty = false;
+      }
+
       if (this._holdSent == false && this.duration >= this.game.input.holdRate) {
         if (this.game.input.multiInputOverride == Input.MOUSE_OVERRIDES_TOUCH || this.game.input.multiInputOverride == Input.MOUSE_TOUCH_COMBINE || (this.game.input.multiInputOverride == Input.TOUCH_OVERRIDES_MOUSE && this.game.input.currentPointers == 0)) {
           this.game.input.onHold.dispatch(this);
@@ -410,8 +426,8 @@ class Pointer {
         this._nextDrop = this.game.time.now + this.game.input.recordRate;
 
         this._history.add({
-            x: this.position.x,
-            y: this.position.y
+          x: this.position.x,
+          y: this.position.y
         });
 
         if (this._history.length > this.game.input.recordLimit) {
@@ -471,8 +487,8 @@ class Pointer {
       this.movementY += this.rawMovementY;
     }
 
-    this.x = (this.pageX - this.game.stage.offset.x) * this.game.input.scale.x;
-    this.y = (this.pageY - this.game.stage.offset.y) * this.game.input.scale.y;
+    this.x = (this.pageX - this.game.scale.offset.x) * this.game.input.scale.x;
+    this.y = (this.pageY - this.game.scale.offset.y) * this.game.input.scale.y;
 
     this.position.setTo(this.x, this.y);
     this.circle.x = this.x;
@@ -494,15 +510,11 @@ class Pointer {
       return this;
     }
 
-    //  DEPRECATED - Soon to be removed
-    if (this.game.input.moveCallback != null) {
-      this.game.input.moveCallback(this, this.x, this.y);
-    }
 
     int i = this.game.input.moveCallbacks.length;
 
     while (i-- > 0) {
-      this.game.input.moveCallbacks[i]['callback'](this.x, this.y);
+      this.game.input.moveCallbacks[i]['callback'](this.x, this.y, fromClick);
     }
 
     //  Easy out if we're dragging something and it still exists
@@ -510,35 +522,123 @@ class Pointer {
       if (this.targetObject.update(this) == false) {
         this.targetObject = null;
       }
-
-      return this;
+    } else if (this.game.input.interactiveItems.length > 0) {
+      this.processInteractiveObjects(fromClick);
     }
 
+    return this;
+//
+//    //  Work out which object is on the top
+//    this._highestRenderOrderID = 9999999999;
+//    this._highestRenderObject = null;
+//    this._highestInputPriorityID = -1;
+//
+//    //  Run through the list
+//    if (this.game.input.interactiveItems.length > 0) {
+//      for (InputHandler currentNode in this.game.input.interactiveItems) {
+//        //var currentNode = this.game.input.interactiveItems.first;
+//
+//        //do {
+//        //  If the object is using pixelPerfect checks, or has a higher InputManager.PriorityID OR if the priority ID is the same as the current highest AND it has a higher renderOrderID, then set it to the top
+//        if (currentNode != null && currentNode.validForInput(this._highestInputPriorityID, this._highestRenderOrderID)) {
+//
+//          if ((!fromClick && currentNode.checkPointerOver(this)) || (fromClick && currentNode.checkPointerDown(this))) {
+//            this._highestRenderOrderID = currentNode.sprite._cache[3]; // renderOrderID
+//            this._highestInputPriorityID = currentNode.priorityID;
+//            this._highestRenderObject = currentNode;
+//          }
+//        }
+//        //currentNode = this.game.input.interactiveItems.next;
+//      }
+//      //while (currentNode != null);
+//    }
+//
+//    if (this._highestRenderObject == null) {
+//      //  The pointer isn't currently over anything, check if we've got a lingering previous target
+//      if (this.targetObject != null) {
+//        this.targetObject._pointerOutHandler(this);
+//        this.targetObject = null;
+//      }
+//    } else {
+//      if (this.targetObject == null) {
+//        //  And now set the new one
+//        this.targetObject = this._highestRenderObject;
+//        this._highestRenderObject._pointerOverHandler(this);
+//      } else {
+//        //  We've got a target from the last update
+//        if (this.targetObject == this._highestRenderObject) {
+//          //  Same target as before, so update it
+//          if (this._highestRenderObject.update(this) == false) {
+//            this.targetObject = null;
+//          }
+//        } else {
+//          //  The target has changed, so tell the old one we've left it
+//          this.targetObject._pointerOutHandler(this);
+//
+//          //  And now set the new one
+//          this.targetObject = this._highestRenderObject;
+//          this.targetObject._pointerOverHandler(this);
+//        }
+//      }
+//    }
+//
+//    return this;
+
+  }
+
+  /**
+      * Process all interactive objects to find out which ones were updated in the recent Pointer move.
+      * 
+      * @method Phaser.Pointer#processInteractiveObjects
+      * @protected
+      * @param {boolean} [fromClick=false] - Was this called from the click event?
+      * @return {boolean} True if this method processes an object (i.e. a Sprite becomes the Pointers currentTarget), otherwise false.
+      */
+  bool processInteractiveObjects([bool fromClick = false]) {
+
+    this.game.input.interactiveItems.forEach((InputHandler i) {
+      i.checked = false;
+    });
+
     //  Work out which object is on the top
-    this._highestRenderOrderID = 9999999999;
+    this._highestRenderOrderID = double.MAX_FINITE.toInt();
     this._highestRenderObject = null;
     this._highestInputPriorityID = -1;
 
-    //  Run through the list
-    if (this.game.input.interactiveItems.length > 0) {
-      for (InputHandler currentNode in this.game.input.interactiveItems) {
-        //var currentNode = this.game.input.interactiveItems.first;
+    //  First pass gets all objects that the pointer is over that DON'T use pixelPerfect checks and get the highest ID
+    //  We know they'll be valid for input detection but not which is the top just yet
 
-        //do {
-        //  If the object is using pixelPerfect checks, or has a higher InputManager.PriorityID OR if the priority ID is the same as the current highest AND it has a higher renderOrderID, then set it to the top
-        if (currentNode != null && currentNode.validForInput(this._highestInputPriorityID, this._highestRenderOrderID)) {
+    //InputHandler currentNode = this.game.input.interactiveItems.first;
+    this.game.input.interactiveItems.forEach((InputHandler currentNode){
+      if (currentNode != null && currentNode.validForInput(this._highestInputPriorityID, this._highestRenderOrderID, false)) {
+        //  Flag it as checked so we don't re-scan it on the next phase
+        currentNode.checked = true;
 
-          if ((!fromClick && currentNode.checkPointerOver(this)) || (fromClick && currentNode.checkPointerDown(this))) {
-            this._highestRenderOrderID = currentNode.sprite._cache[3]; // renderOrderID
-            this._highestInputPriorityID = currentNode.priorityID;
-            this._highestRenderObject = currentNode;
-          }
+        if ((fromClick && currentNode.checkPointerDown(this, true)) || (!fromClick && currentNode.checkPointerOver(this, true))) {
+          this._highestRenderOrderID = currentNode.sprite._cache[3]; // renderOrderID
+          this._highestInputPriorityID = currentNode.priorityID;
+          this._highestRenderObject = currentNode;
         }
-        //currentNode = this.game.input.interactiveItems.next;
       }
-      //while (currentNode != null);
-    }
+    });
 
+
+    //  Then in the second sweep we process ONLY the pixel perfect ones that are checked and who have a higher ID
+    //  because if their ID is lower anyway then we can just automatically discount them
+
+    //currentNode = this.game.input.interactiveItems.first;
+
+    this.game.input.interactiveItems.forEach((InputHandler currentNode){
+      if (currentNode != null  && !currentNode.checked && currentNode.validForInput(this._highestInputPriorityID, this._highestRenderOrderID, true)) {
+        if ((fromClick && currentNode.checkPointerDown(this, false)) || (!fromClick && currentNode.checkPointerOver(this, false))) {
+          this._highestRenderOrderID = currentNode.sprite._cache[3]; // renderOrderID
+          this._highestInputPriorityID = currentNode.priorityID;
+          this._highestRenderObject = currentNode;
+        }
+      }
+    });
+
+    //  Now we know the top-most item (if any) we can process it
     if (this._highestRenderObject == null) {
       //  The pointer isn't currently over anything, check if we've got a lingering previous target
       if (this.targetObject != null) {
@@ -568,7 +668,7 @@ class Pointer {
       }
     }
 
-    return this;
+    return (this.targetObject != null);
 
   }
 
@@ -697,6 +797,7 @@ class Pointer {
 
     this.pointerId = null;
     this.identifier = null;
+    this.dirty= false; 
     this.isDown = false;
     this.isUp = true;
     this.totalTouches = 0;

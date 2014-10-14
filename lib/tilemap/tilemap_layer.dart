@@ -189,7 +189,7 @@ class TilemapLayer extends Image {
     /**
      * @property {HTMLCanvasElement} canvas - The canvas to which this TilemapLayer draws.
      */
-    this.canvas = Canvas.create(width, height, '', true);
+    this.canvas = Canvas.create(width, height, '');
 
     /**
      * @property {CanvasRenderingContext2D} context - The 2d context of the canvas.

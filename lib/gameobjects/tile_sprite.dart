@@ -8,7 +8,7 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
   String name;
   num type;
   Events events;
-  bool alive;
+  bool alive = true;
 
   GameObject get parent => super.parent;
 
@@ -705,6 +705,10 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
     }
 
     this._cache[8] = 1;
+    
+    if (this.events != null) {
+      this.events.onDestroy.dispatch(this);
+    }
 
     if (this.filters != null) {
       this.filters = null;
@@ -736,6 +740,7 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
 
     this.exists = false;
     this.visible = false;
+    this.alive = false;
 
     this.filters = null;
     this.mask = null;

@@ -106,7 +106,7 @@ class Signal<T extends Function> {
     while (n-- > 0) {
       this._bindings[n]._destroy();
     }
-    this._bindings.length = 0;
+    this._bindings.clear();
   }
 
   /// Gets the total number of listeneres attached to ths Signal.

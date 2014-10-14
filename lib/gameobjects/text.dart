@@ -248,6 +248,10 @@ class Text extends PIXI.Text implements GameObject {
     this._cache = [0, 0, 0, 0, 1, 0, 1, 0, 0];
 
 
+    if (text != ''){
+      this.updateText();
+    }
+    
   }
 
 //  bool get inputEnabled {
@@ -358,6 +362,10 @@ class Text extends PIXI.Text implements GameObject {
     }
 
     this._cache[8] = 1;
+    
+    if (this.events != null) {
+      this.events.onDestroy.dispatch(this);
+    }
 
     if (this.parent != null) {
       if (this.parent is Group) {
@@ -367,7 +375,7 @@ class Text extends PIXI.Text implements GameObject {
       }
     }
 
-    this.texture.destroy();
+    this.texture.destroy(true);
 
     if (this.canvas.parentNode != null) {
       this.canvas.remove();

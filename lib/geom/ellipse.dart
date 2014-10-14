@@ -180,16 +180,16 @@ class Ellipse extends PIXI.Ellipse {
    * @return {Phaser.Ellipse} The cloned Ellipse object.
    */
 
-  Ellipse clone([Ellipse out]) {
+  Ellipse clone([Ellipse output]) {
 
-    if (out == null) {
-      out = new Ellipse(this.x, this.y, this.width, this.height);
+    if (output == null) {
+      output = new Ellipse(this.x, this.y, this.width, this.height);
     }
     else {
-      out.setTo(this.x, this.y, this.width, this.height);
+      output.setTo(this.x, this.y, this.width, this.height);
     }
 
-    return out;
+    return output;
 
   }
 

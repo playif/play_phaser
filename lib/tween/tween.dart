@@ -11,22 +11,19 @@ class Tween {
    * @property {object} _valuesStart - Private value object.
    * @private
    */
-  Map _valuesStart = {
-  };
+  Map _valuesStart = {};
 
   /**
    * @property {object} _valuesEnd - Private value object.
    * @private
    */
-  Map _valuesEnd = {
-  };
+  Map _valuesEnd = {};
 
   /**
    * @property {object} _valuesStartRepeat - Private value object.
    * @private
    */
-  Map _valuesStartRepeat = {
-  };
+  Map _valuesStartRepeat = {};
 
   /**
    * @property {number} _duration - Private duration counter.
@@ -74,7 +71,7 @@ class Tween {
    * @property {function} _easingFunction - The easing function used for the tween.
    * @private
    */
-  EasingFunction _easingFunction = Easing.Linear.None;
+  EasingFunction _easingFunction = Easing.Default;
 
   /**
    * @property {function} _interpolationFunction - The interpolation function used for the tween.
@@ -170,7 +167,7 @@ class Tween {
 
   }
 
-  Tween to(Map<String,num> properties, [int duration=1000, EasingFunction ease=null, bool autoStart=false, num delay=0.0, int repeat=0, bool yoyo=false]) {
+  Tween to(Map<String, num> properties, [int duration = 1000, EasingFunction ease = null, bool autoStart = false, num delay = 0.0, int repeat = 0, bool yoyo = false]) {
     if (yoyo && repeat == 0) {
       repeat = 1;
     }
@@ -181,8 +178,7 @@ class Tween {
       self = this._manager.create(this._object);
       this._lastChild.chain(self);
       this._lastChild = self;
-    }
-    else {
+    } else {
       self = this;
       this._parent = this;
       this._lastChild = this;
@@ -204,8 +200,7 @@ class Tween {
 
     if (autoStart) {
       return this.start();
-    }
-    else {
+    } else {
       return this;
     }
 
@@ -227,14 +222,13 @@ class Tween {
    * @return {Phaser.Tween} This Tween object.
    */
 
-  Tween from(Map properties, [int duration=1000, EasingFunction ease=null, bool autoStart=false, double delay=0.0, int repeat=0, bool yoyo=false]) {
-    Map _cache = {
-    };
+  Tween from(Map properties, [int duration = 1000, EasingFunction ease = null, bool autoStart = false, double delay = 0.0, int repeat = 0, bool yoyo = false]) {
+    Map _cache = {};
 
-    InstanceMirror instance=reflect(this._object);
-    
+    InstanceMirror instance = reflect(this._object);
+
     for (String prop in properties.keys) {
-      Symbol field= new Symbol(prop);
+      Symbol field = new Symbol(prop);
       _cache[prop] = instance.getField(new Symbol(prop)).reflectee; //this._object[prop];
       //this._object[prop] = properties[prop];
       instance.setField(field, properties[prop]);
@@ -266,8 +260,8 @@ class Tween {
 
     this._startTime = this.game.time.now + this._delayTime;
 
-    InstanceMirror instance=reflect(this._object);
-    
+    InstanceMirror instance = reflect(this._object);
+
     for (var property in this._valuesEnd.keys) {
       // check if an Array was provided as property value
       if (this._valuesEnd[property] is List) {
@@ -278,8 +272,8 @@ class Tween {
         // create a local copy of the Array with the start value at the front
         [this._object[property]].addAll(this._valuesEnd[property]);
       }
-      
-      Symbol field= new Symbol(property);
+
+      Symbol field = new Symbol(property);
 
       this._valuesStart[property] = instance.getField(field).reflectee; //this._object [property];
 
@@ -308,7 +302,7 @@ class Tween {
    * @return {array} An array of tweened values.
    */
 
-  List generateData([int frameRate =60, List data]) {
+  List generateData([int frameRate = 60, List data]) {
 
     if (this.game == null || this._object == null) {
       return null;
@@ -351,8 +345,7 @@ class Tween {
       elapsed = elapsed > 1 ? 1 : elapsed;
 
       var value = this._easingFunction(elapsed);
-      var blob = {
-      };
+      Map blob = {};
 
       for (property in this._valuesEnd.keys) {
         var start = this._valuesStart[property];
@@ -360,16 +353,16 @@ class Tween {
 
         if (end is List) {
           blob[property] = this._interpolationFunction(end, value);
-        }
-        else {
-          // Parses relative end values with start as base (e.g.: +10, -3)
+        } else {
+
           if (end is String) {
+            // Parses relative end values with start as base (e.g.: +10, -3)
             end = start + double.parse(end);
           }
 
-          // protect against non numeric properties.
           if (end is num) {
-            blob[property] = start + ( end - start ) * value;
+            //  Protect against non numeric properties.
+            blob[property] = start + (end - start) * value;
           }
         }
       }
@@ -378,6 +371,14 @@ class Tween {
 
       time += tick;
     }
+
+    Map blob = {};
+
+    for (var property in this._valuesEnd.keys) {
+      blob[property] = this._valuesEnd[property];
+    }
+
+    output.add(blob);
 
     if (this._yoyo) {
 //      List reversed = output.reversed;
@@ -389,8 +390,7 @@ class Tween {
       data.addAll(output);
 
       return data;
-    }
-    else {
+    } else {
       return output;
     }
 
@@ -607,8 +607,7 @@ class Tween {
 
     if (this._codePaused) {
       return;
-    }
-    else {
+    } else {
       this._startTime += this.game.time.pauseDuration;
       this._paused = false;
     }
@@ -655,8 +654,7 @@ class Tween {
 
       if (end is List) {
         this._object[property] = this._interpolationFunction(end, value);
-      }
-      else {
+      } else {
         // Parses relative end values with start as base (e.g.: +10, -3)
         if (end is String) {
           end = start + double.parse(end);
@@ -665,7 +663,7 @@ class Tween {
         // protect against non numeric properties.
         if (end is num) {
           InstanceMirror instance = reflect(this._object);
-          instance.setField(new Symbol(property), start + ( end - start ) * value);
+          instance.setField(new Symbol(property), start + (end - start) * value);
           //this._object[property] = start + ( end - start ) * value;
         }
       }
@@ -710,12 +708,12 @@ class Tween {
         this.onLoop.dispatch(this._object);
 
         return true;
-      }
-      else {
+      } else {
         this.isRunning = false;
         this.onComplete.dispatch(this._object);
 
-        for (var i = 0, numChainedTweens = this._chainedTweens.length; i < numChainedTweens; i ++) {
+        for (var i = 0,
+            numChainedTweens = this._chainedTweens.length; i < numChainedTweens; i++) {
           this._chainedTweens[i].start();
         }
 
@@ -729,4 +727,3 @@ class Tween {
   }
 
 }
-

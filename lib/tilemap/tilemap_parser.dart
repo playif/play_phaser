@@ -182,6 +182,7 @@ class TilemapParser {
         ..properties = {}
         ..indexes = []
         ..callbacks = []
+        ..bodies = []
         ..data = [];
 
 
@@ -381,10 +382,11 @@ class TilemapParser {
             ['properties']: json['layers'][i]['objects'][v]['properties']
           };
           objects[json['layers'][i]['name']].add(object);
-          
+
         } else if (json['layers'][i]['objects'][v]['polyline'] != null) {
           Map object = {
             ['name']: json['layers'][i]['objects'][v]['name'],
+            ['type']: json['layers'][i]['objects'][v]['type'],
             ['x']: json['layers'][i]['objects'][v]['x'],
             ['y']: json['layers'][i]['objects'][v]['y'],
             ['width']: json['layers'][i]['objects'][v]['width'],
@@ -400,9 +402,10 @@ class TilemapParser {
           }
 
           collision[json['layers'][i]['name']].add(object);
+          objects[json['layers'][i]['name']].add(object);
         } // polygon
         else if (json['layers'][i]['objects'][v]['polygon'] != null) {
-          Map object = slice(json['layers'][i]['objects'][v], ["name", "x", "y", "visible", "properties"]);
+          Map object = slice(json['layers'][i]['objects'][v], ["name", "type", "x", "y", "visible", "properties"]);
 
           //  Parse the polygon into an array
           object['polygon'] = [];
@@ -413,11 +416,11 @@ class TilemapParser {
 
         } // ellipse
         else if (json['layers'][i]['objects'][v]['ellipse']) {
-          var object = slice(json['layers'][i]['objects'][v], ["name", "ellipse", "x", "y", "width", "height", "visible", "properties"]);
+          var object = slice(json['layers'][i]['objects'][v], ["name", "type", "ellipse", "x", "y", "width", "height", "visible", "properties"]);
           objects[json['layers'][i]['name']].add(object);
         } // otherwise it's a rectangle
         else {
-          Map object = slice(json['layers'][i]['objects'][v], ["name", "x", "y", "width", "height", "visible", "properties"]);
+          Map object = slice(json['layers'][i]['objects'][v], ["name", "type", "x", "y", "width", "height", "visible", "properties"]);
           object['rectangle'] = true;
           objects[json['layers'][i]['name']].add(object);
         }
@@ -443,13 +446,12 @@ class TilemapParser {
       for (var t = set.firstgid; t < set.firstgid + set.total; t++) {
         //  Can add extra properties here as needed
         //TODO
-        if(t>=map.tiles.length){
+        if (t >= map.tiles.length) {
           map.tiles.add([x, y, i]);
-        }
-        else{
+        } else {
           map.tiles[t] = [x, y, i];
         }
-        
+
 
         x += set.tileWidth + set.tileSpacing;
 
@@ -474,6 +476,39 @@ class TilemapParser {
         }
       }
 
+    }
+
+    // assign tile properties
+
+    var i, j, k;
+    var layer, tile, sid, set;
+
+    // go through each of the map layers
+    for (i = 0; i < map.layers.length; i++) {
+      layer = map.layers[i];
+
+      // rows of tiles
+      for (j = 0; j < layer.data.length; j++) {
+        List row = layer.data[j];
+
+        // individual tiles
+        for (k = 0; k < row.length; k++) {
+          tile = row[k];
+
+          if (tile.index < 0) {
+            continue;
+          }
+
+          // find the relevant tileset
+          sid = map.tiles[tile.index][2];
+          set = map.tilesets[sid];
+
+          // if that tile type has any properties, add them to the tile object
+          if (set.tileProperties && set.tileProperties[tile.index - set.firstgid]) {
+            tile.properties = set.tileProperties[tile.index - set.firstgid];
+          }
+        }
+      }
     }
 
     return map;

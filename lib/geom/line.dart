@@ -4,7 +4,7 @@ class Line {
   num x1, x2, y1, y2;
   Point start, end;
 
-  Line([this.x1=0, this.y1=0, this.x2=0, this.y2=0]) {
+  Line([this.x1 = 0, this.y1 = 0, this.x2 = 0, this.y2 = 0]) {
     /**
      * @property {Phaser.Point} start - The start point of the line.
      */
@@ -26,7 +26,7 @@ class Line {
    * @return {Phaser.Line} This line object
    */
 
-  setTo([int x1=0, int y1=0, int x2=0, int y2=0]) {
+  setTo([int x1 = 0, int y1 = 0, int x2 = 0, int y2 = 0]) {
     this.start.setTo(x1, y1);
     this.end.setTo(x2, y2);
     return this;
@@ -42,19 +42,33 @@ class Line {
    * @return {Phaser.Line} This line object
    */
 
-  Line fromSprite(Sprite startSprite, Sprite endSprite, [bool useCenter=false]) {
+  Line fromSprite(Sprite startSprite, Sprite endSprite, [bool useCenter = false]) {
 
 //    if (typeof useCenter == 'undefined') { useCenter = false; }
 
     if (useCenter) {
       return this.setTo(startSprite.center.x, startSprite.center.y, endSprite.center.x, endSprite.center.y);
     }
-    else {
-      return this.setTo(startSprite.x, startSprite.y, endSprite.x, endSprite.y);
-    }
+    return this.setTo(startSprite.x, startSprite.y, endSprite.x, endSprite.y);
 
   }
 
+  /**
+      * Returns a new Line object with the same values for the start and end properties as this Line object.
+      * @method Phaser.Line#clone
+      * @param {Phaser.Line} output - Optional Line object. If given the values will be set into the object, otherwise a brand new Line object will be created and returned.
+      * @return {Phaser.Line} The cloned Line object.
+      */
+  Line clone(Line output) {
+
+    if (output == null) {
+      output = new Line(this.start.x, this.start.y, this.end.x, this.end.y);
+    } else {
+      output.setTo(this.start.x, this.start.y, this.end.x, this.end.y);
+    }
+
+    return output;
+  }
   /**
    * Checks for intersection between this line and another Line.
    * If asSegment is true it will check for segment intersection. If asSegment is false it will check for line intersection.
@@ -114,7 +128,7 @@ class Line {
    * @return {array} An array of coordinates.
    */
 
-  List<List<num>> coordinatesOnLine([int stepRate=1, List<List<num>> results]) {
+  List<List<num>> coordinatesOnLine([int stepRate = 1, List<List<num>> results]) {
 
 //  if (typeof stepRate === 'undefined') { stepRate = 1; }
     if (results == null) {
@@ -222,7 +236,7 @@ class Line {
    * @return {Phaser.Point} The intersection segment of the two lines as a Point, or null if there is no intersection.
    */
 
-  static Point intersectsPoints(Point a, Point b, Point e, Point f, [bool asSegment=true, Point result]) {
+  static Point intersectsPoints(Point a, Point b, Point e, Point f, [bool asSegment = true, Point result]) {
 
 //    if (typeof asSegment === 'undefined') { asSegment = true; }
     if (result == null) {

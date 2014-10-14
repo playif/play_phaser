@@ -1714,11 +1714,12 @@ class Loader {
     if (this.preloadSprite != null) {
       if (this.preloadSprite['direction'] == 0) {
         this.preloadSprite['rect'].width = Math.floor((this.preloadSprite['width'] / 100) * this.progress);
-        this.preloadSprite['sprite'].crop(this.preloadSprite['rect']);
+        //this.preloadSprite['sprite'].crop(this.preloadSprite['rect']);
       } else {
         this.preloadSprite['rect'].height = Math.floor((this.preloadSprite['height'] / 100) * this.progress);
-        this.preloadSprite['sprite'].crop(this.preloadSprite['rect']);
+        //this.preloadSprite['sprite'].crop(this.preloadSprite['rect']);
       }
+      this.preloadSprite['sprite'].updateCrop();
     }
 
     this.onFileComplete.dispatch([this.progress, this._fileList[previousIndex]['key'], success, this.totalLoadedFiles(), this._fileList.length]);

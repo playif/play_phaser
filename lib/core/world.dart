@@ -5,12 +5,27 @@ class World extends Group {
   Rectangle bounds;
   Camera camera;
 
+  /// True if the World has been given a specifically defined size (i.e. from a Tilemap or direct in code) or false if it's just matched to the Game dimensions.
+  bool _definedSize;
+
+  /// The defined width of the World. Sometimes the bounds needs to grow larger than this (if you resize the game) but this retains the original requested dimension.
+  num _width;
+
+  /// The defined height of the World. Sometimes the bounds needs to grow larger than this (if you resize the game) but this retains the original requested dimension.
+  num _height;
+
+
   num get width {
     return this.bounds.width;
   }
 
   set width(num value) {
+    if (value < this.game.width) {
+      value = this.game.width;
+    }
     this.bounds.width = value;
+    this._width = value;
+    this._definedSize = true;
   }
 
   num get height {
@@ -18,7 +33,12 @@ class World extends Group {
   }
 
   set height(num value) {
+    if (value < this.game.height) {
+      value = this.game.height;
+    }
     this.bounds.height = value;
+    this._height = value;
+    this._definedSize = true;
   }
 
   num get centerX {
@@ -32,8 +52,7 @@ class World extends Group {
   num get randomX {
     if (this.bounds.x < 0) {
       return this.game.rnd.integerInRange(this.bounds.x, (this.bounds.width - Math.abs(this.bounds.x)));
-    }
-    else {
+    } else {
       return this.game.rnd.integerInRange(this.bounds.x, this.bounds.width);
     }
   }
@@ -41,15 +60,14 @@ class World extends Group {
   num get randomY {
     if (this.bounds.y < 0) {
       return this.game.rnd.integerInRange(this.bounds.y, (this.bounds.height - Math.abs(this.bounds.y)));
-    }
-    else {
+    } else {
       return this.game.rnd.integerInRange(this.bounds.y, this.bounds.height);
     }
   }
 
-    World(Game game):super(game, null, '__world', false) {
+  World(Game game) : super(game, null, '__world', false) {
 
-    this.game=game;
+    this.game = game;
 
     /**
      * The World has no fixed size, but it does have a bounds outside of which objects are no longer considered as being "in world" and you should use this to clean-up the display list and purge dead objects.
@@ -64,6 +82,13 @@ class World extends Group {
      * @property {Phaser.Camera} camera - Camera instance.
      */
     this.camera = null;
+
+
+    this._definedSize = false;
+
+    this._width = game.width;
+
+    this._height = game.height;
 
   }
 
@@ -93,23 +118,38 @@ class World extends Group {
 
   setBounds(num x, num y, num width, num height) {
 
-    if (width < this.game.width) {
-      width = this.game.width;
-    }
-
-    if (height < this.game.height) {
-      height = this.game.height;
-    }
+    this._definedSize = true;
+    this._width = width;
+    this._height = height;
 
     this.bounds.setTo(x, y, width, height);
 
     if (this.camera.bounds != null) {
       //  The Camera can never be smaller than the game size
-      this.camera.bounds.setTo(x, y, width, height);
+      //this.camera.bounds.setTo(x, y, width, height);
+      this.camera.bounds.setTo(x, y, Math.max(width, this.game.width), Math.max(height, this.game.height));
     }
 
     this.game.physics.setBoundsToWorld();
 
+  }
+
+  resize(num width, num height) {
+    //  Don't ever scale the World bounds lower than the original requested dimensions if it's a defined world size
+    if (this._definedSize) {
+      if (width < this._width) {
+        width = this._width;
+      }
+
+      if (height < this._height) {
+        height = this._height;
+      }
+    }
+    this.bounds.width = width;
+    this.bounds.height = height;
+
+    this.game.camera.setBoundsToWorld();
+    this.game.physics.setBoundsToWorld();
   }
 
   /**
@@ -137,37 +177,32 @@ class World extends Group {
    * @param {boolean} [vertical=true] - If vertical is false, wrap will not wrap the object.y coordinates vertically.
    */
 
-  wrap(GameObject sprite, [num padding =0, bool useBounds =false, bool horizontal=true, bool vertical=true]) {
+  wrap(GameObject sprite, [num padding = 0, bool useBounds = false, bool horizontal = true, bool vertical = true]) {
 
     if (!useBounds) {
       if (horizontal && sprite.x + padding < this.bounds.x) {
         sprite.x = this.bounds.right + padding;
-      }
-      else if (horizontal && sprite.x - padding > this.bounds.right) {
+      } else if (horizontal && sprite.x - padding > this.bounds.right) {
         sprite.x = this.bounds.left - padding;
       }
 
       if (vertical && sprite.y + padding < this.bounds.top) {
         sprite.y = this.bounds.bottom + padding;
-      }
-      else if (vertical && sprite.y - padding > this.bounds.bottom) {
+      } else if (vertical && sprite.y - padding > this.bounds.bottom) {
         sprite.y = this.bounds.top - padding;
       }
-    }
-    else {
+    } else {
       sprite.getBounds();
 
       if (horizontal && sprite._currentBounds.right < this.bounds.x) {
         sprite.x = this.bounds.right;
-      }
-      else if (horizontal && sprite._currentBounds.x > this.bounds.right) {
+      } else if (horizontal && sprite._currentBounds.x > this.bounds.right) {
         sprite.x = this.bounds.left;
       }
 
       if (vertical && sprite._currentBounds.bottom < this.bounds.top) {
         sprite.y = this.bounds.bottom;
-      }
-      else if (vertical && sprite._currentBounds.top > this.bounds.bottom) {
+      } else if (vertical && sprite._currentBounds.top > this.bounds.bottom) {
         sprite.y = this.bounds.top;
       }
     }

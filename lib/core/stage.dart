@@ -22,7 +22,7 @@ class Stage extends PIXI.Stage implements GameObject {
 
   PIXI.scaleModes scaleMode;
 
-  
+
   GameObject parent;
 
   int z;
@@ -32,7 +32,7 @@ class Stage extends PIXI.Stage implements GameObject {
     return new Point(x + width / 2, y + height / 2);
   }
 
-  Point world=new Point();
+  Point world = new Point();
   Rectangle _currentBounds;
   int type;
   List _cache;
@@ -42,26 +42,20 @@ class Stage extends PIXI.Stage implements GameObject {
   Point cameraOffset;
   bool autoCull;
   bool alive;
-  bool _dirty=false;
-  
+  bool _dirty = false;
 
-  
-  destroy([bool destroyChildren = true]) {
-    throw new Exception("Not implement yet!");
-  }
-  
+
   bool get destroyPhase {
     return false;
   }
-  
+
   GameObject bringToTop([GameObject child]) {
-    if(child == null){
+    if (child == null) {
       if (this.parent != null) {
         this.parent.bringToTop(this);
       }
-      return this; 
-    }
-    else{
+      return this;
+    } else {
       if (child.parent == this && this.children.indexOf(child) < this.children.length) {
         this.removeChild(child);
         this.addChild(child);
@@ -69,7 +63,7 @@ class Stage extends PIXI.Stage implements GameObject {
       return child;
     }
   }
-  
+
 
   /**
    * @name Phaser.Stage#backgroundColor
@@ -110,19 +104,9 @@ class Stage extends PIXI.Stage implements GameObject {
 
   List<GameObject> children = [];
 
-  Stage(this.game, num width, num height)
+  Stage(this.game)
       : super() {
-    /**
-     * @property {Phaser.Point} offset - Holds the offset coordinates of the Game.canvas from the top-left of the browser window (used by Input and other classes)
-     */
-    this.offset = new Point();
 
-    /**
-     * @property {Phaser.Rectangle} bounds - The bounds of the Stage. Typically x/y = Stage.offset.x/y and the width/height match the game width and height.
-     */
-    this.bounds = new Rectangle(0, 0, width, height);
-
-    //PIXI.Stage.call(this, 0x000000);
 
     /**
      * @property {string} name - The name of this object.
@@ -144,12 +128,6 @@ class Stage extends PIXI.Stage implements GameObject {
     this.disableVisibilityChange = false;
 
     /**
-     * @property {number|false} checkOffsetInterval - The time (in ms) between which the stage should check to see if it has moved.
-     * @default
-     */
-    this.checkOffsetInterval = 2500;
-
-    /**
      * @property {boolean} exists - If exists is true the Stage and all children are updated, otherwise it is skipped.
      * @default
      */
@@ -167,12 +145,6 @@ class Stage extends PIXI.Stage implements GameObject {
     this._hiddenVar = 'hidden';
 
     /**
-     * @property {number} _nextOffsetCheck - The time to run the next offset check.
-     * @private
-     */
-    this._nextOffsetCheck = 0;
-
-    /**
      * @property {number} _backgroundColor - Stage background color.
      * @private
      */
@@ -181,6 +153,47 @@ class Stage extends PIXI.Stage implements GameObject {
     if (game.config != null) {
       this.parseConfig(game.config);
     }
+  }
+
+  /**
+   *  Parses a Game configuration object.
+  *
+  * @method Phaser.Stage#parseConfig
+  * @protected
+  * @param {object} config -The configuration object to parse.
+  */
+  parseConfig(Map config) {
+
+    if (config['disableVisibilityChange']) {
+      this.disableVisibilityChange = config['disableVisibilityChange'];
+    }
+
+    if (config['backgroundColor']) {
+      this.backgroundColor = config['backgroundColor'];
+    }
+
+  }
+
+  /**
+  * Initialises the stage and adds the event listeners.
+  * @method Phaser.Stage#boot
+  * @private
+  */
+  boot() {
+
+    Canvas.getOffset(this.game.canvas, this.offset);
+
+    //var _this = this;
+
+    this._onChange = (event) {
+      return this.visibilityChange(event);
+    };
+
+    Canvas.setUserSelect(this.game.canvas, 'none');
+    Canvas.setTouchAction(this.game.canvas, 'none');
+
+    this.checkVisibility();
+
   }
 
 
@@ -199,7 +212,7 @@ class Stage extends PIXI.Stage implements GameObject {
 
   update() {
     int i = this.children.length;
-    while (i-- > 0 ) {
+    while (i-- > 0) {
       this.children[i].update();
     }
   }
@@ -227,60 +240,6 @@ class Stage extends PIXI.Stage implements GameObject {
         this.children[i].postUpdate();
       }
     }
-
-    if (this.checkOffsetInterval != false) {
-      if (this.game.time.now > this._nextOffsetCheck) {
-        Canvas.getOffset(this.game.canvas, this.offset);
-        this.bounds.x = this.offset.x;
-        this.bounds.y = this.offset.y;
-        this._nextOffsetCheck = this.game.time.now + this.checkOffsetInterval;
-      }
-    }
-
-  }
-
-  parseConfig(Map config) {
-
-    if (config.containsKey('checkOffsetInterval')) {
-      this.checkOffsetInterval = config['checkOffsetInterval'];
-    }
-
-    if (config.containsKey('disableVisibilityChange')) {
-      this.disableVisibilityChange = config['disableVisibilityChange'];
-    }
-
-    if (config.containsKey('fullScreenScaleMode')) {
-      this.fullScreenScaleMode = config['fullScreenScaleMode'];
-    }
-
-    if (config.containsKey('scaleMode')) {
-      this.scaleMode = config['scaleMode'];
-    }
-
-    if (config.containsKey('backgroundColor')) {
-      this.backgroundColor = config['backgroundColor'];
-    }
-
-  }
-
-
-  boot() {
-
-    Canvas.getOffset(this.game.canvas, this.offset);
-
-    this.bounds.setTo(this.offset.x, this.offset.y, this.game.width, this.game.height);
-
-    var _this = this;
-
-    this._onChange = (event) {
-      return _this.visibilityChange(event);
-    };
-
-    Canvas.setUserSelect(this.game.canvas, 'none');
-    //Canvas.setTouchAction(this.game.canvas, 'none');
-
-    this.checkVisibility();
-
   }
 
   checkVisibility() {
@@ -301,6 +260,16 @@ class Stage extends PIXI.Stage implements GameObject {
 //          this._hiddenVar = null;
 //        }
 
+    if (this.game.device.cocoonJS) {
+      // TODO
+//            CocoonJS.App.onSuspended.addEventListener(function () {
+//                Phaser.Stage.prototype.visibilityChange.call(_this, {type: "pause"});
+//            });
+//
+//            CocoonJS.App.onActivated.addEventListener(function () {
+//                Phaser.Stage.prototype.visibilityChange.call(_this, {type: "resume"});
+//            });
+    }
 
     this._hiddenVar = 'visibilitychange';
     //  Does browser support it? If not (like in IE9 or old Android) we need to fall back to blur/focus
@@ -355,5 +324,23 @@ class Stage extends PIXI.Stage implements GameObject {
 
   }
 
+  /** 
+   * Destroys the Stage and removes event listeners.
+  *
+  * @name Phaser.Stage#destroy
+  */
+  destroy ([bool destroyChildren = true]) {
+      if (this._hiddenVar != null)
+      {
+          document.removeEventListener(this._hiddenVar, this._onChange, false);
+      }
+      
+//      window.onPageHide.close();.onpagehide = null;
+//      window.onpageshow = null;
+//
+//      window.onblur = null;
+//      window.onfocus = null;
+
+  }
 
 }

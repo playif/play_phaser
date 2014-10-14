@@ -13,14 +13,51 @@ class Camera {
   Rectangle screenView;
   Rectangle bounds;
   Rectangle deadzone;
+
+  /// If a Camera has roundPx set to `true` it will call `view.floor` as part of its update loop, keeping its boundary to integer values. Set this to `false` to disable this from happening.
+  bool roundPx;
+
   bool visible;
   AtLimit atLimit;
   Sprite target;
 
   num _edge;
+
+  /// Current position of the camera in world.
+  Point _position;
+
   PIXI.DisplayObject displayObject;
 
   Point scale;
+
+  /**
+  * The Cameras position. This value is automatically clamped if it falls outside of the World bounds.
+  * @name Phaser.Camera#position
+  * @property {Phaser.Point} position - Gets or sets the cameras xy position using Phaser.Point object.
+  */
+  //Object.defineProperty(Phaser.Camera.prototype, "position", {
+
+  Point get position {
+    this._position.set(this.view.centerX, this.view.centerY);
+    return this._position;
+  }
+
+  set position(Point value) {
+
+    if (value.x != null) {
+      this.view.x = value.x;
+    }
+    if (value.y != null) {
+      this.view.y = value.y;
+    }
+
+    if (this.bounds != null) {
+      this.checkBounds();
+    }
+  }
+
+  //});
+
 
   Camera(this.game, id, x, y, width, height) {
 
@@ -65,6 +102,8 @@ class Camera {
      */
     this.visible = true;
 
+    this.roundPx = true;
+
     /**
      * @property {boolean} atLimit - Whether this camera is flush with the World Bounds or not.
      */
@@ -82,6 +121,9 @@ class Camera {
      * @default
      */
     this._edge = 0;
+
+
+    this._position = new Point();
 
     /**
      * @property {PIXI.DisplayObject} displayObject - The display object to which all game objects are added. Set by World.boot
@@ -166,7 +208,7 @@ class Camera {
    * @param {Phaser.Sprite|Phaser.Image|Phaser.Text} target - The object you want the camera to track. Set to null to not follow anything.
    * @param {number} [style] - Leverage one of the existing "deadzone" presets. If you use a custom deadzone, ignore this parameter and manually specify the deadzone after calling follow().
    */
-  follow(target, [int style =Camera.FOLLOW_LOCKON]) {
+  follow(target, [int style = Camera.FOLLOW_LOCKON]) {
 
     this.target = target;
 
@@ -234,12 +276,16 @@ class Camera {
    */
   update() {
 
-    if (this.target !=null) {
+    if (this.target != null) {
       this.updateTarget();
     }
 
-    if (this.bounds !=null) {
+    if (this.bounds != null) {
       this.checkBounds();
+    }
+
+    if (this.roundPx) {
+      this.view.floor();
     }
 
     this.displayObject.position.x = -this.view.x;
@@ -259,8 +305,7 @@ class Camera {
 
       if (this._edge < this.deadzone.left) {
         this.view.x = this.target.x - this.deadzone.left;
-      }
-      else if (this._edge > this.deadzone.right) {
+      } else if (this._edge > this.deadzone.right) {
         this.view.x = this.target.x - this.deadzone.right;
       }
 
@@ -268,12 +313,10 @@ class Camera {
 
       if (this._edge < this.deadzone.top) {
         this.view.y = this.target.y - this.deadzone.top;
-      }
-      else if (this._edge > this.deadzone.bottom) {
+      } else if (this._edge > this.deadzone.bottom) {
         this.view.y = this.target.y - this.deadzone.bottom;
       }
-    }
-    else {
+    } else {
       this.view.x = this.target.x - this.view.halfWidth;
       this.view.y = this.target.y - this.view.halfHeight;
     }
@@ -285,7 +328,9 @@ class Camera {
    */
 
   setBoundsToWorld() {
-    this.bounds.setTo(this.game.world.bounds.x, this.game.world.bounds.y, this.game.world.bounds.width, this.game.world.bounds.height);
+    if (this.bounds != null) {
+      this.bounds.setTo(this.game.world.bounds.x, this.game.world.bounds.y, this.game.world.bounds.width, this.game.world.bounds.height);
+    }
   }
 
   /**
@@ -313,7 +358,6 @@ class Camera {
       this.atLimit.y = true;
       this.view.y = this.bounds.bottom - this.height;
     }
-    this.view.floor();
   }
 
   /**

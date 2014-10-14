@@ -171,15 +171,15 @@ class Circle extends PIXI.Circle {
    * @return {Phaser.Circle} The cloned Circle object.
    */
 
-  Circle clone([Circle out]) {
+  Circle clone([Circle output]) {
 
-    if (out == null) {
-      out = new Circle(this.x, this.y, this._diameter);
+    if (output == null) {
+      output = new Circle(this.x, this.y, this._diameter);
     }
     else {
-      out.setTo(this.x, this.y, this._diameter);
+      output.setTo(this.x, this.y, this._diameter);
     }
-    return out;
+    return output;
   }
 
   /**

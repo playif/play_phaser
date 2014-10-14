@@ -108,8 +108,8 @@ class Debug {
     if (this.game.renderType == CANVAS) {
       this.context = this.game.context;
     } else {
-      RenderTexture texture=new RenderTexture(this.game,this.game.width,this.game.height);
-      this.canvas = Canvas.create(this.game.width, this.game.height, '', true);
+      RenderTexture texture = new RenderTexture(this.game, this.game.width, this.game.height);
+      this.canvas = Canvas.create(this.game.width, this.game.height, '');
       this.context = this.canvas.getContext('2d');
       this.baseTexture = new PIXI.BaseTexture(this.canvas);
       this.texture = new PIXI.Texture(this.baseTexture);
@@ -167,7 +167,24 @@ class Debug {
     this.context.fillStyle = color;
     this.context.font = this.font;
     this.context.globalAlpha = 1;
-    this.context.lineWidth=1;
+    this.context.lineWidth = 1;
+
+  }
+
+  /**
+      * Clears the Debug canvas.
+      *
+      * @method Phaser.Utils.Debug#reset
+      */
+  reset() {
+
+    if (this.context != null) {
+      this.context.clearRect(0, 0, this.game.width, this.game.height);
+    }
+
+    if (this.sprite != null) {
+      PIXI.updateWebGLTexture(this.baseTexture, this.game.renderer.gl);
+    }
 
   }
 
@@ -262,7 +279,11 @@ class Debug {
     this.start(x, y, color);
     this.line('Camera (' + camera.width.toString() + ' x ' + camera.height.toString() + ')');
     this.line('X: ' + camera.x.toString() + ' Y: ' + camera.y.toString());
-    this.line('Bounds x: ' + camera.bounds.x.toString() + ' Y: ' + camera.bounds.y.toString() + ' w: ' + camera.bounds.width.toString() + ' h: ' + camera.bounds.height.toString());
+    //
+    if (camera.bounds != null) {
+      this.line('Bounds x: ' + camera.bounds.x.toString() + ' Y: ' + camera.bounds.y.toString() + ' w: ' + camera.bounds.width.toString() + ' h: ' + camera.bounds.height.toString());
+    }
+
     this.line('View x: ' + camera.view.x.toString() + ' Y: ' + camera.view.y.toString() + ' w: ' + camera.view.width.toString() + ' h: ' + camera.view.height.toString());
     this.stop();
 
@@ -285,6 +306,21 @@ class Debug {
     this.line('Paused: ' + timer.paused.toString() + ' Length: ' + timer.length.toString());
     this.stop();
 
+  }
+
+  /**
+    * Renders the Rope's segments. Note: This is really expensive as it has to calculate new segments everytime you call it
+    *
+    * @method Phaser.Utils.Debug#ropeSegments
+    * @param {Phaser.Rope} rope - The rope to display the segments of.
+    * @param {string} [color] - Color of the debug info to be rendered (format is css color string).
+    * @param {boolean} [filled=true] - Render the rectangle as a fillRect (default, true) or a strokeRect (false)
+    */
+  ropeSegments(Rope rope, String color, [bool filled = true]) {
+    List<Rectangle> segments = rope.segments;
+    segments.forEach((Rectangle segment) {
+      this.rectangle(segment, color, filled);
+    });
   }
 
   /**
@@ -635,7 +671,7 @@ class Debug {
     Bounds bounds = quadtree.bounds;
 
     if (quadtree.nodes[0] == null) {
-      
+
       this.context.strokeStyle = color;
       this.context.strokeRect(bounds.x, bounds.y, bounds.width, bounds.height);
       this.text('size: ' + quadtree.objects.length.toString(), (bounds.x + 4), (bounds.y + 16), 'rgb(0,200,0)', '12px Courier');
@@ -672,7 +708,7 @@ class Debug {
         this.start();
         sprite.body.render(this.context, color, filled);
         this.stop();
-      } 
+      }
 //      else if (sprite.body.type == Physics.NINJA) {
 //        this.start();
 //        //TODO

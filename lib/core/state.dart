@@ -172,6 +172,14 @@ class State {
   }
 
   /**
+  * If your game is set to Scalemode RESIZE then each time the browser resizes it will call this function, passing in the new width and height.
+  *
+  * @method Phaser.State#resize
+  */
+  resize() {
+  }
+
+  /**
    * This method will be called if the core game loop is paused.
    *
    * @method Phaser.State#paused
@@ -198,15 +206,15 @@ class State {
   shutdown() {
   }
 
-  preRender(){
+  preRender() {
 
   }
 
-  resumed(){
+  resumed() {
 
   }
 
-  init([args]){
+  init([args]) {
 
   }
 }

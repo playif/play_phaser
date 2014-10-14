@@ -504,12 +504,12 @@ class Sound {
       forceRestart = true;
     }
 
-    if (this.isPlaying == true && forceRestart == false && this.override == false) {
+    if (this.isPlaying && !forceRestart && !this.override) {
       //  Use Restart instead
       return this;
     }
 
-    if (this.isPlaying && this.override) {
+    if (this.isPlaying && (this.override || forceRestart)) {
       if (this.usingWebAudio) {
         if (this._sound.stop == null) {
           this._sound.noteOff(0);

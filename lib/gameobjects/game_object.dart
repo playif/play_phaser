@@ -15,8 +15,9 @@ abstract class SpriteInterface implements CoreInterfact {
   num width,height,rotation;
 }
 
-abstract class AnimationInterface implements SpriteInterface {
+abstract class AnimationInterface implements SpriteInterface{
   CanvasPattern __tilePattern;
+  //setTexture(PIXI.Texture texture);
 }
 
 abstract class GameObject implements PIXI.DisplayInterface, CoreInterfact {

@@ -15,27 +15,7 @@ class Polygon {
     return this._points;
   }
 
-  set(List<Point> points) {
-
-    //if points isn't an array, use arguments as the array
-//  if (!(points instanceof Array))
-//  {
-//  points = Array.prototype.slice.call(arguments);
-//  }
-//
-//  //if this is a flat array of numbers, convert it to points
-//  if (typeof points[0] === 'number')
-//  {
-//  var p = [];
-//
-//  for (var i = 0, len = points.length; i < len; i += 2)
-//  {
-//  p.push(new Point(points[i], points[i + 1]));
-//  }
-//
-//  points = p;
-//  }
-
+  set points(List<Point> points) {
     this._points = points;
   }
 
@@ -71,8 +51,7 @@ class Polygon {
 
       if (i == this.points.length - 1) {
         p2 = this.points[0];
-      }
-      else {
+      } else {
         p2 = this.points[i + 1];
       }
 
@@ -128,7 +107,7 @@ class Polygon {
    * @return {Phaser.Polygon} A copy of the polygon.
    */
 
-  clone() {
+  Polygon clone(Polygon output) {
 
     var points = [];
 
@@ -136,7 +115,20 @@ class Polygon {
       points.add(this.points[i].clone());
     }
 
-    return new Polygon(points);
+    //return new Polygon(points);
+    if (output == null) {
+      output = new Polygon(points);
+    } else {
+      output.setTo(points);
+    }
+    return output;
+  }
+
+  setTo(List<Point> points) {
+
+    this.points = points;
+
+    return this;
 
   }
 
@@ -154,7 +146,8 @@ class Polygon {
     var inside = false;
 
     // use some raycasting to test hits https://github.com/substack/point-in-polygon/blob/master/index.js
-    for (var i = 0, j = this.points.length - 1; i < this.points.length; j = i++) {
+    for (var i = 0,
+        j = this.points.length - 1; i < this.points.length; j = i++) {
       var xi = this.points[i].x;
       var yi = this.points[i].y;
       var xj = this.points[j].x;

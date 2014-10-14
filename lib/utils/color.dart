@@ -887,78 +887,79 @@ class Color {
   static int getBlue(int color) {
     return color & 0xFF;
   }
-
-//   The following are all DEPRECATED
-
-  /**
-   * DEPRECATED: This method will be removed in Phaser 2.1.
-   * Returns a string containing handy information about the given color including string hex value,
-   * RGB format information. Each section starts on a newline, 3 lines in total.
-   *
-   * @method Phaser.Color.getColorInfo
-   * @static
-   * @param {number} color - A color value in the format 0xAARRGGBB.
-   * @returns {string} String containing the 3 lines of information.
-   */
-
-  static String getColorInfo(int color) {
-    Color argb = Color.getRGB(color);
-    //  Hex format
-    String result = Color.RGBtoHexstring(color) + "\n";
-    //  RGB format
-    result = result + "Alpha: ${argb.alpha} Red: ${argb.red} Green: ${argb.green} Blue: ${argb.blue} \n";
-    return result;
-  }
-
-  /**
-   * DEPRECATED: This method will be removed in Phaser 2.1. Please use Phaser.Color.RGBtoString instead.
-   * Return a string representation of the color in the format 0xAARRGGBB.
-   *
-   * @method Phaser.Color.RGBtoHexstring
-   * @static
-   * @param {number} color - The color to get the string representation for
-   * @returns {string} A string of length 10 characters in the format 0xAARRGGBB
-   */
-
-  static String RGBtoHexstring(int color) {
-
-    Color argb = Color.getRGB(color);
-
-    return "0x" + Color.colorToHexstring(argb.alpha) + Color.colorToHexstring(argb.red) + Color.colorToHexstring(argb.green) + Color.colorToHexstring(argb.blue);
-
-  }
-
-  /**
-   * DEPRECATED: This method will be removed in Phaser 2.1. Please use Phaser.Color.RGBtoString instead.
-   * Return a string representation of the color in the format #RRGGBB.
-   *
-   * @method Phaser.Color.RGBtoWebstring
-   * @static
-   * @param {number} color - The color to get the string representation for.
-   * @returns {string} A string of length 10 characters in the format 0xAARRGGBB.
-   */
-
-  static String RGBtoWebstring(int color) {
-    Color argb = Color.getRGB(color);
-    return "#" + Color.colorToHexstring(argb.red) + Color.colorToHexstring(argb.green) + Color.colorToHexstring(argb.blue);
-  }
-
-  /**
-   * DEPRECATED: This method will be removed in Phaser 2.1. Please use Phaser.Color.componentToHex instead.
-   * Return a string containing a hex representation of the given color.
-   *
-   * @method Phaser.Color.colorToHexstring
-   * @static
-   * @param {number} color - The color channel to get the hex value for, must be a value between 0 and 255).
-   * @returns {string} A string of length 2 characters, i.e. 255 = FF, 0 = 00.
-   */
-
-  static String colorToHexstring(int color) {
-    String digits = "0123456789ABCDEF";
-    int lsd = color % 16;
-    int msd = (color - lsd) ~/ 16;
-    String hexified = (digits.indexOf(msd.toString()) + digits.indexOf(lsd.toString())).toString();
-    return hexified;
-  }
+  
+//
+////   The following are all DEPRECATED
+//
+//  /**
+//   * DEPRECATED: This method will be removed in Phaser 2.1.
+//   * Returns a string containing handy information about the given color including string hex value,
+//   * RGB format information. Each section starts on a newline, 3 lines in total.
+//   *
+//   * @method Phaser.Color.getColorInfo
+//   * @static
+//   * @param {number} color - A color value in the format 0xAARRGGBB.
+//   * @returns {string} String containing the 3 lines of information.
+//   */
+//
+//  static String getColorInfo(int color) {
+//    Color argb = Color.getRGB(color);
+//    //  Hex format
+//    String result = Color.RGBtoHexstring(color) + "\n";
+//    //  RGB format
+//    result = result + "Alpha: ${argb.alpha} Red: ${argb.red} Green: ${argb.green} Blue: ${argb.blue} \n";
+//    return result;
+//  }
+//
+//  /**
+//   * DEPRECATED: This method will be removed in Phaser 2.1. Please use Phaser.Color.RGBtoString instead.
+//   * Return a string representation of the color in the format 0xAARRGGBB.
+//   *
+//   * @method Phaser.Color.RGBtoHexstring
+//   * @static
+//   * @param {number} color - The color to get the string representation for
+//   * @returns {string} A string of length 10 characters in the format 0xAARRGGBB
+//   */
+//
+//  static String RGBtoHexstring(int color) {
+//
+//    Color argb = Color.getRGB(color);
+//
+//    return "0x" + Color.colorToHexstring(argb.alpha) + Color.colorToHexstring(argb.red) + Color.colorToHexstring(argb.green) + Color.colorToHexstring(argb.blue);
+//
+//  }
+//
+//  /**
+//   * DEPRECATED: This method will be removed in Phaser 2.1. Please use Phaser.Color.RGBtoString instead.
+//   * Return a string representation of the color in the format #RRGGBB.
+//   *
+//   * @method Phaser.Color.RGBtoWebstring
+//   * @static
+//   * @param {number} color - The color to get the string representation for.
+//   * @returns {string} A string of length 10 characters in the format 0xAARRGGBB.
+//   */
+//
+//  static String RGBtoWebstring(int color) {
+//    Color argb = Color.getRGB(color);
+//    return "#" + Color.colorToHexstring(argb.red) + Color.colorToHexstring(argb.green) + Color.colorToHexstring(argb.blue);
+//  }
+//
+//  /**
+//   * DEPRECATED: This method will be removed in Phaser 2.1. Please use Phaser.Color.componentToHex instead.
+//   * Return a string containing a hex representation of the given color.
+//   *
+//   * @method Phaser.Color.colorToHexstring
+//   * @static
+//   * @param {number} color - The color channel to get the hex value for, must be a value between 0 and 255).
+//   * @returns {string} A string of length 2 characters, i.e. 255 = FF, 0 = 00.
+//   */
+//
+//  static String colorToHexstring(int color) {
+//    String digits = "0123456789ABCDEF";
+//    int lsd = color % 16;
+//    int msd = (color - lsd) ~/ 16;
+//    String hexified = (digits.indexOf(msd.toString()) + digits.indexOf(lsd.toString())).toString();
+//    return hexified;
+//  }
 
 }

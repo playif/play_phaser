@@ -1,7 +1,7 @@
 part of Phaser;
 
 class Canvas {
-  static CanvasElement create([num width = 256, num height = 256, String id, bool noCocoon = false]) {
+  static CanvasElement create([num width = 256, num height = 256, String id]) {
     CanvasElement canvas = new CanvasElement();
     if (id != null) {
       canvas.dataset['id'] = id;
@@ -62,13 +62,10 @@ class Canvas {
     return canvas;
   }
 
-  //  CanvasElement setTouchAction (CanvasElement canvas, [String value='none']) {
-  //    //value = value || 'none';
-  //    //canvas.style.msTouchAction = value;
-  //    //canvas.style['ms-touch-action'] = value;
-  //    canvas.style['touch-action'] = value;
-  //    return canvas;
-  //  }
+  static CanvasElement setTouchAction (CanvasElement canvas, [String value='none']) {
+    canvas.style.touchAction=value;
+    return canvas;
+  }
 
   static CanvasElement setUserSelect(CanvasElement canvas, [String value = 'none']) {
     canvas.style.userSelect = value;
@@ -142,4 +139,23 @@ class Canvas {
     return canvas;
   }
 
+  /**
+      * Removes the given canvas element from the DOM.
+      *
+      * @method Phaser.Canvas.removeFromDOM
+      * @param {HTMLCanvasElement} canvas - The canvas to be removed from the DOM.
+      */
+  static removeFromDOM(CanvasElement canvas) {
+    canvas.remove();
+//          if (canvas.parentNode != null)
+//          {
+//              canvas.parentNode.removeChild(canvas);
+//          }
+
+  }
+  
+  // TODO
+  getSmoothingEnabled(Map context) {
+    return (context['imageSmoothingEnabled'] || context['mozImageSmoothingEnabled'] || context['oImageSmoothingEnabled'] || context['webkitImageSmoothingEnabled'] || context['msImageSmoothingEnabled']);
+  }
 }

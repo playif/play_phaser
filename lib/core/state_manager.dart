@@ -2,7 +2,7 @@ part of Phaser;
 
 class StateManager {
   Game game;
-  Map<String,State> states;
+  Map<String, State> states;
 
   bool _clearWorld;
   bool _clearCache;
@@ -13,28 +13,53 @@ class StateManager {
   State _pendingState;
   State current;
 
+  /// This is called when the state is set as the active state.
   Function onInitCallback;
+
+  /// This is called when the state starts to load assets.
   Function onPreloadCallback;
+
+  /// This is called when the state preload has finished and creation begins.
   Function onCreateCallback;
+
+  /// This is called when the state is updated, every game loop. It doesn't happen during preload (see [onLoadUpdateCallback]).
   Function onUpdateCallback;
+
+  /// This is called post-render. It doesn't happen during preload (see [onLoadRenderCallback]).
   Function onRenderCallback;
+
+  /// This is called if [ScaleManager].scalemode is RESIZE and a resize event occurs. It's passed the new width and height.
+  Function onResizeCallback;
+
+  /// This is called before the state is rendered and before the stage is cleared.
   Function onPreRenderCallback;
+
+  /// This is called when the State is updated during the preload phase.
   Function onLoadUpdateCallback;
+
+  /// This is called when the State is rendered during the preload phase.
   Function onLoadRenderCallback;
+
+  /// This is called when the game is paused.
   Function onPausedCallback;
+
+  /// This is called when the game is resumed from a paused state.
   Function onResumedCallback;
+
+  /// This is called every frame while the game is paused.
   Function onPauseUpdateCallback;
+
+  /// This is called when the state is shut down (i.e. swapped to another state).
   Function onShutDownCallback;
 
   //Object callbackContext;
 
 
-  StateManager(this.game, [State pendingState=null]) {
+  StateManager(this.game, [State pendingState = null]) {
     /**
      * @property {Object} states - The object containing Phaser.States.
      */
-    this.states = {
-    };
+    this.states = {};
 
     /**
      * @property {Phaser.State} _pendingState - The state to be switched to in the next frame.
@@ -152,7 +177,7 @@ class StateManager {
 //        this.start(this._pendingState, false, false);
 //      }
 //      else {
-        this.add('default', this._pendingState, true);
+      this.add('default', this._pendingState, true);
 //      }
     }
 
@@ -169,7 +194,7 @@ class StateManager {
    * @param {boolean} [autoStart=false]  - If true the State will be started immediately after adding it.
    */
 
-  add(String key, State state, [bool autoStart=false]) {
+  add(String key, State state, [bool autoStart = false]) {
 
 //    var newState;
 //
@@ -189,8 +214,7 @@ class StateManager {
     if (autoStart) {
       if (this.game.isBooted) {
         this.start(key);
-      }
-      else {
+      } else {
         this._pendingState = state;
       }
     }
@@ -238,12 +262,12 @@ class StateManager {
    * @param {...*} parameter - Additional parameters that will be passed to the State.init function (if it has one).
    */
 
-  start(String key, [bool clearWorld=true, bool clearCache=false, List args]) {
+  start(String key, [bool clearWorld = true, bool clearCache = false, List args]) {
 
 
     if (this.checkState(key)) {
       //  Place the state in the queue. It will be started the next time the game loop starts.
-      this._pendingStateKey=key;
+      this._pendingStateKey = key;
       this._pendingState = this.states[key];
       this._clearWorld = clearWorld;
       this._clearCache = clearCache;
@@ -267,7 +291,7 @@ class StateManager {
    * @param {...*} parameter - Additional parameters that will be passed to the State.init function if it has one.
    */
 
-  restart([bool clearWorld=true, bool clearCache=false, List args]) {
+  restart([bool clearWorld = true, bool clearCache = false, List args]) {
 
     //  Place the state in the queue. It will be started the next time the game loop starts.
     this._pendingState = this.current;
@@ -301,29 +325,33 @@ class StateManager {
 
     if (this._pendingState != null && this.game.isBooted) {
       //  Already got a state running?
-      if (this.current != null) {
-        this.onShutDownCallback();
+//      if (this.current != null) {
+//        this.onShutDownCallback();
+//
+//        this.game.tweens.removeAll();//.killAll();
+//
+//        this.game.camera.reset();
+//
+//        this.game.input.reset(true);
+//
+//        this.game.physics.clear();
+//
+//        this.game.time.removeAll();
+//
+//        if (this._clearWorld) {
+//          this.game.world.shutdown();
+//
+//          if (this._clearCache == true) {
+//            this.game.cache.destroy();
+//          }
+//        }
+//      }
 
-        this.game.tweens.removeAll();//.killAll();
-
-        this.game.camera.reset();
-
-        this.game.input.reset(true);
-
-        this.game.physics.clear();
-
-        this.game.time.removeAll();
-
-        if (this._clearWorld) {
-          this.game.world.shutdown();
-
-          if (this._clearCache == true) {
-            this.game.cache.destroy();
-          }
-        }
-      }
+      this.clearCurrentState();
 
       this.setCurrentState(this._pendingStateKey);
+
+      this._pendingState = null;
 
       if (this.onPreloadCallback != null) {
         this.game.load.reset();
@@ -332,13 +360,11 @@ class StateManager {
         //  Is the loader empty?
         if (this.game.load.totalQueuedFiles() == 0 && this.game.load.totalQueuedPacks() == 0) {
           this.loadComplete();
-        }
-        else {
+        } else {
           //  Start the loader going as we have something in the queue
           this.game.load.start();
         }
-      }
-      else {
+      } else {
 //  No init? Then there was nothing to load either
         this.loadComplete();
       }
@@ -348,6 +374,45 @@ class StateManager {
       }
     }
 
+  }
+
+  /**
+      * This method clears the current State, calling its shutdown callback. The process also removes any active tweens,
+      * resets the camera, resets input, clears physics, removes timers and if set clears the world and cache too.
+      *
+      * @method Phaser.StateManager#clearCurrentState
+      */
+  clearCurrentState() {
+    if (this.current != null) {
+      if (this.onShutDownCallback != null) {
+        this.onShutDownCallback(this.game);
+      }
+
+      this.game.tweens.removeAll();
+
+      this.game.camera.reset();
+
+      this.game.input.reset(true);
+
+      this.game.physics.clear();
+
+      if (this.current == this._pendingState) this.game.time.removeAll();
+
+      this.game.scale.reset(this._clearWorld);
+
+      if (this.game.debug != null) {
+        this._pendingState = null;
+        this.game.debug.reset();
+      }
+
+      if (this._clearWorld) {
+        this.game.world.shutdown();
+
+        if (this._clearCache == true) {
+          this.game.cache.destroy();
+        }
+      }
+    }
   }
 
   /**
@@ -382,8 +447,7 @@ class StateManager {
 //      }
 
       return true;
-    }
-    else {
+    } else {
       window.console.warn("Phaser.StateManager - No state found with the key: " + key);
       return false;
     }
@@ -447,6 +511,7 @@ class StateManager {
     this.onUpdateCallback = this.states[key].update;
     this.onPreRenderCallback = this.states[key].preRender;
     this.onRenderCallback = this.states[key].render;
+    this.onResizeCallback = this.states[key].resize;
     this.onPausedCallback = this.states[key].paused;
     this.onResumedCallback = this.states[key].resumed;
     this.onPauseUpdateCallback = this.states[key].pauseUpdate;
@@ -460,6 +525,18 @@ class StateManager {
     this.onInitCallback(this._args);
 
     this._args = [];
+
+  }
+
+  /**
+      * @method Phaser.StateManager#resize
+      * @protected
+      */
+  resize(num width, num height) {
+
+    if (this.onResizeCallback != null) {
+      this.onResizeCallback(width, height);
+    }
 
   }
 
@@ -485,8 +562,7 @@ class StateManager {
     if (this._created == false && this.onCreateCallback != null) {
       this._created = true;
       this.onCreateCallback();
-    }
-    else {
+    } else {
       this._created = true;
     }
 
@@ -527,8 +603,7 @@ class StateManager {
 
     if (this._created && this.onUpdateCallback != null) {
       this.onUpdateCallback();
-    }
-    else {
+    } else {
       if (this.onLoadUpdateCallback != null) {
         this.onLoadUpdateCallback();
       }
@@ -545,8 +620,7 @@ class StateManager {
 
     if (this._created && this.onPauseUpdateCallback != null) {
       this.onPauseUpdateCallback();
-    }
-    else {
+    } else {
       if (this.onLoadUpdateCallback != null) {
         this.onLoadUpdateCallback();
       }
@@ -585,8 +659,7 @@ class StateManager {
       if (this.game.renderType == CANVAS) {
         this.game.context.restore();
       }
-    }
-    else {
+    } else {
       if (this.onLoadRenderCallback != null) {
         this.onLoadRenderCallback();
       }
@@ -603,7 +676,7 @@ class StateManager {
   destroy() {
 
     //this.callbackContext = null;
-
+    this.clearCurrentState();
     this.onInitCallback = null;
     this.onShutDownCallback = null;
 
@@ -618,8 +691,7 @@ class StateManager {
     this.onPauseUpdateCallback = null;
 
     this.game = null;
-    this.states = {
-    };
+    this.states = {};
     this._pendingState = null;
 
   }
