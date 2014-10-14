@@ -125,10 +125,10 @@ class basic_01_load_an_image extends State {
 Change log
 ==========
 0.11.0 
- * Add P2.js (with some examples)
- * Update to Phaser 2.1.1
+ * Add P2.js (with some examples).
+ * Update to Phaser 2.1.1.
  * Add a Rope example.
- * Fix a text bug (thanks to [#9](https://github.com/playif/play_phaser/issues/9)
+ * Fix a text bug (thanks to [#10](https://github.com/playif/play_phaser/issues/10)).
  
 
 0.10.3
