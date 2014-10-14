@@ -15,7 +15,7 @@ pub: [https://pub.dartlang.org/packages/play_phaser]
 
 ## Features
 
-**WebGL or Canvas**
+**WebGL and Canvas**
 
 Phaser uses both a Canvas and WebGL renderer internally and can automatically swap between them based on browser support. This allows for lightning fast rendering across Desktop and Mobile. When running under WebGL Phaser now supports shaders, allowing for some incredible in-game effects. Phaser uses and contributes towards the excellent Pixi.js library for rendering.
 
