@@ -15,7 +15,7 @@ pub: [https://pub.dartlang.org/packages/play_phaser]
 
 ## Features
 
-**WebGL &amp; Canvas**
+**WebGL or Canvas**
 
 Phaser uses both a Canvas and WebGL renderer internally and can automatically swap between them based on browser support. This allows for lightning fast rendering across Desktop and Mobile. When running under WebGL Phaser now supports shaders, allowing for some incredible in-game effects. Phaser uses and contributes towards the excellent Pixi.js library for rendering.
 
@@ -125,33 +125,33 @@ class basic_01_load_an_image extends State {
 Change log
 ==========
 0.11.0 
- * Add P2.js (with some examples).
- * Update to Phaser 2.1.1.
- * Add a Rope example.
- * Fix a text bug (thanks to [#10](https://github.com/playif/play_phaser/issues/10)).
+* Add P2.js (0.6) (with some examples).
+* Update to Phaser 2.1.1.
+* Add a Rope example.
+* Fix a text bug (thanks to [#10](https://github.com/playif/play_phaser/issues/10)).
  
 
 0.10.3
- * Fix Rectangle class centerY getter has a typo! (thanks to [#8](https://github.com/playif/play_phaser/issues/8)).
- * Fix Group.sort Class has no instance method '[]'. (thanks to [#7](https://github.com/playif/play_phaser/issues/7)).
- * Add Point operator overloading with num. (thanks to [#6](https://github.com/playif/play_phaser/issues/6)
+* Fix Rectangle class centerY getter has a typo! (thanks to [#8](https://github.com/playif/play_phaser/issues/8)).
+* Fix Group.sort Class has no instance method '[]'. (thanks to [#7](https://github.com/playif/play_phaser/issues/7)).
+* Add Point operator overloading with num. (thanks to [#6](https://github.com/playif/play_phaser/issues/6)
 
 0.10.2
- * Fix a ScaleManager bug (thanks to [#4](https://github.com/playif/play_phaser/issues/4)).
- * Fix a Sprite.crop bug (thanks to [#5](https://github.com/playif/play_phaser/issues/5)).
- * Add two examples, sprite_06 and sprite_07
- 
+* Fix a ScaleManager bug (thanks to [#4](https://github.com/playif/play_phaser/issues/4)).
+* Fix a Sprite.crop bug (thanks to [#5](https://github.com/playif/play_phaser/issues/5)).
+* Add two examples, sprite_06 and sprite_07
+
 0.10.1
- * Add types to all functions and Signals.
+* Add types to all functions and Signals.
 
 0.10.0
- * Ninja physics with examples.
+* Ninja physics with examples.
 
 0.9.4
- * Fix animation bug (thanks to [#3](https://github.com/playif/play_phaser/issues/3)).
+* Fix animation bug (thanks to [#3](https://github.com/playif/play_phaser/issues/3)).
 
 0.9.3
- * Fix bugs.
+* Fix bugs.
 
 
 TODO
