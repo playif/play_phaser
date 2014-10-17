@@ -6,7 +6,7 @@ class LockConstraint extends p2.LockConstraint {
   /// Local reference to P2 World.
   P2 world;
 
-  LockConstraint(world, bodyA, bodyB, offset, angle, maxForce) : super(bodyA, bodyB, localOffsetB: [world.pxm(offset[0]), world.pxm(offset[1])], localAngleB: angle, maxForce: maxForce) {
+  LockConstraint(world, bodyA, bodyB, offset, angle, maxForce) : super(bodyA, bodyB, localOffsetB: new p2.vec2(world.pxm(offset[0]), world.pxm(offset[1])), localAngleB: angle, maxForce: maxForce) {
     if (offset == null) {
       offset = [0, 0];
     }

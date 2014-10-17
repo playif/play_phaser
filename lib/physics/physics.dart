@@ -125,7 +125,7 @@ class Physics {
    * @param {number} The physics system to start.
    */
 
-  startSystem(int system, {p2js.Solver solver, List gravity, bool doProfiling: false, p2js.Broadphase broadphase, bool islandSplit: false, bool fake: false}) {
+  startSystem(int system, {p2js.Solver solver, List gravity:const [0.0,0.0], bool doProfiling: false, p2js.Broadphase broadphase, bool islandSplit: false, bool fake: false}) {
 
     if (system == Physics.ARCADE) {
       this.arcade = new Arcade.Arcade(this.game);

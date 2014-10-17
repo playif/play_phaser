@@ -83,7 +83,7 @@ class Game {
     }
   }
 
-  Game([num width = 800, num height = 600, int renderer = AUTO, this.parent = '', State state, this.transparent, this.antialias, this.physicsConfig]) {
+  Game([num width = 800, num height = 600, int renderer = AUTO, String parent = '', State state, this.transparent, this.antialias, this.physicsConfig]) {
 
     GAMES.add(this);
     /**

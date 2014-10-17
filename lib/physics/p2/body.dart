@@ -72,12 +72,12 @@ class Body extends Phaser.Body {
 
     if (value && this.data.type != p2.Body.STATIC) {
       this.data.type = p2.Body.STATIC;
-      this.mass = 0;
+      this.mass = 0.0;
     } else if (!value && this.data.type == p2.Body.STATIC) {
       this.data.type = p2.Body.DYNAMIC;
 
       if (this.mass == 0) {
-        this.mass = 1;
+        this.mass = 1.0;
       }
     }
 
@@ -406,13 +406,13 @@ class Body extends Phaser.Body {
 
   num get x {
 
-    return this.system.mpxi(this.data.position[0]);
+    return this.system.mpxi(this.data.position.x);
 
   }
 
   set x(num value) {
 
-    this.data.position[0] = this.system.pxmi(value);
+    this.data.position.x = this.system.pxmi(value);
 
   }
 
@@ -426,13 +426,13 @@ class Body extends Phaser.Body {
 
   num get y {
 
-    return this.system.mpxi(this.data.position[1]);
+    return this.system.mpxi(this.data.position.y);
 
   }
 
   set y(num value) {
 
-    this.data.position[1] = this.system.pxmi(value);
+    this.data.position.y = this.system.pxmi(value);
 
   }
 
@@ -524,7 +524,7 @@ class Body extends Phaser.Body {
      * @property {p2.Body} data -
      * @protected
      */
-    this.data = new p2.Body(position: [this.system.pxmi(x), this.system.pxmi(y)], mass: mass);
+    this.data = new p2.Body(position: new p2.vec2(this.system.pxmi(x), this.system.pxmi(y)), mass: mass);
 
     this.data.parent = this;
 
@@ -848,8 +848,8 @@ class Body extends Phaser.Body {
 
 
   /// Apply force to a world point. This could for example be a point on the RigidBody surface. Applying force this way will add to Body.force and Body.angularForce.
-  applyForce(List force, num worldX, num worldY) {
-    this.data.applyForce(force, [this.system.pxmi(worldX), this.system.pxmi(worldY)]);
+  applyForce(p2.vec2 force, num worldX, num worldY) {
+    this.data.applyForce(force, new p2.vec2(this.system.pxmi(worldX), this.system.pxmi(worldY)));
   }
 
   /**
@@ -872,7 +872,7 @@ class Body extends Phaser.Body {
 
   setZeroRotation() {
 
-    this.data.angularVelocity = 0;
+    this.data.angularVelocity = 0.0;
 
   }
 
@@ -884,8 +884,8 @@ class Body extends Phaser.Body {
 
   setZeroVelocity() {
 
-    this.data.velocity[0] = 0.0;
-    this.data.velocity[1] = 0.0;
+    this.data.velocity.x = 0.0;
+    this.data.velocity.y = 0.0;
 
   }
 
@@ -897,8 +897,8 @@ class Body extends Phaser.Body {
 
   setZeroDamping() {
 
-    this.data.damping = 0;
-    this.data.angularDamping = 0;
+    this.data.damping = 0.0;
+    this.data.angularDamping = 0.0;
 
   }
 
@@ -969,8 +969,8 @@ class Body extends Phaser.Body {
     var magnitude = this.system.pxmi(-speed);
     var angle = this.data.angle + Math.PI / 2;
 
-    this.data.velocity[0] = magnitude * Math.cos(angle);
-    this.data.velocity[1] = magnitude * Math.sin(angle);
+    this.data.velocity.x = magnitude * Math.cos(angle);
+    this.data.velocity.y = magnitude * Math.sin(angle);
 
   }
 
@@ -987,8 +987,8 @@ class Body extends Phaser.Body {
     var magnitude = this.system.pxmi(-speed);
     var angle = this.data.angle + Math.PI / 2;
 
-    this.data.velocity[0] = -(magnitude * Math.cos(angle));
-    this.data.velocity[1] = -(magnitude * Math.sin(angle));
+    this.data.velocity.x = -(magnitude * Math.cos(angle));
+    this.data.velocity.y = -(magnitude * Math.sin(angle));
 
   }
 
@@ -1005,8 +1005,8 @@ class Body extends Phaser.Body {
     var magnitude = this.system.pxmi(-speed);
     var angle = this.data.angle + Math.PI / 2;
 
-    this.data.force[0] += magnitude * Math.cos(angle);
-    this.data.force[1] += magnitude * Math.sin(angle);
+    this.data.force.x += magnitude * Math.cos(angle);
+    this.data.force.y += magnitude * Math.sin(angle);
 
   }
 
@@ -1023,8 +1023,8 @@ class Body extends Phaser.Body {
     var magnitude = this.system.pxmi(-speed);
     var angle = this.data.angle + Math.PI / 2;
 
-    this.data.force[0] -= magnitude * Math.cos(angle);
-    this.data.force[1] -= magnitude * Math.sin(angle);
+    this.data.force.x -= magnitude * Math.cos(angle);
+    this.data.force.y -= magnitude * Math.sin(angle);
 
   }
 
@@ -1038,7 +1038,7 @@ class Body extends Phaser.Body {
 
   moveLeft(speed) {
 
-    this.data.velocity[0] = this.system.pxmi(-speed);
+    this.data.velocity.x = this.system.pxmi(-speed);
 
   }
 
@@ -1052,7 +1052,7 @@ class Body extends Phaser.Body {
 
   moveRight(speed) {
 
-    this.data.velocity[0] = this.system.pxmi(speed);
+    this.data.velocity.x = this.system.pxmi(speed);
 
   }
 
@@ -1066,7 +1066,7 @@ class Body extends Phaser.Body {
 
   moveUp(speed) {
 
-    this.data.velocity[1] = this.system.pxmi(-speed);
+    this.data.velocity.y = this.system.pxmi(-speed);
 
   }
 
@@ -1080,7 +1080,7 @@ class Body extends Phaser.Body {
 
   moveDown(speed) {
 
-    this.data.velocity[1] = this.system.pxmi(speed);
+    this.data.velocity.y = this.system.pxmi(speed);
 
   }
 
@@ -1109,8 +1109,8 @@ class Body extends Phaser.Body {
 
   postUpdate() {
 
-    this.sprite.x = this.system.mpxi(this.data.position[0]);
-    this.sprite.y = this.system.mpxi(this.data.position[1]);
+    this.sprite.x = this.system.mpxi(this.data.position.x);
+    this.sprite.y = this.system.mpxi(this.data.position.y);
 
     if (!this.fixedRotation) {
       this.sprite.rotation = this.data.angle;
@@ -1259,7 +1259,7 @@ class Body extends Phaser.Body {
       rotation = 0;
     }
 
-    this.data.addShape(shape, [this.system.pxmi(offsetX), this.system.pxmi(offsetY)], rotation);
+    this.data.addShape(shape, new p2.vec2(this.system.pxmi(offsetX), this.system.pxmi(offsetY)), rotation);
     this.shapeChanged();
 
     return shape;
@@ -1615,15 +1615,15 @@ class Body extends Phaser.Body {
       shape.collisionMask = fixtureData['filter'].maskBits;
       shape.sensor = fixtureData['isSensor'];
 
-      List offset = p2.vec2.create();
-      offset[0] = this.system.pxmi(fixtureData['circle'].position[0] - this.sprite.width / 2);
-      offset[1] = this.system.pxmi(fixtureData['circle'].position[1] - this.sprite.height / 2);
+      p2.vec2 offset = p2.vec2.create();
+      offset.x = this.system.pxmi(fixtureData['circle'].position[0] - this.sprite.width / 2);
+      offset.y = this.system.pxmi(fixtureData['circle'].position[1] - this.sprite.height / 2);
 
       this.data.addShape(shape, offset);
       generatedShapes.add(shape);
     } else {
       Map polygons = fixtureData['polygons'];
-      List cm = p2.vec2.create();
+      p2.vec2 cm = p2.vec2.create();
 
       for (int i = 0; i < polygons.length; i++) {
         Map shapes = polygons[i];
@@ -1637,14 +1637,14 @@ class Body extends Phaser.Body {
 
         //  Move all vertices so its center of mass is in the local center of the convex
         for (int j = 0; j != shape.vertices.length; j++) {
-          List v = shape.vertices[j];
+          p2.vec2 v = shape.vertices[j];
           p2.vec2.sub(v, v, shape.centerOfMass);
         }
 
         p2.vec2.scale(cm, shape.centerOfMass, 1);
 
-        cm[0] -= this.system.pxmi(this.sprite.width / 2);
-        cm[1] -= this.system.pxmi(this.sprite.height / 2);
+        cm.x -= this.system.pxmi(this.sprite.width / 2);
+        cm.y -= this.system.pxmi(this.sprite.height / 2);
 
         shape.updateTriangles();
         shape.updateCenterOfMass();
@@ -1678,13 +1678,13 @@ class Body extends Phaser.Body {
     List<Map> data = this.game.cache.getPhysicsData(key, object);
 
     //  We've multiple Convex shapes, they should be CCW automatically
-    List cm = p2.vec2.create();
+    p2.vec2 cm = p2.vec2.create();
 
     for (int i = 0; i < data.length; i++) {
       List vertices = [];
 
       for (int s = 0; s < data[i]['shape'].length; s += 2) {
-        vertices.add([this.system.pxmi(data[i]['shape'][s]), this.system.pxmi(data[i]['shape'][s + 1])]);
+        vertices.add(new p2.vec2(this.system.pxmi(data[i]['shape'][s]), this.system.pxmi(data[i]['shape'][s + 1])));
       }
 
       p2.Convex c = new p2.Convex(vertices);
@@ -1697,8 +1697,8 @@ class Body extends Phaser.Body {
 
       p2.vec2.scale(cm, c.centerOfMass, 1);
 
-      cm[0] -= this.system.pxmi(this.sprite.width / 2);
-      cm[1] -= this.system.pxmi(this.sprite.height / 2);
+      cm.x -= this.system.pxmi(this.sprite.width / 2);
+      cm.y -= this.system.pxmi(this.sprite.height / 2);
 
       c.updateTriangles();
       c.updateCenterOfMass();

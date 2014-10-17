@@ -4,6 +4,28 @@ class Walls {
   p2.Body left, right, top, bottom;
 }
 
+class vec2 extends p2.vec2 {
+  vec2(num x, num y) : super(x.toDouble(), y.toDouble()) {
+
+  }
+  
+  num operator [](int v) {
+    if (v == 0) {
+      return x;
+    } else {
+      return y;
+    }
+  }
+
+  operator []=(int v, num n) {
+    if (v == 0) {
+      x = n;
+    } else {
+      y = n;
+    }
+  }
+}
+
 class P2 {
 
 
@@ -168,7 +190,7 @@ class P2 {
   Walls walls;
 
 
-  P2(Phaser.Game game, {p2.Solver solver, List gravity, bool doProfiling: false, p2.Broadphase broadphase, bool islandSplit: false, bool fake: false}) {
+  P2(Phaser.Game game, {p2.Solver solver, List gravity:const [0.0,0.0], bool doProfiling: false, p2.Broadphase broadphase, bool islandSplit: false, bool fake: false}) {
     /**
      * @property {Phaser.Game} game - Local reference to game.
      */
@@ -191,7 +213,7 @@ class P2 {
      * @property {p2.World} world - The p2 World in which the simulation is run.
      * @protected
      */
-    this.world = new p2.World(solver: solver, gravity: gravity, doProfiling: doProfiling, broadphase: broadphase, islandSplit: islandSplit, fake: fake);
+    this.world = new p2.World(solver: solver, gravity: new p2.vec2(gravity[0].toDouble(), gravity[1].toDouble()), doProfiling: doProfiling, broadphase: broadphase, islandSplit: islandSplit, fake: fake);
 
     /**
      * @property {number} frameRate - The frame rate the world will be stepped at. Defaults to 1 / 60, but you can change here. Also see useElapsedTime property.
@@ -320,7 +342,7 @@ class P2 {
     /**
      * @property {Phaser.Physics.P2.CollisionGroup} everythingCollisionGroup - A default collision group.
      */
-    this.everythingCollisionGroup = new CollisionGroup(2147483648-1);
+    this.everythingCollisionGroup = new CollisionGroup(2147483648 - 1);
 
     /**
      * @property {array} boundsCollidesWith - An array of the bodies the world bounds collides with.
@@ -721,7 +743,7 @@ class P2 {
     }
 
     if (left) {
-      this.walls.left = new p2.Body(mass: 0, position: [this.pxmi(x), this.pxmi(y)], angle: 1.5707963267948966);
+      this.walls.left = new p2.Body(mass: 0, position: new p2.vec2(this.pxmi(x), this.pxmi(y)), angle: 1.5707963267948966);
       this.walls.left.addShape(new p2.Plane());
 
       if (setCollisionGroup) {
@@ -732,7 +754,7 @@ class P2 {
     }
 
     if (right) {
-      this.walls.right = new p2.Body(mass: 0, position: [this.pxmi(x + width), this.pxmi(y)], angle: -1.5707963267948966);
+      this.walls.right = new p2.Body(mass: 0, position: new p2.vec2(this.pxmi(x + width), this.pxmi(y)), angle: -1.5707963267948966);
       this.walls.right.addShape(new p2.Plane());
 
       if (setCollisionGroup) {
@@ -743,7 +765,7 @@ class P2 {
     }
 
     if (top) {
-      this.walls.top = new p2.Body(mass: 0, position: [this.pxmi(x), this.pxmi(y)], angle: -3.141592653589793);
+      this.walls.top = new p2.Body(mass: 0, position: new p2.vec2(this.pxmi(x), this.pxmi(y)), angle: -3.141592653589793);
       this.walls.top.addShape(new p2.Plane());
 
       if (setCollisionGroup) {
@@ -754,7 +776,7 @@ class P2 {
     }
 
     if (bottom) {
-      this.walls.bottom = new p2.Body(mass: 0, position: [this.pxmi(x), this.pxmi(y + height)]);
+      this.walls.bottom = new p2.Body(mass: 0, position: new p2.vec2(this.pxmi(x), this.pxmi(y + height)));
       this.walls.bottom.addShape(new p2.Plane());
 
       if (setCollisionGroup) {
@@ -1266,7 +1288,7 @@ class P2 {
       filterStatic = false;
     }
 
-    List physicsPosition = [this.pxmi(worldPoint.x), this.pxmi(worldPoint.y)];
+    p2.vec2 physicsPosition = new p2.vec2(this.pxmi(worldPoint.x), this.pxmi(worldPoint.y));
 
     List<p2.Body> query = [];
     int i = bodies.length;

@@ -54,10 +54,10 @@ class Spring {
         bodyB,
         stiffness: stiffness,
         damping: damping,
-        worldAnchorA:[world.pxm(worldA[0]), world.pxm(worldA[1])],
-        worldAnchorB:[world.pxm(worldB[0]), world.pxm(worldB[1])],
-        localAnchorA:[world.pxm(localA[0]), world.pxm(localA[1])],
-        localAnchorB:[world.pxm(localB[0]), world.pxm(localB[1])]
+        worldAnchorA:new p2.vec2(world.pxm(worldA[0]), world.pxm(worldA[1])),
+        worldAnchorB:new p2.vec2(world.pxm(worldB[0]), world.pxm(worldB[1])),
+        localAnchorA:new p2.vec2(world.pxm(localA[0]), world.pxm(localA[1])),
+        localAnchorB:new p2.vec2(world.pxm(localB[0]), world.pxm(localB[1]))
         );
 
     this.data.parent = this;

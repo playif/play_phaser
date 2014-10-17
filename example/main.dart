@@ -189,7 +189,7 @@ main() {
   //var game = new Game(width, height, WEBGL, '');
 
 
-  Game game = new Game(800, 600, WEBGL, '');
+  Game game = new Game(800, 600, WEBGL, 'phaser-example');
 
   dom.SelectElement select = dom.document.getElementById("examples") as dom.SelectElement;
   for (String key in examples.keys) {

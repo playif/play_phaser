@@ -50,8 +50,8 @@ class BodyDebug extends Phaser.Group {
 
   updateSpriteTransform() {
 
-    this.position.x = this.body.position[0] * this.ppu;
-    this.position.y = this.body.position[1] * this.ppu;
+    this.position.x = this.body.position.x * this.ppu;
+    this.position.y = this.body.position.y * this.ppu;
 
     return this.rotation = this.body.angle;
 
@@ -69,9 +69,10 @@ class BodyDebug extends Phaser.Group {
     p2.Shape child;
     num color, i, j, lineColor, lw;
     p2.Body obj = this.body;
-    List offset;
+    p2.vec2 offset;
     Phaser.Graphics sprite = this.canvas;
-    List v, verts, vrot;
+    p2.vec2 v, vrot;
+    List verts;
     num _j, _ref1;
 
 
@@ -93,7 +94,7 @@ class BodyDebug extends Phaser.Group {
         angle = angle == null ? 0 : angle;
 
         if (child is p2.Circle) {
-          this.drawCircle(sprite, offset[0] * this.ppu, offset[1] * this.ppu, angle, (child as p2.Circle).radius * this.ppu, color, lw);
+          this.drawCircle(sprite, offset.x * this.ppu, offset.y * this.ppu, angle, (child as p2.Circle).radius * this.ppu, color, lw);
         } else if (child is p2.Convex) {
           verts = [];
           vrot = p2.vec2.create();
@@ -102,16 +103,16 @@ class BodyDebug extends Phaser.Group {
               _ref1 = (child as p2.Convex).vertices.length; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; j = 0 <= _ref1 ? ++_j : --_j) {
             v = (child as p2.Convex).vertices[j];
             p2.vec2.rotate(vrot, v, angle);
-            verts.add([(vrot[0] + offset[0]) * this.ppu, -(vrot[1] + offset[1]) * this.ppu]);
+            verts.add(new p2.vec2((vrot.x + offset.x) * this.ppu, -(vrot.y + offset.y) * this.ppu));
           }
 
-          this.drawConvex(sprite, verts, (child as p2.Convex).triangles, lineColor, color, lw, debugPolygons, [offset[0] * this.ppu, -offset[1] * this.ppu]);
+          this.drawConvex(sprite, verts, (child as p2.Convex).triangles, lineColor, color, lw, debugPolygons, [offset.x * this.ppu, -offset.y * this.ppu]);
         } else if (child is p2.Plane) {
-          this.drawPlane(sprite, offset[0] * this.ppu, -offset[1] * this.ppu, color, lineColor, lw * 5, lw * 10, lw * 10, this.ppu * 100, angle);
+          this.drawPlane(sprite, offset.x * this.ppu, -offset.y * this.ppu, color, lineColor, lw * 5, lw * 10, lw * 10, this.ppu * 100, angle);
         } else if (child is p2.Line) {
           this.drawLine(sprite, (child as p2.Line).length * this.ppu, lineColor, lw);
         } else if (child is p2.Rectangle) {
-          this.drawRectangle(sprite, offset[0] * this.ppu, -offset[1] * this.ppu, angle, (child as p2.Rectangle).width * this.ppu, (child as p2.Rectangle).height * this.ppu, lineColor, color, lw);
+          this.drawRectangle(sprite, offset.x * this.ppu, -offset.y * this.ppu, angle, (child as p2.Rectangle).width * this.ppu, (child as p2.Rectangle).height * this.ppu, lineColor, color, lw);
         }
 
         i++;
@@ -209,8 +210,8 @@ class BodyDebug extends Phaser.Group {
 
       while (i != verts.length) {
         v = verts[i];
-        x = v[0];
-        y = v[1];
+        x = v.x;
+        y = v.y;
 
         if (i == 0) {
           g.moveTo(x, -y);
@@ -224,8 +225,8 @@ class BodyDebug extends Phaser.Group {
       g.endFill();
 
       if (verts.length > 2) {
-        g.moveTo(verts[verts.length - 1][0], -verts[verts.length - 1][1]);
-        return g.lineTo(verts[0][0], -verts[0][1]);
+        g.moveTo(verts[verts.length - 1].x, -verts[verts.length - 1].y);
+        return g.lineTo(verts[0].x, -verts[0].y);
       }
     } else {
       colors = [0xff0000, 0x00ff00, 0x0000ff];
@@ -234,10 +235,10 @@ class BodyDebug extends Phaser.Group {
       while (i != verts.length + 1) {
         v0 = verts[i % verts.length];
         v1 = verts[(i + 1) % verts.length];
-        x0 = v0[0];
-        y0 = v0[1];
-        x1 = v1[0];
-        y1 = v1[1];
+        x0 = v0.x;
+        y0 = v0.y;
+        x1 = v1.x;
+        y1 = v1.y;
         g.lineStyle(lineWidth, colors[i % colors.length], 1);
         g.moveTo(x0, -y0);
         g.lineTo(x1, -y1);
@@ -246,7 +247,7 @@ class BodyDebug extends Phaser.Group {
       }
 
       g.lineStyle(lineWidth, 0x000000, 1);
-      return g.drawCircle(offset[0], offset[1], lineWidth * 2);
+      return g.drawCircle(offset.x, offset.y, lineWidth * 2);
     }
 
   }
@@ -279,8 +280,8 @@ class BodyDebug extends Phaser.Group {
 
     while (i < path.length) {
       v = path[i];
-      x = v[0];
-      y = v[1];
+      x = v.x;
+      y = v.y;
 
       if (x != lastx || y != lasty) {
         if (i == 0) {
@@ -290,8 +291,8 @@ class BodyDebug extends Phaser.Group {
           p1y = lasty;
           p2x = x;
           p2y = y;
-          p3x = path[(i + 1) % path.length][0];
-          p3y = path[(i + 1) % path.length][1];
+          p3x = path[(i + 1) % path.length].x;
+          p3y = path[(i + 1) % path.length].y;
           area = ((p2x - p1x) * (p3y - p1y)) - ((p3x - p1x) * (p2y - p1y));
 
           if (area != 0) {
@@ -311,8 +312,8 @@ class BodyDebug extends Phaser.Group {
     }
 
     if (path.length > 2 && fillColor is num) {
-      g.moveTo(path[path.length - 1][0], path[path.length - 1][1]);
-      g.lineTo(path[0][0], path[0][1]);
+      g.moveTo(path[path.length - 1].x, path[path.length - 1].y);
+      g.lineTo(path[0].x, path[0].y);
     }
 
   }

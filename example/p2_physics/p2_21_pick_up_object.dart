@@ -67,13 +67,13 @@ class p2_21_pick_up_object extends State {
     List bodies = game.physics.p2.hitTest(pointer.position, [tetris1.body, tetris2, tetris3]);
 
     // p2 uses different coordinate system, so convert the pointer position to p2's coordinate system
-    List physicsPos = [game.physics.p2.pxmi(pointer.position.x), game.physics.p2.pxmi(pointer.position.y)];
+    p2.vec2 physicsPos = new p2.vec2(game.physics.p2.pxmi(pointer.position.x), game.physics.p2.pxmi(pointer.position.y));
 
     if (bodies.length != 0) {
 
       var clickedBody = bodies[0];
 
-      List localPointInBody = [0, 0];
+      p2.vec2 localPointInBody = new p2.vec2(0, 0);
       // this function takes physicsPos and coverts it to the body's local coordinate system
       clickedBody.toLocalFrame(localPointInBody, physicsPos);
 
