@@ -11,7 +11,7 @@ class Game {
   bool transparent;
   bool antialias;
   Map physicsConfig;
- 
+
   //TODO
   int id;
 
@@ -463,7 +463,7 @@ class Game {
     //tween.Tween.combinedAttributesLimit=1;
 
     //tween.Tween.registerAccessor(Sprite,new GameObjectAccessor());
-    
+
     //tween.Tween.registerAccessor(Point, new PointAccessor());
     //tween.Tween.registerAccessor(Emitter, new PointAccessor());
     //    if (!document.body) {
@@ -628,24 +628,26 @@ class Game {
       }
     } else {
       //  They requested WebGL and their browser supports it
-      this.renderType = WEBGL;
-      this.renderer = new PIXI.WebGLRenderer(this.width, this.height, this.canvas, this.transparent, this.antialias, this.preserveDrawingBuffer);
-      this.context = null;
+      try {
+        this.renderType = WEBGL;
+        this.renderer = new PIXI.WebGLRenderer(this.width, this.height, this.canvas, this.transparent, this.antialias, this.preserveDrawingBuffer);
+        this.context = null;
+      } catch (e) {
+        this.renderType = CANVAS;
+        this.renderer = new PIXI.CanvasRenderer(this.width, this.height, this.canvas, this.transparent);
+        this.context = (this.renderer as PIXI.CanvasRenderer).context;
+      }
     }
-    
-    if (this.device.cocoonJS)
-    {
-        if (this.renderType == CANVAS)
-        {
-          // TODO
-            //this.canvas.screencanvas = true;
-        }
-        else
-        {
+
+    if (this.device.cocoonJS) {
+      if (this.renderType == CANVAS) {
+        // TODO
+        //this.canvas.screencanvas = true;
+      } else {
 // TODO
-            // Some issue related to scaling arise with Cocoon using screencanvas and webgl renderer.
-            //this.canvas.screencanvas = false;
-        }
+        // Some issue related to scaling arise with Cocoon using screencanvas and webgl renderer.
+        //this.canvas.screencanvas = false;
+      }
     }
 
     if (this.renderType != HEADLESS) {
@@ -768,7 +770,7 @@ class Game {
 
     this.state.destroy();
     this.sound.destroy();
-    
+
     this.scale.destroy();
     this.stage.destroy();
     this.input.destroy();
@@ -783,9 +785,9 @@ class Game {
     this.time = null;
     this.world = null;
     this.isBooted = false;
-    
+
     Canvas.removeFromDOM(this.canvas);
-    
+
   }
 
   /**

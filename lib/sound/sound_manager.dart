@@ -392,6 +392,20 @@ class SoundManager {
 
   }
 
+
+  /**
+   * Adds a new AudioSprite into the SoundManager.
+   *
+   * @method Phaser.SoundManager#addSprite
+   * @param {string} key - Asset key for the sound.
+   * @return {Phaser.AudioSprite} The new AudioSprite instance.
+   */
+  addSprite(String key) {
+    AudioSprite audioSprite = new AudioSprite(this.game, key);
+    return audioSprite;
+  }
+
+
   /**
    * Removes a Sound from the SoundManager. The removed Sound is destroyed before removal.
    *

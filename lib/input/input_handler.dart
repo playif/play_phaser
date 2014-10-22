@@ -10,7 +10,7 @@ class InputHandler {
   bool isDragged;
   bool allowHorizontalDrag;
   bool allowVerticalDrag;
-  bool bringToTop;
+  bool bringToTop; 
   Point snapOffset;
   bool snapOnDrag;
   bool snapOnRelease;
@@ -30,6 +30,7 @@ class InputHandler {
   Rectangle boundsRect;
   Sprite boundsSprite;
   bool consumePointerEvent;
+  bool scaleLayer;
   bool _dragPhase;
   bool _wasEnabled;
   Point _tempPoint;
@@ -196,6 +197,9 @@ class InputHandler {
      * @default
      */
     this.consumePointerEvent = false;
+
+
+    this.scaleLayer = false;
 
     /**
      * @property {boolean} _dragPhase - Internal cache var.
@@ -958,13 +962,18 @@ class InputHandler {
       return false;
     }
 
+    num px = this.globalToLocalX(pointer.x) + this._dragPoint.x + this.dragOffset.x;
+    num py = this.globalToLocalY(pointer.y) + this._dragPoint.y + this.dragOffset.y;
+
     if (this.sprite.fixedToCamera) {
       if (this.allowHorizontalDrag) {
-        this.sprite.cameraOffset.x = pointer.x + this._dragPoint.x + this.dragOffset.x;
+        //this.sprite.cameraOffset.x = pointer.x + this._dragPoint.x + this.dragOffset.x;
+        this.sprite.cameraOffset.x = px;
       }
 
       if (this.allowVerticalDrag) {
-        this.sprite.cameraOffset.y = pointer.y + this._dragPoint.y + this.dragOffset.y;
+        //this.sprite.cameraOffset.y = pointer.y + this._dragPoint.y + this.dragOffset.y;
+        this.sprite.cameraOffset.y = py;
       }
 
       if (this.boundsRect != null) {
@@ -981,11 +990,13 @@ class InputHandler {
       }
     } else {
       if (this.allowHorizontalDrag) {
-        this.sprite.x = pointer.x + this._dragPoint.x + this.dragOffset.x;
+        //this.sprite.x = pointer.x + this._dragPoint.x + this.dragOffset.x;
+        this.sprite.x = px;
       }
 
       if (this.allowVerticalDrag) {
-        this.sprite.y = pointer.y + this._dragPoint.y + this.dragOffset.y;
+        //this.sprite.y = pointer.y + this._dragPoint.y + this.dragOffset.y;
+        this.sprite.y = py;
       }
 
       if (this.boundsRect != null) {
@@ -1080,7 +1091,7 @@ class InputHandler {
    * @return {number} The number of milliseconds the pointer has been over the Sprite, or -1 if not over.
    */
 
-  double overDuration([int pointer = 0]) {
+  num overDuration([int pointer = 0]) {
 
     //pointer = pointer || 0;
 
@@ -1099,7 +1110,7 @@ class InputHandler {
    * @return {number} The number of milliseconds the pointer has been pressed down on the Sprite, or -1 if not over.
    */
 
-  double downDuration([int pointer = 0]) {
+  num downDuration([int pointer = 0]) {
 
     //pointer = pointer;
 
@@ -1202,13 +1213,16 @@ class InputHandler {
       }
     } else {
       if (this.dragFromCenter) {
-        var bounds = this.sprite.getBounds();
-        this.sprite.x = pointer.x + (this.sprite.x - bounds.centerX);
-        this.sprite.y = pointer.y + (this.sprite.y - bounds.centerY);
-        this._dragPoint.setTo(this.sprite.x - pointer.x, this.sprite.y - pointer.y);
-      } else {
-        this._dragPoint.setTo(this.sprite.x - pointer.x, this.sprite.y - pointer.y);
+        Rectangle bounds = this.sprite.getBounds();
+//        this.sprite.x = pointer.x + (this.sprite.x - bounds.centerX);
+//        this.sprite.y = pointer.y + (this.sprite.y - bounds.centerY);
+//        this._dragPoint.setTo(this.sprite.x - pointer.x, this.sprite.y - pointer.y);
+//      } else {
+//        this._dragPoint.setTo(this.sprite.x - pointer.x, this.sprite.y - pointer.y);
+        this.sprite.x = this.globalToLocalX(pointer.x) + (this.sprite.x - bounds.centerX);
+        this.sprite.y = this.globalToLocalY(pointer.y) + (this.sprite.y - bounds.centerY);
       }
+      this._dragPoint.setTo(this.sprite.x - this.globalToLocalX(pointer.x), this.sprite.y - this.globalToLocalY(pointer.y));
     }
 
     this.updateDrag(pointer);
@@ -1220,6 +1234,34 @@ class InputHandler {
 
     this.sprite.events.onDragStart.dispatch([this.sprite, pointer]);
 
+  }
+
+  /**
+   * Warning: EXPERIMENTAL
+   * @method Phaser.InputHandler#globalToLocalX
+   * @param {number} x
+   */
+  globalToLocalX (num x) {
+    if (this.scaleLayer)
+    {
+      x -= this.game.scale.grid.boundsFluid.x;
+      x *= this.game.scale.grid.scaleFluidInversed.x;
+    }
+    return x;
+  }
+
+  /**
+   * Warning: EXPERIMENTAL
+   * @method Phaser.InputHandler#globalToLocalY
+   * @param {number} y
+   */
+  globalToLocalY (num y) {
+    if (this.scaleLayer)
+    {
+      y -= this.game.scale.grid.boundsFluid.y;
+      y *= this.game.scale.grid.scaleFluidInversed.y;
+    }
+    return y;
   }
 
   /**

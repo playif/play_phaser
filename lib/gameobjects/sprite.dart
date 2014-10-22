@@ -484,6 +484,11 @@ class Sprite<T extends Body> extends PIXI.Sprite implements GameObject, SpriteIn
       this.setTexture(key);
     } else if (key is BitmapData) {
       this.setTexture(key.texture);
+      if (this.game.cache.getFrameData(key.key, Cache.BITMAPDATA)!= null)
+      {
+        setFrame = !this.animations.loadFrameData(this.game.cache.getFrameData(key.key, Cache.BITMAPDATA), frame);
+      }
+
     } else if (key is PIXI.Texture) {
       this.setTexture(key);
     } else {
@@ -548,6 +553,10 @@ class Sprite<T extends Body> extends PIXI.Sprite implements GameObject, SpriteIn
       this.texture.frame.width = frame.sourceSizeW;
       this.texture.frame.height = frame.sourceSizeH;
     } else if (!frame.trimmed && this.texture.trim != null) {
+      this.texture.trim = null;
+    }
+    else if (!frame.trimmed && this.texture.trim != null)
+    {
       this.texture.trim = null;
     }
 

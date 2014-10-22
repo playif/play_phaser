@@ -10,6 +10,7 @@ class Marker {
   num duration;
   num durationMS;
   bool loop;
+  num end;
 }
 
 class Sound {
@@ -20,20 +21,21 @@ class Sound {
   AudioContext context;
   bool autoplay;
 
-  double totalDuration;
-  double startTime;
-  double currentTime;
-  double duration;
-  double durationMS;
+  num totalDuration;
+  num startTime;
+  num currentTime;
+  num duration;
+  num durationMS;
   int position;
-  double stopTime;
+  num stopTime;
   bool paused;
-  double pausedPosition;
-  double pausedTime;
+  num pausedPosition;
+  num pausedTime;
   bool isPlaying;
   String currentMarker;
   bool pendingPlayback;
   bool override;
+  bool allowMultiple;
   bool usingWebAudio;
   bool usingAudioTag;
   Map externalNode;
@@ -49,6 +51,7 @@ class Sound {
   Signal<SoundFunc> onStop;
   Signal<SoundFunc> onMute;
   Signal<SoundFunc> onMarkerComplete;
+  Signal<SoundFunc> onFadeComplete;
   num _volume;
   var _buffer;
   bool _muted;
@@ -209,6 +212,12 @@ class Sound {
     this.override = false;
 
     /**
+     * @property {boolean} allowMultiple - This will allow you to have multiple instances of this Sound playing at once. This is only useful when running under Web Audio, and we recommend you implement a local pooling system to not flood the sound channels.
+     * @default
+     */
+    this.allowMultiple = false;
+
+    /**
      * @property {boolean} usingWebAudio - true if this sound is being played with Web Audio.
      * @readonly
      */
@@ -306,6 +315,8 @@ class Sound {
      */
     this.onMarkerComplete = new Signal();
 
+    this.onFadeComplete = new Signal();
+
     /**
      * @property {number} _volume - The global audio volume. A value between 0 (silence) and 1 (full volume).
      * @private
@@ -374,10 +385,10 @@ class Sound {
 
     if (key == this.key) {
       this._sound = this.game.cache.getSoundData(this.key);
-      if(this._sound is AudioElement){
+      if (this._sound is AudioElement) {
         this.totalDuration = (this._sound as AudioElement).duration;
       }
-      else{
+      else {
         this.totalDuration = (this._sound as AudioBuffer).duration;
       }
 
@@ -495,7 +506,7 @@ class Sound {
    * @return {Phaser.Sound} This sound instance.
    */
 
-  Sound play([String marker, int position=0, double volume=1.0, bool loop=false, bool forceRestart=true]) {
+  Sound play([String marker, int position=0, num volume=1.0, bool loop=false, bool forceRestart=true]) {
 
     if (marker == null) {
       marker = '';
@@ -504,12 +515,12 @@ class Sound {
       forceRestart = true;
     }
 
-    if (this.isPlaying && !forceRestart && !this.override) {
+    if (this.isPlaying && !this.allowMultiple && !forceRestart && !this.override) {
       //  Use Restart instead
       return this;
     }
 
-    if (this.isPlaying && (this.override || forceRestart)) {
+    if (this.isPlaying && !this.allowMultiple && (this.override || forceRestart)) {
       if (this.usingWebAudio) {
         if (this._sound.stop == null) {
           this._sound.noteOff(0);
@@ -778,6 +789,80 @@ class Sound {
 
     if (!this.paused) {
       this.onStop.dispatch([this, prevMarker]);
+    }
+
+  }
+
+  /**
+   * Starts this sound playing (or restarts it if already doing so) and sets the volume to zero.
+   * Then increases the volume from 0 to 1 over the duration specified.
+   * At the end of the fade Sound.onFadeComplete is dispatched with this Sound object as the first parameter,
+   * and the final volume (1) as the second parameter.
+   *
+   * @method Phaser.Sound#fadeIn
+   * @param {number} [duration=1000] - The time in milliseconds during which the Sound should fade in.
+   * @param {boolean} [loop=false] - Should the Sound be set to loop? Note that this doesn't cause the fade to repeat.
+   */
+
+  fadeIn([num duration=1000, bool loop=false]) {
+
+    //if (typeof duration == 'undefined') { duration = 1000; }
+    //if (typeof loop == 'undefined') { loop = false; }
+
+    if (this.paused) {
+      return;
+    }
+
+    this.play('', 0, 0, loop);
+
+    Tween tween = this.game.add.tween(this).to({
+        volume: 1
+    }, duration, Easing.Linear.None, true);
+
+    tween.onComplete.add(this.fadeComplete);
+
+  }
+
+  /**
+   * Decreases the volume of this Sound from its current value to 0 over the duration specified.
+   * At the end of the fade Sound.onFadeComplete is dispatched with this Sound object as the first parameter,
+   * and the final volume (0) as the second parameter.
+   *
+   * @method Phaser.Sound#fadeOut
+   * @param {number} [duration=1000] - The time in milliseconds during which the Sound should fade out.
+   */
+
+  fadeOut([num duration=1000]) {
+
+    if (duration == null) {
+      duration = 1000;
+    }
+
+    if (!this.isPlaying || this.paused || this.volume <= 0) {
+      return;
+    }
+
+    Tween tween = this.game.add.tween(this).to({
+        volume: 0
+    }, duration, Easing.Linear.None, true);
+
+    tween.onComplete.add(this.fadeComplete);
+
+  }
+
+  /**
+   * Internal handler for Sound.fadeIn and Sound.fadeOut.
+   *
+   * @method Phaser.Sound#fadeComplete
+   * @private
+   */
+
+  fadeComplete(Sound sound) {
+
+    this.onFadeComplete.dispatch([this, this.volume]);
+
+    if (this.volume == 0) {
+      this.stop();
     }
 
   }

@@ -85,7 +85,7 @@ class Timer {
 
   TimerEvent create(num delay, bool loop, int repeatCount, Function callback, args) {
 
-    num tick = delay;
+    num tick = Math.round(delay);
 
     if (this._now == 0) {
       tick += this.game.time.now;

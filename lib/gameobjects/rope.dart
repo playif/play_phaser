@@ -419,6 +419,10 @@ class Rope extends PIXI.Rope implements GameObject, AnimationInterface {
       this.texture.frame.width = frame.sourceSizeW;
       this.texture.frame.height = frame.sourceSizeH;
     }
+    else if (!frame.trimmed && this.texture.trim != null)
+    {
+      this.texture.trim = null;
+    }
 
     if (this.game.renderType == WEBGL) {
       PIXI.WebGLRenderer.updateTextureFrame(this.texture);

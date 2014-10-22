@@ -26,15 +26,17 @@ class Camera {
   /// Current position of the camera in world.
   Point _position;
 
+  Point _targetPosition;
+
   PIXI.DisplayObject displayObject;
 
   Point scale;
 
   /**
-  * The Cameras position. This value is automatically clamped if it falls outside of the World bounds.
-  * @name Phaser.Camera#position
-  * @property {Phaser.Point} position - Gets or sets the cameras xy position using Phaser.Point object.
-  */
+   * The Cameras position. This value is automatically clamped if it falls outside of the World bounds.
+   * @name Phaser.Camera#position
+   * @property {Phaser.Point} position - Gets or sets the cameras xy position using Phaser.Point object.
+   */
   //Object.defineProperty(Phaser.Camera.prototype, "position", {
 
   Point get position {
@@ -134,6 +136,9 @@ class Camera {
      * @property {Phaser.Point} scale - The scale of the display object to which all game objects are added. Set by World.boot
      */
     this.scale = null;
+
+
+    this._targetPosition = new Point();
   }
 
   /**
@@ -208,6 +213,7 @@ class Camera {
    * @param {Phaser.Sprite|Phaser.Image|Phaser.Text} target - The object you want the camera to track. Set to null to not follow anything.
    * @param {number} [style] - Leverage one of the existing "deadzone" presets. If you use a custom deadzone, ignore this parameter and manually specify the deadzone after calling follow().
    */
+
   follow(target, [int style = Camera.FOLLOW_LOCKON]) {
 
     this.target = target;
@@ -246,6 +252,7 @@ class Camera {
    *
    * @method Phaser.Camera#unfollow
    */
+
   unfollow() {
     this.target = null;
   }
@@ -256,6 +263,7 @@ class Camera {
    * @method Phaser.Camera#focusOn
    * @param {any} displayObject - The display object to focus the camera on. Must have visible x/y properties.
    */
+
   focusOn(GameObject displayObject) {
     this.setPosition(Math.round(displayObject.x - this.view.halfWidth), Math.round(displayObject.y - this.view.halfHeight));
   }
@@ -266,6 +274,7 @@ class Camera {
    * @param {number} x - X position.
    * @param {number} y - Y position.
    */
+
   focusOnXY(num x, num y) {
     this.setPosition(Math.round(x - this.view.halfWidth), Math.round(y - this.view.halfHeight));
   }
@@ -274,6 +283,7 @@ class Camera {
    * Update focusing and scrolling.
    * @method Phaser.Camera#update
    */
+
   update() {
 
     if (this.target != null) {
@@ -298,28 +308,46 @@ class Camera {
    * @method Phaser.Camera#updateTarget
    * @private
    */
+
   updateTarget() {
+    this._targetPosition
+    .copyFrom(this.target)
+    .multiply(
+        this.target.parent != null ? this.target.parent.worldTransform.a : 1,
+        this.target.parent != null ? this.target.parent.worldTransform.d : 1
+    );
+
 
     if (this.deadzone != null) {
-      this._edge = this.target.x - this.view.x;
+      //this._edge = this.target.x - this.view.x;
+      this._edge = this._targetPosition.x - this.view.x;
 
       if (this._edge < this.deadzone.left) {
-        this.view.x = this.target.x - this.deadzone.left;
+        //this.view.x = this.target.x - this.deadzone.left;
+        this.view.x = this._targetPosition.x - this.deadzone.left;
       } else if (this._edge > this.deadzone.right) {
-        this.view.x = this.target.x - this.deadzone.right;
+        //this.view.x = this.target.x - this.deadzone.right;
+        this.view.x = this._targetPosition.x - this.deadzone.right;
       }
 
-      this._edge = this.target.y - this.view.y;
+      //this._edge = this.target.y - this.view.y;
+      this._edge = this._targetPosition.y - this.view.y;
 
       if (this._edge < this.deadzone.top) {
-        this.view.y = this.target.y - this.deadzone.top;
+        //this.view.y = this.target.y - this.deadzone.top;
+        this.view.y = this._targetPosition.y - this.deadzone.top;
       } else if (this._edge > this.deadzone.bottom) {
-        this.view.y = this.target.y - this.deadzone.bottom;
+        //this.view.y = this.target.y - this.deadzone.bottom;
+        this.view.y = this._targetPosition.y - this.deadzone.bottom;
       }
     } else {
-      this.view.x = this.target.x - this.view.halfWidth;
-      this.view.y = this.target.y - this.view.halfHeight;
+//      this.view.x = this.target.x - this.view.halfWidth;
+//      this.view.y = this.target.y - this.view.halfHeight;
+      this.view.x = this._targetPosition.x - this.view.halfWidth;
+      this.view.y = this._targetPosition.y - this.view.halfHeight;
     }
+
+
   }
 
   /**

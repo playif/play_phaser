@@ -9,11 +9,15 @@ class Cache {
   Map _sounds;
   Map _text;
   Map _json;
+  Map _xml;
   Map _physics;
   Map _tilemaps;
   Map _binary;
   Map _bitmapDatas;
   Map _bitmapFont;
+  Map _urlMap;
+  ImageElement _urlResolver;
+  String _urlTemp;
 
   Signal<SoundFunc> onSoundUnlock = new Signal();
   List _cacheMap;
@@ -29,7 +33,7 @@ class Cache {
   static const int BITMAPDATA = 9;
   static const int BITMAPFONT = 10;
   static const int JSON = 11;
-
+  static const int XML = 12;
 
   Cache(this.game) {
 
@@ -70,6 +74,12 @@ class Cache {
     this._json = {};
 
     /**
+     * @property {object} _xml - XML key-value container.
+     * @private
+     */
+    this._xml = {};
+
+    /**
      * @property {object} _physics - Physics data key-value container.
      * @private
      */
@@ -99,6 +109,26 @@ class Cache {
      */
     this._bitmapFont = {};
 
+
+    /**
+    * @property {object} _urlMap - Maps URLs to resources.
+    * @private
+    */
+    this._urlMap = {};
+
+    /**
+    * @property {Image} _urlResolver - Used to resolve URLs to the absolute path.
+    * @private
+    */
+    this._urlResolver = new ImageElement();
+
+    /**
+    * @property {string} _urlTemp - Temporary variable to hold a resolved url.
+    * @private
+    */
+    this._urlTemp = null;
+
+
     this.addDefaultImage();
     this.addMissingImage();
 
@@ -110,7 +140,7 @@ class Cache {
     /**
      * @property {array} _cacheMap - Const to cache object look-up array.
      */
-    this._cacheMap = new List(12);
+    this._cacheMap = new List(13);
 
     this._cacheMap[Cache.CANVAS] = this._canvases;
     this._cacheMap[Cache.IMAGE] = this._images;
@@ -123,6 +153,7 @@ class Cache {
     this._cacheMap[Cache.BITMAPDATA] = this._bitmapDatas;
     this._cacheMap[Cache.BITMAPFONT] = this._bitmapFont;
     this._cacheMap[Cache.JSON] = this._json;
+    this._cacheMap[Cache.XML] = this._xml;
 
 
   }
@@ -165,8 +196,13 @@ class Cache {
    * @return {Phaser.BitmapData} The BitmapData object to be addded to the cache.
    */
 
-  BitmapData addBitmapData(String key, BitmapData bitmapData) {
-    this._bitmapDatas[key] = bitmapData;
+  BitmapData addBitmapData(String key, BitmapData bitmapData, [FrameData frameData]) {
+    //this._bitmapDatas[key] = bitmapData;
+    bitmapData.key = key;
+    this._bitmapDatas[key] = {
+      'data': bitmapData,
+      'frameData': frameData
+    };
     return bitmapData;
   }
 
@@ -214,7 +250,7 @@ class Cache {
 
     PIXI.BaseTextureCache[key] = new PIXI.BaseTexture(data);
     this._images[key]['frameData'] = AnimationParser.spriteSheet(this.game, key, frameWidth, frameHeight, frameMax, margin, spacing);
-
+    this._urlMap[this._resolveUrl(url)] = this._images[key];
   }
 
   /**
@@ -233,6 +269,7 @@ class Cache {
       'data': mapData,
       'format': format
     };
+    this._urlMap[this._resolveUrl(url)] = this._tilemaps[key];
   }
 
   /**
@@ -261,6 +298,8 @@ class Cache {
     } else if (format == Loader.TEXTURE_ATLAS_XML_STARLING) {
       this._images[key]['frameData'] = AnimationParser.XMLData(this.game, atlasData, key);
     }
+
+    this._urlMap[this._resolveUrl(url)] = this._images[key];
   }
 
   /**
@@ -286,6 +325,8 @@ class Cache {
     LoaderParser.bitmapFont(this.game, xmlData, key, xSpacing, ySpacing);
 
     this._bitmapFont[key] = PIXI.BitmapText.fonts[key];
+
+    this._urlMap[this._resolveUrl(url)] = this._bitmapFont[key];
   }
 
   /**
@@ -304,6 +345,8 @@ class Cache {
       'data': JSONData,
       'format': format
     };
+
+    this._urlMap[this._resolveUrl(url)] = this._physics[key];
   }
 
   /**
@@ -378,6 +421,8 @@ class Cache {
       'url': url,
       'data': data
     };
+
+    this._urlMap[this._resolveUrl(url)] = this._text[key];
   }
 
   /**
@@ -391,6 +436,23 @@ class Cache {
 
   addJSON(String key, String url, data) {
     this._json[key] = {
+      'url': url,
+      'data': data
+    };
+
+    this._urlMap[this._resolveUrl(url)] = this._json[key];
+  }
+
+  /**
+    * Add a new xml object into the cache.
+    *
+    * @method Phaser.Cache#addXML
+    * @param {string} key - Asset key for the xml file.
+    * @param {string} url - URL of this xml file.
+    * @param {object} data - Extra text data.
+    */
+  addXML(String key, String url, data) {
+    this._xml[key] = {
       'url': url,
       'data': data
     };
@@ -417,6 +479,8 @@ class Cache {
     this._images[key]['frameData'].addFrame(new Frame(0, 0, 0, data.width, data.height, url, this.game.rnd.uuid()));
     PIXI.BaseTextureCache[key] = new PIXI.BaseTexture(data);
     PIXI.TextureCache[key] = new PIXI.Texture(PIXI.BaseTextureCache[key]);
+
+    this._urlMap[this._resolveUrl(url)] = this._images[key];
   }
 
   /**
@@ -453,6 +517,7 @@ class Cache {
       'locked': this.game.sound.touchLocked
     };
 
+    this._urlMap[this._resolveUrl(url)] = this._sounds[key];
   }
 
   /**
@@ -541,11 +606,12 @@ class Cache {
    * @return {Phaser.BitmapData} The requested BitmapData object if found, or null if not.
    */
 
-  getBitmapData(String key) {
+  BitmapData getBitmapData(String key) {
     if (this._bitmapDatas[key] != null) {
-      return this._bitmapDatas[key];
+      return this._bitmapDatas[key]['data'];
     } else {
       window.console.warn('Phaser.Cache.getBitmapData: Invalid key: "' + key + '"');
+      return null;
     }
   }
 
@@ -766,6 +832,35 @@ class Cache {
   }
 
   /**
+    * Checks if the given key exists in the XML Cache.
+    *
+    * @method Phaser.Cache#checkXMLKey
+    * @param {string} key - Asset key of the XML file to check is in the Cache.
+    * @return {boolean} True if the key exists, otherwise false.
+    */
+  bool checkXMLKey(String key) {
+
+    return this.checkKey(Cache.XML, key);
+  }
+
+  /**
+    * Checks if the given URL has been loaded into the Cache.
+    *
+    * @method Phaser.Cache#checkUrl
+    * @param {string} url - The url to check for in the cache.
+    * @return {boolean} True if the url exists, otherwise false.
+    */
+  checkUrl(String url) {
+
+    if (this._urlMap[this._resolveUrl(url)]) {
+      return true;
+    }
+
+    return false;
+
+  }
+
+  /**
    * Get image data by key.
    *
    * @method Phaser.Cache#getImage
@@ -807,9 +902,9 @@ class Cache {
    * @return {Phaser.FrameData} The frame data.
    */
 
-  FrameData getFrameData(String key) {
-    if (this._images[key] != null) {
-      return this._images[key]['frameData'];
+  FrameData getFrameData(String key, [int map = Cache.IMAGE]) {
+    if (this._cacheMap[map][key] != null) {
+      return this._cacheMap[map][key]['frameData'];
     }
     return null;
   }
@@ -1018,6 +1113,24 @@ class Cache {
   }
 
   /**
+    * Get a XML object by key from the cache.
+    *
+    * @method Phaser.Cache#getXML
+    * @param {string} key - Asset key of the XML object to retrieve from the Cache.
+    * @return {object} The XML object.
+    */
+  Object getXML(String key) {
+
+    if (this._xml[key]) {
+      return this._xml[key].data;
+    } else {
+      window.console.warn('Phaser.Cache.getXML: Invalid key: "' + key + '"');
+      return null;
+    }
+
+  }
+
+  /**
    * Get binary data by key.
    *
    * @method Phaser.Cache#getBinary
@@ -1032,6 +1145,24 @@ class Cache {
       window.console.warn('Phaser.Cache.getBinary: Invalid key: "' + key + '"');
       return null;
     }
+  }
+
+  /**
+    * Get a cached object by the URL.
+    *
+    * @method Phaser.Cache#getUrl
+    * @param {string} url - The url for the object loaded to get from the cache.
+    * @return {object} The cached object.
+    */
+  getUrl(String url) {
+
+    if (this._urlMap[this._resolveUrl(url)]) {
+      return this._urlMap[this._resolveUrl(url)];
+    } else {
+      window.console.warn('Phaser.Cache.getUrl: Invalid url: "' + url + '"');
+      return null;
+    }
+
   }
 
   /**
@@ -1088,6 +1219,10 @@ class Cache {
       case Cache.JSON:
         array = this._json;
         break;
+
+      case Cache.XML:
+        array = this._xml;
+        break;
     }
 
     if (array == null) {
@@ -1124,8 +1259,11 @@ class Cache {
    * @param {string} key - Key of the asset you want to remove.
    */
 
-  removeImage(String key) {
+  removeImage(String key, [bool removeFromPixi = true]) {
     this._images.remove(key);
+    if (removeFromPixi) {
+      PIXI.BaseTextureCache[key].destroy();
+    }
   }
 
   /**
@@ -1159,6 +1297,16 @@ class Cache {
 
   removeJSON(String key) {
     this._json.remove(key);
+  }
+
+  /**
+    * Removes a xml object from the cache.
+    *
+    * @method Phaser.Cache#removeXML
+    * @param {string} key - Key of the asset you want to remove.
+    */
+  removeXML(String key) {
+    this._xml.remove(key);
   }
 
   /**
@@ -1216,6 +1364,26 @@ class Cache {
     this._bitmapFont.remove(key);
   }
 
+
+  /**
+    * Resolves a url its absolute form.
+    *
+    * @method Phaser.Cache#_resolveUrl
+    * @param {string} url - The url to resolve.
+    * @private
+    */
+  _resolveUrl(String url) {
+    this._urlResolver.src = this.game.load.baseURL + url;
+
+    this._urlTemp = this._urlResolver.src;
+
+    // ensure no request is actually made
+    this._urlResolver.src = '';
+
+    return this._urlTemp;
+  }
+
+
   /**
    * Clears the cache. Removes every local cache object reference.
    *
@@ -1246,6 +1414,10 @@ class Cache {
       this._json.remove(item);
     }
 
+    for (String item in this._xml) {
+      this._xml.remove(item);
+    }
+
     for (String item in this._textures.keys) {
       this._textures.remove(item);
     }
@@ -1269,6 +1441,10 @@ class Cache {
     for (String item in this._bitmapFont.keys) {
       this._bitmapFont.remove(item);
     }
+
+    this._urlMap = null;
+    this._urlResolver = null;
+    this._urlTemp = null;
 
   }
 

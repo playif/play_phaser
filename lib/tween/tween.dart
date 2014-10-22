@@ -1,6 +1,7 @@
 part of Phaser;
 
 typedef double EasingFunction(double k);
+typedef void ObjectFunc(Object object);
 
 class Tween {
   final dynamic _object;
@@ -141,17 +142,17 @@ class Tween {
   /**
    * @property {Phaser.Signal} onStart - The onStart event is fired when the Tween begins.
    */
-  Signal<GameObjectFunc> onStart = new Signal();
+  Signal<ObjectFunc> onStart = new Signal();
 
   /**
    * @property {Phaser.Signal} onLoop - The onLoop event is fired if the Tween loops.
    */
-  Signal<GameObjectFunc> onLoop = new Signal();
+  Signal<ObjectFunc> onLoop = new Signal();
 
   /**
    * @property {Phaser.Signal} onComplete - The onComplete event is fired when the Tween completes. Does not fire if the Tween is set to loop.
    */
-  Signal<GameObjectFunc> onComplete = new Signal();
+  Signal<ObjectFunc> onComplete = new Signal();
 
   /**
    * @property {boolean} isRunning - If the tween is running this is set to true, otherwise false. Tweens that are in a delayed state, waiting to start, are considered as being running.

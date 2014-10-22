@@ -630,6 +630,7 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
       }
     }
 
+
     if (setFrame) {
       this._frame = new Rectangle().copyFrom(this.texture.frame);
     }
@@ -677,6 +678,10 @@ class TileSprite extends PIXI.TilingSprite implements GameObject, AnimationInter
       this.texture.height = frame.sourceSizeH;
       this.texture.frame.width = frame.sourceSizeW;
       this.texture.frame.height = frame.sourceSizeH;
+    }
+    else if (!frame.trimmed && this.texture.trim != null)
+    {
+      this.texture.trim = null;
     }
 
     if (this.game.renderType == WEBGL) {

@@ -26,10 +26,12 @@ class FlexGrid {
   num width;
   num height;
 
+  Rectangle boundsCustom;
   Rectangle boundsFluid;
   Rectangle boundsFull;
   Rectangle boundsNone;
 
+  Point positionCustom;
   Point positionFluid;
   Point positionFull;
   Point positionNone;
@@ -38,10 +40,16 @@ class FlexGrid {
    * @property {Phaser.Point} scaleFactor - The scale factor based on the game dimensions vs. the scaled dimensions.
    * @readonly
    */
+  Point scaleCustom;
   Point scaleFluid;
   Point scaleFluidInversed;
   Point scaleFull;
   Point scaleNone;
+  
+  num customWidth;
+  num customHeight;
+  num customOffsetX;
+  num customOffsetY;
 
   num ratioH;
   num ratioV;
@@ -66,6 +74,7 @@ class FlexGrid {
     this.width = width;
     this.height = height;
 
+    this.boundsCustom = new Rectangle(0, 0, width, height);
     this.boundsFluid = new Rectangle(0, 0, width, height);
     this.boundsFull = new Rectangle(0, 0, width, height);
     this.boundsNone = new Rectangle(0, 0, width, height);
@@ -74,6 +83,7 @@ class FlexGrid {
      * @property {Phaser.Point} position -
      * @readonly
      */
+    this.positionCustom = new Point(0, 0);
     this.positionFluid = new Point(0, 0);
     this.positionFull = new Point(0, 0);
     this.positionNone = new Point(0, 0);
@@ -82,10 +92,16 @@ class FlexGrid {
      * @property {Phaser.Point} scaleFactor - The scale factor based on the game dimensions vs. the scaled dimensions.
      * @readonly
      */
+    this.scaleCustom = new Point(1, 1);
     this.scaleFluid = new Point(1, 1);
     this.scaleFluidInversed = new Point(1, 1);
     this.scaleFull = new Point(1, 1);
     this.scaleNone = new Point(1, 1);
+
+    this.customWidth = 0;
+    this.customHeight = 0;
+    this.customOffsetX = 0;
+    this.customOffsetY = 0;
 
     this.ratioH = width / height;
     this.ratioV = height / width;
@@ -95,6 +111,45 @@ class FlexGrid {
     this.layers = [];
 
   }
+
+
+  /**
+   * A custom layer is centered on the game and maintains its aspect ratio as it scales up and down.
+   *
+   * @method createCustomLayer
+   * @param {number} width - Width of this layer in pixels.
+   * @param {number} height - Height of this layer in pixels.
+   * @param {array} [children] - An array of children that are used to populate the FlexLayer.
+   * @return {Phaser.FlexLayer} The Layer object.
+   */
+  FlexLayer createCustomLayer (num width, num height, List children, [bool addToWorld]) {
+
+    if (addToWorld == null) { addToWorld = true; }
+
+    this.customWidth = width;
+    this.customHeight = height;
+
+    this.boundsCustom.width = width;
+    this.boundsCustom.height = height;
+
+    FlexLayer layer = new FlexLayer(this, this.positionCustom, this.boundsCustom, this.scaleCustom);
+
+    if (addToWorld)
+    {
+      this.game.world.add(layer);
+    }
+
+    this.layers.add(layer);
+
+    if (children != null)
+    {
+      layer.addMultiple(children);
+    }
+
+    return layer;
+
+  }
+
 
   /**
    * Sets the core game size. This resets the w/h parameters and bounds.
@@ -150,6 +205,23 @@ class FlexGrid {
 
     return layer;
 
+    //  Custom Layer
+
+    /*
+        if (this.customWidth > 0)
+        {
+            var customMultiplier = Math.min((this.manager.height / this.customHeight), (this.manager.width / this.customWidth));
+
+            this.boundsCustom.width = Math.round(this.customWidth * customMultiplier);
+            this.boundsCustom.height = Math.round(this.customHeight * customMultiplier);
+
+            this.boundsCustom.centerOn(this.manager.bounds.centerX, this.manager.bounds.centerY);
+
+            this.scaleCustom.set(this.boundsCustom.width / this.width, this.boundsCustom.height / this.height);
+
+            this.positionCustom.set(this.boundsCustom.x, this.boundsCustom.y);
+        }
+        */
   }
 
   /**
@@ -269,14 +341,20 @@ class FlexGrid {
 //     this.layers[i].debug();
 // }
 
-    this.game.debug.text(this.boundsFull.width.toString() + ' x ' + this.boundsFull.height.toString(), this.boundsFull.x + 4, this.boundsFull.y + 16);
-    this.game.debug.geom(this.boundsFull, 'rgba(0,0,255,0.9', false);
+    //this.game.debug.text(this.boundsFull.width.toString() + ' x ' + this.boundsFull.height.toString(), this.boundsFull.x + 4, this.boundsFull.y + 16);
+    //this.game.debug.geom(this.boundsFull, 'rgba(0,0,255,0.9', false);
 
     this.game.debug.text(this.boundsFluid.width.toString() + ' x ' + this.boundsFluid.height.toString(), this.boundsFluid.x + 4, this.boundsFluid.y + 16);
     this.game.debug.geom(this.boundsFluid, 'rgba(255,0,0,0.9', false);
 
-    this.game.debug.text(this.boundsNone.width.toString() + ' x ' + this.boundsNone.height.toString(), this.boundsNone.x + 4, this.boundsNone.y + 16);
-    this.game.debug.geom(this.boundsNone, 'rgba(0,255,0,0.9', false);
+    //this.game.debug.text(this.boundsNone.width.toString() + ' x ' + this.boundsNone.height.toString(), this.boundsNone.x + 4, this.boundsNone.y + 16);
+    //this.game.debug.geom(this.boundsNone, 'rgba(0,255,0,0.9', false);
+
+    // this.game.debug.text(this.boundsNone.width + ' x ' + this.boundsNone.height, this.boundsNone.x + 4, this.boundsNone.y + 16);
+    // this.game.debug.geom(this.boundsNone, 'rgba(0,255,0,0.9', false);
+
+    // this.game.debug.text(this.boundsCustom.width + ' x ' + this.boundsCustom.height, this.boundsCustom.x + 4, this.boundsCustom.y + 16);
+    // this.game.debug.geom(this.boundsCustom, 'rgba(255,255,0,0.9', false);
 
   }
 

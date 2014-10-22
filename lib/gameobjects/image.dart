@@ -23,7 +23,7 @@ class Image extends PIXI.Sprite implements GameObject, SpriteInterface, Animatio
   }
 
   Rectangle cropRect;
-  var _frame;
+  Rectangle _frame;
 
   List _cache;
   Rectangle _crop;
@@ -411,7 +411,13 @@ class Image extends PIXI.Sprite implements GameObject, SpriteInterface, Animatio
       this.setTexture(key);
     } else if (key is BitmapData) {
       //this.key = key;
+      //  This works from a reference, which probably isn't what we need here
       this.setTexture(key.texture);
+      if (this.game.cache.getFrameData(key.key, Cache.BITMAPDATA) != null)
+      {
+        setFrame = !this.animations.loadFrameData(this.game.cache.getFrameData(key.key, Cache.BITMAPDATA), frame);
+      }
+
     } else if (key is PIXI.Texture) {
       //this.key=key;
       this.setTexture(key);
@@ -464,15 +470,15 @@ class Image extends PIXI.Sprite implements GameObject, SpriteInterface, Animatio
   }
 
 
-/**
-* Sets the Texture frame the Image uses for rendering.
-* This is primarily an internal method used by Image.loadTexture, although you may call it directly.
-*
-* @method Phaser.Image#setFrame
-* @memberof Phaser.Image
-* @param {Phaser.Frame} frame - The Frame to be used by the Image texture.
-*/
-setFrame (Frame frame) {
+  /**
+  * Sets the Texture frame the Image uses for rendering.
+  * This is primarily an internal method used by Image.loadTexture, although you may call it directly.
+  *
+  * @method Phaser.Image#setFrame
+  * @memberof Phaser.Image
+  * @param {Phaser.Frame} frame - The Frame to be used by the Image texture.
+  */
+  setFrame (Frame frame) {
 
     this._frame = frame;
 
@@ -504,6 +510,10 @@ setFrame (Frame frame) {
         this.texture.height = frame.sourceSizeH;
         this.texture.frame.width = frame.sourceSizeW;
         this.texture.frame.height = frame.sourceSizeH;
+    }
+    else if (!frame.trimmed && this.texture.trim != null)
+    {
+      this.texture.trim = null;
     }
 
     if (this.cropRect != null)
@@ -883,24 +893,32 @@ bringToTop ([GameObject obj]) {
 */
 //Object.defineProperty(Phaser.Image.prototype, "frame", {
 
-    get frame{
-        return this._frame;
+    int get frame {
+      return this.animations.frame;
     }
 
-    set frame(value) {
-
-        if (value != this.frame)
-        {
-            var frameData = this.game.cache.getFrameData(this.key);
-
-            if (frameData!= null && value < frameData.total && frameData.getFrame(value) != null)
-            {
-                this.setTexture(PIXI.TextureCache[frameData.getFrame(value).uuid]);
-                this._frame = value;
-            }
-        }
-
+    set frame(int value) {
+      this.animations.frame = value;
     }
+    
+//    num get frame{
+//        return this._frame;
+//    }
+//
+//    set frame(num value) {
+//
+//        if (value != this.frame)
+//        {
+//            var frameData = this.game.cache.getFrameData(this.key);
+//
+//            if (frameData!= null && value < frameData.total && frameData.getFrame(value) != null)
+//            {
+//                this.setTexture(PIXI.TextureCache[frameData.getFrame(value).uuid]);
+//                this._frame = value;
+//            }
+//        }
+//
+//    }
 
 //});
 

@@ -176,7 +176,7 @@ class AnimationParser {
     var frameWidth;
     var frameHeight;
 
-    for (var i = 0; i < frames.length; i++) {
+    for (int i = 0; i < frames.length; i++) {
       uuid = game.rnd.uuid();
 
       frame = frames[i].attributes;

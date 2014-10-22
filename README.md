@@ -1,6 +1,6 @@
 play_phaser
 =========
-A Dart port of Phaser (2.1.1)
+A Dart port of Phaser (2.1.2)
 
 Very easy to learn and fun 2D game engine for dart.
 
@@ -124,6 +124,10 @@ class basic_01_load_an_image extends State {
 
 Change log
 ==========
+0.12.0
+* Update to Phaser 2.1.2.
+* Fix a bug (thanks to [#12](https://github.com/playif/play_phaser/issues/12))
+
 0.11.1
 * Fix a bug (thanks to [#11](https://github.com/playif/play_phaser/issues/11))
 

@@ -104,10 +104,10 @@ class Rectangle extends PIXI.Rectangle {
   }
 
   /**
-  * The location of the Rectangles top right corner as a Point object.
-  * @name Phaser.Rectangle#topRight
-  * @property {Phaser.Point} topRight - The location of the Rectangles top left corner as a Point object.
-  */
+   * The location of the Rectangles top right corner as a Point object.
+   * @name Phaser.Rectangle#topRight
+   * @property {Phaser.Point} topRight - The location of the Rectangles top left corner as a Point object.
+   */
   //Object.defineProperty(Phaser.Rectangle.prototype, "topRight", {
 
   Point get topRight {
@@ -294,13 +294,14 @@ class Rectangle extends PIXI.Rectangle {
   }
 
   /**
-    * Centers this Rectangle so that the center coordinates match the given x and y values.
-    * 
-    * @method Phaser.Rectangle#centerOn
-    * @param {number} x - The x coordinate to place the center of the Rectangle at.
-    * @param {number} y - The y coordinate to place the center of the Rectangle at.
-    * @return {Phaser.Rectangle} This Rectangle object
-    */
+   * Centers this Rectangle so that the center coordinates match the given x and y values.
+   *
+   * @method Phaser.Rectangle#centerOn
+   * @param {number} x - The x coordinate to place the center of the Rectangle at.
+   * @param {number} y - The y coordinate to place the center of the Rectangle at.
+   * @return {Phaser.Rectangle} This Rectangle object
+   */
+
   centerOn(num x, num y) {
 
     this.centerX = x;
@@ -427,6 +428,48 @@ class Rectangle extends PIXI.Rectangle {
 
   factory Rectangle.fromRect(source) {
     return new Rectangle(source.x, source.y, source.width, source.height);
+  }
+
+  /**
+   * Calculates the Axis Aligned Bounding Box (or aabb) from an array of points.
+   *
+   * @method Phaser.Rectangle#aabb
+   * @param {Phaser.Point[]} points - The array of one or more points.
+   * @param {Phaser.Rectangle} [out] - Optional Rectangle to store the value in, if not supplied a new Rectangle object will be created.
+   * @return {Phaser.Rectangle} The new Rectangle object.
+   * @static
+   */
+
+  Rectangle AABB(List<Point> points, Rectangle out) {
+
+    if (out == null) {
+      out = new Rectangle();
+    }
+
+    num xMax = double.MIN_POSITIVE,
+    xMin = double.MAX_FINITE,
+    yMax = double.MIN_POSITIVE,
+    yMin = double.MAX_FINITE;
+
+    points.forEach((Point point) {
+      if (point.x > xMax) {
+        xMax = point.x;
+      }
+      if (point.x < xMin) {
+        xMin = point.x;
+      }
+
+      if (point.y > yMax) {
+        yMax = point.y;
+      }
+      if (point.y < yMin) {
+        yMin = point.y;
+      }
+    });
+
+    out.setTo(xMin, yMin, xMax - xMin, yMax - yMin);
+
+    return out;
   }
 
 }

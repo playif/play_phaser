@@ -351,8 +351,20 @@ class StateManager {
 
       this.setCurrentState(this._pendingStateKey);
 
-      this._pendingState = null;
+      //this._pendingState = null;
+      if (this.current != this._pendingState)
+      {
+        // console.log('-> init called StateManager.start(', this._pendingState, ') so bail out');
+        return;
+      }
+      else
+      {
+        this._pendingState = null;
+        // console.log('pending nulled');
+      }
 
+      //  If StateManager.start has been called from the init of a State that ALSO has a preload, then
+      //  onPreloadCallback will be set, but must be ignored
       if (this.onPreloadCallback != null) {
         this.game.load.reset();
         this.onPreloadCallback();
@@ -369,9 +381,42 @@ class StateManager {
         this.loadComplete();
       }
 
-      if (this.current == this._pendingState) {
-        this._pendingState = null;
-      }
+//      if (this.current == this._pendingState) {
+//        this._pendingState = null;
+//      }
+    }
+
+  }
+
+  /**
+   * Nulls all State level Phaser properties, including a reference to Game.
+   *
+   * @method Phaser.StateManager#unlink
+   * @param {string} key - State key.
+   * @protected
+   */
+  unlink (String key) {
+
+    if (this.states[key]!= null)
+    {
+      this.states[key].game = null;
+      this.states[key].add = null;
+      this.states[key].make = null;
+      this.states[key].camera = null;
+      this.states[key].cache = null;
+      this.states[key].input = null;
+      this.states[key].load = null;
+      this.states[key].math = null;
+      this.states[key].sound = null;
+      this.states[key].scale = null;
+      this.states[key].state = null;
+      this.states[key].stage = null;
+      this.states[key].time = null;
+      this.states[key].tweens = null;
+      this.states[key].world = null;
+      this.states[key].particles = null;
+      this.states[key].rnd = null;
+      this.states[key].physics = null;
     }
 
   }
@@ -401,7 +446,7 @@ class StateManager {
       this.game.scale.reset(this._clearWorld);
 
       if (this.game.debug != null) {
-        this._pendingState = null;
+        //this._pendingState = null;
         this.game.debug.reset();
       }
 
@@ -524,8 +569,12 @@ class StateManager {
 
     this.onInitCallback(this._args);
 
-    this._args = [];
 
+    //  If they no longer do then the init callback hit StateManager.start
+    if (this.states[key] == this._pendingState)
+    {
+      this._args = [];
+    }
   }
 
   /**

@@ -108,6 +108,17 @@ class GameObjectCreator {
   }
 
   /**
+   * Creates a new AudioSprite object.
+   *
+   * @method Phaser.GameObjectCreator#audioSprite
+   * @param {string} key - The Game.cache key of the sound that this object will use.
+   * @return {Phaser.AudioSprite} The newly created AudioSprite object.
+   */
+  audioSprite (String key) {
+    return this.game.sound.addSprite(key);
+  }
+
+  /**
    * Creates a new Sound object.
    *
    * @method Phaser.GameObjectCreator#sound

@@ -83,6 +83,7 @@ abstract class GameObject implements PIXI.DisplayInterface, CoreInterfact {
   bool get destroyPhase;
 
   bool get worldVisible;
-
+  
+  PIXI.Matrix get worldTransform;
 }
 

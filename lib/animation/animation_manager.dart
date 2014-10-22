@@ -97,6 +97,15 @@ class AnimationManager {
     }
   }
 
+
+  String get name {
+    if (this.currentAnim != null)
+    {
+      return this.currentAnim.name;
+    }
+    return null;
+  }
+
   //FrameData get frameData=>_frameData;
 
   AnimationManager(this.sprite) {
@@ -149,7 +158,7 @@ class AnimationManager {
     * Loads FrameData into the internal temporary vars and resets the frame index to zero.
     * This is called automatically when a new Sprite is created.
     */
-  copyFrameData(frameData, frame) {
+  copyFrameData(FrameData frameData, frame) {
 
     this._frameData = frameData.clone();
 

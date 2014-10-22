@@ -114,7 +114,7 @@ part "physics/ibody.dart";
 //part "physics/ninja/ninja.dart";
 //part "physics/p2/p2.dart";
 
-
+part "sound/audio_sprite.dart";
 part "sound/sound.dart";
 part "sound/sound_manager.dart";
 
@@ -146,7 +146,7 @@ part "utils/debug.dart";
 part "utils/utils.dart";
 
 
-const String VERSION = '2.1.1';
+const String VERSION = '2.1.2';
 final List<Game> GAMES = [];
 
 

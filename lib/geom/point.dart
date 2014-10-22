@@ -29,7 +29,7 @@ class Point extends PIXI.Point {
 
   }
 
-  Point copyFrom(Point source) {
+  Point copyFrom(source) {
     return this.setTo(source.x, source.y);
   }
 
@@ -585,6 +585,38 @@ class Point extends PIXI.Point {
     out.divide(pointslength, pointslength);
 
     return out;
+
+  }
+
+  /**
+   * Parses an object for x and/or y properties and returns a new Phaser.Point with matching values.
+   * If the object doesn't contain those properties a Point with x/y of zero will be returned.
+   *
+   * @method Phaser.Point.parse
+   * @static
+   * @param {Object} obj - The object to parse.
+   * @param {string} [xProp='x'] - The property used to set the Point.x value.
+   * @param {string} [yProp='y'] - The property used to set the Point.y value.
+   * @return {Phaser.Point} The new Point object.
+   */
+  Point parse(obj, [String xProp='x', String yProp='y']) {
+
+    //xProp = xProp || 'x';
+    //yProp = yProp || 'y';
+
+    Point point = new Point();
+
+    if (obj[xProp])
+    {
+      point.x = int.parse(obj[xProp]);
+    }
+
+    if (obj[yProp])
+    {
+      point.y = int.parse(obj[yProp]);
+    }
+
+    return point;
 
   }
 }

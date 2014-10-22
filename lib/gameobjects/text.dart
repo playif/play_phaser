@@ -62,6 +62,10 @@ class Text extends PIXI.Text implements GameObject {
   bool alive;
   bool _dirty = false;
 
+  int _charCount;
+  List<String> colors;
+
+
   CanvasPattern __tilePattern;
 
 //  String get text=>_text;
@@ -140,7 +144,7 @@ class Text extends PIXI.Text implements GameObject {
   Rectangle _currentBounds;
 
   Text(this.game, [num x, num y, String text = '', TextStyle style])
-      : super(text, style) {
+  : super(text, style) {
 
     this.x = x;
     this.y = y;
@@ -231,6 +235,19 @@ class Text extends PIXI.Text implements GameObject {
 
     this.position.set(x, y);
 
+
+    /**
+     * @property {number} _charCount - Internal character counter used by the text coloring.
+     * @private
+     */
+    this._charCount = 0;
+
+    /**
+     * @property {array} colors - An array of the color values as specified by `Text.addColor`.
+     */
+    this.colors = [];
+
+
     /**
      * A small internal cache:
      * 0 = previous position.x
@@ -248,10 +265,10 @@ class Text extends PIXI.Text implements GameObject {
     this._cache = [0, 0, 0, 0, 1, 0, 1, 0, 0];
 
 
-    if (text != ''){
+    if (text != '') {
       this.updateText();
     }
-    
+
   }
 
 //  bool get inputEnabled {
@@ -307,7 +324,7 @@ class Text extends PIXI.Text implements GameObject {
 
     //  Update any Children
     for (var i = 0,
-        len = this.children.length; i < len; i++) {
+    len = this.children.length; i < len; i++) {
       this.children[i].preUpdate();
     }
 
@@ -340,7 +357,7 @@ class Text extends PIXI.Text implements GameObject {
 
     //  Update any Children
     for (var i = 0,
-        len = this.children.length; i < len; i++) {
+    len = this.children.length; i < len; i++) {
       this.children[i].postUpdate();
     }
 
@@ -362,7 +379,7 @@ class Text extends PIXI.Text implements GameObject {
     }
 
     this._cache[8] = 1;
-    
+
     if (this.events != null) {
       this.events.onDestroy.dispatch(this);
     }
@@ -520,6 +537,8 @@ class Text extends PIXI.Text implements GameObject {
     this.context.lineCap = 'round';
     this.context.lineJoin = 'round';
 
+    this._charCount = 0;
+
     //draw lines line by line
     for (int i = 0; i < lines.length; i++) {
       Point linePosition = new Point(this.style.strokeThickness / 2, this.style.strokeThickness / 2 + i * lineHeight);
@@ -532,16 +551,50 @@ class Text extends PIXI.Text implements GameObject {
 
       linePosition.y += this._lineSpacing;
 
-      if (this.style.stroke != null && this.style.strokeThickness != 0) {
-        this.context.strokeText(lines[i], linePosition.x, linePosition.y);
+      if (this.colors.length > 0) {
+        this.updateLine(lines[i], linePosition.x, linePosition.y);
       }
+      else {
+        if (this.style.stroke != null && this.style.strokeThickness != 0) {
+          this.context.strokeText(lines[i], linePosition.x, linePosition.y);
+        }
 
-      if (this.style.fill != null) {
-        this.context.fillText(lines[i], linePosition.x, linePosition.y);
+        if (this.style.fill != null) {
+          this.context.fillText(lines[i], linePosition.x, linePosition.y);
+        }
       }
     }
 
     this.updateTexture();
+  }
+
+  updateLine(String line, num x, num y) {
+
+    for (int i = 0; i < line.length; i++) {
+      String letter = line[i];
+
+      if (this.colors[this._charCount] != null) {
+        this.context.fillStyle = this.colors[this._charCount];
+        this.context.strokeStyle = this.colors[this._charCount];
+      }
+
+
+      if (this.style.stroke != null && this.style.strokeThickness != 0) {
+        //this.context.strokeText(lines[i], linePosition.x, linePosition.y);
+        this.context.strokeText(letter, x, y);
+      }
+
+      if (this.style.fill != null) {
+        //this.context.fillText(lines[i], linePosition.x, linePosition.y);
+        this.context.fillText(letter, x, y);
+      }
+
+      x += this.context.measureText(letter).width;
+
+      this._charCount++;
+    }
+
+    //this.updateTexture();
   }
 
   updateTransform() {
@@ -550,6 +603,35 @@ class Text extends PIXI.Text implements GameObject {
       this._dirty = false;
     }
     super.updateTransform();
+  }
+
+
+  /**
+   * Clears any previously set color stops.
+   *
+   * @method Phaser.Text.prototype.clearColors
+   */
+
+  clearColors() {
+    this.colors.clear();
+    this._dirty = true;
+  }
+
+  /**
+   * This method allows you to set specific colors within the Text.
+   * It works by taking a color value, which is a typical HTML string such as `#ff0000` or `rgb(255,0,0)` and a position.
+   * The position value is the index of the character in the Text string to start applying this color to.
+   * Once set the color remains in use until either another color or the end of the string is encountered.
+   * For example if the Text was `Photon Storm` and you did `Text.addColor('#ffff00', 6)` it would color in the word `Storm` in yellow.
+   *
+   * @method Phaser.Text.prototype.addColor
+   * @param {string} color - A canvas fillstyle that will be used on the text eg `red`, `#00FF00`, `rgba()`.
+   * @param {number} position - The index of the character in the string to start applying this color value from.
+   */
+
+  addColor(String color, int position) {
+    this.colors[position] = color;
+    this._dirty = true;
   }
 
   /**
@@ -561,16 +643,16 @@ class Text extends PIXI.Text implements GameObject {
 
   runWordWrap(String text) {
 
-    var result = '';
-    var lines = text.split('\n');
+    String result = '';
+    List<String> lines = text.split('\n');
 
-    for (var i = 0; i < lines.length; i++) {
-      var spaceLeft = this.style.wordWrapWidth;
-      var words = lines[i].split(' ');
+    for (int i = 0; i < lines.length; i++) {
+      num spaceLeft = this.style.wordWrapWidth;
+      List<String> words = lines[i].split(' ');
 
-      for (var j = 0; j < words.length; j++) {
-        var wordWidth = this.context.measureText(words[j]).width;
-        var wordWidthWithSpace = wordWidth + this.context.measureText(' ').width;
+      for (int j = 0; j < words.length; j++) {
+        num wordWidth = this.context.measureText(words[j]).width;
+        num wordWidthWithSpace = wordWidth + this.context.measureText(' ').width;
 
         if (wordWidthWithSpace > spaceLeft) {
           // Skip printing the newline if it's the first word of the line that is greater than the word wrap width.
@@ -595,12 +677,12 @@ class Text extends PIXI.Text implements GameObject {
   }
 
   /**
-  * Indicates the rotation of the Text, in degrees, from its original orientation. Values from 0 to 180 represent clockwise rotation; values from 0 to -180 represent counterclockwise rotation.
-  * Values outside this range are added to or subtracted from 360 to obtain a value within the range. For example, the statement player.angle = 450 is the same as player.angle = 90.
-  * If you wish to work in radians instead of degrees use the property Sprite.rotation instead.
-  * @name Phaser.Text#angle
-  * @property {number} angle - Gets or sets the angle of rotation in degrees.
-  */
+   * Indicates the rotation of the Text, in degrees, from its original orientation. Values from 0 to 180 represent clockwise rotation; values from 0 to -180 represent counterclockwise rotation.
+   * Values outside this range are added to or subtracted from 360 to obtain a value within the range. For example, the statement player.angle = 450 is the same as player.angle = 90.
+   * If you wish to work in radians instead of degrees use the property Sprite.rotation instead.
+   * @name Phaser.Text#angle
+   * @property {number} angle - Gets or sets the angle of rotation in degrees.
+   */
   //Object.defineProperty(Phaser.Text.prototype, 'angle', {
 
   num get angle {
@@ -614,10 +696,10 @@ class Text extends PIXI.Text implements GameObject {
   //});
 
   /**
-  * The text string to be displayed by this Text object, taking into account the style settings.
-  * @name Phaser.Text#text
-  * @property {string} text - The text string to be displayed by this Text object, taking into account the style settings.
-  */
+   * The text string to be displayed by this Text object, taking into account the style settings.
+   * @name Phaser.Text#text
+   * @property {string} text - The text string to be displayed by this Text object, taking into account the style settings.
+   */
   //Object.defineProperty(Phaser.Text.prototype, 'text', {
 
   String get text {
@@ -629,23 +711,31 @@ class Text extends PIXI.Text implements GameObject {
     if (value != this._text) {
       this._text = value;
       this._dirty = true;
-      this.updateTransform();
+      //this.updateTransform();
+      if (this.parent != null) {
+        this.updateTransform();
+      }
     }
 
   }
 
   /// Set the copy for the text object. To split a line you can use '\n'
+
   setText(Object text) {
     this._text = text.toString();
     this._dirty = true;
+
+    if (this.parent != null) {
+      this.updateTransform();
+    }
   }
 
   //});
 
   /**
-  * @name Phaser.Text#font
-  * @property {string} font - The font the text will be rendered in, i.e. 'Arial'. Must be loaded in the browser before use.
-  */
+   * @name Phaser.Text#font
+   * @property {string} font - The font the text will be rendered in, i.e. 'Arial'. Must be loaded in the browser before use.
+   */
   //Object.defineProperty(Phaser.Text.prototype, 'font', {
 
   String get font {
@@ -658,7 +748,9 @@ class Text extends PIXI.Text implements GameObject {
       this._font = value.trim();
       this.style.font = this._fontWeight + ' ' + this._fontSize.toString() + "px '" + this._font + "'";
       this._dirty = true;
-      this.updateTransform();
+      if (this.parent != null) {
+        this.updateTransform();
+      }
     }
 
   }
@@ -666,9 +758,9 @@ class Text extends PIXI.Text implements GameObject {
   //});
 
   /**
-  * @name Phaser.Text#fontSize
-  * @property {number} fontSize - The size of the font in pixels.
-  */
+   * @name Phaser.Text#fontSize
+   * @property {number} fontSize - The size of the font in pixels.
+   */
   //Object.defineProperty(Phaser.Text.prototype, 'fontSize', {
 
   num get fontSize {
@@ -683,7 +775,9 @@ class Text extends PIXI.Text implements GameObject {
       this._fontSize = value;
       this.style.font = this._fontWeight + ' ' + this._fontSize.toString() + "px '" + this._font + "'";
       this._dirty = true;
-      this.updateTransform();
+      if (this.parent != null) {
+        this.updateTransform();
+      }
     }
 
   }
@@ -691,9 +785,9 @@ class Text extends PIXI.Text implements GameObject {
   //});
 
   /**
-  * @name Phaser.Text#fontWeight
-  * @property {number} fontWeight - The weight of the font: 'normal', 'bold', 'italic'. You can combine settings too, such as 'bold italic'.
-  */
+   * @name Phaser.Text#fontWeight
+   * @property {number} fontWeight - The weight of the font: 'normal', 'bold', 'italic'. You can combine settings too, such as 'bold italic'.
+   */
   //Object.defineProperty(Phaser.Text.prototype, 'fontWeight', {
 
   String get fontWeight {
@@ -706,7 +800,9 @@ class Text extends PIXI.Text implements GameObject {
       this._fontWeight = value;
       this.style.font = this._fontWeight + ' ' + this._fontSize.toString() + "px '" + this._font + "'";
       this._dirty = true;
-      this.updateTransform();
+      if (this.parent != null) {
+        this.updateTransform();
+      }
     }
 
   }
@@ -714,9 +810,9 @@ class Text extends PIXI.Text implements GameObject {
   //});
 
   /**
-  * @name Phaser.Text#fill
-  * @property {object} fill - A canvas fillstyle that will be used on the text eg 'red', '#00FF00'.
-  */
+   * @name Phaser.Text#fill
+   * @property {object} fill - A canvas fillstyle that will be used on the text eg 'red', '#00FF00'.
+   */
   //Object.defineProperty(Phaser.Text.prototype, 'fill', {
 
   String get fill {
@@ -735,9 +831,9 @@ class Text extends PIXI.Text implements GameObject {
   //});
 
   /**
-  * @name Phaser.Text#align
-  * @property {string} align - Alignment for multiline text ('left', 'center' or 'right'), does not affect single line text.
-  */
+   * @name Phaser.Text#align
+   * @property {string} align - Alignment for multiline text ('left', 'center' or 'right'), does not affect single line text.
+   */
   //Object.defineProperty(Phaser.Text.prototype, 'align', {
 
   String get align {
@@ -756,9 +852,9 @@ class Text extends PIXI.Text implements GameObject {
   //});
 
   /**
-  * @name Phaser.Text#stroke
-  * @property {string} stroke - A canvas fillstyle that will be used on the text stroke eg 'blue', '#FCFF00'.
-  */
+   * @name Phaser.Text#stroke
+   * @property {string} stroke - A canvas fillstyle that will be used on the text stroke eg 'blue', '#FCFF00'.
+   */
   //Object.defineProperty(Phaser.Text.prototype, 'stroke', {
 
   String get stroke {
@@ -777,9 +873,9 @@ class Text extends PIXI.Text implements GameObject {
   //});
 
   /**
-  * @name Phaser.Text#strokeThickness
-  * @property {number} strokeThickness - A number that represents the thickness of the stroke. Default is 0 (no stroke)
-  */
+   * @name Phaser.Text#strokeThickness
+   * @property {number} strokeThickness - A number that represents the thickness of the stroke. Default is 0 (no stroke)
+   */
   //Object.defineProperty(Phaser.Text.prototype, 'strokeThickness', {
 
   num get strokeThickness {
@@ -798,9 +894,9 @@ class Text extends PIXI.Text implements GameObject {
   //});
 
   /**
-  * @name Phaser.Text#wordWrap
-  * @property {boolean} wordWrap - Indicates if word wrap should be used.
-  */
+   * @name Phaser.Text#wordWrap
+   * @property {boolean} wordWrap - Indicates if word wrap should be used.
+   */
   //Object.defineProperty(Phaser.Text.prototype, 'wordWrap', {
 
   bool get isWordWrap {
@@ -819,9 +915,9 @@ class Text extends PIXI.Text implements GameObject {
   //});
 
   /**
-  * @name Phaser.Text#wordWrapWidth
-  * @property {number} wordWrapWidth - The width at which text will wrap.
-  */
+   * @name Phaser.Text#wordWrapWidth
+   * @property {number} wordWrapWidth - The width at which text will wrap.
+   */
   //Object.defineProperty(Phaser.Text.prototype, 'wordWrapWidth', {
 
   num get wordWrapWidth {
@@ -840,9 +936,9 @@ class Text extends PIXI.Text implements GameObject {
   //});
 
   /**
-  * @name Phaser.Text#lineSpacing
-  * @property {number} lineSpacing - Additional spacing (in pixels) between each line of text if multi-line.
-  */
+   * @name Phaser.Text#lineSpacing
+   * @property {number} lineSpacing - Additional spacing (in pixels) between each line of text if multi-line.
+   */
   //Object.defineProperty(Phaser.Text.prototype, 'lineSpacing', {
 
   num get lineSpacing {
@@ -854,7 +950,9 @@ class Text extends PIXI.Text implements GameObject {
     if (value != this._lineSpacing) {
       this._lineSpacing = value;
       this._dirty = true;
-      this.updateTransform();
+      if (this.parent != null) {
+        this.updateTransform();
+      }
     }
 
   }
@@ -862,9 +960,9 @@ class Text extends PIXI.Text implements GameObject {
   //});
 
   /**
-  * @name Phaser.Text#shadowOffsetX
-  * @property {number} shadowOffsetX - The shadowOffsetX value in pixels. This is how far offset horizontally the shadow effect will be.
-  */
+   * @name Phaser.Text#shadowOffsetX
+   * @property {number} shadowOffsetX - The shadowOffsetX value in pixels. This is how far offset horizontally the shadow effect will be.
+   */
   //Object.defineProperty(Phaser.Text.prototype, 'shadowOffsetX', {
 
   num get shadowOffsetX {
@@ -883,9 +981,9 @@ class Text extends PIXI.Text implements GameObject {
   //});
 
   /**
-  * @name Phaser.Text#shadowOffsetY
-  * @property {number} shadowOffsetY - The shadowOffsetY value in pixels. This is how far offset vertically the shadow effect will be.
-  */
+   * @name Phaser.Text#shadowOffsetY
+   * @property {number} shadowOffsetY - The shadowOffsetY value in pixels. This is how far offset vertically the shadow effect will be.
+   */
   //Object.defineProperty(Phaser.Text.prototype, 'shadowOffsetY', {
 
   get shadowOffsetY {
@@ -904,9 +1002,9 @@ class Text extends PIXI.Text implements GameObject {
   //});
 
   /**
-  * @name Phaser.Text#shadowColor
-  * @property {string} shadowColor - The color of the shadow, as given in CSS rgba format. Set the alpha component to 0 to disable the shadow.
-  */
+   * @name Phaser.Text#shadowColor
+   * @property {string} shadowColor - The color of the shadow, as given in CSS rgba format. Set the alpha component to 0 to disable the shadow.
+   */
   //Object.defineProperty(Phaser.Text.prototype, 'shadowColor', {
 
   String get shadowColor {
@@ -925,9 +1023,9 @@ class Text extends PIXI.Text implements GameObject {
   //});
 
   /**
-  * @name Phaser.Text#shadowBlur
-  * @property {number} shadowBlur - The shadowBlur value. Make the shadow softer by applying a Gaussian blur to it. A number from 0 (no blur) up to approx. 10 (depending on scene).
-  */
+   * @name Phaser.Text#shadowBlur
+   * @property {number} shadowBlur - The shadowBlur value. Make the shadow softer by applying a Gaussian blur to it. A number from 0 (no blur) up to approx. 10 (depending on scene).
+   */
   //Object.defineProperty(Phaser.Text.prototype, 'shadowBlur', {
 
   num get shadowBlur {
@@ -946,12 +1044,12 @@ class Text extends PIXI.Text implements GameObject {
   //});
 
   /**
-  * By default a Text object won't process any input events at all. By setting inputEnabled to true the Phaser.InputHandler is
-  * activated for this object and it will then start to process click/touch events and more.
-  *
-  * @name Phaser.Text#inputEnabled
-  * @property {boolean} inputEnabled - Set to true to allow this object to receive input events.
-  */
+   * By default a Text object won't process any input events at all. By setting inputEnabled to true the Phaser.InputHandler is
+   * activated for this object and it will then start to process click/touch events and more.
+   *
+   * @name Phaser.Text#inputEnabled
+   * @property {boolean} inputEnabled - Set to true to allow this object to receive input events.
+   */
   //Object.defineProperty(Phaser.Text.prototype, "inputEnabled", {
 
   bool get inputEnabled {
@@ -980,13 +1078,13 @@ class Text extends PIXI.Text implements GameObject {
   //});
 
   /**
-  * An Text that is fixed to the camera uses its x/y coordinates as offsets from the top left of the camera. These are stored in Text.cameraOffset.
-  * Note that the cameraOffset values are in addition to any parent in the display list.
-  * So if this Text was in a Group that has x: 200, then this will be added to the cameraOffset.x
-  *
-  * @name Phaser.Text#fixedToCamera
-  * @property {boolean} fixedToCamera - Set to true to fix this Text to the Camera at its current world coordinates.
-  */
+   * An Text that is fixed to the camera uses its x/y coordinates as offsets from the top left of the camera. These are stored in Text.cameraOffset.
+   * Note that the cameraOffset values are in addition to any parent in the display list.
+   * So if this Text was in a Group that has x: 200, then this will be added to the cameraOffset.x
+   *
+   * @name Phaser.Text#fixedToCamera
+   * @property {boolean} fixedToCamera - Set to true to fix this Text to the Camera at its current world coordinates.
+   */
   //Object.defineProperty(Phaser.Text.prototype, "fixedToCamera", {
 
   bool get fixedToCamera {
@@ -1008,9 +1106,9 @@ class Text extends PIXI.Text implements GameObject {
   //});
 
   /**
-  * @name Phaser.Text#destroyPhase
-  * @property {boolean} destroyPhase - True if this object is currently being destroyed.
-  */
+   * @name Phaser.Text#destroyPhase
+   * @property {boolean} destroyPhase - True if this object is currently being destroyed.
+   */
   //Object.defineProperty(Phaser.Text.prototype, "destroyPhase", {
 
   bool get destroyPhase {
@@ -1019,6 +1117,6 @@ class Text extends PIXI.Text implements GameObject {
 
   }
 
-  //});
+//});
 
 }

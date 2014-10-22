@@ -617,4 +617,6 @@ class Keyboard {
   static const int DELETE = 46;
   static const int HELP = 47;
   static const int NUM_LOCK = 144;
+  static const int PLUS = 43;
+  static const int MINUS = 45;
 }
