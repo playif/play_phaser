@@ -23,7 +23,7 @@ class Time {
   /**
    * @property {number} deltaCap - If you need to cap the delta timer, set the value here. For 60fps the delta should be 0.016, so try variances just above this.
    */
-  double deltaCap = 0.0;
+  num deltaCap = 0.0;
 
   /**
    * @property {number} timeCap - If the difference in time between two frame updates exceeds this value, the frame time is reset to avoid huge elapsed counts.
@@ -38,17 +38,17 @@ class Time {
   /**
    * @property {number} pauseDuration - Records how long the game was paused for in miliseconds.
    */
-  double pauseDuration = 0.0;
+  num pauseDuration = 0.0;
 
   /**
    * @property {number} timeToCall - The value that setTimeout needs to work out when to next update
    */
-  double timeToCall = 0.0;
+  num timeToCall = 0.0;
 
   /**
    * @property {number} lastTime - Internal value used by timeToCall as part of the setTimeout loop
    */
-  double lastTime = 0.0;
+  num lastTime = 0.0;
 
   /**
    * @property {Phaser.Timer} events - This is a Phaser.Timer object bound to the master clock to which you can add timed events.

@@ -2,6 +2,8 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/example/animation/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/arcade_physics/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/assets/audio/SoundEffects/packages" />
@@ -76,4 +78,3 @@
     <orderEntry type="library" name="Dart SDK" level="application" />
   </component>
 </module>
-

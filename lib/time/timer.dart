@@ -29,7 +29,7 @@ class Timer {
 
   int _i = 0;
   int _diff = 0;
-  double _newTick = 0.0;
+  num _newTick = 0.0;
 
   static const double MINUTE = 60000.0;
   static const double SECOND = 1000.0;
@@ -39,9 +39,9 @@ class Timer {
   Timer(this.game, [bool autoDestroy=true]) {
   }
 
-  double get next => nextTick;
+  num get next => nextTick;
 
-  double get duration {
+  num get duration {
     if (this.running && this.nextTick > this._now) {
       return this.nextTick - this._now;
     }
@@ -52,7 +52,7 @@ class Timer {
 
   int get length => events.length;
 
-  double get ms {
+  num get ms {
     if (this.running) {
       return this._now - this._started - this._pauseTotal;
     }
@@ -138,7 +138,7 @@ class Timer {
    * @return {Phaser.TimerEvent} The Phaser.TimerEvent object that was created.
    */
 
-  TimerEvent repeat(double delay, int repeatCount, Function callback, List args) {
+  TimerEvent repeat(num delay, int repeatCount, Function callback, List args) {
     return this.create(delay, false, repeatCount, callback, args);
   }
 
@@ -156,7 +156,7 @@ class Timer {
    * @return {Phaser.TimerEvent} The Phaser.TimerEvent object that was created.
    */
 
-  TimerEvent loop(delay, callback, List args) {
+  TimerEvent loop(num delay, Function callback, List args) {
     return this.create(delay, true, 0, callback, args);
   }
 
@@ -205,7 +205,7 @@ class Timer {
    * @method Phaser.Timer#remove
    */
 
-  remove(event) {
+  remove(TimerEvent event) {
 
     for (var i = 0; i < this.events.length; i++) {
       if (this.events[i] == event) {
@@ -292,7 +292,7 @@ class Timer {
    * @return {boolean} True if there are still events waiting to be dispatched, otherwise false if this Timer can be destroyed.
    */
 
-  update(time) {
+  bool update(num time) {
 
     if (this.paused) {
       return true;
@@ -414,7 +414,7 @@ class Timer {
    * @method Phaser.Timer#adjustEvents
    */
 
-  adjustEvents(baseTime) {
+  adjustEvents(num baseTime) {
 
     for (var i = 0; i < this.events.length; i++) {
       if (!this.events[i].pendingDelete) {

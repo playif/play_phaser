@@ -185,7 +185,7 @@ class ScaleManager {
 
   Point offset;
 
-  bool isFullScreen;
+  bool isFullScreen = false;
 
   int _iterations = 0;
 
