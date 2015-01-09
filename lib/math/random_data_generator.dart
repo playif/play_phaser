@@ -7,6 +7,7 @@ class RandomDataGenerator {
   double s2 = 0.0;
 
   RandomDataGenerator(List seeds) {
+    sow(seeds);
   }
 
   double rnd() {
@@ -32,40 +33,36 @@ class RandomDataGenerator {
     this.s2 = this.hash(this.s1);
     this.c = 1;
 
-    var seed;
+    seeds.forEach(sowMix);
+  }
 
-    for (var i = 0; seed = seeds[i++]; ) {
-      this.s0 -= this.hash(seed);
-      //this.s0 += ~(this.s0 < 0);
-      this.s1 -= this.hash(seed);
-      //this.s1 += ~(this.s1 < 0);
-      this.s2 -= this.hash(seed);
-      //this.s2 += ~(this.s2 < 0);
-    }
-
+  sowMix(seed) {
+    this.s0 -= this.hash(seed);
+    this.s0 += (this.s0 < 0) ? 1 : 0;
+    this.s1 -= this.hash(seed);
+    this.s1 += (this.s1 < 0) ? 1 : 0;
+    this.s2 -= this.hash(seed);
+    this.s2 += (this.s2 < 0) ? 1 : 0;
   }
 
   hash(data) {
 
-    int h, i, n;
-    n = 0xefc8249d;
+    int i;
+    double n;
+    n = 0xefc8249d.toDouble();
     data = data.toString();
-
     for (i = 0; i < data.length; i++) {
       n += data.codeUnitAt(i);
-      h = (0.02519603282416938 * n).toInt();
-      n = h >> 0;
+      var h = 0.02519603282416938 * n;
+      n = h.toInt().toUnsigned(32).toDouble();
       h -= n;
       h *= n;
-      n = h >> 0;
+      n = h.toInt().toUnsigned(32).toDouble();
       h -= n;
-      n += h * 0x100000000;
-      // 2^32
+      n += h * 0x100000000; // 2^32
     }
 
-    return (n >> 0) * 2.3283064365386963e-10;
-    // 2^-32
-
+    return n.toInt().toUnsigned(32) * 2.3283064365386963e-10; // 2^-32
   }
 
   /**
