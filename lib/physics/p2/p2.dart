@@ -1404,7 +1404,7 @@ class P2 {
     bodyA = this.getBody(bodyA);
     bodyB = this.getBody(bodyB);
 
-    if (!bodyA || !bodyB) {
+    if (bodyA == null || bodyB == null) {
       print('Cannot create Spring, invalid body objects given');
     } else {
       return this.addSpring(new Spring(this, bodyA, bodyB, restLength, stiffness, damping, worldA, worldB, localA, localB));
