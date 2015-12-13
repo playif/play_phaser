@@ -15,7 +15,7 @@ class Debug {
 
   num currentX;
   num currentY;
-  double currentAlpha;
+  num currentAlpha;
   bool dirty;
   String currentColor;
 

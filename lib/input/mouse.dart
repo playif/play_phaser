@@ -499,7 +499,7 @@ class Mouse {
       event.preventDefault();
     }
 
-    num val = event.wheelDeltaY;
+    num val = event.deltaY;
     if (val == null || val == 0) {
       val = -event.detail;
     }
